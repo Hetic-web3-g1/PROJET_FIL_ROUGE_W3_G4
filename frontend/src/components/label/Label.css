@@ -1,0 +1,25 @@
+.label {
+    font-family: 'Montserrat', sans-serif;
+    display: inline-block;
+    font-size: 12px;
+    border-radius: 0.5em;
+    border: transparent; 
+    padding: 0.3em 0.5em;
+    color: white
+}
+
+.label-completed {
+    background-color: #007bff;
+}
+
+.label-in-progress {
+    background-color: #ffc107;
+}
+
+.label-archive {
+    background-color: #28a745;
+}
+
+.label-review {
+    background-color: #17a2b8;
+}
