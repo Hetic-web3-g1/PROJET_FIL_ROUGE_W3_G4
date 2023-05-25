@@ -1,0 +1,56 @@
+# Production build
+version: '3.8'
+services:
+  backend-api:
+    build:
+      context: ./backend
+      target: production
+    restart: unless-stopped
+    container_name: backend-api
+    ports:
+      - '4000:4000'
+    networks: 
+      - app-network
+      - db-network
+    depends_on:
+      - db
+
+  builder:
+    build:
+      context: ./frontend
+      target: builder
+    restart: no
+    container_name: builder
+
+  frontend-app:
+    build:
+      context: ./frontend
+      target: production
+    restart: unless-stopped
+    container_name: frontend-app
+    ports:
+      - '81:80'
+    networks: 
+      - app-network
+    depends_on:
+      - builder
+
+  db:
+    container_name: db-postgres
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=db
+      - DATABASE_HOST=postgres
+    restart: unless-stopped
+    ports:
+      - 5432:5432
+    networks:
+      - db-network
+
+networks:
+  app-network:
+  db-network:
+
+# docker compose -f docker-compose.yml up -d --build
