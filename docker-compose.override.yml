@@ -1,35 +1,39 @@
-# Development build
+# Production build
 version: '3.8'
 services:
   backend-api:
     build:
       context: ./backend
-      target: development
+      target: production
     restart: unless-stopped
     container_name: backend-api
     ports:
       - '4000:4000'
-    volumes:
-      - ./backend:/app
     networks: 
       - app-network
       - db-network
     depends_on:
       - db
 
+  builder:
+    build:
+      context: ./frontend
+      target: builder
+    restart: no
+    container_name: builder
+
   frontend-app:
     build:
       context: ./frontend
-      target: development
-    command: sh -c "npm i && npm run dev"
+      target: production
     restart: unless-stopped
     container_name: frontend-app
-    volumes:
-      - ./frontend:/app
     ports:
-      - '3000:3000'
+      - '3000:80'
     networks: 
       - app-network
+    depends_on:
+      - builder
 
   db:
     container_name: db-postgres
@@ -45,28 +49,8 @@ services:
     networks:
       - db-network
 
-  adminer:
-    container_name: db-adminer
-    image: adminer
-    environment:
-      ADMINER_DB: db
-      ADMINER_DRIVER: pgsql
-      ADMINER_USERNAME: root
-      ADMINER_PASSWORD: root
-      ADMINER_SERVER: postgres
-      ADMINER_AUTOLOGIN: 1
-      ADMINER_NAME: Sample DB
-      ADMINER_DESIGN: pepa-linha-dark
-    restart: unless-stopped
-    ports:
-      - 8080:8080
-    depends_on:
-      - db
-    networks:
-      - db-network
-
 networks:
   app-network:
   db-network:
 
-# docker compose up -d --build
+# docker compose -f docker-compose.override.yml up -d --build

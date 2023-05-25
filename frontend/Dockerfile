@@ -14,7 +14,7 @@ COPY . .
 
 # Set environment variables
 ENV NODE_ENV=development
-ENV PORT=3000
+ENV FRONTEND_PORT=3000
 
 # Start the development server
 CMD ["npm", "run", "dev"]
@@ -34,6 +34,9 @@ RUN npm install
 
 # Copy the entire project to the container
 COPY . .
+
+# Set environment variables
+ENV FRONTEND_PORT=3000
 
 # Build the React app
 RUN npm run build

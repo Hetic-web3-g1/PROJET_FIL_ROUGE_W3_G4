@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-const port = process.env.PORT
+const frontendPort = process.env.FRONTEND_PORT;
 const isDevelopment = process.env.NODE_ENV === 'development';
 
 // https://vitejs.dev/config/
@@ -13,6 +13,6 @@ export default defineConfig({
     },
     host: true,
     strictPort: true,
-    port: port, // Specify the desired port number here
+    port: frontendPort,
   },
 })
