@@ -81,6 +81,18 @@ const VideoPlayer = ({ video }) => {
                     >
                         +10s
                     </button>
+                    <input
+                        type="range"
+                        min="0"
+                        max="1"
+                        step="0.05"
+                        value={playerState.volume}
+                        className="video-player-controls-volume"
+                        onChange={(e) => handleVolume(e)}
+                    />
+                    <div className="video-player-controls-progress">
+                    {videoElement.current.currentTime} / {videoElement.current.duration}
+                    </div>
                     <select
                         value={playerState.speed}
                         className="video-player-controls-speed"
@@ -93,15 +105,6 @@ const VideoPlayer = ({ video }) => {
                         <option value="1.5">1.5x</option>
                         <option value="2">2x</option>
                     </select>
-                    <input
-                        type="range"
-                        min="0"
-                        max="1"
-                        step="0.05"
-                        value={playerState.volume}
-                        className="video-player-controls-volume"
-                        onChange={(e) => handleVolume(e)}
-                    />
                     {/* <button
                         className="video-player-controls-mute"
                         onClick={handleMute}
@@ -120,8 +123,8 @@ const VideoPlayer = ({ video }) => {
     );
 };
 
-VideoPlayer.PropTypes = {
-    video: PropTypes.object.isRequired,
+VideoPlayer.propTypes = {
+    video: PropTypes.string.isRequired,
 };
 
 export default VideoPlayer;
