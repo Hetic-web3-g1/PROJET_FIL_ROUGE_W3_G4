@@ -9,6 +9,6 @@ class Settings(BaseSettings):
 
     class Config:
         environment = os.environ['ENVIRONMENT']
-        env_file = f"../env/{environment}.env"
+        env_file = f"../.env/{environment}.env"
 
 settings = Settings()
