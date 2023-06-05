@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import PropTypes from 'prop-types';
 import "./VideoPlayer.css";
 
@@ -9,6 +9,7 @@ import pauseButton from "../../assets/videoPlayer/Pause/Pause.svg";
 import rewindButton from "../../assets/videoPlayer/Rewind/Rewind.svg";
 import forwardButton from "../../assets/videoPlayer/Forward/Forward.svg";
 import fullScreenButton from "../../assets/videoPlayer/FullScreen/FullScreen.svg";
+import volumeButton from "../../assets/videoPlayer/Volume/Volume.svg";
 
 const VideoPlayer = ({ video }) => {
     const videoElement = React.useRef(null);
@@ -48,6 +49,8 @@ const VideoPlayer = ({ video }) => {
         }
     };
 
+    const [volumeHovered, setVolumeHovered] = useState(false); 
+
     return (
         <div className="video-wrapper">
             <video
@@ -73,29 +76,35 @@ const VideoPlayer = ({ video }) => {
                         className="video-player-controls-button"
                         onClick={togglePlay}
                     >
-                        {playerState.playing ?  <object data={pauseButton} /> : <object data={playButton} />}
+                        {playerState.playing ?  <object className="controls-svg" data={pauseButton} /> : <object className="controls-svg" data={playButton} />}
                     </button>
                     <button
                         className="video-player-controls-rewind"
                         onClick={handleTimeRewind}
                     >
-                        <object data={rewindButton} />
+                        <object className="controls-svg" data={rewindButton} />
                     </button>
                     <button
                         className="video-player-controls-forward"
                         onClick={handleTimeForward}
                     >
-                        <object data={forwardButton} />
+                        <object className="controls-svg" data={forwardButton} />
                     </button>
-                    <input
-                        type="range"
-                        min="0"
-                        max="1"
-                        step="0.05"
-                        value={playerState.volume}
-                        className="video-player-controls-volume"
-                        onChange={(e) => handleVolume(e)}
+                    <object className="controls-svg" data={volumeButton}
+                        onMouseEnter={() => setVolumeHovered(true)}
                     />
+                    {volumeHovered ?
+                        <input
+                            type="range"
+                            min="0"
+                            max="1"
+                            step="0.05"
+                            value={playerState.volume}
+                            className="video-player-controls-volume"
+                            onChange={(e) => handleVolume(e)}
+                            onMouseLeave={() => setVolumeHovered(false)}
+                        />
+                    : null}
                     <div className="video-player-controls-progress">
                     {videoElement.current?.currentTime.toFixed(2)} / {videoElement.current?.duration.toFixed(2)}
                     </div>
@@ -121,7 +130,7 @@ const VideoPlayer = ({ video }) => {
                         className="video-player-controls-fullscreen"
                         onClick={handleFullscreen}
                     >
-                        <object data={fullScreenButton} />
+                        <object className="controls-svg" data={fullScreenButton} />
                     </button>
                 </div>
             </div>
