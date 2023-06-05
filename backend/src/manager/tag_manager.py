@@ -1,7 +1,6 @@
 from sqlalchemy.engine import Connection
 from sqlalchemy import select
 from typing import Union, Generator
-from uuid import uuid4
 
 from database import db_srv
 from schema.tag import Tag, TagCreate, TagUpdate

@@ -1,5 +1,4 @@
 from pydantic import BaseModel
-from typing import Optional
 from uuid import UUID
 from datetime import datetime
 
@@ -13,6 +12,6 @@ class Partition(PartitionCreate):
     created_at: datetime
 
 class PartitionUpdate(BaseModel):
-    status: Optional[str]
+    status: str | None
     updated_at: datetime = datetime.now()
     updated_by: UUID
