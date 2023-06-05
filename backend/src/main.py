@@ -2,8 +2,13 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import os
 
-from routers import index
-from database.db_engine import engine
+from database.db_engine import metadata, engine
+from database.tables import academy, annotation, biography, comment, image, masterclass, partition, subtitle, tag, timecode, user, video, work_analysis
+from utils.fake_data import generate_data
+from router.router import routing
+# from utils.meilisearch import search
+
+metadata.create_all(bind=engine)
 
 frontend_port = os.getenv('FRONTEND_PORT')
 origins = [
@@ -21,4 +26,8 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
-app.include_router(index.router)
+# search('Mad')
+
+routing(app)
+
+generate_data()
