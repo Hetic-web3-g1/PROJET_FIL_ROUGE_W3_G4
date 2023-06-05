@@ -1,37 +1,36 @@
-import { Button } from './Button';
+import { Checkbox } from './Checkbox';
 
 export default {
-  title: 'Button',
-  component: Button,
-  tags: ['autodocs'],
-  argTypes: {
-    backgroundColor: { control: 'color' },
+  title: 'Checkbox',
+  component: Checkbox
+};
+
+export const Base = {
+  args: {
   },
 };
 
-export const White = {
+export const Disabled = {
   args: {
-    primary: true,
-    label: 'Button',
+    disabled: true
   },
 };
 
-export const Blue = {
+export const CheckedByDefault = {
   args: {
-    label: 'Button',
+  checkedByDefault: true,
+  },
+}
+
+export const CheckedDisabled = {
+  args: {
+  checkedByDefault: true,
+  disabled: true
   },
 };
 
-export const Medium = {
+export const Secondary = {
   args: {
-    size: 'medium',
-    label: 'Button',
-  },
-};
-
-export const Small = {
-  args: {
-    size: 'small',
-    label: 'Button',
+    primary: false,
   },
 };

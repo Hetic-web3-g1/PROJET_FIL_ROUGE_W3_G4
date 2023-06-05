@@ -1,34 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import '..button/buttons.css';
+import './checkbox.css';
 
-export const Checkbox = ({ primary, backgroundColor, size, label, ...props }) => {
-  const mode = primary ? 'button-primary' : 'button-secondary';
+export const Checkbox = ({ checkedByDefault, label, disabled, primary }) => {
+  const [checked, setChecked] = useState(checkedByDefault);
+  const mode = primary ? 'checkbox-primary' : 'checkbox-secondary';
   return (
-    <button
-      type="button"
-      className={['button', `button-${size}`, mode].join(' ')}
-      style={backgroundColor && { backgroundColor }}
-      {...props}
-    >
-      {label}
-    </button>
+    <div>
+      <input disabled={disabled} checked={checked} onChange={(e) => setChecked(e.target.checked)} type="checkbox" />
+      <label className={mode} for="label">{label}</label>
+    </div>
   );
 };
 
-Button.propTypes = {
-  primary: PropTypes.bool,
-  backgroundColor: PropTypes.string,
-  size: PropTypes.oneOf(['small', 'medium', 'large']),
+Checkbox.propTypes = {
+  disabled: PropTypes.bool,
+  checkedByDefault: PropTypes.bool,
   label: PropTypes.string.isRequired,
-  onClick: PropTypes.func,
+  primary: PropTypes.bool
 };
 
-Button.defaultProps = {
-  backgroundColor: null,
-  primary: false,
-  size: 'medium',
-  onClick: undefined,
+Checkbox.defaultProps = {
+  disabled: false,
+  checkedByDefault: false,
+  label: 'Label',
+  primary: true
 };
 
 export default Checkbox;
