@@ -4,6 +4,12 @@ import "./VideoPlayer.css";
 
 import useVideoPlayer from "./useVideoPlayer";
 
+import playButton from "../../assets/videoPlayer/Play/Play.svg";
+import pauseButton from "../../assets/videoPlayer/Pause/Pause.svg";
+import rewindButton from "../../assets/videoPlayer/Rewind/Rewind.svg";
+import forwardButton from "../../assets/videoPlayer/Forward/Forward.svg";
+import fullScreenButton from "../../assets/videoPlayer/FullScreen/FullScreen.svg";
+
 const VideoPlayer = ({ video }) => {
     const videoElement = React.useRef(null);
     const {
@@ -67,19 +73,19 @@ const VideoPlayer = ({ video }) => {
                         className="video-player-controls-button"
                         onClick={togglePlay}
                     >
-                        {playerState.playing ? "Pause" : "Play"}
+                        {playerState.playing ?  <object data={pauseButton} /> : <object data={playButton} />}
                     </button>
                     <button
                         className="video-player-controls-rewind"
                         onClick={handleTimeRewind}
                     >
-                        -10s
+                        <object data={rewindButton} />
                     </button>
                     <button
                         className="video-player-controls-forward"
                         onClick={handleTimeForward}
                     >
-                        +10s
+                        <object data={forwardButton} />
                     </button>
                     <input
                         type="range"
@@ -91,7 +97,7 @@ const VideoPlayer = ({ video }) => {
                         onChange={(e) => handleVolume(e)}
                     />
                     <div className="video-player-controls-progress">
-                    {videoElement.current.currentTime} / {videoElement.current.duration}
+                    {videoElement.current?.currentTime.toFixed(2)} / {videoElement.current?.duration.toFixed(2)}
                     </div>
                     <select
                         value={playerState.speed}
@@ -115,7 +121,7 @@ const VideoPlayer = ({ video }) => {
                         className="video-player-controls-fullscreen"
                         onClick={handleFullscreen}
                     >
-                        Fullscreen
+                        <object data={fullScreenButton} />
                     </button>
                 </div>
             </div>
