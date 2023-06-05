@@ -37,3 +37,6 @@ L'interface de cette solution sera accessible à travers une API, ce qui facilit
 #### **En production :**
 
 ``docker compose -f docker-compose.override.yml up -d --build``
+
+## Test de l'API
+```pytest /tests```
