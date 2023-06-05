@@ -1,5 +1,9 @@
 fastapi
 uvicorn
 psycopg2
+pytest
 sqlalchemy
 sqlalchemy_utils
+pydantic[dotenv]
+faker
+meilisearch

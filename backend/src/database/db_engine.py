@@ -1,12 +1,13 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, MetaData
 from sqlalchemy_utils import database_exists, create_database
 from sqlalchemy.exc import SQLAlchemyError
 
-DATABASE_URL = "postgresql://root:root@db-postgres:5432/db_saline_royale"
+from utils.log import logging
+from utils.env import settings
 
 # Connection to database
 engine = create_engine(
-    DATABASE_URL,
+    settings.database_url,
     connect_args={"options": "-c timezone=utc"}
 )
 
@@ -17,8 +18,10 @@ if not database_exists(engine.url):
 # Try except to test db conncection
 try:
     engine.connect()
-    print("DB connection success")
+    logging.info("DB connection success")
 
 except SQLAlchemyError as err:
     engine.connect()
-    print("Error", err.__cause__)
+    logging.error("Error", err.__cause__)
+
+metadata = MetaData()

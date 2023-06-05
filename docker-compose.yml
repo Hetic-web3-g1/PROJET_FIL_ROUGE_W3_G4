@@ -45,6 +45,16 @@ services:
     networks:
       - db-network
 
+  meilisearch:
+    container_name: meilisearch
+    image: getmeili/meilisearch:latest
+    ports:
+      - 7700:7700
+    depends_on:
+      - db
+    networks:
+      - db-network
+
   adminer:
     container_name: db-adminer
     image: adminer
