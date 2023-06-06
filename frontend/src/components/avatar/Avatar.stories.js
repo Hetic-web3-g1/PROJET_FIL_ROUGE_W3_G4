@@ -9,3 +9,9 @@ export const Base = {
   args: {
   },
 };
+
+export const OnClickTest = {
+  args: {
+    onClick: () => console.log('click'),
+  },
+};
