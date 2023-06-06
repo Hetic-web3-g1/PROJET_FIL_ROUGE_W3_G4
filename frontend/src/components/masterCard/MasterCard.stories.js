@@ -9,10 +9,10 @@ const data = {
     composer_bio_id: 1,
     work_analysis_id: 1,
     partition_id: 1,
-    instrument: 'piano',
+    instrument: 'Piano',
     status: 'completed',
     created_at: '2021-05-05T14:00:00.000Z',
-    created_by: '1',
+    created_by: 'zoubi le moine',
     updated_by: '1',
 };
 
@@ -25,5 +25,14 @@ export default {
 export const test = {
     args: {
         content: data,
+    },
+};
+
+export const in_progress = {
+    args: {
+        content: {
+            ...data,
+            status: 'in-progress',
+        },
     },
 };
