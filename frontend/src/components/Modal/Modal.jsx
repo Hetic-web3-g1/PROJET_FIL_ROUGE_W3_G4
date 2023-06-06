@@ -6,19 +6,24 @@ import Divider from '../divider/Divider'
 
 import './Modal.css'
 
-export const Modal = ({ title, content, handleClose, handleSave }) => {
+export const Modal = ({ title, content, size, handleClose, handleSave }) => {
     return (
-        <div className="modal">
+        <div className={(`modal-${size}`)}>
             <div className="modal-header">
-                <h2>{title}</h2>
+                <h2 className='modal-title'>{title}</h2>
                 <Divider />
             </div>
             <div className="modal-content">
                 {content}
             </div>
-            <div>
-                <Button type="submit" primary={true} label="Save" onClick={handleSave}/>
-                <Button type="submit" primary={false} label="Close" onClick={handleClose}/>
+            <div className="modal-footer">
+                <Divider />
+                <div className="modal-button-container">
+                    <Button type="submit" primary={true} label="Save" onClick={handleSave}/>
+                    <div className="modal-close-button">
+                        <Button type="submit" primary={false} label="Close" onClick={handleClose}/>
+                    </div>
+                </div>
             </div>
         </div>
     );
