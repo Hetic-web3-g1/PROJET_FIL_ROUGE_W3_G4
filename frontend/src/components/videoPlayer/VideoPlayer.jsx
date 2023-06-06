@@ -76,23 +76,45 @@ const VideoPlayer = ({ video }) => {
                         className="video-player-controls-button"
                         onClick={togglePlay}
                     >
-                        {playerState.playing ?  <object className="controls-svg" data={pauseButton} /> : <object className="controls-svg" data={playButton} />}
+                        {playerState.playing ?  
+                            <object 
+                                className="controls-svg" 
+                                data={pauseButton} 
+                                width="25" 
+                                height="25"
+                            /> 
+                            : 
+                            <object 
+                                className="controls-svg" 
+                                data={playButton} 
+                                width="25" 
+                                height="25"
+                            />
+                        }
                     </button>
                     <button
                         className="video-player-controls-rewind"
                         onClick={handleTimeRewind}
                     >
-                        <object className="controls-svg" data={rewindButton} />
+                        <object className="controls-svg" data={rewindButton}
+                            width="25" height="25"
+                        />
                     </button>
                     <button
                         className="video-player-controls-forward"
                         onClick={handleTimeForward}
                     >
-                        <object className="controls-svg" data={forwardButton} />
+                        <object className="controls-svg" data={forwardButton}
+                            width="25" height="25"
+                        />
                     </button>
-                    <object className="controls-svg" data={volumeButton}
-                        onMouseEnter={() => setVolumeHovered(true)}
-                    />
+                    <button
+                        onClick={() => setVolumeHovered(true)}
+                    >
+                        <object className="controls-svg" data={volumeButton} 
+                            width="25" height="25"
+                        />
+                    </button>
                     {volumeHovered ?
                         <input
                             type="range"
@@ -105,8 +127,8 @@ const VideoPlayer = ({ video }) => {
                             onMouseLeave={() => setVolumeHovered(false)}
                         />
                     : null}
-                    <div className="video-player-controls-progress">
-                    {videoElement.current?.currentTime.toFixed(2)} / {videoElement.current?.duration.toFixed(2)}
+                    <div className="video-player-controls-progress-text">
+                        {videoElement.current?.currentTime.toFixed(2)} / {videoElement.current?.duration.toFixed(2)}
                     </div>
                     <select
                         value={playerState.speed}
@@ -130,7 +152,7 @@ const VideoPlayer = ({ video }) => {
                         className="video-player-controls-fullscreen"
                         onClick={handleFullscreen}
                     >
-                        <object className="controls-svg" data={fullScreenButton} />
+                        <object className="controls-svg" data={fullScreenButton} width="25" height="25"/>
                     </button>
                 </div>
             </div>
