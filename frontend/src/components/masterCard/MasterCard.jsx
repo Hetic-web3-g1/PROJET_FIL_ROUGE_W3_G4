@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Label } from '../label/Label'
 
-import './MasterCard.css';
+import './masterCard.css';
 
 export const MasterCard = ({type, content, ...props }) => {
     return (
