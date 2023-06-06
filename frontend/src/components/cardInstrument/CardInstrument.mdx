@@ -1,0 +1,27 @@
+{/* CardInstrument.mdx */}
+
+import { Canvas, Meta, Controls } from '@storybook/blocks';
+
+import * as CardInstrumentStories from './CardInstrument.stories';
+
+<Meta of={CardInstrumentStories} />
+
+# Card instrument
+Component returning us the specified SVG image.
+
+<Canvas of={CardInstrumentStories.Base} />
+
+## Props
+<Controls />
+
+## Stories
+
+### Custom SVG
+
+We can specify the desired SVG by indicating the name of the SVG (see list of names in assets/cardInstrument).
+<Canvas of={CardInstrumentStories.CustomSVG} />
+
+### Custom size
+
+We can specify the size, the maximum size is 100 pixels
+<Canvas of={CardInstrumentStories.CustomSize} />
