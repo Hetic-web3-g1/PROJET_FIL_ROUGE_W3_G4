@@ -22,3 +22,10 @@ export const CustomSize = {
     size: 50
   },
 };
+
+export const HasLegend = {
+  args: {
+    name: 'Trombone.svg',
+    legend: true
+  },
+};
