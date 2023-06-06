@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './button.css';
 
-export const Button = ({ primary, backgroundColor, size, label, ...props }) => {
+export const Button = ({ primary, type, backgroundColor, size, label, ...props }) => {
   const mode = primary ? 'button-primary' : 'button-secondary';
   return (
     <button
@@ -18,6 +18,7 @@ export const Button = ({ primary, backgroundColor, size, label, ...props }) => {
 
 Button.propTypes = {
   primary: PropTypes.bool,
+  type: PropTypes.oneOf(['button', 'submit', 'reset']),
   backgroundColor: PropTypes.string,
   size: PropTypes.oneOf(['small', 'medium', 'large']),
   label: PropTypes.string.isRequired,
