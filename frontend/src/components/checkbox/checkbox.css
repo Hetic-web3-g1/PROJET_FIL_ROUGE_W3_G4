@@ -1,0 +1,13 @@
+label {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
+  margin-left: 10px;
+}
+
+.checkbox-primary {
+    color: black;
+}
+
+.checkbox-secondary {
+    color: #FDFCFA;
+}
