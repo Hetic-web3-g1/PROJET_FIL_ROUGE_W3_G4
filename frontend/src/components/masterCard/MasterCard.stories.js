@@ -19,20 +19,28 @@ const data = {
 export default {
   title: 'MasterCard',
   component: MasterCard,
-  tags: ['autodocs'],
 };
 
-export const test = {
+export const Default = {
     args: {
         content: data,
     },
 };
 
-export const in_progress = {
+export const In_progress = {
     args: {
         content: {
             ...data,
             status: 'in-progress',
+        },
+    },
+};
+
+export const Partition = {
+    args: {
+        content: {
+            ...data,
+            type: 'partition',
         },
     },
 };

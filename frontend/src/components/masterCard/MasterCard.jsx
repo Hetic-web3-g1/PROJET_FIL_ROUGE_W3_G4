@@ -6,10 +6,13 @@ import { Label } from '../label/Label'
 import './masterCard.css';
 
 import placeholderImg from '../../assets/cardPlaceholder.png';
+import partitionPlaceholder from '../../assets/partitionPlaceholder.png';
 
 export const MasterCard = ({type, content, ...props }) => {
 
     const createdAt = new Date(content.created_at);
+    const cardImg = type === 'masterCard' ? placeholderImg : partitionPlaceholder;
+    console.log(cardImg)
 
     return (
         <div
@@ -44,19 +47,19 @@ export const MasterCard = ({type, content, ...props }) => {
                 </div>
             </div>
             <div className="masterCard-img-wrapper">
-                <img className='masterCard-img' src={placeholderImg} alt={content.title}/>
+                <img className='masterCard-img' src={cardImg} alt={content.title}/>
             </div>
         </div>
     );
 }
 
 MasterCard.propTypes = {
-    type: PropTypes.oneOf(['default', 'small']),
+    type: PropTypes.oneOf(['masterCard', 'partition']),
     content: PropTypes.object.isRequired,
 }
 
 MasterCard.defaultProps = {
-    type: 'default',
+    type: 'masterCard',
 };
 
 export default MasterCard;
