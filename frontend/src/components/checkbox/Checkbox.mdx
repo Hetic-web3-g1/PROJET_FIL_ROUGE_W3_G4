@@ -1,0 +1,38 @@
+{/* Checkbox.mdx */}
+
+import { Canvas, Meta, Controls } from '@storybook/blocks';
+
+import * as CheckboxStories from './Checkbox.stories';
+
+<Meta of={CheckboxStories} />
+
+# Checkbox
+
+A checkbox is a square box that can be activated or deactivated when ticked. 
+
+Use checkboxes to select one or more options from a list of choices.
+<Canvas of={CheckboxStories.Base} />
+
+## Props
+<Controls />
+
+## Stories
+
+### Disabled
+
+A checkbox can be disabled or enabled
+<Canvas of={CheckboxStories.Disabled} />
+
+### Checked by default
+
+A checkbox can be checked by default
+<Canvas of={CheckboxStories.CheckedByDefault} />
+
+### Checked and disabled
+A checkbox can also merge these two states and be disabled and checked
+<Canvas of={CheckboxStories.CheckedDisabled} />
+
+### Secondary color
+If the background is black the checkbox label can switch to white (need a black background)
+<Canvas of={CheckboxStories.Secondary} />
+

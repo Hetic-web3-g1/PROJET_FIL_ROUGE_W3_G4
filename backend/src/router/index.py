@@ -2,7 +2,7 @@ from fastapi import APIRouter
 
 router = APIRouter(
     prefix="",
-    tags=["index"],
+    tags=["Index"],
 )
 
 @router.get("/")

@@ -6,9 +6,10 @@ from pydantic import BaseSettings
 
 class Settings(BaseSettings):
     database_url: str
+    meilisearch_masterkey: str
 
     class Config:
         environment = os.environ['ENVIRONMENT']
-        env_file = f"../env/{environment}.env"
+        env_file = f"../.env/{environment}.env"
 
 settings = Settings()
