@@ -5,7 +5,12 @@ import { Label } from '../label/Label'
 
 import './masterCard.css';
 
+import placeholderImg from '../../assets/cardPlaceholder.png';
+
 export const MasterCard = ({type, content, ...props }) => {
+
+    const createdAt = new Date(content.created_at);
+
     return (
         <div
             type="masterCard"
@@ -21,20 +26,37 @@ export const MasterCard = ({type, content, ...props }) => {
                         <Label type={content.status} label={content.status}/>
                     </div>
                 </div>
-                <div className='masterCard-content-description'>
+                <div className='masterCard-content-details'>
                     <div>
                         {content.instrument}
                     </div>
-                    <div>
-                        {content.created_by}
+                    <div className="masterCard-content-date-wrapper">
+                        <div>
+                            {content.created_by}
+                        </div>
+                        <div>
+                            {createdAt.toLocaleDateString()}
+                        </div>
                     </div>
-                    <div>
+                    <div className="masterCard-content-description">
                         {content.description}
                     </div>                  
                 </div>
             </div>
+            <div className="masterCard-img-wrapper">
+                <img className='masterCard-img' src={placeholderImg} alt={content.title}/>
+            </div>
         </div>
     );
 }
+
+MasterCard.propTypes = {
+    type: PropTypes.oneOf(['default', 'small']),
+    content: PropTypes.object.isRequired,
+}
+
+MasterCard.defaultProps = {
+    type: 'default',
+};
 
 export default MasterCard;
