@@ -1,5 +1,4 @@
 from pydantic import BaseModel
-from typing import Optional
 from uuid import UUID
 from datetime import datetime
 
@@ -9,11 +8,11 @@ class AnnotationCreate(BaseModel):
     created_by: UUID
 
 class Annotation(AnnotationCreate):
-    id: UUID
+    id: int
     created_at: datetime
 
 class AnnotationUpdate(BaseModel):
-    measure: Optional[int]
-    content: Optional[str]
+    measure: int | None
+    content: str | None
     updated_at: datetime = datetime.now()
     updated_by: UUID

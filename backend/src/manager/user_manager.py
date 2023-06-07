@@ -10,7 +10,7 @@ from database.tables.user import user_table
 def get_all_user(conn: Connection) -> Generator[User, None, None]:
     result = conn.execute(select(user_table))
     if result is None:
-        return
+        return None
     else:
         for user_row in result:
             user_dict = user_row._asdict()

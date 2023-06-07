@@ -1,9 +1,10 @@
-fastapi
-uvicorn
-psycopg2
-pytest
-sqlalchemy
-sqlalchemy_utils
-pydantic[dotenv]
-faker
-meilisearch
+fastapi 0.96.0
+uvicorn 0.22.0
+psycopg2 2.9.6
+pydantic[dotenv] 1.10.8
+pytest 7.3.1
+sqlalchemy 2.0.15
+sqlalchemy_utils 0.41.1
+faker 18.10.1
+httpx 0.24.1
+meilisearch 0.28.0

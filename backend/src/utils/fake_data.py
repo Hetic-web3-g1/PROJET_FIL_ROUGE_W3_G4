@@ -5,8 +5,10 @@ import random
 from utils.log import logging
 from database.db_engine import engine
 from database.tables.academy import academy_table
+from database.tables.annotation import annotation_table
 from database.tables.biography import biography_table
 from database.tables.comment import comment_table
+from database.tables.image import image_table
 from database.tables.masterclass import masterclass_table
 from database.tables.partition import partition_table
 from database.tables.tag import tag_table
@@ -14,8 +16,10 @@ from database.tables.user import user_table
 from database.tables.video import video_table
 from database.tables.work_analysis import work_analysis_table
 from schema.academy import AcademyCreate
+from schema.annotation import AnnotationCreate
 from schema.biography import BiographyCreate
 from schema.comment import CommentCreate
+from schema.image import ImageCreate
 from schema.masterclass import MasterclassCreate
 from schema.partition import PartitionCreate
 from schema.tag import TagCreate
@@ -23,8 +27,10 @@ from schema.user import UserCreate
 from schema.video import VideoCreate
 from schema.work_analysis import WorkAnalysisCreate
 from manager.academy_manager import create_academy
+from manager.annotation_manager import create_annotation
 from manager.biography_manager import create_biography
 from manager.comment_manager import create_comment
+from manager.image_manager import create_image
 from manager.masterclass_manager import create_masterclass
 from manager.partition_manager import create_partition
 from manager.tag_manager import create_tag
@@ -39,6 +45,15 @@ def create_academy_fake():
             "name": Faker().company()
         })
         create_academy(conn, academy)
+
+def create_annotation_fake():
+    with engine.begin() as conn:
+        annotation = AnnotationCreate(**{
+            "measure": random.randint(1, 100),
+            "content": Faker().text(),
+            "created_by": "12345648-1234-1234-1234-123456789123"
+        })
+        create_annotation(conn, annotation)
 
 def create_fixed_academy_fake():
     with engine.begin() as conn:
@@ -71,6 +86,15 @@ def create_comment_fake():
             "created_by": "12345648-1234-1234-1234-123456789123"
         })
         create_comment(conn, comment)
+
+def create_image_fake():
+    with engine.begin() as conn:
+        image = ImageCreate(**{
+            "title": Faker().word(),
+            "file_name": Faker().word(),
+            "created_by": "12345648-1234-1234-1234-123456789123"
+        })
+        create_image(conn, image)
 
 def create_masterclass_fake():
     with engine.begin() as conn:
@@ -154,8 +178,10 @@ def has_data(conn, table):
 def generate_data():
     tables = {
         academy_table: create_academy_fake,
+        annotation_table: create_annotation_fake,
         biography_table: create_biography_fake,
         comment_table: create_comment_fake,
+        image_table: create_image_fake,
         masterclass_table: create_masterclass_fake,
         partition_table: create_partition_fake,
         tag_table: create_tag_fake,
