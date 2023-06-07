@@ -19,3 +19,10 @@ export const Search = {
         type: 'search',
     },
 };
+
+export const Password = {
+    args: {
+        placeholder: 'Enter your password',
+        type: 'password',
+    },
+};

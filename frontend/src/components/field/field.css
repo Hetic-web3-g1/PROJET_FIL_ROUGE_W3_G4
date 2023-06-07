@@ -1,15 +1,16 @@
 .field-input {
-    width: 100%;
+    width: 96%;
     height: 100%;
     max-height: 200px;
     border: 1px solid #DFE1E6;
     outline: none;
-    font-size: 1.6rem;
+    font-size: 14px;
     font-weight: 400;
     color: var(--color-grey-dark-2);
     background-color: #FDFCFA;
-    border-radius: 0.5rem;
-    padding: 1.5rem 2rem;
+    color: #7A869A;
+    border-radius: 0.2rem;
+    padding: 2% 2%;
     resize: none;
 }
 
@@ -19,6 +20,12 @@
 
 .field-input-search {
     background: url("src/assets/search/Search.svg") no-repeat right;
+    background-size: 3vw;
+    background-position: 98%;
+}
+
+.field-input-password {
+    background: white url("src/assets/hide/eye.svg") no-repeat right;
     background-size: 3vw;
     background-position: 98%;
 }
