@@ -1,0 +1,9 @@
+.size {
+  font-family: 'Montserrat', sans-serif;
+  height: 300px;
+  font-size: 50px;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
