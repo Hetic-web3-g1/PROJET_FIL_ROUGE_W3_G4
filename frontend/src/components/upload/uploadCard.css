@@ -1,0 +1,12 @@
+.upload-card-content {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: normal;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px dashed #020A33;
+    padding: 0 1rem;
+}
