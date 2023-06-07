@@ -6,7 +6,7 @@ export const CardInstrument = ({ name, size, legend }) => {
     const mode = legend ? 'L-' : '';
   return (
     <div>
-        <img className='max-height' height={size} src={`src/assets/cardInstrument/${mode}${name}`} />
+        <img className='max-height' height={size} src={`src/assets/cardInstrument/${mode}${name}.svg`} />
     </div>
   );
 };

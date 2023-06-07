@@ -2,8 +2,10 @@ import react from 'React'
 import propTypes from 'prop-types'
 
 import Modal from '../Modal'
+import CardInstrument from '../../cardInstrument/CardInstrument'
 
 import './modalMasterClass.css'
+import Instruments from '../../../constants/instruments'
 
 export const ModalMasterClass = ({ biography, content, handleClose, handleSave }) => {
 
@@ -22,6 +24,13 @@ export const ModalMasterClass = ({ biography, content, handleClose, handleSave }
                 </div>
                 <div className="modal-masterclass-infos-spokenLanguage">
                 </div>
+            </div>
+            <div className="modal-masterclass-instrument">
+                {Instruments.map((instrument, index) => {
+                    return (
+                        <CardInstrument key={index} name={instrument} legend={true}/>
+                    )
+                })}
             </div>
         </div>
     );
