@@ -1,8 +1,8 @@
-import { Scrollbar } from './Scrollbar';
+import { ScrollbarComp } from './Scrollbar';
 
 export default {
   title: 'Scrollbar',
-  component: Scrollbar,
+  component: ScrollbarComp,
   tags: ['autodocs']
 };
 

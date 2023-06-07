@@ -1,9 +1,17 @@
-.size {
+.story-size {
   font-family: 'Montserrat', sans-serif;
   height: 300px;
   font-size: 50px;
 }
 
-::-webkit-scrollbar {
-  display: none;
+.div-with-zero-border {
+  border: 0 !important;
+}
+
+.ScrollbarsCustom-Track {
+  background: none !important;
+}
+
+.ScrollbarsCustom-Thumb {
+  width: 6px !important;
 }
