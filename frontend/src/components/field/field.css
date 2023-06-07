@@ -1,0 +1,24 @@
+.field-input {
+    width: 100%;
+    height: 100%;
+    max-height: 200px;
+    border: 1px solid #DFE1E6;
+    outline: none;
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: var(--color-grey-dark-2);
+    background-color: #FDFCFA;
+    border-radius: 0.5rem;
+    padding: 1.5rem 2rem;
+    resize: none;
+}
+
+.field-input:focus {
+    border: 1px solid #007bff;
+}
+
+.field-input-search {
+    background: url("src/assets/search/Search.svg") no-repeat right;
+    background-size: 3vw;
+    background-position: 98%;
+}
