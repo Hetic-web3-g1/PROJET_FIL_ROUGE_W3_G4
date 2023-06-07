@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from pip import main
 import os
+
+from sqlalchemy.ext.asyncio import create_async_engine
 
 from database.db_engine import metadata, engine
 from database.tables import academy, annotation, biography, comment, image, masterclass, partition, subtitle, tag, timecode, user, video, work_analysis
@@ -29,5 +32,3 @@ app.add_middleware(
 # search('Mad')
 
 routing(app)
-
-generate_data()
