@@ -20,7 +20,7 @@ ScrollbarComp.propTypes = {
 };
 
 ScrollbarComp.defaultProps = {
-  content: true
+  content: false
 };
 
 export default ScrollbarComp;
