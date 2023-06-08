@@ -15,7 +15,6 @@ export const ModalMasterClass = ({ biography, content, handleClose, handleSave }
 
     const handleInstrument = (instrument) => {
         setInstrument(instrument);
-        console.log(instrument);
     };
 
     const masterclassContent = (
