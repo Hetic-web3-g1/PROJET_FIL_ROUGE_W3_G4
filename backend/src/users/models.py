@@ -1,11 +1,8 @@
-from sqlalchemy.types import UUID
-
-from uuid import uuid4
-from sqlalchemy import Table, Column, ForeignKey, Integer, String, DateTime, LargeBinary
-from sqlalchemy.dialects.postgresql import UUID
 from uuid import uuid4
 from datetime import datetime
 
+from sqlalchemy.types import UUID
+from sqlalchemy import Table, Column, ForeignKey, String, DateTime, LargeBinary
 from src.database.db_engine import metadata
 
 

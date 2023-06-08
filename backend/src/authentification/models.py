@@ -1,14 +1,12 @@
+from uuid import uuid4
+
 from sqlalchemy.types import UUID
-
-from uuid import uuid4
-from sqlalchemy import Table, Column, ForeignKey, Integer, String, DateTime, LargeBinary
+from sqlalchemy import Column, ForeignKey, DateTime, LargeBinary
 from sqlalchemy.dialects.postgresql import UUID
-from uuid import uuid4
-from datetime import datetime
-
 import sqlalchemy as sa
 
 from src.database.db_engine import metadata
+
 
 reset_token = sa.Table(
     "reset_token",

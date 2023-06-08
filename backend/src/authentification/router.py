@@ -6,7 +6,6 @@ from . import exceptions as auth_exceptions
 
 import src.users.exceptions as user_exceptions
 import src.users.service as user_service
-
 from src.database.db_engine import engine
 
 router = APIRouter(
@@ -60,7 +59,9 @@ def login(
             password_hash, salt = auth_service.get_user_password_hash(conn, email)
             if not auth_service.verify_password(password_hash, salt, password):
                 raise auth_exceptions.InvalidCredentials
-            return "good"
+
+            user = user_service.get_user_by_email(conn, email)
+            return auth_service.generate_jwt_token(user)
 
     except auth_exceptions.InvalidCredentials:
         raise HTTPException(

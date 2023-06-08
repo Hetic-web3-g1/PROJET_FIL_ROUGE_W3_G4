@@ -1,27 +1,22 @@
 from uuid import UUID
+from hashlib import scrypt
+from datetime import datetime, timedelta
+import os
+import base64
+import hmac
 
 import sqlalchemy as sa
 from sqlalchemy.engine import Connection
-from fastapi import Request, Depends
-from fastapi.security import APIKeyHeader
+from fastapi.encoders import jsonable_encoder
+import sendgrid
+import jwt
 
 from .schemas import ResetToken
 from .models import reset_token
 from src.users.models import user_table
-import src.users.service as user_service
 from src.users.schemas import User
-
 from src.utils.env import settings
-
-from datetime import datetime, timedelta
-import os
-from hashlib import scrypt
-import base64
-
 from .exceptions import InvalidToken, ExpiredToken, InvalidCredentials
-import sendgrid
-import jwt
-import hmac
 
 
 def create_reset_token(
@@ -165,7 +160,7 @@ def generate_jwt_token(user: User) -> str:
     """
     return jwt.encode(
         {
-            **user,
+            **jsonable_encoder(user),
             # Add expiration date
         },
         settings.jwt_private_key,
