@@ -12,7 +12,6 @@ export const MasterCard = ({type, content, ...props }) => {
 
     const createdAt = new Date(content.created_at);
     const cardImg = type === 'masterCard' ? placeholderImg : partitionPlaceholder;
-    console.log(cardImg)
 
     return (
         <div

@@ -4,12 +4,11 @@
     max-height: 200px;
     border: 1px solid #DFE1E6;
     outline: none;
-    font-size: 1.6rem;
-    font-weight: 400;
+    font-size: 1rem;
     color: var(--color-grey-dark-2);
     background-color: #FDFCFA;
     border-radius: 0.5rem;
-    padding: 1.5rem 2rem;
+    padding: 0.5rem 0.5rem;
     resize: none;
 }
 

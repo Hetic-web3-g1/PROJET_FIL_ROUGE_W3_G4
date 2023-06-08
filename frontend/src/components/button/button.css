@@ -6,20 +6,21 @@
 }
 
 .button-primary {
-  color: black;
+  color: #161C3D;
   background-color: white;
-  border: 2px solid black; 
+  border: 2px solid #161C3D; 
 }
 
 .button-secondary {
   color: white;
-  background-color: rgb(22,28,61);
-  border: transparent;
+  background-color: #161C3D;
+  border: 2px solid #161C3D; 
 }
 
 .button-small {
   font-size: 12px;
-  padding: 10px 16px;
+  padding: 6px 10px;
+  max-width: 100px;
 }
 
 .button-medium {
