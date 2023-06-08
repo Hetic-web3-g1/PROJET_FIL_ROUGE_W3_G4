@@ -24,8 +24,25 @@
     background-position: 98%;
 }
 
-.field-input-password {
+/* .field-input-password {
     background: white url("src/assets/hide/eye.svg") no-repeat right;
     background-size: 3vw;
     background-position: 98%;
+} */
+
+.field-icon{
+    display: none;
+}
+.field-icon-password{
+    background: url("src/assets/hide/eye.svg") no-repeat right;
+    display: block;
+    position: absolute;
+    margin-right: 1%;
+}
+.input-wrap{
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
 }
