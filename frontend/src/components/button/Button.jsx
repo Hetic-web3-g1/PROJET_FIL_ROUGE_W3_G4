@@ -6,7 +6,7 @@ export const Button = ({ primary, type, backgroundColor, size, label, ...props }
   const mode = primary ? 'button-primary' : 'button-secondary';
   return (
     <button
-      type="button"
+      type={type}
       className={['button', `button-${size}`, mode].join(' ')}
       style={backgroundColor && { backgroundColor }}
       {...props}
@@ -26,6 +26,7 @@ Button.propTypes = {
 };
 
 Button.defaultProps = {
+  type: 'button',
   backgroundColor: null,
   primary: false,
   size: 'medium',

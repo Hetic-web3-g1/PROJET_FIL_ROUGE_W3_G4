@@ -30,9 +30,9 @@ export const Modal = ({ title, content, size, handleClose, handleSave }) => {
 }
 
 Modal.propTypes = {
-    title: propTypes.string.isRequired,
-    content: propTypes.string.isRequired,
-    handleClose: propTypes.func.isRequired,
+    title: propTypes.string,
+    content: propTypes.object,
+    handleClose: propTypes.func,
 };
 
 export default Modal;
