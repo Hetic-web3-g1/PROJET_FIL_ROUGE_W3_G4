@@ -1,20 +1,15 @@
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy_utils import database_exists, create_database
 from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.ext.asyncio import create_async_engine
 
-from utils.log import logging
-from utils.env import settings
+from src.utils.log import logging
+from src.utils.env import settings
 
 # Connection to database
 engine = create_engine(
-    settings.database_url,
-    connect_args={"options": "-c timezone=utc"}
+    settings.database_url, connect_args={"options": "-c timezone=utc"}
 )
 
-aysnc_engine = create_async_engine(
-    settings.async_database_url
-)
 
 # Check existence of db, if not, create it
 if not database_exists(engine.url):

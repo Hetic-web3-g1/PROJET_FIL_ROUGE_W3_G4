@@ -1,12 +1,12 @@
 from sqlalchemy.types import UUID
 
 from uuid import uuid4
-from sqlalchemy import Table, Column, ForeignKey, Integer, String, DateTime
+from sqlalchemy import Table, Column, ForeignKey, Integer, String, DateTime, LargeBinary
 from sqlalchemy.dialects.postgresql import UUID
 from uuid import uuid4
 from datetime import datetime
 
-from database.db_engine import metadata
+from src.database.db_engine import metadata
 
 
 user_table = Table(
@@ -16,7 +16,8 @@ user_table = Table(
     Column("first_name", String(), nullable=False),
     Column("last_name", String(), nullable=False),
     Column("email", String(), unique=True, nullable=False),
-    Column("password", String(), nullable=False),
+    Column("password_hash", LargeBinary(), nullable=True),
+    Column("salt", LargeBinary(), nullable=True),
     Column("role", String(), nullable=False),
     Column("academy_id", UUID(as_uuid=True), ForeignKey("academy.id"), nullable=False),
     Column("image_id", UUID(as_uuid=True), nullable=True),
@@ -25,9 +26,9 @@ user_table = Table(
     Column("updated_by", UUID(as_uuid=True), ForeignKey("user.id"), nullable=True),
 )
 
-user_tag_table = Table(
-    "user_tag",
-    metadata,
-    Column("user_id", UUID(as_uuid=True), ForeignKey("user.id"), nullable=False),
-    Column("tag_id", Integer, ForeignKey("tag.id"), nullable=False),
-)
+# user_tag_table = Table(
+#     "user_tag",
+#     metadata,
+#     Column("user_id", UUID(as_uuid=True), ForeignKey("user.id"), nullable=False),
+#     Column("tag_id", Integer, ForeignKey("tag.id"), nullable=False),
+# )

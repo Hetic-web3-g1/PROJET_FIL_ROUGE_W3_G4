@@ -3,18 +3,20 @@ from typing import Optional
 from uuid import UUID
 from datetime import datetime
 
+
 class UserCreate(BaseModel):
     first_name: str
     last_name: str
     email: str
-    password: str
-    role: str = "User"
-    academy_id: Optional[UUID]
-    image_id: Optional[UUID]
+    role: str = "test"
+    academy_id: UUID
+    image_id: UUID | None
+
 
 class User(UserCreate):
     id: UUID
-    created_by: UUID
-    created_at: datetime
+
+    created_by: UUID | None
+    created_at: datetime | None
     updated_at: datetime | None
     updated_by: UUID | None

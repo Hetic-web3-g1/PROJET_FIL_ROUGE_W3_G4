@@ -1,9 +1,11 @@
 fastapi
 uvicorn
-psycopg2
+psycopg2-binary
 pytest
 sqlalchemy[asyncio]
 sqlalchemy_utils
 pydantic[dotenv]
 faker
 meilisearch
+black
+PyJWT[crypto]==2.1.0
