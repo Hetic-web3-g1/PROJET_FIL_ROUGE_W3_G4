@@ -1,0 +1,23 @@
+.header {
+    background-color: #161C3D;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 10vh;
+    max-height: 100px;
+    padding: 5px 20px;
+}
+
+.header-searchbar {
+    width: 60%;
+}
+
+.header-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 20%;
+    align-items: center;
+}
