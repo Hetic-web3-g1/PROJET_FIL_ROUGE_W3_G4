@@ -6,15 +6,15 @@
 }
 
 .button-primary {
-  color: rgb(22,28,61);
+  color: #161C3D;
   background-color: white;
-  border: 2px solid rgb(22,28,61); 
+  border: 2px solid #161C3D; 
 }
 
 .button-secondary {
   color: white;
-  background-color: rgb(22,28,61);
-  border: 2px solid rgb(22,28,61); 
+  background-color: #161C3D;
+  border: 2px solid #161C3D; 
 }
 
 .button-small {
