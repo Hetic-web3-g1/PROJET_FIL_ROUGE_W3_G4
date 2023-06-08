@@ -12,20 +12,20 @@ export const Base = {
 
 export const CustomSVG = {
   args: {
-    name: 'Trombone.svg',
+    name: 'Trombone',
   },
 };
 
 export const CustomSize = {
   args: {
-    name: 'Trombone.svg',
+    name: 'Trombone',
     size: 50
   },
 };
 
 export const HasLegend = {
   args: {
-    name: 'Trombone.svg',
+    name: 'Trombone',
     legend: true
   },
 };
