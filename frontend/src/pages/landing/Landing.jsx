@@ -4,7 +4,6 @@ import './Landing.css';
 import Button from '../../components/button/Button';
 
 export const Landing = ({ }) => {
-  // const mode = legend ? 'L-' : '';
   return (
     <div className="landing-wrap">
       <img
@@ -15,17 +14,5 @@ export const Landing = ({ }) => {
     </div>
   );
 };
-
-// CardInstrument.propTypes = {
-//   name: PropTypes.string,
-//   legend: PropTypes.bool,
-//   size: PropTypes.number
-// };
-
-// CardInstrument.defaultProps = {
-//   name: 'Celio.svg',
-//   legend: false,
-//   size: 100
-// };
 
 export default Landing;

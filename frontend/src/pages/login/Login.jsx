@@ -5,7 +5,6 @@ import Button from '../../components/button/Button';
 import Field from '../../components/field/Field';
 
 export const Login = ({ }) => {
-  // const mode = legend ? 'L-' : '';
   return (
     <div className="login-wrap">
       <img
@@ -18,22 +17,8 @@ export const Login = ({ }) => {
           <label for="password" className='login-field' >Password</label>
           <Field type="password" placeholder="Enter your password" />
           <Button label="Login" class="button button-secondary padded" />
-
       </div>
     </div>
   );
 }; 
-
-// CardInstrument.propTypes = {
-//   name: PropTypes.string,
-//   legend: PropTypes.bool,
-//   size: PropTypes.number
-// };
-
-// CardInstrument.defaultProps = {
-//   name: 'Celio.svg',
-//   legend: false,
-//   size: 100
-// };
-
 export default Login;

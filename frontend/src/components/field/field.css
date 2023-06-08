@@ -13,23 +13,14 @@
     padding: 2% 2%;
     resize: none;
 }
-
 .field-input:focus {
     border: 1px solid #007bff;
 }
-
 .field-input-search {
     background: url("src/assets/search/Search.svg") no-repeat right;
     background-size: 3vw;
     background-position: 98%;
 }
-
-/* .field-input-password {
-    background: white url("src/assets/hide/eye.svg") no-repeat right;
-    background-size: 3vw;
-    background-position: 98%;
-} */
-
 .field-icon{
     display: none;
 }
@@ -41,7 +32,6 @@
     height: -webkit-fill-available;
     width: 25px;
 }
-
 .input-wrap{
     position: relative;
     width: 100%;
