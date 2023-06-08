@@ -6,6 +6,7 @@ from pydantic import BaseSettings, Field
 
 class Settings(BaseSettings):
     database_url: str
+    database_log_url: str
     meilisearch_masterkey: str = Field(default=None)
 
     class Config:
