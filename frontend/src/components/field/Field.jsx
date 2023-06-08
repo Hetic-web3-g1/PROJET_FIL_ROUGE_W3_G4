@@ -1,6 +1,6 @@
 import React from 'react';
 import propTypes from 'prop-types';
-import './field.css'
+import './field.css';
 const searchIcon = '../../assets/search/search.svg';
 export const Field = ({ type, placeholder, onChange, id }) => {
 function HideAndShowPassword () {
@@ -11,7 +11,7 @@ function HideAndShowPassword () {
         x.type = "password";
     }}
     return (
-        <div className='input-wrap'>
+        <div className={['input-wrap', `input-wrap-${type}`].join(' ')}>
             <input
                 className={['field-input', `field-input-${type}`].join(' ')}
                 type={type}

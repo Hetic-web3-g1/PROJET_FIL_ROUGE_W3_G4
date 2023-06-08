@@ -41,3 +41,6 @@
     align-items: center;
     justify-content: flex-end;
 }
+.input-wrap-checkbox{
+    width: 15%;
+}
