@@ -3,6 +3,10 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+
+}
+body{
+  background-color: whitesmoke;
 }
 
 .logo {
@@ -35,6 +39,7 @@
 
 .card {
   padding: 2em;
+  
 }
 
 .read-the-docs {

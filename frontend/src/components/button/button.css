@@ -3,30 +3,37 @@
   font-weight: 700;
   cursor: pointer;
   display: inline-block;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  transition: border-color 0.25s;
+  max-width: 20vw;
 }
-
+.padded{
+  padding: 0.6em 4.2em;
+  margin-top: 8%;
+  width: 100%;
+  border-radius: 0.2rem;
+}
 .button-primary {
-  color: black;
+  color: #161C3D;
   background-color: white;
-  border: 2px solid black; 
+  border: 2px solid #161C3D; 
 }
-
 .button-secondary {
   color: white;
-  background-color: rgb(22,28,61);
-  border: transparent;
+  background-color: #161C3D;
+  border: 2px solid #161C3D; 
 }
-
 .button-small {
   font-size: 12px;
-  padding: 10px 16px;
+  padding: 6px 10px;
+  max-width: 100px;
 }
-
 .button-medium {
   font-size: 14px;
   padding: 11px 20px;
 }
-
 .button-large {
   font-size: 16px;
   padding: 12px 24px;

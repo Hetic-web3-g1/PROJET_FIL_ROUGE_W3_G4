@@ -1,5 +1,4 @@
 from pydantic import BaseModel
-from typing import Optional
 from uuid import UUID
 from datetime import datetime
 
@@ -16,9 +15,9 @@ class Video(VideoCreate):
     created_at: datetime
 
 class VideoUpdate(BaseModel):
-    title: Optional[str]
-    duration: Optional[float]
-    status: Optional[str]
-    file_name: Optional[str]
+    title: str | None
+    duration: float | None
+    status: str | None
+    file_name: str | None
     updated_at: datetime = datetime.now()
     updated_by: UUID

@@ -1,5 +1,5 @@
 # Development stage
-FROM python:3.9 AS development
+FROM python:3.11 AS development
 
 # Set the working directory in the container
 WORKDIR /app

@@ -1,12 +1,12 @@
 from pydantic import BaseModel
-from typing import Optional, List
+from typing import List
 from uuid import UUID
 from datetime import datetime
 
 class WorkAnalysisCreate(BaseModel):
-    about: Optional[str]
-    learning: Optional[List[str]]
-    content: Optional[str]
+    about: str | None
+    learning: List[str]
+    content: str | None
     status: str = "created"
     created_by: UUID
 
@@ -15,9 +15,9 @@ class WorkAnalysis(WorkAnalysisCreate):
     created_at: datetime
 
 class WorkAnalysisUpdate(BaseModel):
-    about: Optional[str]
-    learning: Optional[List[str]]
-    content: Optional[str]
-    status: Optional[str]
+    about: str | None
+    learning: List[str]
+    content: str | None
+    status: str | None
     updated_at: datetime = datetime.now()
     updated_by: UUID

@@ -1,19 +1,19 @@
 from pydantic import BaseModel
-from typing import Optional, List
+from typing import List
 from uuid import UUID
 from datetime import datetime
 
 class BiographyCreate(BaseModel):
     first_name: str
     last_name: str
-    instrument: Optional[List[str]] = None
-    nationality: Optional[str] = None
-    website: Optional[str] = None
-    award: Optional[List[str]] = None
-    content: Optional[str] = None
+    instrument: List[str] | None
+    nationality: str | None
+    website: str | None
+    award: List[str] | None
+    content: str | None
     type: str
     status: str = "created"
-    image_id: Optional[UUID] = None
+    image_id: UUID | None
     created_by: UUID
 
 class Biography(BiographyCreate):
@@ -21,15 +21,15 @@ class Biography(BiographyCreate):
     created_at: datetime
 
 class BiographyUpdate(BaseModel):
-    first_name: Optional[str]
-    last_name: Optional[str]
-    instrument: Optional[List[str]]
-    nationality: Optional[str]
-    website: Optional[str]
-    award: Optional[List[str]]
-    content: Optional[str]
-    type: Optional[str]
-    status: Optional[str]
-    image_id: Optional[UUID]
+    first_name: str | None
+    last_name: str | None
+    instrument: str | None
+    nationality: str | None
+    website: str | None
+    award: str | None
+    content: str | None
+    type: str | None
+    status: str | None
+    image_id: UUID | None
     updated_at: datetime = datetime.now()
     updated_by: UUID

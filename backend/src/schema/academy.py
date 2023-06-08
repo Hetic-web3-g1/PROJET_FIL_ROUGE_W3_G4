@@ -1,5 +1,4 @@
 from pydantic import BaseModel
-from typing import Optional
 from uuid import UUID
 from datetime import datetime
 
@@ -11,5 +10,5 @@ class Academy(AcademyCreate):
     created_at: datetime
 
 class AcademyUpdate(BaseModel):
-    name: Optional[str]
+    name: str | None
     updated_at: datetime = datetime.now()
