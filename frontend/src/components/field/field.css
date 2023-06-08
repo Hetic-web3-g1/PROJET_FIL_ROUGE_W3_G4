@@ -5,12 +5,13 @@
     border: 1px solid #DFE1E6;
     outline: none;
     font-size: 1rem;
-    color: var(--color-grey-dark-2);
     background-color: #FDFCFA;
-    border-radius: 0.5rem;
-    padding: 0.5rem 0.5rem;
     resize: none;
+    color: black;
+    border-radius: 0.2rem;
+    padding: 2% 2%;
 }
+
 .field-input:focus {
     border: 1px solid #007bff;
 }
@@ -19,9 +20,11 @@
     background-size: 3vw;
     background-position: 98%;
 }
+
 .field-icon{
     display: none;
 }
+
 .field-icon-password{
     background: url("src/assets/hide/eye.svg") no-repeat right;
     display: block;
@@ -30,6 +33,7 @@
     height: -webkit-fill-available;
     width: 25px;
 }
+
 .input-wrap{
     position: relative;
     width: 100%;
