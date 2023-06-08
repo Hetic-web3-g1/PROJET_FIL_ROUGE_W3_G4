@@ -40,6 +40,11 @@
     margin-bottom: 1vh;
     overflow-x: auto;
     white-space: nowrap;
+
+}
+
+.modal-masterclass-instrument::-webkit-scrollbar{
+    display: none;
 }
 
 .instrument-card {
