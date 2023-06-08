@@ -14,7 +14,7 @@ export const Login = ({ }) => {
       </img>
       <div className="login-form">
           <label for="email" className='login-field'>Email</label>
-          <Field type="" placeholder="Enter your mail" />
+          <Field type="email" placeholder="Enter your mail" />
           <label for="password" className='login-field' >Password</label>
           <Field type="password" placeholder="Enter your password" />
           <Button label="Login" class="button button-secondary padded" />

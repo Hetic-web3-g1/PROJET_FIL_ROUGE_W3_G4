@@ -38,7 +38,10 @@
     display: block;
     position: absolute;
     margin-right: 1%;
+    height: -webkit-fill-available;
+    width: 25px;
 }
+
 .input-wrap{
     position: relative;
     width: 100%;
