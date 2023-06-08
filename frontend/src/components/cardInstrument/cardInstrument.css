@@ -2,8 +2,3 @@
     max-height: 100px;
     cursor: pointer;
 }
-
-.selected {
-    background-color: #007bff;
-    color: white;
-}
