@@ -1,13 +1,9 @@
 import os
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from src.utils.env import settings
-
-
 from src.database.db_engine import metadata, engine
-
 
 # from src.database.tables import (
 #     academy,

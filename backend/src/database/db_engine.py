@@ -1,7 +1,6 @@
 from sqlalchemy import create_engine, MetaData
-from sqlalchemy_utils import database_exists, create_database
 from sqlalchemy.exc import SQLAlchemyError
-
+from sqlalchemy_utils import database_exists, create_database
 from src.utils.log import logging
 from src.utils.env import settings
 
