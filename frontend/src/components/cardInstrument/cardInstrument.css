@@ -1,3 +1,16 @@
-.max-height {
-    max-height: 100px;
+.img-card-instrument {
+    border: 2px solid #020A33;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+.highlight {
+    transition: ease 0.3s;
+    transform: scale(1.1);
+    border: 2px solid #5900FF;
+}
+
+.highlight-close {
+    transition: ease 0.3s;
+    transform: scale(1);
 }

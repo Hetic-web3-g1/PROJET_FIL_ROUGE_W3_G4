@@ -1,4 +1,4 @@
-import react from 'react';
+import React from 'react';
 import propTypes from 'prop-types';
 import './field.css'
 const searchIcon = '../../assets/search/search.svg';
