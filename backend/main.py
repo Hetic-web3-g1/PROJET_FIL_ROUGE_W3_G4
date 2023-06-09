@@ -4,6 +4,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from src.utils.env import settings
 from src.database.db_engine import metadata, engine
+from src.database.db_engine_log import metadata_log, engine_log
+
 
 # from src.database.tables import (
 #     academy,
@@ -54,4 +56,5 @@ from src.academy.models import academy
 app.include_router(user_router)
 app.include_router(auth_router)
 
+metadata_log.create_all(bind=engine_log)
 metadata.create_all(engine)

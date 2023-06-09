@@ -1,8 +1,8 @@
 from sqlalchemy import create_engine, MetaData
-from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy_utils import database_exists, create_database
-from src.utils.log import logging
+
 from src.utils.env import settings
+from src.utils.log.log_manager import log
 
 # Connection to database
 engine = create_engine(
@@ -13,14 +13,6 @@ engine = create_engine(
 # Check existence of db, if not, create it
 if not database_exists(engine.url):
     create_database(engine.url)
-
-# Try except to test db conncection
-try:
-    engine.connect()
-    logging.info("DB connection success")
-
-except SQLAlchemyError as err:
-    engine.connect()
-    logging.error("Error", err.__cause__)
+    log(level="INFO", message="Database created.")
 
 metadata = MetaData()
