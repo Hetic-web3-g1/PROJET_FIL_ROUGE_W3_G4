@@ -12,6 +12,7 @@ from .db_engine import metadata
 
 T = TypeVar("T")
 
+
 def parse_row(row, model: Type[T]) -> T:
     if "data" in row:
         return parse_obj_as(model, {**row.data, **row})
@@ -21,6 +22,7 @@ def parse_row(row, model: Type[T]) -> T:
 
 def get_table_object(table_name: str):
     return metadata.tables[table_name]
+
 
 def create_object(
     conn: Connection,
@@ -54,12 +56,15 @@ def create_object(
     # Convert UUID objects to strings
     result = tuple(str(item) if isinstance(item, UUID) else item for item in result)
     # Convert datetime object to string
-    result = tuple(str(item) if isinstance(item, datetime.datetime) else item for item in result)
+    result = tuple(
+        str(item) if isinstance(item, datetime.datetime) else item for item in result
+    )
 
     if parser is not None:
         return parser(result)
     else:
         return result
+
 
 def update_object(
     conn: Connection,
@@ -73,7 +78,7 @@ def update_object(
     table = get_table_object(object_name)
     if isinstance(object_data, BaseModel):
         object_data = object_data.dict()
-    
+
     # Check if object exists
     stmt = sa.select(table).where(table.c[id_key] == object_id)
     result = conn.execute(stmt).fetchone()
@@ -104,18 +109,21 @@ def update_object(
     # Convert UUID objects to strings
     result = tuple(str(item) if isinstance(item, UUID) else item for item in result)
     # Convert datetime object to string
-    result = tuple(str(item) if isinstance(item, datetime.datetime) else item for item in result)
+    result = tuple(
+        str(item) if isinstance(item, datetime.datetime) else item for item in result
+    )
 
     if parser is not None:
         return parser(result)
     else:
         return result
 
+
 def delete_object(
     conn: Connection,
     object_name: str,
     object_id: Union[str, UUID, int],
-    id_key: str = "id"
+    id_key: str = "id",
 ):
     table = get_table_object(object_name)
 

@@ -1,9 +1,8 @@
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy_utils import database_exists, create_database
 
-from utils.env import settings
-from utils.log.log_manager import log
 from src.utils.env import settings
+from src.utils.log.log_manager import log
 
 # Connection to database
 engine = create_engine(

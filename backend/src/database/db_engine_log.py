@@ -1,12 +1,11 @@
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy_utils import database_exists, create_database
 
-from utils.env import settings
+from src.utils.env import settings
 
 # Connection to database
 engine_log = create_engine(
-    settings.database_log_url,
-    connect_args={"options": "-c timezone=utc"}
+    settings.database_log_url, connect_args={"options": "-c timezone=utc"}
 )
 
 # Check existence of db, if not, create it

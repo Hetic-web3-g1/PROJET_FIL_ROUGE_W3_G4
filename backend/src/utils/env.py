@@ -10,6 +10,7 @@ from pydantic import BaseSettings
 class Settings(BaseSettings):
     environment: Literal["dev", "prod"]
     database_url: str
+    database_log_url: str
 
     # keys
     reset_token_key: str
