@@ -40,7 +40,6 @@
     margin-bottom: 1vh;
     overflow-x: auto;
     white-space: nowrap;
-    /* width: 100%; */
     width: 75vw;
 }
 
@@ -109,6 +108,5 @@
 @media screen and (max-width: 900px) {
     .modal-bio-instrument-wrapper{
         display: none;
-        
     }
 }
