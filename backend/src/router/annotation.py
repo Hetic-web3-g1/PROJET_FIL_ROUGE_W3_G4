@@ -1,11 +1,11 @@
 from fastapi import APIRouter
 from typing import List, Union
 
-from database.db_engine import engine
-from schema.response import ResponseModel
-from utils.route_function import check_id, route_response, get_route_response
-from schema.annotation import Annotation, AnnotationCreate, AnnotationUpdate
-from manager import annotation_manager
+from src.database.db_engine import engine
+from src.schema.response import ResponseModel
+from src.utils.route_function import check_id, route_response, get_route_response
+from src.schema.annotation import Annotation, AnnotationCreate, AnnotationUpdate
+from src.manager import annotation_manager
 
 router = APIRouter(
     prefix="/annotation",
@@ -16,7 +16,7 @@ router = APIRouter(
 @router.get("", response_model=Union[List[Annotation], None])
 def get_all_annotations():
     with engine.begin() as conn:
-        response = list(annotation_manager.get_all_annotation(conn))
+        response = list(annotation_manager.get_all_annoxsdtation(conn))
         return get_route_response(response, 200, 404, "No annotations found")
 
 # Get annotation by id

@@ -2,9 +2,9 @@ from sqlalchemy.engine import Connection
 from sqlalchemy import select
 from typing import Union, Generator
 
-from database import db_srv
-from schema.annotation import Annotation, AnnotationCreate, AnnotationUpdate
-from database.tables.annotation import annotation_table
+from src.database import db_srv
+from src.schema.annotation import Annotation, AnnotationCreate, AnnotationUpdate
+from src.database.tables.annotation import annotation_table
 
 def get_all_annotation(conn: Connection) -> Generator[Annotation, None, None]:
     result = conn.execute(select(annotation_table))

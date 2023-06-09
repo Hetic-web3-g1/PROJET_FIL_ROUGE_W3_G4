@@ -5,7 +5,7 @@ from sqlalchemy.engine import Connection
 
 from src.database.db_engine_log import metadata_log, engine_log
 from src.utils.log.log_schema import LogCreate
-
+from src.utils.log.log_table import log_table
 
 def create_log(conn: Connection, log: LogCreate):
     table = metadata_log.tables["log"]

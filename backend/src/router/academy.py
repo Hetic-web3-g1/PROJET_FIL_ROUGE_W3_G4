@@ -1,11 +1,11 @@
 from fastapi import APIRouter
 from typing import List, Union
 
-from database.db_engine import engine
-from schema.response import ResponseModel
-from utils.route_function import check_id, route_response, get_route_response
-from schema.academy import Academy, AcademyCreate, AcademyUpdate
-from manager import academy_manager
+from src.database.db_engine import engine
+from src.schema.response import ResponseModel
+from src.utils.route_function import check_id, route_response, get_route_response
+from src.schema.academy import Academy, AcademyCreate, AcademyUpdate
+from src.manager import academy_manager
 
 router = APIRouter(
     prefix="/academy",
