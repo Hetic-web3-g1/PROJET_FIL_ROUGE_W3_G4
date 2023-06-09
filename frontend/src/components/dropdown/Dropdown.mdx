@@ -1,0 +1,27 @@
+{/* Dropdown.mdx */}
+
+import { Canvas, Meta, Controls } from '@storybook/blocks';
+
+import * as DropdownStories from './Dropdown.stories';
+
+<Meta of={DropdownStories} />
+
+# Dropdown
+Dropdown component for select an item in a list.
+
+<Canvas of={DropdownStories.Base} />
+
+## Props
+<Controls />
+
+## Stories
+
+### Custom options
+
+We can specify custom options to fill the dropdown.
+<Canvas of={DropdownStories.CustomOptions} />
+
+### Disabled option
+
+We can disabled the dropdown.
+<Canvas of={DropdownStories.DisabledOption} />
