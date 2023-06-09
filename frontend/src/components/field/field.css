@@ -44,3 +44,12 @@
 .input-wrap-checkbox{
     width: 15%;
 }
+
+.field-input-bio{
+    height: 898px;
+    padding: 0;
+    max-height: max-content;
+}
+.input-wrap-bio{
+    display: block;
+}

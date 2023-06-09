@@ -65,7 +65,11 @@ export const ModalBio = ({ biography, content, handleClose, handleSave }) => {
                     })}
                 </div>
             </div>
-
+            <div style={{ display: 'flex','flex-direction': 'column'}}>
+                <span>Biography</span>
+                {/* <Field type="bio" placeholder='...'/> */}
+                <textarea className="modal-bio-textarea" placeholder="..." row='20'/>
+            </div>
         </div>
     );
 
