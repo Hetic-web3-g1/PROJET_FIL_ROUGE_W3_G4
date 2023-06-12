@@ -1,11 +1,11 @@
 from fastapi import APIRouter
 from typing import List, Union
 
-from database.db_engine import engine
-from schema.response import ResponseModel
-from utils.route_function import check_id, route_response, get_route_response
-from schema.image import Image, ImageCreate, ImageUpdate
-from manager import image_manager
+from src.database.db_engine import engine
+from src.schema.response import ResponseModel
+from src.utils.route_function import check_id, route_response, get_route_response
+from src.schema.image import Image, ImageCreate
+from src.manager import image_manager
 
 router = APIRouter(
     prefix="/image",
@@ -36,7 +36,7 @@ def create_image(image: ImageCreate):
 
 # Update image
 @router.put("/{image_id}", response_model=ResponseModel)
-def update_image(image_id: str, image: ImageUpdate):
+def update_image(image_id: str, image: Image):
     check_id(image_id)
     with engine.begin() as conn:
         response = image_manager.update_image(conn, image_id, image)

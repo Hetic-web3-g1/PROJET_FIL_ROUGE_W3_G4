@@ -17,17 +17,8 @@ class MasterclassCreate(BaseModel):
 
 class Masterclass(MasterclassCreate):
     id: UUID
+    created_by: UUID
     created_at: datetime
+    updated_at: datetime | None
+    updated_by: UUID | None
 
-class MasterclassUpdate(BaseModel):
-    academy_id: UUID | None
-    title: str | None
-    description: str | None
-    teacher_bio_id: UUID | None
-    composer_bio_id: UUID | None
-    work_analysis_id: UUID | None
-    partition_id: UUID | None
-    instrument: List[str] | None
-    status: str | None
-    updated_at: datetime = datetime.now()
-    updated_by: UUID

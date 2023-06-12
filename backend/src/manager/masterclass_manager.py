@@ -3,9 +3,9 @@ from sqlalchemy import select
 from typing import Union, Generator
 from uuid import uuid4
 
-from database import db_srv
-from schema.masterclass import Masterclass, MasterclassCreate, MasterclassUpdate
-from database.tables.masterclass import masterclass_table
+from src.database import db_srv
+from src.schema.masterclass import Masterclass, MasterclassCreate, MasterclassUpdate
+from src.database.tables.masterclass import masterclass_table
 
 def get_all_masterclass(conn: Connection) -> Generator[Masterclass, None, None]:
     result = conn.execute(select(masterclass_table))

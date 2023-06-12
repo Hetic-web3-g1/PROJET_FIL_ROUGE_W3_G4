@@ -3,9 +3,9 @@ from sqlalchemy import select
 from typing import Union, Generator
 from uuid import uuid4
 
-from database import db_srv
-from schema.user import User, UserCreate, UserUpdate
-from database.tables.user import user_table
+from src.database import db_srv
+from src.users.schemas import User, UserCreate
+from src.users.models import user_table
 
 def get_all_user(conn: Connection) -> Generator[User, None, None]:
     result = conn.execute(select(user_table))
@@ -32,7 +32,7 @@ def create_user(conn: Connection, user: UserCreate):
     except Exception as e:
         return {"status": "error", "message": str(e)}
 
-def update_user(conn: Connection, user_id: str, user: UserUpdate):
+def update_user(conn: Connection, user_id: str, user: User):
     try:
         # Filter out None values from the user object
         filtered_user = {k: v for k, v in user.dict().items() if v is not None}

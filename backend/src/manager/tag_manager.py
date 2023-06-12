@@ -2,9 +2,9 @@ from sqlalchemy.engine import Connection
 from sqlalchemy import select
 from typing import Union, Generator
 
-from database import db_srv
-from schema.tag import Tag, TagCreate, TagUpdate
-from database.tables.tag import tag_table
+from src.database import db_srv
+from src.schema.tag import Tag, TagCreate, TagUpdate
+from src.database.tables.tag import tag_table
 
 def get_all_tag(conn: Connection) -> Generator[Tag, None, None]:
     result = conn.execute(select(tag_table))

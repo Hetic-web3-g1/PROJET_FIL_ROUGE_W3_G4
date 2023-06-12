@@ -3,9 +3,9 @@ from sqlalchemy import select
 from typing import Union, Generator
 from uuid import uuid4
 
-from database import db_srv
-from schema.biography import Biography, BiographyCreate, BiographyUpdate
-from database.tables.biography import biography_table
+from src.database import db_srv
+from src.schema.biography import Biography, BiographyCreate, BiographyUpdate
+from src.database.tables.biography import biography_table
 
 def get_all_biography(conn: Connection) -> Generator[Biography, None, None]:
     result = conn.execute(select(biography_table))

@@ -3,9 +3,9 @@ from sqlalchemy import select
 from typing import Union, Generator
 from uuid import uuid4
 
-from database import db_srv
-from schema.partition import Partition, PartitionCreate, PartitionUpdate
-from database.tables.partition import partition_table
+from src.database import db_srv
+from src.schema.partition import Partition, PartitionCreate, PartitionUpdate
+from src.database.tables.partition import partition_table
 
 def get_all_partition(conn: Connection) -> Generator[Partition, None, None]:
     result = conn.execute(select(partition_table))

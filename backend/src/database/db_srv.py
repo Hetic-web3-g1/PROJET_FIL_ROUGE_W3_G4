@@ -1,11 +1,13 @@
+import datetime
+from uuid import UUID
+from typing import Callable, Optional, TypeVar, Type, Union, Any
+
 from fastapi.encoders import jsonable_encoder
 from pydantic import parse_obj_as
 from pydantic.main import BaseModel
 import sqlalchemy as sa
 from sqlalchemy.engine import Connection
-from typing import Callable, Optional, TypeVar, Type, Union, Any
-from uuid import UUID
-import datetime
+from sqlalchemy import Table
 
 from .db_engine import metadata
 
@@ -26,13 +28,13 @@ def get_table_object(table_name: str):
 
 def create_object(
     conn: Connection,
-    object_name: str,
+    table: Table,
     object_data: Any,
     object_id: Optional[Any] = None,
-    user_id: Optional[str] = None,
+    user_id: Optional[UUID] = None,
     parser: Optional[Callable[[Any], T]] = None,
 ) -> T:
-    table = get_table_object(object_name)
+    
     if isinstance(object_data, BaseModel):
         object_data = object_data.dict()
 
@@ -52,13 +54,6 @@ def create_object(
 
     stmt = sa.insert(table).values(**values).returning(table)
     result = conn.execute(stmt).first()
-
-    # Convert UUID objects to strings
-    result = tuple(str(item) if isinstance(item, UUID) else item for item in result)
-    # Convert datetime object to string
-    result = tuple(
-        str(item) if isinstance(item, datetime.datetime) else item for item in result
-    )
 
     if parser is not None:
         return parser(result)
@@ -96,6 +91,8 @@ def update_object(
 
     if user_id is not None:
         values["updated_by"] = user_id
+
+    values["updated_at"] = datetime.datetime.now()
 
     stmt = (
         sa.update(table)

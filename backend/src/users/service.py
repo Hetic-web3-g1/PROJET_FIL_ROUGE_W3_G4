@@ -13,14 +13,14 @@ def _parse_row(row: sa.Row):
     return User(**row._asdict())
 
 
-def create_user(conn: Connection, user: UserCreate) -> User:
+def create_user(conn: Connection, user: UserCreate, user_id: UUID) -> User:
     result = conn.execute(
         sa.select(user_table).where(user_table.c.email == user.email)
     ).first()
     if result is not None:
         raise EmailAlreadyExist
 
-    created_user = db_srv.create_object(conn, user_table, user.dict())
+    created_user = db_srv.create_object(conn, user_table, user.dict(), user_id=user_id)
     return _parse_row(created_user)
 
 

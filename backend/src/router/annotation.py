@@ -4,7 +4,7 @@ from typing import List, Union
 from src.database.db_engine import engine
 from src.schema.response import ResponseModel
 from src.utils.route_function import check_id, route_response, get_route_response
-from src.schema.annotation import Annotation, AnnotationCreate, AnnotationUpdate
+from src.schema.annotation import Annotation, AnnotationCreate
 from src.manager import annotation_manager
 
 router = APIRouter(
@@ -16,7 +16,7 @@ router = APIRouter(
 @router.get("", response_model=Union[List[Annotation], None])
 def get_all_annotations():
     with engine.begin() as conn:
-        response = list(annotation_manager.get_all_annoxsdtation(conn))
+        response = list(annotation_manager.get_all_annotation(conn))
         return get_route_response(response, 200, 404, "No annotations found")
 
 # Get annotation by id
@@ -36,7 +36,7 @@ def create_annotation(annotation: AnnotationCreate):
 
 # Update annotation
 @router.put("/{annotation_id}", response_model=ResponseModel)
-def update_annotation(annotation_id: str, annotation: AnnotationUpdate):
+def update_annotation(annotation_id: str, annotation: Annotation):
     check_id(annotation_id)
     with engine.begin() as conn:
         response = annotation_manager.update_annotation(conn, annotation_id, annotation)

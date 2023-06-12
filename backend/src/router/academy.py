@@ -4,7 +4,7 @@ from typing import List, Union
 from src.database.db_engine import engine
 from src.schema.response import ResponseModel
 from src.utils.route_function import check_id, route_response, get_route_response
-from src.schema.academy import Academy, AcademyCreate, AcademyUpdate
+from src.academies.schemas import Academy, AcademyCreate
 from src.manager import academy_manager
 
 router = APIRouter(
@@ -36,7 +36,7 @@ def create_academy(academy: AcademyCreate):
 
 # Update academy
 @router.put("/{academy_id}", response_model=ResponseModel)
-def update_academy(academy_id: str, academy: AcademyUpdate):
+def update_academy(academy_id: str, academy: Academy):
     check_id(academy_id)
     with engine.begin() as conn:
         response = academy_manager.update_academy(conn, academy_id, academy)

@@ -12,12 +12,7 @@ class WorkAnalysisCreate(BaseModel):
 
 class WorkAnalysis(WorkAnalysisCreate):
     id: UUID
+    created_by: UUID
     created_at: datetime
-
-class WorkAnalysisUpdate(BaseModel):
-    about: str | None
-    learning: List[str]
-    content: str | None
-    status: str | None
-    updated_at: datetime = datetime.now()
-    updated_by: UUID
+    updated_at: datetime | None
+    updated_by: UUID | None

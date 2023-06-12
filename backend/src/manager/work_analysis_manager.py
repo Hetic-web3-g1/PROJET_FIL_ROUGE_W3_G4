@@ -3,9 +3,9 @@ from sqlalchemy import select
 from typing import Union, Generator
 from uuid import uuid4
 
-from database import db_srv
-from schema.work_analysis import WorkAnalysis, WorkAnalysisCreate, WorkAnalysisUpdate
-from database.tables.work_analysis import work_analysis_table
+from src.database import db_srv
+from src.schema.work_analysis import WorkAnalysis, WorkAnalysisCreate, WorkAnalysisUpdate
+from src.database.tables.work_analysis import work_analysis_table
 
 def get_all_work_analysis(conn: Connection) -> Generator[WorkAnalysis, None, None]:
     result = conn.execute(select(work_analysis_table))
