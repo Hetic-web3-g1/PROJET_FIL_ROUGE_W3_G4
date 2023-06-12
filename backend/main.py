@@ -58,3 +58,10 @@ metadata.create_all(engine)
 #TODO Remove when tests are set up or when can generate clean data
 from src.utils.fake_data import generate_data
 generate_data()
+
+#TODO Gestion des roles d'authentification
+# Endpoint accès seloon ton role de base/role masterclass
+# Définir tt les roles
+
+#primary_role admin user
+#secondary_role 

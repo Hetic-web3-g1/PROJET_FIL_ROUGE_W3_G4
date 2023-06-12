@@ -1,7 +1,6 @@
 from sqlalchemy.engine import Connection
 from sqlalchemy import select
 from typing import Union, Generator
-from uuid import uuid4
 
 from src.database import db_srv
 from src.users.schemas import User, UserCreate
@@ -27,7 +26,7 @@ def get_user_by_id(conn: Connection, user_id: str) -> Union[User, None]:
 
 def create_user(conn: Connection, user: UserCreate):
     try:
-        result = db_srv.create_object(conn, 'user', user, object_id=uuid4())
+        result = db_srv.create_object(conn, user_table, user)
         return {"status": "success", "message": "User created successfully", "value": result}
     except Exception as e:
         return {"status": "error", "message": str(e)}

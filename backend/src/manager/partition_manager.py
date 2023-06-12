@@ -1,10 +1,9 @@
 from sqlalchemy.engine import Connection
 from sqlalchemy import select
 from typing import Union, Generator
-from uuid import uuid4
 
 from src.database import db_srv
-from src.schema.partition import Partition, PartitionCreate, PartitionUpdate
+from src.schema.partition import Partition, PartitionCreate
 from src.database.tables.partition import partition_table
 
 def get_all_partition(conn: Connection) -> Generator[Partition, None, None]:
@@ -27,12 +26,12 @@ def get_partition_by_id(conn: Connection, partition_id: str) -> Union[Partition,
 
 def create_partition(conn: Connection, partition: PartitionCreate):
     try:
-        result = db_srv.create_object(conn, 'partition', partition, object_id=uuid4())
+        result = db_srv.create_object(conn, partition_table, partition)
         return {"status": "success", "message": "Partition created successfully", "value": result}
     except Exception as e:
         return {"status": "error", "message": str(e)}
 
-def update_partition(conn: Connection, partition_id: str, partition: PartitionUpdate):
+def update_partition(conn: Connection, partition_id: str, partition: Partition):
     try:
         filtered_partition = {k: v for k, v in partition.dict().items() if v is not None}
         result = db_srv.update_object(conn, 'partition', partition_id, filtered_partition)

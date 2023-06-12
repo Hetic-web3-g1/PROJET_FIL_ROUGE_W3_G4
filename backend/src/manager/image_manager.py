@@ -1,10 +1,9 @@
 from sqlalchemy.engine import Connection
 from sqlalchemy import select
 from typing import Union, Generator
-from uuid import uuid4
 
 from src.database import db_srv
-from src.schema.image import Image, ImageCreate, ImageUpdate
+from src.schema.image import Image, ImageCreate
 from src.database.tables.image import image_table
 
 def get_all_image(conn: Connection) -> Generator[Image, None, None]:
@@ -27,12 +26,12 @@ def get_image_by_id(conn: Connection, image_id: str) -> Union[Image, None]:
 
 def create_image(conn: Connection, image: ImageCreate):
     try:
-        result = db_srv.create_object(conn, 'image', image, object_id=uuid4())
+        result = db_srv.create_object(conn, image_table, image)
         return {"status": "success", "message": "Image created successfully", "value": result}
     except Exception as e:
         return {"status": "error", "message": str(e)}
 
-def update_image(conn: Connection, image_id: str, image: ImageUpdate):
+def update_image(conn: Connection, image_id: str, image: Image):
     try:
         # Filter out None values from the image object
         filtered_image = {k: v for k, v in image.dict().items() if v is not None}
