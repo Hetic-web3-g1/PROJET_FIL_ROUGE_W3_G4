@@ -19,7 +19,7 @@ user_table = Table(
     Column("academy_id", UUID(as_uuid=True), ForeignKey("academy.id"), nullable=False),
     Column("image_id", UUID(as_uuid=True), nullable=True),
     Column("created_at", DateTime(), default=datetime.utcnow, nullable=False),
-    Column("updated_at", DateTime(), nullable=True),
+    Column("updated_at", DateTime(), onupdate=datetime.utcnow, nullable=True),
     Column("created_by", UUID(as_uuid=True), ForeignKey("user.id"), nullable=True),
     Column("updated_by", UUID(as_uuid=True), ForeignKey("user.id"), nullable=True),
 )

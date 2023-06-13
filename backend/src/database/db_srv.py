@@ -91,9 +91,7 @@ def update_object(
 
     if user_id is not None:
         values["updated_by"] = user_id
-
-    values["updated_at"] = datetime.datetime.now()
-
+        
     stmt = (
         sa.update(table)
         .values(**values)
