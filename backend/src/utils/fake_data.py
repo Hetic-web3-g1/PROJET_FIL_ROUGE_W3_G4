@@ -8,38 +8,17 @@ from sqlalchemy.engine import Connection
 from src.database import db_srv
 from src.database.db_engine import engine
 from src.academies.models import academy_table
-from src.database.tables.annotation import annotation_table
-from src.database.tables.biography import biography_table
-from src.comments.models import comment_table
-from src.database.tables.image import image_table
-from src.database.tables.masterclass import masterclass_table
-from src.database.tables.partition import partition_table
-from src.database.tables.tag import tag_table
-from src.users.models import user_table
-from src.database.tables.video import video_table
-from src.database.tables.work_analysis import work_analysis_table
 from src.academies.schemas import AcademyCreate
-from src.schema.annotation import AnnotationCreate
-from src.schema.biography import BiographyCreate
-from src.comments.schemas import CommentCreate
-from src.schema.image import ImageCreate
-from src.schema.masterclass import MasterclassCreate
-from src.schema.partition import PartitionCreate
-from src.schema.tag import TagCreate
-from src.users.schemas import UserCreate
-from src.schema.video import VideoCreate
-from src.schema.work_analysis import WorkAnalysisCreate
 from src.academies.service import create_academy
-from src.manager.annotation_manager import create_annotation
-from src.manager.biography_manager import create_biography
-from src.comments.service import create_comment
-from src.manager.image_manager import create_image
-from src.manager.masterclass_manager import create_masterclass
-from src.manager.partition_manager import create_partition
-from src.manager.tag_manager import create_tag
+from src.users.models import user_table
+from src.users.schemas import UserCreate
 from src.users.service import create_user
-from src.manager.video_manager import create_video
-from src.manager.work_analysis_manager import create_work_analysis
+from src.masterclasses.models import masterclass_table
+from src.masterclasses.schemas import MasterclassCreate
+from src.masterclasses.service import create_masterclass
+from src.comments.models import comment_table
+from src.comments.schemas import CommentCreate
+from src.comments.service import create_comment
 
 def create_academy_fake():
     with engine.begin() as conn:
@@ -100,16 +79,16 @@ def create_comment_fake():
 #         })
 #         create_image(conn, image)
 
-# def create_masterclass_fake():
-#     with engine.begin() as conn:
-#         masterclass = MasterclassCreate(**{
-#             "academy_id": "12345648-1234-1234-1234-123456789123",
-#             "title": Faker().word(),
-#             "description": Faker().text(),
-#             "status": "created",
-#             "created_by": "12345648-1234-1234-1234-123456789123"
-#         })
-#         create_masterclass(conn, masterclass)
+def create_masterclass_fake():
+    with engine.begin() as conn:
+        masterclass = MasterclassCreate(**{
+            "academy_id": "12345648-1234-1234-1234-123456789123",
+            "title": Faker().word(),
+            "description": Faker().text(),
+            "status": "created",
+            "created_by": "12345648-1234-1234-1234-123456789123"
+        })
+        create_masterclass(conn, masterclass)
 
 # def create_partition_fake():
 #     with engine.begin() as conn:
@@ -138,7 +117,7 @@ def create_user_fake():
             "role": random.choice(roles),
             "academy_id" : uuid.UUID("12345648-1234-1234-1234-123456789123")
         })
-        create_user(conn, user, user_id=uuid.UUID("12345648-1234-1234-1234-123456789123"))
+        create_user(conn, user)
 
 def create_fixed_user(conn: Connection, user: UserCreate):
     return db_srv.create_object(conn, user_table, user.dict(), object_id="12345648-1234-1234-1234-123456789123")
@@ -190,7 +169,7 @@ def generate_data():
         # biography_table: create_biography_fake,
         comment_table: create_comment_fake,
         # image_table: create_image_fake,
-        # masterclass_table: create_masterclass_fake,
+        masterclass_table: create_masterclass_fake,
         # partition_table: create_partition_fake,
         # tag_table: create_tag_fake,
         # video_table: create_video_fake,

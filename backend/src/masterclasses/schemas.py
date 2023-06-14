@@ -22,3 +22,10 @@ class Masterclass(MasterclassCreate):
     updated_at: datetime | None
     updated_by: UUID | None
 
+class MasterclassUserCreate(BaseModel):
+    user_id: UUID
+    masterclass_id: UUID
+    role: str
+
+class MasterclassUser(MasterclassUserCreate):
+    id: int

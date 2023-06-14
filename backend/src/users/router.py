@@ -3,6 +3,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from .schemas import User, UserCreate
 from . import exceptions as user_exceptions
 from . import service as user_service
+from .dependencies import is_admin, has_masterclass_role
 from src.database.db_engine import engine
 from src.authentification import service as auth_service
 from src.authentification.dependencies import CustomSecurity
@@ -28,3 +29,18 @@ def create_academy_user(
             status_code=400,
             detail="Email already exist",
         )
+    
+
+from . import service
+from uuid import UUID
+
+# Get user by id
+@router.get("/{user_id}")
+def get_user_by_id(
+    user_id: UUID,
+    user: User = Depends(CustomSecurity()),
+    # user: User = Depends(is_admin(user)=True)
+):
+    with engine.begin() as conn:
+        response = service.get_user_by_id(conn, user_id)
+        return response
