@@ -1,11 +1,11 @@
 from fastapi import APIRouter
 from typing import List, Union
 
-from database.db_engine import engine
-from schema.response import ResponseModel
-from utils.route_function import check_id, route_response, get_route_response
-from schema.tag import Tag, TagCreate, TagUpdate
-from manager import tag_manager
+from src.database.db_engine import engine
+from src.schema.response import ResponseModel
+from src.utils.route_function import check_id, route_response, get_route_response
+from src.schema.tag import Tag, TagCreate
+from src.manager import tag_manager
 
 router = APIRouter(
     prefix="/tag",
@@ -36,7 +36,7 @@ def create_tag(tag: TagCreate):
 
 # Update tag
 @router.put("/{tag_id}", response_model=ResponseModel)
-def update_tag(tag_id: str, tag: TagUpdate):
+def update_tag(tag_id: str, tag: Tag):
     check_id(tag_id)
     with engine.begin() as conn:
         response = tag_manager.update_tag(conn, tag_id, tag)

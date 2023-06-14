@@ -1,11 +1,11 @@
 from fastapi import APIRouter
 from typing import List, Union
 
-from database.db_engine import engine
-from schema.response import ResponseModel
-from utils.route_function import check_id, route_response, get_route_response
-from schema.masterclass import Masterclass, MasterclassCreate, MasterclassUpdate
-from manager import masterclass_manager
+from src.database.db_engine import engine
+from src.schema.response import ResponseModel
+from src.utils.route_function import check_id, route_response, get_route_response
+from src.schema.masterclass import Masterclass, MasterclassCreate
+from src.manager import masterclass_manager
 
 router = APIRouter(
     prefix="/masterclass",
@@ -36,7 +36,7 @@ def create_masterclass(masterclass: MasterclassCreate):
 
 # Update masterclass
 @router.put("/{masterclass_id}", response_model=ResponseModel)
-def update_masterclass(masterclass_id: str, masterclass: MasterclassUpdate):
+def update_masterclass(masterclass_id: str, masterclass: Masterclass):
     check_id(masterclass_id)
     with engine.begin() as conn:
         response = masterclass_manager.update_masterclass(conn, masterclass_id, masterclass)

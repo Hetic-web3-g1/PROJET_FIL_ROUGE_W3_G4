@@ -1,11 +1,10 @@
 from sqlalchemy.engine import Connection
 from sqlalchemy import select
 from typing import Union, Generator
-from uuid import uuid4
 
-from database import db_srv
-from schema.academy import Academy, AcademyCreate, AcademyUpdate
-from database.tables.academy import academy_table
+from src.database import db_srv
+from src.academies.schemas import Academy, AcademyCreate
+from src.academies.models import academy_table
 
 def get_all_academy(conn: Connection) -> Generator[Academy, None, None]:
     result = conn.execute(select(academy_table))
@@ -27,12 +26,12 @@ def get_academy_by_id(conn: Connection, academy_id: str) -> Union[Academy, None]
 
 def create_academy(conn: Connection, academy: AcademyCreate):
     try:
-        result = db_srv.create_object(conn, 'academy', academy, object_id=uuid4())
+        result = db_srv.create_object(conn, academy_table, academy)
         return {"status": "success", "message": "Academy created successfully", "value": result}
     except Exception as e:
         return {"status": "error", "message": str(e)}
 
-def update_academy(conn: Connection, academy_id: str, academy: AcademyUpdate):
+def update_academy(conn: Connection, academy_id: str, academy: Academy):
     try:
         filtered_academy = {k: v for k, v in academy.dict().items() if v is not None}
         result = db_srv.update_object(conn, 'academy', academy_id, filtered_academy)

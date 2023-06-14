@@ -1,11 +1,10 @@
 from sqlalchemy.engine import Connection
 from sqlalchemy import select
 from typing import Union, Generator
-from uuid import uuid4
 
-from database import db_srv
-from schema.video import Video, VideoCreate, VideoUpdate
-from database.tables.video import video_table
+from src.database import db_srv
+from src.schema.video import Video, VideoCreate
+from src.database.tables.video import video_table
 
 def get_all_video(conn: Connection) -> Generator[Video, None, None]:
     result = conn.execute(select(video_table))
@@ -27,12 +26,12 @@ def get_video_by_id(conn: Connection, video_id: str) -> Union[Video, None]:
 
 def create_video(conn: Connection, video: VideoCreate):
     try:
-        result = db_srv.create_object(conn, 'video', video, object_id=uuid4())
+        result = db_srv.create_object(conn, video_table, video)
         return {"status": "success", "message": "Video created successfully", "value": result}
     except Exception as e:
         return {"status": "error", "message": str(e)}
 
-def update_video(conn: Connection, video_id: str, video: VideoUpdate):
+def update_video(conn: Connection, video_id: str, video: Video):
     try:
         filtered_video = {k: v for k, v in video.dict().items() if v is not None}
         result = db_srv.update_object(conn, 'video', video_id, filtered_video)

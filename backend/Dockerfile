@@ -27,7 +27,7 @@ CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "4000", "--reload"]
 # # ------------------------------------------------------------------------
 
 # Production stage
-FROM python:3.9 AS production
+FROM python:3.11 AS production
 
 # Set the working directory in the container
 WORKDIR /app

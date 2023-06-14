@@ -1,4 +1,4 @@
-FROM node:14-alpine AS development
+FROM node:18-alpine AS development
 
 # Set the working directory in the container
 WORKDIR /app
@@ -21,7 +21,7 @@ CMD ["npm", "run", "dev"]
 
 # # ------------------------------------------------------------------------
 
-FROM node:14 AS builder
+FROM node:18 AS builder
 
 # Set the working directory in the container
 WORKDIR /app
