@@ -1,4 +1,4 @@
-import { Types } from '../constants/actionTypes';
+import { Types } from './type';
 
 export const ProfileActions = {
     updateProfileImage: (image) => ({ type: Types.UPDATE_PROFILE_PICTURE, payload: { image } }),  

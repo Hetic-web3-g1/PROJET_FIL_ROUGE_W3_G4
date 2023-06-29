@@ -1,4 +1,4 @@
-import { Types } from '../constants/actionTypes';
+import { Types } from '../actions/type';
 
 const initialState = {
   profile: {

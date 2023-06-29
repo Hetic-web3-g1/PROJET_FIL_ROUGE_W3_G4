@@ -8,9 +8,9 @@ export const Landing = ({ }) => {
     <div className="landing-wrap">
       <img
         className='landing-logo'
-        srcset={`src/assets/Logo.svg`} >
+        srcSet={`src/assets/Logo.svg`} >
       </img>
-      <Button label="Enter" class="button button-primary padded" />
+      <Button label="Enter" className="button button-primary padded" />
     </div>
   );
 };
