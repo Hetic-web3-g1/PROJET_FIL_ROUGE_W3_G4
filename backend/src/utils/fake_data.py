@@ -2,7 +2,6 @@ from sqlalchemy import func, select
 from faker import Faker
 import random
 
-from utils.log import logging
 from database.db_engine import engine
 from database.tables.academy import academy_table
 from database.tables.annotation import annotation_table
@@ -193,7 +192,6 @@ def generate_data():
     with engine.begin() as conn:
         for table, create_func in tables.items():
             if not has_data(conn, table):  # Check if table is empty
-                logging.info(f"Generating data for {table.name}")
                 if table == user_table:
                     create_fixed_user_fake()
                 if table == academy_table:
