@@ -1,5 +1,5 @@
 # Development build
-version: '3.8'
+version: "3.8"
 services:
   backend-api:
     build:
@@ -8,10 +8,10 @@ services:
     restart: unless-stopped
     container_name: backend-api
     ports:
-      - '4000:4000'
+      - "4000:4000"
     volumes:
       - ./backend:/app
-    networks: 
+    networks:
       - app-network
       - db-network
     depends_on:
@@ -33,7 +33,7 @@ services:
 
   db:
     container_name: db-postgres
-    image: postgres:latest
+    image: postgres:15.3
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
@@ -54,6 +54,19 @@ services:
       - db
     networks:
       - db-network
+
+  grafana:
+      container_name: grafana
+      image: grafana/grafana:latest
+      restart: unless-stopped
+      ports:
+        - 3001:3000
+      volumes:
+        - ./grafana:/var/lib/grafana
+      networks:
+        - db-network
+      depends_on:
+        - db
 
   adminer:
     container_name: db-adminer

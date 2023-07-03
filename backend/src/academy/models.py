@@ -5,7 +5,7 @@ from datetime import datetime
 
 from src.database.db_engine import metadata
 
-academy_table = Table(
+academy = Table(
     "academy",
     metadata,
     Column("id", UUID(as_uuid=True), primary_key=True, unique=True, default=uuid4),
