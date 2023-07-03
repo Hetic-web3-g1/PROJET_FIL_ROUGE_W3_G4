@@ -16,20 +16,22 @@ services:
       - db-network
     depends_on:
       - db
+    environment:
+      - DEBUG=1
 
-  frontend-app:
-    build:
-      context: ./frontend
-      target: development
-    command: sh -c "npm i && npm run dev"
-    restart: unless-stopped
-    container_name: frontend-app
-    volumes:
-      - ./frontend:/app
-    ports:
-      - "3000:3000"
-    networks:
-      - app-network
+  # frontend-app:
+  #   build:
+  #     context: ./frontend
+  #     target: development
+  #   command: sh -c "npm i && npm run dev"
+  #   restart: unless-stopped
+  #   container_name: frontend-app
+  #   volumes:
+  #     - ./frontend:/app
+  #   ports:
+  #     - "3000:3000"
+  #   networks:
+  #     - app-network
 
   db:
     container_name: db-postgres

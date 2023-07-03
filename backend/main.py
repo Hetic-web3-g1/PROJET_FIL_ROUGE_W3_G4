@@ -29,8 +29,9 @@ from src.database.db_engine_log import metadata_log, engine_log
 
 origins = []
 if settings.environment == "dev":
-    frontend_port = os.getenv("FRONTEND_PORT", "")
-    origins.extend(["http://localhost:" + frontend_port, "localhost:" + frontend_port])
+    # frontend_port = os.getenv("FRONTEND_PORT", "")
+    # origins.extend(["http://localhost:" + frontend_port, "localhost:" + frontend_port])
+    origins = ["*"]
 else:
     pass
     # Todo, add dns of the frontend
