@@ -1,10 +1,21 @@
-import React from "react";
+import React, {useContext, useEffect} from "react";
 
 import './home.css'
 
 import { Header } from "../../components/header/Header";
+import { useNavigate } from "react-router-dom";
+import { ReactReduxContext } from 'react-redux'
 
 export const Home = () => {
+    const navigate = useNavigate();
+    const { store } = useContext(ReactReduxContext)
+        
+    useEffect(() => {
+      if(!store.getState().user.user_token) {
+        navigate("/");
+      }
+    }, [store.getState().user.user_token])
+
     return (
         <div className="home">
             <div className="home-header">

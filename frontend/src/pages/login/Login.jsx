@@ -24,7 +24,7 @@ export const Login = ({ }) => {
     fetch('http://localhost:4000/auth/login', loginOptions).then((response) => response.json()).then(data => {
       if (data.detail != "Invalid Credentials") {
         dispatch(ProfileActions.login(data));
-        navigate("/");
+        navigate("/home");
       } else {
         alert('Invalid user');
       }
