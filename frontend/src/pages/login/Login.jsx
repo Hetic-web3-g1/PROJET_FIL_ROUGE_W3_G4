@@ -3,22 +3,32 @@ import PropTypes from 'prop-types';
 import './Login.css';
 import Button from '../../components/button/Button';
 import Field from '../../components/field/Field';
-import { getStore } from '../../utils';
+import { useDispatch } from "react-redux";
 import { ProfileActions } from '../../features/actions/profile';
+import { useNavigate } from "react-router-dom";
+
 
 export const Login = ({ }) => {
-  const [userName, setUserName] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const loginForm = (e) => { 
     e.preventDefault();
-    const user = getStore('user');
-    if (user) {
-      dispatch(ProfileActions.login(user));
-      history.push('/dashboard');
-    } else {
-      alert('Invalid user');
-    }
+    const loginOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'accept': 'application/json' },
+      body: JSON.stringify({email, password }),
+    };
+    fetch('http://localhost:4000/auth/login', loginOptions).then((response) => response.json()).then(data => {
+      if (data.detail != "Invalid Credentials") {
+        dispatch(ProfileActions.login(data));
+        navigate("/");
+      } else {
+        alert('Invalid user');
+      }
+    });
   };
 
   return (
@@ -29,7 +39,7 @@ export const Login = ({ }) => {
       </img>
       <form className="login-form">
           <label for="email" className='login-field'>Email</label>
-          <Field type="email" placeholder="Enter your mail" onChange={(e) => {setUserName(e.target.value)}}/>
+          <Field type="email" placeholder="Enter your mail" onChange={(e) => {setEmail(e.target.value)}}/>
           <label for="password" className='login-field' >Password</label>
           <Field type="password" placeholder="Enter your password" onChange={(e) => {setPassword(e.target.value)}}/>
           <Button label="Login" className="button button-secondary padded" onClick={loginForm}/>

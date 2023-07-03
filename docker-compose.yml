@@ -16,6 +16,8 @@ services:
       - db-network
     depends_on:
       - db
+    environment:
+      - DEBUG=1
 
   # frontend-app:
   #   build:
@@ -27,8 +29,8 @@ services:
   #   volumes:
   #     - ./frontend:/app
   #   ports:
-  #     - '3000:3000'
-  #   networks: 
+  #     - "3000:3000"
+  #   networks:
   #     - app-network
 
   db:
