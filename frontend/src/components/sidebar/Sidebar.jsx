@@ -1,26 +1,62 @@
+import Checkbox from '../checkbox/Checkbox'
+import Dropdown from '../dropdown/Dropdown'
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import './sidebar.css';
 
-export const Sidebar = ({ name, size, legend, onClick }) => {
+export const Sidebar = () => {
+  const [open, setOpen] = useState(false);
 
   return (
     <div>
+      <div style={open ? {display: 'none'} : null} className='sidebar-container'>
+
+        <div className="sidebar-filters-container">
+          <label className='sidebar-font'>Sort by:</label>
+          <Dropdown/>
+
+          <div className="sidebar-filter">
+            <h1 className='sidebar-font'>Filters subtitle</h1>
+            <Checkbox label='Filter' primary={false}/>
+            <Checkbox label='Filter' primary={false}/>
+            <Checkbox label='Filter' primary={false}/>
+          </div>
+
+          <div className="sidebar-filter">
+            <h1 className='sidebar-font'>Filters subtitle</h1>
+            <Checkbox label='Filter' primary={false}/>
+            <Checkbox label='Filter' primary={false}/>
+            <Checkbox label='Filter' primary={false}/>
+            <Checkbox label='Filter' primary={false}/>
+          </div>
+
+          <div className="sidebar-filter">
+            <h1 className='sidebar-font'>Filters subtitle</h1>
+            <Checkbox label='Filter' primary={false}/>
+            <Checkbox label='Filter' primary={false}/>
+            <Checkbox label='Filter' primary={false}/>
+          </div>
+
+          <div className="sidebar-filter">
+            <h1 className='sidebar-font'>Filters subtitle</h1>
+            <Checkbox label='Filter' primary={false}/>
+            <Checkbox label='Filter' primary={false}/>
+            <Checkbox label='Filter' primary={false}/>
+          </div>
+
+        </div>
+
+        <div>
+          <img onClick={() => setOpen(!open)} className='exit-sidebar-float' src="src\assets\sidebar\hide-sidebar.svg" alt="exit" />
+        </div>
+      </div>
+
+      <div style={!open ? {display: 'none'} : null} className='small-sidebar'>
+        <div>
+          <img onClick={() => setOpen(!open)} className='exit-sidebar-float' src="src\assets\sidebar\show-sidebar.svg" alt="exit" />
+        </div>
+      </div>
     </div>
   );
-};
-
-Sidebar.propTypes = {
-  name: PropTypes.string,
-  legend: PropTypes.bool,
-  size: PropTypes.number,
-  onClick: PropTypes.func
-};
-
-Sidebar.defaultProps = {
-  name: 'Celio',
-  legend: false,
-  size: 100
 };
 
 export default Sidebar;
