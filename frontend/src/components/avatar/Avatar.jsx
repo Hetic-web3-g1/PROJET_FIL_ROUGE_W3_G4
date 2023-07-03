@@ -2,16 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './avatar.css';
 
-export const Avatar = ({ onClick }) => {
+export const Avatar = ({ onClick, size }) => {
   return (
     <div onClick={onClick}>
-        <img className='image-style' src="src\assets\ours.jpg" alt="placeholder" />
+        <img style={{height: size}} className='image-style' src="src\assets\ours.jpg" alt="placeholder" />
     </div>
   );
 };
 
 Avatar.propTypes = {
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
+  size: PropTypes.string
+};
+
+Avatar.defaultProps = {
+  size: '60px'
 };
 
 export default Avatar;

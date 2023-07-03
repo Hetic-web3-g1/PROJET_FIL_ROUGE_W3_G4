@@ -17,7 +17,8 @@
 }
 .field-input-search {
     background: url("src/assets/search/Search.svg") no-repeat right;
-    background-size: 3vw;
+    background-color: white;
+    background-size: 20px;
     background-position: 98%;
 }
 

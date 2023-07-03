@@ -1,7 +1,7 @@
 import React from 'react';
 import propTypes from 'prop-types';
 import './field.css'
-const searchIcon = '../../assets/search/search.svg';
+
 export const Field = ({ type, placeholder, onChange, id }) => {
 function HideAndShowPassword () {
     var x = document.getElementById(id);
