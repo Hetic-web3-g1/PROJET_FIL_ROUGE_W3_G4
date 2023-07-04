@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import './Login.css';
 import Button from '../../components/button/Button';
@@ -6,13 +6,20 @@ import Field from '../../components/field/Field';
 import { useDispatch } from "react-redux";
 import { ProfileActions } from '../../features/actions/profile';
 import { useNavigate } from "react-router-dom";
-
+import { ReactReduxContext } from 'react-redux'
 
 export const Login = ({ }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { store } = useContext(ReactReduxContext)
+      
+  useEffect(() => {
+    if(store.getState().user.user_token) {
+      navigate("/home");
+    }
+  }, [store.getState().user.user_token])
 
   const loginForm = (e) => { 
     e.preventDefault();

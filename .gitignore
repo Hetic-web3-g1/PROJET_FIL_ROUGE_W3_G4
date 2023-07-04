@@ -28,7 +28,8 @@ package-lock.json
 *.tsv
 *.tsv.gz
 *.xlsx
- 
+
+*.db
  
 # Mac/OSX
 .DS_Store
