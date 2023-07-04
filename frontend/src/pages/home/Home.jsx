@@ -3,6 +3,8 @@ import React, {useContext, useEffect} from "react";
 import './home.css'
 
 import { Header } from "../../components/header/Header";
+import { Sidebar } from "../../components/sidebar/Sidebar";
+
 import { useNavigate } from "react-router-dom";
 import { ReactReduxContext } from 'react-redux'
 
@@ -20,6 +22,9 @@ export const Home = () => {
         <div className="home">
             <div className="home-header">
                 <Header academyName="Flamingo Academy"/>
+            </div>
+            <div className="home-body">
+                <Sidebar/>
             </div>
         </div>
     );

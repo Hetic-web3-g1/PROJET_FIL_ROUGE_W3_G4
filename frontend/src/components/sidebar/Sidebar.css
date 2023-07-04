@@ -5,18 +5,18 @@
   background-color: #121525;
   padding: 25px 15px;
   width: 264px;
-  height: 1024px;
+  height: calc(100vh - 70px);
 }
 
 .small-sidebar {
   background-color: #121525;
   width: 40px;
-  height: 1024px;
   padding: 25px 15px;
   display: flex;
   flex-direction: column;
   justify-content: end;
   align-items: center;
+  height: 100vh;
 }
 
 .sidebar-font {
