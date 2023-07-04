@@ -1,7 +1,6 @@
 .home {
     display: flex;
     flex-direction: column;
-    padding: 0;   
     max-width: 100%;
     overflow-x: hidden;
     overflow-y: hidden;
@@ -16,6 +15,14 @@
 .home-body {
     display: flex;
     flex-direction: row;
+    height: 100%;
+    max-height: calc(100vh - 70px);
+}
+
+.home-content {
+    overflow:auto;
+    overflow-x: hidden;
     width: 100%;
-    padding: 0;
+    box-sizing: content-box;
+    padding-right: 20px;
 }

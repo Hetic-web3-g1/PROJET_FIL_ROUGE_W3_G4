@@ -5,8 +5,7 @@
   background-color: #121525;
   padding: 25px 15px;
   width: 200px;
-  height: 100vh;
-  position: absolute;
+  height: calc(100vh - 70px);
   top: 0;
   z-index: 0;
   box-sizing: border-box;
@@ -20,9 +19,8 @@
   flex-direction: column;
   justify-content: end;
   align-items: center;
-  position: absolute;
   top: 0;
-  height: 100vh;
+  height: calc(100vh - 70px);
   box-sizing: border-box;
 }
 
@@ -31,10 +29,6 @@
   color: #FDFCFA;
   font-size: 18px;
   margin-left: 0;
-}
-
-.sidebar-filters-container {
-  margin-top: 10vh;
 }
 
 .sidebar-filter {

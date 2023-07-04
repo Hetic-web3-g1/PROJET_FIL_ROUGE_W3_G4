@@ -4,9 +4,12 @@ import './home.css'
 
 import { Header } from "../../components/header/Header";
 import { Sidebar } from "../../components/sidebar/Sidebar";
+import { MasterCard } from "../../components/masterCard/MasterCard";
 
 import { useNavigate } from "react-router-dom";
 import { ReactReduxContext } from 'react-redux'
+
+import MasterCardData from '../../mocks/masterCardMocks'
 
 export const Home = () => {
     const navigate = useNavigate();
@@ -28,7 +31,11 @@ export const Home = () => {
                     <Sidebar/>
                 </div>
                 <div className="home-content">
-                    salut
+                    {
+                        MasterCardData.map(function(data, index){
+                            return <MasterCard content={data}/>
+                        }
+                    )}
                 </div>
             </div>
         </div>
