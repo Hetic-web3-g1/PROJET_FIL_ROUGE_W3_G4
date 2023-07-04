@@ -15,3 +15,9 @@ export const OnClickTest = {
     onClick: () => console.log('click'),
   },
 };
+
+export const Size = {
+  args: {
+    size: '100px'
+  },
+};
