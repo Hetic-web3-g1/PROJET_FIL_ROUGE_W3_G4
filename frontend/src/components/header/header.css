@@ -5,13 +5,20 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    height: 10vh;
+    height: 70px;
+    width: 100%;
     max-height: 100px;
     padding: 5px 20px;
 }
 
 .header-searchbar {
     width: 60%;
+}
+
+.header-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
+  margin-left: 10px;
 }
 
 .header-group {
