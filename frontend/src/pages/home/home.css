@@ -1,12 +1,21 @@
 .home {
     display: flex;
     flex-direction: column;
-    height: 100vh;
     padding: 0;   
+    max-width: 100%;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 .home-header {
     top: 0;
     padding: 0;
     width: 100%;
+}
+
+.home-body {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    padding: 0;
 }

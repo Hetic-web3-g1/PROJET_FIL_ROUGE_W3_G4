@@ -24,7 +24,12 @@ export const Home = () => {
                 <Header academyName="Flamingo Academy"/>
             </div>
             <div className="home-body">
-                <Sidebar/>
+                <div className="home-sidebar">
+                    <Sidebar/>
+                </div>
+                <div className="home-content">
+                    salut
+                </div>
             </div>
         </div>
     );
