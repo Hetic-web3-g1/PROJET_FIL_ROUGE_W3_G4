@@ -6,7 +6,7 @@ import {ModalBioProf} from './components/Modal/modalbioprof/Modalbioprof.jsx';
 function App() {
   return (
     <>
-      <ModalBioProf />
+      <Landing />
     </>
   );
 }
