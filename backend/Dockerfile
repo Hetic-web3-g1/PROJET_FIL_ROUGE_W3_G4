@@ -19,7 +19,7 @@ COPY . .
 ENV FRONTEND_PORT=3000
 ENV ENVIRONMENT=dev
 
-WORKDIR /app/src
+WORKDIR /app
 
 # Start the FastAPI app with auto-reload
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "4000", "--reload"]
@@ -47,7 +47,7 @@ COPY . .
 ENV FRONTEND_PORT=3000
 ENV ENVIRONMENT=prod
 
-WORKDIR /app/src
+WORKDIR /app
 
 # Start the FastAPI app with no auto-reload
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "4000"]

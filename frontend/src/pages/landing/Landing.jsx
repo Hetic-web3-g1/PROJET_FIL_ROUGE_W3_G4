@@ -2,15 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './Landing.css';
 import Button from '../../components/button/Button';
+import { Link } from "react-router-dom";
 
 export const Landing = ({ }) => {
   return (
     <div className="landing-wrap">
       <img
         className='landing-logo'
-        srcset={`src/assets/Logo.svg`} >
+        srcSet={`src/assets/Logo.svg`} >
       </img>
-      <Button label="Enter" class="button button-primary padded" />
+      <Link to="/login">
+        <Button label="Enter" className="button button-primary padded"/>
+      </Link>
     </div>
   );
 };
