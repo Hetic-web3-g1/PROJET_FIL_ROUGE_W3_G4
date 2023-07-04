@@ -65,9 +65,28 @@ export const ModalBioProf = ({ biography, content, handleClose, handleSave }) =>
                     })}
                 </div>
             </div>
+            <div>
+                <div>
+                    <div className='modal-bio-prof-infos-field'>
+                        <span>Nationality</span>
+                        <Field placeholder="Nationality"/>
+                    </div>
+                    <div className='modal-bio-prof-infos-field'>
+                        <span>Website</span>
+                        <Field placeholder="Website"/>
+                    </div>
+                </div>
+                <div className='modal-bio-prof-infos-field'>
+                    <span>Awards</span>
+                    <Field placeholder="Awards"/>
+                </div>
+                <div className='modal-bio-prof-infos-field'>
+                    <span>Awards</span>
+                    <Field placeholder="Awards"/>
+                </div>
+            </div>
             <div style={{ display: 'flex','flex-direction': 'column'}}>
                 <span>Biography</span>
-                {/* <Field type="bio" placeholder='...'/> */}
                 <textarea className="modal-bio-prof-textarea" placeholder="..." row='20'/>
             </div>
         </div>
