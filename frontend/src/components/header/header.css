@@ -30,3 +30,19 @@
     width: 20%;
     align-items: center;
 }
+
+.header-create-dropdown {
+    cursor: pointer;
+}
+
+.header-create-dropdown-content {
+    background-color: #161C3D;
+    position: absolute;
+    border: 1px solid white;
+}
+
+.header-create-dropdown-item {
+    padding: 5px 5px;
+    display: flex;
+    justify-content: space-between;
+}

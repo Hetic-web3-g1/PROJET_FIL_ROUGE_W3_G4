@@ -8,7 +8,7 @@ import './modal.css'
 
 export const Modal = ({ title, content, size, handleClose, handleSave }) => {
     return (
-        <div className={(`modal-${size}`)}>
+        <div className={(`modal modal-${size}`)}>
             <div className="modal-header">
                 <h2 className='modal-title'>{title}</h2>
                 <Divider />
