@@ -3,16 +3,15 @@ import PropTypes from 'prop-types';
 import Avatar from '../avatar/Avatar';
 import Field from '../field/Field';
 import Divider from '../divider/Divider';
-import ModalMasterclass, { ModalMasterClass } from '../Modal/modalMasterclass/ModalMasterclass';
+import { ModalMasterClass } from '../Modal/modalMasterclass/ModalMasterclass';
 
 import './header.css';
-import Modal from '../Modal/Modal';
 
 export const Header = ({academyName}) => {
-    const [createModal, setCreateModal] = useState(false)
-    const [createMasterClassModal, setCreateMasterClassModal] = useState(false)
-    const [createBiographyModal, setCreateBiographyModal] = useState(false)
-    const [createWorkAnalysisModal, setCreateWorkAnalysisModal] = useState(false)
+    const [createModal, setCreateModal] = useState(false);
+    const [createMasterClassModal, setCreateMasterClassModal] = useState(false);
+    const [createBiographyModal, setCreateBiographyModal] = useState(false);
+    const [createWorkAnalysisModal, setCreateWorkAnalysisModal] = useState(false);
 
     const handleCreateModal = () => {
         setCreateModal(!createModal);
@@ -80,7 +79,7 @@ export const Header = ({academyName}) => {
                         
                     </div>
 
-                    <div className="header-user">
+                    <div className="header-user no-select">
                         <Avatar/>
                     </div>
                 </div>
