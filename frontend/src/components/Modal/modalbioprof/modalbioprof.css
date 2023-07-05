@@ -29,7 +29,26 @@
 
 .modal-bio-prof-infos-field {
     margin-bottom: 2vh;
-    width: 25%;
+    width: 50%;
+    display: inline-block;
+
+}
+.marg-right{
+    margin-right: 1%;
+}
+.fix-width{
+    width: 49%;
+}
+.full-width{
+    width: 100%;
+}
+.full-width-flex{
+    display: flex;
+    width: 100%;
+    align-items: center;
+}
+.award{
+
 }
 
 .modal-bio-prof-instrument {
@@ -95,6 +114,10 @@
 
 .modal-bio-prof-textarea{
     min-height: 240px;  
+
+}
+
+.field-container{
 
 }
 

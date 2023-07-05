@@ -26,9 +26,3 @@ export const Password = {
         type: 'password',
     },
 };
-
-// export const Checkbox = {
-//     args: {
-//         type: 'checkbox',
-//     },
-// };

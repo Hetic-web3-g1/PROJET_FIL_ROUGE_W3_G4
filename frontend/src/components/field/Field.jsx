@@ -2,7 +2,7 @@ import React from 'react';
 import propTypes from 'prop-types';
 import './field.css';
 const searchIcon = '../../assets/search/search.svg';
-export const Field = ({ type, placeholder, onChange, id }) => {
+export const Field = ({ type, placeholder, onChange, id, checked }) => {
 function HideAndShowPassword () {
     var x = document.getElementById(id);
     if (x.type === "password") {
@@ -10,6 +10,8 @@ function HideAndShowPassword () {
     } else {
         x.type = "password";
     }}
+    console.log(document.getElementById('radio-1'))
+
     return (
         <div className={['input-wrap', `input-wrap-${type}`].join(' ')}>
             <input
@@ -17,7 +19,8 @@ function HideAndShowPassword () {
                 type={type}
                 placeholder={placeholder}
                 onChange={onChange}
-                id={id}/>
+                id={id}
+                checked={false}/>
             <svg  
                 className={['field-icon', `field-icon-${type}`].join(' ')}
                 onClick={HideAndShowPassword}/>
