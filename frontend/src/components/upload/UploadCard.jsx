@@ -16,6 +16,17 @@ export const UploadCard = ({  }) => {
         }
     }
 
+    const handleDrop = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setDrag(false);
+        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+            let files = e.dataTransfer.files;
+            console.log(files);
+            // handleFiles(e.dataTransfer.files);
+        }
+    }
+
     return (
         <div className="upload-card" onDragEnter={handleDrag}>
             <div className="upload-card-content">
@@ -29,6 +40,7 @@ export const UploadCard = ({  }) => {
                         Upload
                     </label>
                 </div>
+                { drag ? <div className="upload-card-drag-file-overlay" onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop}></div> : null}
             </div>
         </div>
     );
