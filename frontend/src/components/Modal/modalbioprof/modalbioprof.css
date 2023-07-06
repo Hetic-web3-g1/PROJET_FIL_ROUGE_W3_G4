@@ -27,29 +27,6 @@
     margin-left: 1vw;
 }
 
-.modal-bio-prof-infos-field {
-    margin-bottom: 2vh;
-    width: 50%;
-    display: inline-block;
-
-}
-.marg-right{
-    margin-right: 1%;
-}
-.fix-width{
-    width: 49%;
-}
-.full-width{
-    width: 100%;
-}
-.full-width-flex{
-    display: flex;
-    width: 100%;
-    align-items: center;
-}
-.award{
-
-}
 
 .modal-bio-prof-instrument {
     display: flex;
@@ -72,9 +49,6 @@
     margin-bottom: 4%;
 }
 
-.instrument-card {
-    /* margin-right: 1vw; */
-}
 
 .modal-bio-prof-background-upload {
     width:auto
@@ -117,9 +91,6 @@
 
 }
 
-.field-container{
-
-}
 
 @media screen and (max-width: 1305px) {
     .modal-bio-prof-instrument{
