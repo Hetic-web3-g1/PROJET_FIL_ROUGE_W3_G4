@@ -1,0 +1,22 @@
+{/* Tabs.mdx */}
+
+import { Canvas, Meta, Controls } from '@storybook/blocks';
+
+import * as TabsStories from './Tabs.stories';
+
+<Meta of={TabsStories} />
+
+# Tabs
+Tabs component that return the current tab to the parent.
+
+<Canvas of={TabsStories.Base} />
+
+## Props
+<Controls />
+
+## Stories
+
+### Active tab by default
+We can specify the activated tab by default.
+
+<Canvas of={TabsStories.ActiveTabByDefault} />
