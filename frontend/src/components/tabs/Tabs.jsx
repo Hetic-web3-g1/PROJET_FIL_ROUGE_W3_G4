@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import './Tabs.css';
 
 export const Tabs = ({ callback, tabActiveByDefault }) => {
-  let tabsName = [
+  const tabsName = [
     {name: 'Masterclass', isActive: false},
     {name: 'Team', isActive: false},
     {name: 'Video', isActive: false},
@@ -25,20 +25,18 @@ export const Tabs = ({ callback, tabActiveByDefault }) => {
    * @param {string} currentTab Current tab name
    */
   function handleTabs(selectedTabHTML, currentTab) {
-    document.querySelectorAll("li").forEach(e => e.classList.remove('active'));
+    document.querySelector(".custom-tabs-li").forEach(e => e.classList.remove('active'));
     selectedTabHTML.classList.add('active');
     callback(currentTab);
   }
 
   return (
     <div>
-      <div>
         <ul className='tabs-ul'>
           {tabsName.map((tab, index) =>
           <li onClick={(e) => handleTabs(e.target, tab.name)} key={index} className={`${tab.isActive === true ? 'active' : ''} custom-tabs-li no-select`}>{tab.name}</li>
           )}
         </ul>
-      </div>
     </div>
   );
 };
