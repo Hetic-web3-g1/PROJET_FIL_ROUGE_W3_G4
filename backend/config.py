@@ -8,10 +8,10 @@ from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
-    environment: Literal["dev", "development", "prod"]
+    environment: Literal["dev", "development", "prod"] = os.getenv("CONFIG_NAME")
     postgres_url: str
 
-    # keys
+    # hash keys
     reset_token_key: str
     jwt_private_key: str
 
@@ -21,7 +21,7 @@ class Settings(BaseSettings):
 
     class Config:
         config = os.getenv("CONFIG_NAME")
-        env_file = f"./.env/{config}.env"
+        env_file = f"./{config}.env"
         if config is None:
             raise ValueError("No 'CONFIG_NAME' env variable set")
         elif os.path.isfile(env_file) is False:
