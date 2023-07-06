@@ -65,15 +65,3 @@ metadata.create_all(engine)
 #TODO Remove when tests are set up or when can generate clean data
 # from src.utils.fake_data import generate_data
 # generate_data()
-# import uuid
-
-# from src.users.service import get_user_by_id, is_admin, has_masterclass_role
-# from src.database.db_engine import engine
-# with engine.connect() as conn:
-#     user = get_user_by_id(conn, uuid.UUID("730abc71-6009-4cac-b946-dcf8b75a60e0"))
-#     print(user)
-#     print(is_admin(user))
-#     id_user = uuid.UUID("12345648-1234-1234-1234-123456789123")
-#     id_masterclass = uuid.UUID("0b30a97e-ce9c-4271-aeb7-ba7b138384da")
-#     print(has_masterclass_role(conn, "teacher", id_user, id_masterclass))
-#     print(has_masterclass_role(conn, "teachUJer", id_user, id_masterclass))

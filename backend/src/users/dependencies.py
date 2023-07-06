@@ -2,25 +2,9 @@ from uuid import UUID
 
 import sqlalchemy as sa
 
-from .schemas import User
 from src.masterclasses.models import masterclass_user_table
 
-
-def is_admin(user: User):
-    """
-    Check if the user is an admin.
-
-    Args:
-        user (User, optional): The user to check.
-
-    Returns:
-        bool: True if the user is an admin, False otherwise.
-    """
-    if user.role != 'admin':
-        return False
-    return True
-
-
+# TODO move to CustomSecurity
 def has_masterclass_role(conn, role_to_check: str, user_id: UUID, masterclass_id: UUID):
     """
     Check if the user has a masterclass role.
