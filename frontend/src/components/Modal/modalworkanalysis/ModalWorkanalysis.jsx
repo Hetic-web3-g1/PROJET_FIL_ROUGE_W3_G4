@@ -2,15 +2,13 @@ import React from 'react'
 import propTypes from 'prop-types'
 
 import Modal from '../Modal'
-import CardInstrument from '../../cardInstrument/CardInstrument'
 
+import '../../professorfields/Professorfields.css'
+import '../modalbioprof/ModalBioprof.css'
 import './ModalWorkanalysis.css'
-import Instruments from '../../../constants/instruments'
 import Field from '../../field/Field'
-import Uploadcard from '../../upload/UploadCard'
 import Button from '../../button/Button'
-import Divider from '../../divider/Divider'
-import Label from '../../label/Label'
+
 
 export const ModalWorkanalysis = ({ biography, content, handleClose, handleSave }) => {
 
@@ -21,68 +19,35 @@ export const ModalWorkanalysis = ({ biography, content, handleClose, handleSave 
     };
 
     const masterclassContent = (
-        <div className='modal-work-analysis'>
-            <div className='button-container'>
+        <div className='modal-bio-prof-background-wrapper'>
+            <div className='marg-bottom'>
             <Button size="long" type="button" label="Associate Masterclass"/>
             </div>
-            <div className='button-container'>
+            <div className='marg-bottom'>
             <Button size="long" type="button" primary='false' label="No Masterclass Associated"/>
             </div>
-            <div class>
-                <span>About this masterclass</span>
-                <Field placeholder="..."/>
+            <div className='field-container2 marg-bottom'>
+                <span className='marg-bottom'>About this masterclass</span>
+                <textarea className="modal-work-analysis-textarea" placeholder="..." row='10'/>
+            </div>
+   
+            <div className='modal-bio-prof-infos-field full-width'>
+            <span className='marg-bottom'>Learnings</span>
+            <Field placeholder="Learning"/>
+            </div>
+            <div className='modal-bio-prof-infos-field full-width-flex'>
+                <img className='marg-right' src='src/assets/plus.svg'/> 
+                <Field placeholder="Learning"/>
+            </div>
+            <div className='modal-bio-prof-infos-field full-width'>
+            <span className='marg-bottom'>Description</span>
+            <Field placeholder="Piece by composer"/>
+            </div>
+            <div className='field-container2 marg-bottom'>
+                <textarea className="modal-work-analysis-textarea" placeholder="..." row='10'/>
             </div>
         </div>
-        // <div className="modal-masterclass-content">
-        //     <div className="modal-masterclass-infos">
-        //         <div className="modal-masterclass-infos-1">
-        //             <div className="modal-masterclass-infos-field">
-        //                 Composer
-        //                 <Field placeholder="Composer"/>
-        //             </div>
-        //             <div className="modal-masterclass-infos-field">
-        //                 Piece
-        //                 <Field placeholder="Piece"/>
-        //             </div>
-        //             <div className="modal-masterclass-infos-element">
-        //                 Professor
-        //                 <Field placeholder="Professor"/>
-        //             </div>
-        //         </div>
-        //         <div className="modal-masterclass-infos-2">
-        //             <div className="modal-masterclass-infos-field">
-        //                 Student
-        //                 <Field placeholder="Student"/>
-        //             </div>
-        //             <div className="modal-masterclass-infos-field">
-        //                 Producer
-        //                 <Field placeholder="Producer"/>
-        //             </div>
-        //             <div className="modal-masterclass-infos-element">
-        //                 Spoken Language
-        //                 <Field placeholder="Spoken Language"/>
-        //             </div>
-        //         </div>
-        //     </div>
-        //     <div className="modal-masterclass-instrument-wrapper">
-        //         Instruments
-        //         <div className="modal-masterclass-instrument">
-        //             {Instruments.map((instrument, index) => {
-        //                 return (
-        //                     <div className="instrument-card">
-        //                         <CardInstrument key={`modal-instrument-card-${index}`} name={instrument} legend={true} onClick={handleInstrument}/>
-        //                     </div>
-        //                 )
-        //             })}
-        //         </div>
-        //     </div>
-        //     <div className="modal-masterclass-background-wrapper">
-        //         Background Image
-        //         <div className="modal-masterclass-background-upload">
-        //             <Uploadcard/>
-        //         </div>
-        //     </div>
-        // </div>
+        
     );
 
     return(
