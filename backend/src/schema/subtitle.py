@@ -15,5 +15,7 @@ class Subtitle(SubtitleCreate):
 
 class SubtitleUpdate(BaseModel):
     status: str | None
-    updated_at: datetime = datetime.now()
-    updated_by: UUID
+    created_by: UUID
+    created_at: datetime
+    updated_at: datetime | None
+    updated_by: UUID | None

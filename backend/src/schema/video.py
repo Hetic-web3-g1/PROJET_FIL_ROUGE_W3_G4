@@ -12,12 +12,7 @@ class VideoCreate(BaseModel):
 
 class Video(VideoCreate):
     id: UUID
+    created_by: UUID
     created_at: datetime
-
-class VideoUpdate(BaseModel):
-    title: str | None
-    duration: float | None
-    status: str | None
-    file_name: str | None
-    updated_at: datetime = datetime.now()
-    updated_by: UUID
+    updated_at: datetime | None
+    updated_by: UUID | None

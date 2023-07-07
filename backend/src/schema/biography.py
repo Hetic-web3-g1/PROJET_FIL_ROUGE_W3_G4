@@ -18,18 +18,7 @@ class BiographyCreate(BaseModel):
 
 class Biography(BiographyCreate):
     id: UUID
+    created_by: UUID
     created_at: datetime
-
-class BiographyUpdate(BaseModel):
-    first_name: str | None
-    last_name: str | None
-    instrument: str | None
-    nationality: str | None
-    website: str | None
-    award: str | None
-    content: str | None
-    type: str | None
-    status: str | None
-    image_id: UUID | None
-    updated_at: datetime = datetime.now()
-    updated_by: UUID
+    updated_at: datetime | None
+    updated_by: UUID | None

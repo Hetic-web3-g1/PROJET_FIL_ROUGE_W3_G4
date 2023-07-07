@@ -25,7 +25,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 from src.users.router import router as user_router
 from src.authentification.router import router as auth_router
 

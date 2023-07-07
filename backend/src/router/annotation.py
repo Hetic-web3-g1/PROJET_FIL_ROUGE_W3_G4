@@ -1,11 +1,11 @@
 from fastapi import APIRouter
 from typing import List, Union
 
-from database.db_engine import engine
-from schema.response import ResponseModel
-from utils.route_function import check_id, route_response, get_route_response
-from schema.annotation import Annotation, AnnotationCreate, AnnotationUpdate
-from manager import annotation_manager
+from src.database.db_engine import engine
+from src.schema.response import ResponseModel
+from src.utils.route_function import check_id, route_response, get_route_response
+from src.schema.annotation import Annotation, AnnotationCreate
+from src.manager import annotation_manager
 
 router = APIRouter(
     prefix="/annotation",
@@ -36,7 +36,7 @@ def create_annotation(annotation: AnnotationCreate):
 
 # Update annotation
 @router.put("/{annotation_id}", response_model=ResponseModel)
-def update_annotation(annotation_id: str, annotation: AnnotationUpdate):
+def update_annotation(annotation_id: str, annotation: Annotation):
     check_id(annotation_id)
     with engine.begin() as conn:
         response = annotation_manager.update_annotation(conn, annotation_id, annotation)
