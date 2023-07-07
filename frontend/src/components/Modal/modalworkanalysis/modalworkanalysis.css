@@ -59,7 +59,14 @@
     width: 80%;
 }
 
-/* .modal-content{
-    height: 100%;
-    margin-left: 0;
-} */
+.modal-work-analysis{
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.button-container{
+    margin: 5px;
+}
