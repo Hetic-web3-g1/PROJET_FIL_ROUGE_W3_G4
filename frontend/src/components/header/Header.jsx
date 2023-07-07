@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
+
 import Avatar from '../avatar/Avatar';
 import Field from '../field/Field';
 import Divider from '../divider/Divider';
