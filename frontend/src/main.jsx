@@ -7,6 +7,7 @@ import {
 import "./index.css";
 import App from "./App";
 import Home from "./pages/home/Home";
+import Masterclass from "./pages/masterclass/Masterclass";
 import Login from "./pages/login/Login";
 import ErrorPage from "./pages/errorPage";
 
@@ -34,6 +35,11 @@ const router = createBrowserRouter([
   {
     path: "/Login",
     element: <Login />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/Masterclass",
+    element: <Masterclass />,
     errorElement: <ErrorPage />,
   }
 ]);
