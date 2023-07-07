@@ -6,6 +6,7 @@ from config import settings
 # from utils.meilisearch import search
 
 origins = []
+
 if settings.environment in {"dev", "development"}:
     origins = ["*"]
 else:

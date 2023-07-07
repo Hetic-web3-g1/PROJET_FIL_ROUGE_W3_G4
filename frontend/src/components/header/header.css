@@ -5,13 +5,22 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    height: 10vh;
+    height: 70px;
+    width: 100%;
     max-height: 100px;
     padding: 5px 20px;
+    z-index: 1;
+    position: relative;
 }
 
 .header-searchbar {
     width: 60%;
+}
+
+.header-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
+  margin-left: 10px;
 }
 
 .header-group {
@@ -20,4 +29,20 @@
     justify-content: space-evenly;
     width: 20%;
     align-items: center;
+}
+
+.header-create-dropdown {
+    cursor: pointer;
+}
+
+.header-create-dropdown-content {
+    background-color: #161C3D;
+    position: absolute;
+    border: 1px solid white;
+}
+
+.header-create-dropdown-item {
+    padding: 5px 5px;
+    display: flex;
+    justify-content: space-between;
 }

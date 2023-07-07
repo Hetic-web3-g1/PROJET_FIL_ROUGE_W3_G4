@@ -19,7 +19,7 @@ export const Dropdown = ({ options, callback, disabled }) => {
   }
 
   return (
-    <div style={!callback ? {height: '300px'} : null}>
+    <div>
       <div style={disabled ? {pointerEvents: 'none', backgroundColor: '#F7F7F7'} : null} onClick={() => setOpen(!open)} className='no-select div-dropdown font'>
         <span className={mode}>{selectedItem}</span>
         <img className={`${mode} ${isOpen}`} src="src\assets\dropdown\Chevron.svg" alt="chevron" />
