@@ -8,11 +8,10 @@ from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
-    environment: Literal["dev", "prod"]
-    database_url: str
-    database_log_url: str
+    environment: Literal["dev", "development", "prod"] = os.getenv("CONFIG_NAME")
+    postgres_url: str
 
-    # keys
+    # hash keys
     reset_token_key: str
     jwt_private_key: str
 
@@ -21,8 +20,12 @@ class Settings(BaseSettings):
     sendgrid_api_key: str
 
     class Config:
-        environment = os.environ["ENVIRONMENT"]
-        env_file = f"./.env/{environment}.env"
+        config = os.getenv("CONFIG_NAME")
+        env_file = f"./{config}.env"
+        if config is None:
+            raise ValueError("No 'CONFIG_NAME' env variable set")
+        elif os.path.isfile(env_file) is False:
+            raise ValueError(f"No {config}.env file found")
 
 
 settings = Settings()

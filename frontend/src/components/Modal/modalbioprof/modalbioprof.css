@@ -1,0 +1,107 @@
+.modal-bio-prof-content {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: normal;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0 1rem;
+    line-height: 2;
+}
+
+.modal-bio-prof-infos {
+    /* display: flex; */
+    flex-direction: row;
+    height: 100%;
+    margin-bottom: 3vh;
+    justify-content: space-around;
+}
+
+.modal-bio-prof-infos-1 {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.modal-bio-prof-infos-2 {
+    width: 50%;
+    margin-left: 1vw;
+}
+
+
+.modal-bio-prof-instrument {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 100%;
+    margin-bottom: 1vh;
+    overflow-x: auto;
+    white-space: nowrap;
+    width: 75vw;
+}
+
+.modal-bio-prof-instrument::-webkit-scrollbar{
+    display: none;
+}
+
+.modal-bio-prof-instrument-wrapper{
+    top: 14%;
+    margin-top: -240px;
+    margin-bottom: 4%;
+}
+
+
+.modal-bio-prof-background-upload {
+    width:auto
+}
+.upload-avatar{
+    border: 1px black dashed;
+}
+
+.TEST-STORYBOOK {
+    width: 80%;
+}
+
+.modal-bio-prof-infos-element{
+    display: flex;
+    align-content: center;
+    align-items: center;
+    flex-direction: row;
+}
+
+.modal-bio-prof-infos-checkbox{
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+.modal-bio-prof-background-wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.upload-card{
+    margin-right: 6rem;
+}
+
+.modal-bio-prof-textarea{
+    min-height: 240px;  
+
+}
+
+
+@media screen and (max-width: 1305px) {
+    .modal-bio-prof-instrument{
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        width: 60vw;
+        
+    }
+}
+@media screen and (max-width: 900px) {
+    .modal-bio-prof-instrument-wrapper{
+        display: none;
+    }
+}

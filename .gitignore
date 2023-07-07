@@ -28,7 +28,8 @@ package-lock.json
 *.tsv
 *.tsv.gz
 *.xlsx
- 
+
+*.db
  
 # Mac/OSX
 .DS_Store
@@ -172,3 +173,7 @@ dmypy.json
  
 # Cython debug symbols
 cython_debug/
+
+
+backend/**.env
+grafana.db

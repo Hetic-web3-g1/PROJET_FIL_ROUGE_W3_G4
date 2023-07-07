@@ -1,0 +1,20 @@
+.modal-bio-prof-infos-field {
+    margin-bottom: 2vh;
+    width: 50%;
+    display: inline-block;
+
+}
+.marg-right{
+    margin-right: 1%;
+}
+.fix-width{
+    width: 49%;
+}
+.full-width{
+    width: 100%;
+}
+.full-width-flex{
+    display: flex;
+    width: 100%;
+    align-items: center;
+}
