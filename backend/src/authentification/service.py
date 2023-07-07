@@ -15,7 +15,7 @@ from .schemas import ResetToken
 from .models import reset_token
 from src.users.models import user_table
 from src.users.schemas import User
-from src.utils.env import settings
+from config import settings
 from .exceptions import InvalidToken, ExpiredToken, InvalidCredentials
 
 
