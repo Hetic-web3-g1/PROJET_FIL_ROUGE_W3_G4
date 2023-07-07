@@ -13,7 +13,6 @@ function HideAndShowPassword () {
     } else {
         x.type = "password";
     }}
-    console.log(document.getElementById('radio-1'))
 
     return (
         <div className={['input-wrap', `input-wrap-${type}`].join(' ')}>

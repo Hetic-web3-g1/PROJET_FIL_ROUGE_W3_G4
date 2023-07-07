@@ -30,7 +30,8 @@
     background: url("src/assets/hide/eye.svg") no-repeat right;
     display: block;
     position: absolute;
-    margin-right: 1%;
+    right: 0;
+    margin-right: 2%;
     height: -webkit-fill-available;
     width: 25px;
 }
