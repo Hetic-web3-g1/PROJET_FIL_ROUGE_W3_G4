@@ -25,13 +25,13 @@ export const Tabs = ({ callback, tabActiveByDefault }) => {
    * @param {string} currentTab Current tab name
    */
   function handleTabs(selectedTabHTML, currentTab) {
-    document.querySelector(".custom-tabs-li").forEach(e => e.classList.remove('active'));
+    document.querySelectorAll("li").forEach(e => e.classList.remove('active'));
     selectedTabHTML.classList.add('active');
     callback(currentTab);
   }
 
   return (
-    <div>
+    <div className='tabs-flex'>
         <ul className='tabs-ul'>
           {tabsName.map((tab, index) =>
           <li onClick={(e) => handleTabs(e.target, tab.name)} key={index} className={`${tab.isActive === true ? 'active' : ''} custom-tabs-li no-select`}>{tab.name}</li>

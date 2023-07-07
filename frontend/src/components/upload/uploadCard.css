@@ -1,14 +1,17 @@
 .upload-card-content {
     font-family: 'Montserrat', sans-serif;
     font-weight: normal;
-    width: 100%;
-    height: 100%;
     min-height: 300px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     border: 1px dashed #020A33;
     padding: 0 3rem;
+}
+
+.upload-card {
+    width: 95%;
+    height: 100%;
 }
 
 .upload-card-drop {

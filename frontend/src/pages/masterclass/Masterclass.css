@@ -1,0 +1,68 @@
+.masterclass-page {
+  background-color: #FDFCFA;
+  height: 100%;
+  width: 100%;
+}
+
+.masterclass-page-container {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 2px solid #d3d3d3;
+}
+
+/*** MASTERCLASS OVERVIEW PART ***/
+.masterclass-overview {
+  padding: 20px;
+  flex-grow: 0.5;
+}
+
+.masterclass-information {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 10px;
+}
+
+.masterclass-information-col {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+.masterclass-span {
+  margin-right: 10px;
+  font-weight: bold;
+  color: #495057;
+}
+
+.masterclass-section {
+  margin-top: 25px;
+}
+
+.masterclass-information-col, .masterclass-status > section > span {
+  font-size: 18px;
+}
+
+/*** MASTERCLASS STATUS PART ***/
+
+.masterclass-status {
+  display: flex;
+  flex-direction: column;
+  border-left: 2px solid #d3d3d3;
+  width: 150px;
+  padding: 15px;
+}
+
+.masterclass-section-status {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 25px;
+}
+
+.masterclass-component-render {
+  margin-top: 15px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
