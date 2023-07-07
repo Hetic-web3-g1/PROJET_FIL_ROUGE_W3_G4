@@ -71,7 +71,7 @@ export const ModalCreateMasterclass = ({ biography, content, handleClose, handle
                 </div>
             </div>
             <div className="modal-bio-prof-background-wrapper">
-                        <span className='center'>Avatar</span>
+                        <span className='center'>Background Image</span>
                             <div className="modal-bio-prof-background-upload">
                                 <Uploadcard/>
                             </div>
