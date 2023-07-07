@@ -36,13 +36,6 @@ export const Sidebar = () => {
             <Checkbox label='Filter' primary={false}/>
           </div>
 
-          <div className="sidebar-filter">
-            <h1 className='sidebar-font'>Filters subtitle</h1>
-            <Checkbox label='Filter' primary={false}/>
-            <Checkbox label='Filter' primary={false}/>
-            <Checkbox label='Filter' primary={false}/>
-          </div>
-
         </div>
 
         <div>
