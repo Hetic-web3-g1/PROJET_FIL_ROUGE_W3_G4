@@ -8,7 +8,7 @@ from alembic import context
 from src.database.db_engine import metadata
 from config import settings
 
-from src.academy.models import *
+from src.academies.models import *
 from src.authentification.models import *
 from src.users.models import *
 
