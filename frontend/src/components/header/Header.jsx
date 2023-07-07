@@ -1,10 +1,14 @@
-import React, {useState} from 'react';
-import PropTypes from 'prop-types';
+import React, {useState, useContext, useEffect} from 'react';
 
 import Avatar from '../avatar/Avatar';
 import Field from '../field/Field';
 import Divider from '../divider/Divider';
 import { ModalMasterClass } from '../Modal/modalMasterclass/ModalMasterclass';
+import { ReactReduxContext } from 'react-redux'
+import { purgeStoredState } from 'redux-persist'
+import { ProfileActions } from '../../features/actions/profile';
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import './header.css';
 
@@ -13,6 +17,17 @@ export const Header = ({academyName}) => {
     const [createMasterClassModal, setCreateMasterClassModal] = useState(false);
     const [createBiographyModal, setCreateBiographyModal] = useState(false);
     const [createWorkAnalysisModal, setCreateWorkAnalysisModal] = useState(false);
+    const [userModal, setUserModal] = useState(false);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const { store } = useContext(ReactReduxContext)
+      
+    useEffect(() => {
+        if(!store.getState().user.user_token) {
+          navigate("/");
+        }
+      }, [store.getState().user.user_token])
 
     const handleCreateModal = () => {
         setCreateModal(!createModal);
@@ -32,6 +47,11 @@ export const Header = ({academyName}) => {
 
     const handleCreateWorkAnalysis = () => {
         setCreateWorkAnalysisModal(!createWorkAnalysisModal);
+    }
+
+    const handleDisconnect = () => {
+        dispatch(ProfileActions.disconnect());
+        window.location.reload();
     }
 
     return (
@@ -80,8 +100,20 @@ export const Header = ({academyName}) => {
                         
                     </div>
 
-                    <div className="header-user no-select">
+                    <div className="header-user no-select" onClick={() => setUserModal(!userModal)}>
                         <Avatar/>
+                        {
+                            userModal ?
+                                <>
+                                    <div className="header-user-dropdown">
+                                        <div className="header-user-dropdown-item" onClick={() => handleDisconnect()}>
+                                            Disconnect
+                                        </div>
+                                    </div>
+                                </>
+                            :
+                                null
+                        }
                     </div>
                 </div>
             </div>

@@ -12,6 +12,7 @@
     width: 92vw;
     height: 40vh;
     object-fit: contain;
+    margin-bottom: 1%;
 }
 .login-form{
     display: flex;
@@ -25,10 +26,5 @@
     text-align-last: left;
     color: #495057;
     margin: 4% 0 2% 0;
-}
-.reset-password-link{
-    color: #495057;
-    text-decoration: none;
-    margin-top: 3vh;
 }
 
