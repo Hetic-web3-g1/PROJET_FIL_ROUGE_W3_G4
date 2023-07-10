@@ -39,4 +39,5 @@ app.include_router(masterclass_router)
 app.include_router(biography_router)
 app.include_router(partition_router)
 
+# Todo: remove when have clean data
 generate_data()
