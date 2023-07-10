@@ -28,6 +28,18 @@ export const Header = ({academyName}) => {
           navigate("/");
         }
       }, [store.getState().user.user_token])
+    
+    useEffect(() => {
+        if(store.getState().user.profile.id) {
+            const userOptions = {
+                method: 'GET',
+                headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}` },
+            };
+            fetch(`http://localhost:4000/users/user/me`, userOptions).then((response) => response.json()).then(data => {
+                dispatch(ProfileActions.updateProfile(data));
+            });
+        }
+    },)
 
     const handleCreateModal = () => {
         setCreateModal(!createModal);

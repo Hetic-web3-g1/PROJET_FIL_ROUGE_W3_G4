@@ -9,16 +9,27 @@ import Instruments from '../../../constants/instruments'
 import Field from '../../field/Field'
 import Uploadcard from '../../upload/UploadCard'
 
-export const ModalMasterClass = ({ biography, content, handleClose, handleSave }) => {
+export const ModalMasterClass = ({ handleClose }) => {
 
     const [instrument, setInstrument] = React.useState('');
+    const [composer, setComposer] = React.useState('');
+    const [piece, setPiece] = React.useState('');
+    const [professor, setProfessor] = React.useState('');
+    const [student, setStudent] = React.useState('');
+    const [producer, setProducer] = React.useState('');
+    const [spokenLanguage, setSpokenLanguage] = React.useState('');
+    const [backgroundImage, setBackgroundImage] = React.useState('');
 
     const handleInstrument = (instrument) => {
         setInstrument(instrument);
     };
 
+    const handleSave = () => {
+        handleClose();
+    };
+
     const masterclassContent = (
-        <div className="modal-masterclass-content">
+        <form className="modal-masterclass-content">
             <div className="modal-masterclass-infos">
                 <div className="modal-masterclass-infos-1">
                     <div className="modal-masterclass-infos-field">
@@ -67,7 +78,7 @@ export const ModalMasterClass = ({ biography, content, handleClose, handleSave }
                     <Uploadcard/>
                 </div>
             </div>
-        </div>
+        </form>
     );
 
     return(
