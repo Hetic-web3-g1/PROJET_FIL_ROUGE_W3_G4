@@ -9,7 +9,7 @@
       "type": "python",
       "request": "launch",
       "env": {
-        "ENVIRONMENT": "development"
+        "CONFIG_NAME": "development"
       },
       "cwd": "${workspaceFolder}/backend",
       "program": "${workspaceFolder}/backend/debug.py",

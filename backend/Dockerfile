@@ -16,7 +16,7 @@ COPY . .
 # Set environment variables
 # ENV FASTAPI_ENV=development
 # ENV PYTHONUNBUFFERED=1
-ENV ENVIRONMENT=development
+ENV CONFIG_NAME=development
 
 WORKDIR /app
 
@@ -43,7 +43,7 @@ COPY . .
 # Set environment variables
 # ENV FASTAPI_ENV=development
 # ENV PYTHONUNBUFFERED=1
-ENV ENVIRONMENT=production
+ENV CONFIG_NAME=production
 
 WORKDIR /app
 
