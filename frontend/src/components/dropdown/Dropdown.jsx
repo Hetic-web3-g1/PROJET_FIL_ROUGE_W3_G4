@@ -34,8 +34,8 @@ export const Dropdown = ({ options, callback, disabled }) => {
 
 Dropdown.propTypes = {
   options: PropTypes.arrayOf(PropTypes.string),
-  callback: PropTypes.func.isRequired, // Callback function needed in parent component to get the value of the dropdown
-  disabled: PropTypes.bool
+  callback: PropTypes.func, // Callback function needed in parent component to get the value of the dropdown
+  disabled: PropTypes.bool,
 };
 
 Dropdown.defaultProps = {
