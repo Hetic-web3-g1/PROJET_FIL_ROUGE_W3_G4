@@ -3,7 +3,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from uuid import uuid4
 from datetime import datetime
 
-from database.db_engine import metadata
+from src.database.db_engine import metadata
 
 partition_table = Table(
     "partition",
@@ -12,7 +12,7 @@ partition_table = Table(
     Column("status", String(), nullable=False, default="created"),
     Column("file_name", String(), nullable=True),
     Column("created_at", DateTime(), default=datetime.utcnow, nullable=False),
-    Column("updated_at", DateTime(), nullable=True),
+    Column("updated_at", DateTime(), onupdate=datetime.utcnow, nullable=True),
     Column("created_by", UUID(as_uuid=True), ForeignKey("user.id"), nullable=False),
     Column("updated_by", UUID(as_uuid=True), ForeignKey("user.id"), nullable=True)
 )

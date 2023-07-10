@@ -16,8 +16,7 @@ COPY . .
 # Set environment variables
 # ENV FASTAPI_ENV=development
 # ENV PYTHONUNBUFFERED=1
-ENV FRONTEND_PORT=3000
-ENV ENVIRONMENT=dev
+ENV CONFIG_NAME=development
 
 WORKDIR /app
 
@@ -27,7 +26,7 @@ CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "4000", "--reload"]
 # # ------------------------------------------------------------------------
 
 # Production stage
-FROM python:3.9 AS production
+FROM python:3.11 AS production
 
 # Set the working directory in the container
 WORKDIR /app
@@ -44,8 +43,7 @@ COPY . .
 # Set environment variables
 # ENV FASTAPI_ENV=development
 # ENV PYTHONUNBUFFERED=1
-ENV FRONTEND_PORT=3000
-ENV ENVIRONMENT=prod
+ENV CONFIG_NAME=production
 
 WORKDIR /app
 

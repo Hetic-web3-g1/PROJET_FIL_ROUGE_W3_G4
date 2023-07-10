@@ -8,4 +8,4 @@ class LogCreate(BaseModel):
 
 class Log(LogCreate):
     id: int
-    timestamp: datetime
+    time: datetime

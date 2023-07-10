@@ -20,7 +20,7 @@ Button.propTypes = {
   primary: PropTypes.bool,
   type: PropTypes.oneOf(['button', 'submit', 'reset']),
   backgroundColor: PropTypes.string,
-  size: PropTypes.oneOf(['small', 'medium', 'large']),
+  size: PropTypes.oneOf(['small', 'medium', 'large', 'long']),
   label: PropTypes.string.isRequired,
   onClick: PropTypes.func,
 };

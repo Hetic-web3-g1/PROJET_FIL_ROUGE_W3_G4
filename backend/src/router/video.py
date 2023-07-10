@@ -1,11 +1,11 @@
 from fastapi import APIRouter
 from typing import List, Union
 
-from database.db_engine import engine
-from schema.response import ResponseModel
-from utils.route_function import check_id, route_response, get_route_response
-from schema.video import Video, VideoCreate, VideoUpdate
-from manager import video_manager
+from src.database.db_engine import engine
+from src.schema.response import ResponseModel
+from src.utils.route_function import check_id, route_response, get_route_response
+from src.schema.video import Video, VideoCreate
+from src.manager import video_manager
 
 router = APIRouter(
     prefix="/video",
@@ -36,7 +36,7 @@ def create_video(video: VideoCreate):
 
 # Update video
 @router.put("/{video_id}", response_model=ResponseModel)
-def update_video(video_id: str, video: VideoUpdate):
+def update_video(video_id: str, video: Video):
     check_id(video_id)
     with engine.begin() as conn:
         response = video_manager.update_video(conn, video_id, video)

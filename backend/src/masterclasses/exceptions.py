@@ -1,0 +1,2 @@
+class MasterclassNotFound(Exception):
+    pass

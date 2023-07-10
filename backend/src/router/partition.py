@@ -1,11 +1,11 @@
 from fastapi import APIRouter
 from typing import List, Union
 
-from database.db_engine import engine
-from schema.response import ResponseModel
-from utils.route_function import check_id, route_response, get_route_response
-from schema.partition import Partition, PartitionCreate, PartitionUpdate
-from manager import partition_manager
+from src.database.db_engine import engine
+from src.schema.response import ResponseModel
+from src.utils.route_function import check_id, route_response, get_route_response
+from src.schema.partition import Partition, PartitionCreate
+from src.manager import partition_manager
 
 router = APIRouter(
     prefix="/partition",
@@ -36,7 +36,7 @@ def create_partition(partition: PartitionCreate):
 
 # Update partition
 @router.put("/{partition_id}", response_model=ResponseModel)
-def update_partition(partition_id: str, partition: PartitionUpdate):
+def update_partition(partition_id: str, partition: Partition):
     check_id(partition_id)
     with engine.begin() as conn:
         response = partition_manager.update_partition(conn, partition_id, partition)

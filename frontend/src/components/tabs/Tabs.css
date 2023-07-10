@@ -1,4 +1,5 @@
 .tabs-ul {
+  padding-left: 0;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -11,18 +12,26 @@
 .custom-tabs-li {
   list-style-type: none;
   font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  font-weight: bold;
   color: #020A33;
   font-weight: bold;
   cursor: pointer;
+}
+
+.custom-tabs-li:not(:last-child) {
+  margin-right: 100px;
 }
 
 .active {
  text-decoration: underline;
  text-decoration-color: #FFCF00;
  text-decoration-thickness: 2px;
- text-underline-offset: 9px;
+ text-underline-offset: 10px;
 }
 
-.tabs-hr {
-  margin: 0;
+.tabs-flex {
+  display: flex;
+  justify-content: center;
+  margin-top: 25px;
 }

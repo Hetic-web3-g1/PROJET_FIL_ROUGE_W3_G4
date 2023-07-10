@@ -1,11 +1,11 @@
 from fastapi import APIRouter
 from typing import List, Union
 
-from database.db_engine import engine
-from schema.response import ResponseModel
-from utils.route_function import check_id, route_response, get_route_response
-from schema.comment import Comment, CommentCreate, CommentUpdate
-from manager import comment_manager
+from src.database.db_engine import engine
+from src.schema.response import ResponseModel
+from src.utils.route_function import check_id, route_response, get_route_response
+from src.comments.schemas import Comment, CommentCreate
+from src.manager import comment_manager
 
 router = APIRouter(
     prefix="/comment",
@@ -27,16 +27,16 @@ def get_comment_by_id(comment_id: str):
         response = comment_manager.get_comment_by_id(conn, comment_id)
         return get_route_response(response, 200, 404, "Comment not found")
 
-# Create comment
-@router.post("", response_model=ResponseModel)
-def create_comment(comment: CommentCreate):
-    with engine.begin() as conn:
-        response = comment_manager.create_comment(conn, comment)
-        return route_response(response, 200, 500)
+# # Create comment
+# @router.post("", response_model=ResponseModel)
+# def create_comment(comment: CommentCreate):
+#     with engine.begin() as conn:
+#         response = comment_manager.create_comment(conn, comment)
+#         return route_response(response, 200, 500)
 
 # Update comment
 @router.put("/{comment_id}", response_model=ResponseModel)
-def update_comment(comment_id: str, comment: CommentUpdate):
+def update_comment(comment_id: str, comment: Comment):
     check_id(comment_id)
     with engine.begin() as conn:
         response = comment_manager.update_comment(conn, comment_id, comment)

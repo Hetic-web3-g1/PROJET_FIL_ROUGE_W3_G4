@@ -8,7 +8,6 @@ from .schemas import User, UserCreate
 from .models import user_table
 from .exceptions import EmailAlreadyExist, UserNotFound
 
-
 def _parse_row(row: sa.Row):
     return User(**row._asdict())
 
@@ -37,7 +36,13 @@ def get_user_by_id(conn: Connection, user_id: UUID) -> User:
     Raises:
         UserNotFound: If the user does not exist.
     """
-    pass
+    result = conn.execute(
+        sa.select(user_table).where(user_table.c.id == user_id)
+    ).first()
+    if result is None:
+        raise UserNotFound
+
+    return _parse_row(result)
 
 
 def get_user_by_email(conn: Connection, email: str) -> User:
