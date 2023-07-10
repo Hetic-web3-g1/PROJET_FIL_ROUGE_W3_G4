@@ -21,10 +21,10 @@ export const Professorfields = ({ }) => {
             <span>Awards</span>
             <Field placeholder="Awards"/>
         </div>
-        <div className='modal-bio-prof-infos-field full-width-flex'>
+        {/* <div className='modal-bio-prof-infos-field full-width-flex'>
             <img className='marg-right' src='src/assets/plus.svg'/> 
             <Field placeholder="Awards"/>
-        </div>
+        </div> */}
     </div>
     )
 }

@@ -33,7 +33,7 @@ export const Header = ({academyName}) => {
       }, [store.getState().user.user_token])
     
     useEffect(() => {
-        if(store.getState().user.profile.id) {
+        if(!store.getState().user.profile.id) {
             const userOptions = {
                 method: 'GET',
                 headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}` },
@@ -71,7 +71,7 @@ export const Header = ({academyName}) => {
                 createMasterClassModal ? <ModalMasterClass handleClose={handleCreateMasterClass}/> : null
             }
             {
-                createBiographyModal ? <ModalBioProf handleClose={handleCreateBiography}/> : null
+                createBiographyModal ? <ModalBioProf handleClose={handleCreateBiography} store={store}/> : null
             }
             {
                 createWorkAnalysisModal ? <ModalWorkAnalysis handleClose={handleCreateWorkAnalysis}/> : null
