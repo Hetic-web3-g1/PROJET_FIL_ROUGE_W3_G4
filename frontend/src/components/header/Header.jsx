@@ -4,11 +4,14 @@ import Avatar from '../avatar/Avatar';
 import Field from '../field/Field';
 import Divider from '../divider/Divider';
 import { ModalMasterClass } from '../Modal/modalMasterclass/ModalMasterclass';
+import { ModalBioProf } from '../Modal/modalbioprof/Modalbioprof.jsx';
+import { ModalWorkAnalysis } from '../Modal/modalworkanalysis/ModalWorkanalysis';
 import { ReactReduxContext } from 'react-redux'
 import { purgeStoredState } from 'redux-persist'
 import { ProfileActions } from '../../features/actions/profile';
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import './header.css';
 
@@ -37,10 +40,6 @@ export const Header = ({academyName}) => {
         setCreateMasterClassModal(!createMasterClassModal);
     }
 
-    const handleCloseModalMasterClass = () => {
-        setCreateMasterClassModal(!createMasterClassModal);
-    }
-
     const handleCreateBiography = () => {
         setCreateBiographyModal(!createBiographyModal);
     }
@@ -57,12 +56,20 @@ export const Header = ({academyName}) => {
     return (
         <>
             {
-                createMasterClassModal ? <ModalMasterClass handleClose={handleCloseModalMasterClass}/> : null
+                createMasterClassModal ? <ModalMasterClass handleClose={handleCreateMasterClass}/> : null
+            }
+            {
+                createBiographyModal ? <ModalBioProf handleClose={handleCreateBiography}/> : null
+            }
+            {
+                createWorkAnalysisModal ? <ModalWorkAnalysis handleClose={handleCreateWorkAnalysis}/> : null
             }
             <div className="header">
                 <div className='header-group'>
                     <div className="header-logo">
-                        <Avatar />
+                        <Link to="/home">
+                            <Avatar />
+                        </Link>
                     </div>
                     <div className="header-title">
                         {academyName}

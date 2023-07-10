@@ -12,17 +12,6 @@ def _parse_row(row: sa.Row):
     return User(**row._asdict())
 
 
-def create_user(conn: Connection, user: UserCreate) -> User:
-    result = conn.execute(
-        sa.select(user_table).where(user_table.c.email == user.email)
-    ).first()
-    if result is not None:
-        raise EmailAlreadyExist
-
-    created_user = db_srv.create_object(conn, user_table, user.dict())
-    return _parse_row(created_user)
-
-
 def get_user_by_id(conn: Connection, user_id: UUID) -> User:
     """
     Get a user by the given id.
@@ -65,3 +54,26 @@ def get_user_by_email(conn: Connection, email: str) -> User:
         raise UserNotFound
 
     return _parse_row(result)
+
+
+def create_user(conn: Connection, user: UserCreate) -> User:
+    """
+    Create a user.
+
+    Args:
+        user (UserCreate): UserCreate object.
+
+    Raises:
+        EmailAlreadyExist: If the email already exist.
+
+    Returns:
+        User: The created User object.
+    """
+    result = conn.execute(
+        sa.select(user_table).where(user_table.c.email == user.email)
+    ).first()
+    if result is not None:
+        raise EmailAlreadyExist
+
+    created_user = db_srv.create_object(conn, user_table, user.dict())
+    return _parse_row(created_user)

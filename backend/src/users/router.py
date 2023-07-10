@@ -14,6 +14,24 @@ router = APIRouter(
 )
 
 
+@router.get("/user/me")
+def get_user_by_token(
+    user: User = Depends(CustomSecurity()),
+):
+    return user
+    
+
+# Get user by id
+@router.get("/{user_id}")
+def get_user_by_id(
+    user_id: UUID,
+    user: User = Depends(CustomSecurity()),
+):
+    with engine.begin() as conn:
+        response = user_service.get_user_by_id(conn, user_id)
+        return response
+
+
 @router.post("/academy/{academy_id}/user")
 def create_academy_user(
     academy_id: str, new_user: UserCreate, user: User = Depends(CustomSecurity())
@@ -29,14 +47,5 @@ def create_academy_user(
             status_code=400,
             detail="Email already exist",
         )
-    
 
-# Get user by id
-@router.get("/{user_id}")
-def get_user_by_id(
-    user_id: UUID,
-    user: User = Depends(CustomSecurity(is_admin=True)),
-):
-    with engine.begin() as conn:
-        response = user_service.get_user_by_id(conn, user_id)
-        return response
+

@@ -1,0 +1,2 @@
+class BiographyNotFound(Exception):
+    pass

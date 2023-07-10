@@ -40,7 +40,7 @@ export const Home = () => {
                 <div className="home-content">
                     {
                         MasterCardData.map(function(data, index){
-                            return <MasterCard content={data}/>
+                            return <MasterCard content={data} key={data.id}/>
                         }
                     )}
                 </div>
