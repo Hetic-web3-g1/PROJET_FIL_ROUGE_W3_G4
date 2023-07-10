@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from "react";
+import React, {useEffect, useState} from "react";
 
 import './home.css'
 
@@ -11,19 +11,23 @@ import MasterCardData from '../../mocks/masterCardMocks'
 
 export const Home = () => {
   const userStateRedux = useSelector((state) => state.filters.filters.sort_by);
+  const [mastercardComponent, setMastercardComponent] = useState([]);
 
   useEffect(() => {
-    console.log('TEST', userStateRedux);
+    setMastercardComponent([]);
     switch (userStateRedux) {
         case 'Created at':
-            console.log('created', MasterCardData);
-            MasterCardData.sort((a, b) => {
+            const sortedDataByCreation = MasterCardData.sort((a, b) => {
                 return new Date(b.created_at) - new Date(a.created_at);
             });
+            sortedDataByCreation.map(e => setMastercardComponent(component => [...component, <MasterCard content={e} key={e.id}/>]));
             break;
 
         case 'Last update':
-            console.log('updated');
+            const sortedDataByUpdate = MasterCardData.sort((a, b) => {
+                return new Date(b.updated_at) - new Date(a.updated_at);
+            });
+            sortedDataByUpdate.map(e => setMastercardComponent(component => [...component, <MasterCard content={e} key={e.id}/>]));
             break;
     }
   }, [userStateRedux]);
@@ -39,10 +43,8 @@ export const Home = () => {
                 </div>
                 <div className="home-content">
                     {
-                        MasterCardData.map(function(data, index){
-                            return <MasterCard content={data} key={data.id}/>
-                        }
-                    )}
+                        mastercardComponent.map(mastercard => { return mastercard })
+                    }
                 </div>
             </div>
         </div>

@@ -2,7 +2,7 @@ import { Types } from '../actions/type';
 
 const initialState = {
   filters: {
-    sort_by: 'Select an option'
+    sort_by: 'Created at'
   }
 }
 
