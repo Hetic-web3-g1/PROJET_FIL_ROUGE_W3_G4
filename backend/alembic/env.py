@@ -11,6 +11,18 @@ from config import settings
 from src.academies.models import *
 from src.authentification.models import *
 from src.users.models import *
+from src.comments.models import *
+
+
+from src.database.tables.annotation import *
+from src.database.tables.biography import *
+from src.database.tables.image import *
+from src.database.tables.partition import *
+from src.database.tables.subtitle import *
+from src.database.tables.tag import *
+from src.database.tables.timecode import *
+from src.database.tables.video import *
+from src.database.tables.work_analysis import *
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

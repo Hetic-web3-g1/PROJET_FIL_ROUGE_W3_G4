@@ -35,3 +35,11 @@ export const Small = {
     label: 'Button',
   },
 };
+
+export const Long = {
+  args: {
+    size: 'long',
+    label: 'Button',
+  },
+};
+

@@ -1,13 +1,12 @@
 import React, {useState, useContext, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import './Login.css';
-import Button from '../../components/button/Button';
-import Field from '../../components/field/Field';
+import Button from '../../../components/button/Button';
+import Field from '../../../components/field/Field';
 import { useDispatch } from "react-redux";
-import { ProfileActions } from '../../features/actions/profile';
+import { ProfileActions } from '../../../features/actions/profile';
 import { useNavigate } from "react-router-dom";
 import { ReactReduxContext } from 'react-redux'
-import { Link } from "react-router-dom";
 
 export const Login = ({ }) => {
   const [email, setEmail] = useState('');
@@ -51,7 +50,6 @@ export const Login = ({ }) => {
           <label for="password" className='login-field' >Password</label>
           <Field type="password" placeholder="Enter your password" onChange={(e) => {setPassword(e.target.value)}}/>
           <Button label="Login" className="button button-secondary padded" onClick={loginForm}/>
-          <div className='reset-password-link'>Forgot your password ? <Link to="/reset-password">Reset Password</Link></div>
       </form>
     </div>
   );
