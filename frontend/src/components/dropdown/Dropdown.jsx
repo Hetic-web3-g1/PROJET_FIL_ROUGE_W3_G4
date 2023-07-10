@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import './Dropdown.css';
 
-export const Dropdown = ({ options, callback, disabled }) => {
+export const Dropdown = ({ options, callback, disabled, defaultValue }) => {
   const [open, setOpen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState('Select an item')
+  const [selectedItem, setSelectedItem] = useState(defaultValue);
   const mode = disabled ? 'dropdown-disabled' : '';
   const isOpen = open ? 'open-chevron-svg' : 'close-chevron-svg';
 
@@ -34,8 +34,9 @@ export const Dropdown = ({ options, callback, disabled }) => {
 
 Dropdown.propTypes = {
   options: PropTypes.arrayOf(PropTypes.string),
-  callback: PropTypes.func, // Callback function needed in parent component to get the value of the dropdown
+  callback: PropTypes.func.isRequired, // Callback function needed in parent component to get the value of the dropdown
   disabled: PropTypes.bool,
+  defaultValue: PropTypes.string
 };
 
 Dropdown.defaultProps = {
