@@ -14,7 +14,7 @@ export const Masterclass = () => {
   const [tabName, setTabName] = useState('');
 
   /**
-   * Get data from tabs component
+   * Get data from tabs component and depending of the value set the corresponding component in the HTML.
    * @param childData Data from tabs component
    */
   function handleCallback(childData) {
