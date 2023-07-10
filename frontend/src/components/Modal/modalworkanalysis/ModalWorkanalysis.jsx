@@ -10,7 +10,7 @@ import Field from '../../field/Field'
 import Button from '../../button/Button'
  
 
-export const ModalWorkanalysis = ({ handleClose, handleSave }) => {
+export const ModalWorkAnalysis = ({ handleClose, handleSave }) => {
 
     const masterclassContent = (
         <div className='modal-bio-prof-background-wrapper'>
@@ -49,10 +49,8 @@ export const ModalWorkanalysis = ({ handleClose, handleSave }) => {
     );
 };
 
-ModalWorkanalysis.propTypes = {
-    biography: propTypes.string,
-    content: propTypes.string,
+ModalWorkAnalysis.propTypes = {
     handleClose: propTypes.func,
 };
 
-export default ModalWorkanalysis;
+export default ModalWorkAnalysis;
