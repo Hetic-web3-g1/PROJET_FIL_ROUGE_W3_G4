@@ -1,10 +1,19 @@
 import Checkbox from '../checkbox/Checkbox'
 import Dropdown from '../dropdown/Dropdown'
-import React, { useState } from 'react';
+import { useDispatch, ReactReduxContext } from 'react-redux';
+import React, { useContext, useEffect, useState } from 'react';
 import './sidebar.css';
+import { FiltersActions } from '../../features/actions/filters';
 
 export const Sidebar = () => {
   const [open, setOpen] = useState(false);
+  const customFilters = ['Created at', 'Last update'];
+  const dispatch = useDispatch();
+  const {store} = useContext(ReactReduxContext);
+
+  function handleCallback(childData) {
+    dispatch(FiltersActions.sortBy(childData));
+  }
 
   return (
     <div>
@@ -12,7 +21,7 @@ export const Sidebar = () => {
 
         <div className="sidebar-filters-container">
           <label className='sidebar-font'>Sort by:</label>
-          <Dropdown/>
+          <Dropdown callback={handleCallback} options={customFilters} defaultValue={store.getState().filters.filters.sort_by}/>
 
           <div className="sidebar-filter">
             <h1 className='sidebar-font'>Filters subtitle</h1>
