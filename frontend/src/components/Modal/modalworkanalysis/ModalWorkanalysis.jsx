@@ -8,15 +8,9 @@ import '../modalbioprof/ModalBioprof.css'
 import './ModalWorkanalysis.css'
 import Field from '../../field/Field'
 import Button from '../../button/Button'
+ 
 
-
-export const ModalWorkanalysis = ({ biography, content, handleClose, handleSave }) => {
-
-    const [instrument, setInstrument] = React.useState('');
-
-    const handleInstrument = (instrument) => {
-        setInstrument(instrument);
-    };
+export const ModalWorkanalysis = ({ handleClose, handleSave }) => {
 
     const masterclassContent = (
         <div className='modal-bio-prof-background-wrapper'>
