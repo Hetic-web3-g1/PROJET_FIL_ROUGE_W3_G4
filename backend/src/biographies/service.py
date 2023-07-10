@@ -16,20 +16,6 @@ def _parse_row(row: sa.Row):
     return Biography(**row._asdict())
 
 
-def create_biography(conn: Connection, biography: BiographyCreate) -> Biography:
-    """
-    Create a biography.
-
-    Args:
-        biography (BiographyCreate): BiographyCreate object.
-
-    Returns:
-        Biography: The created Biography object.
-    """
-    create_biography = db_srv.create_object(conn, biography_table, biography.dict())
-    return _parse_row(create_biography)
-
-
 def get_all_biographies(conn: Connection):
     """
     Get all biographies.
@@ -61,3 +47,17 @@ def get_biography_by_id(con: Connection, biography_id: UUID) -> Biography:
         raise BiographyNotFound
 
     return _parse_row(result)
+
+
+def create_biography(conn: Connection, biography: BiographyCreate) -> Biography:
+    """
+    Create a biography.
+
+    Args:
+        biography (BiographyCreate): BiographyCreate object.
+
+    Returns:
+        Biography: The created Biography object.
+    """
+    create_biography = db_srv.create_object(conn, biography_table, biography.dict())
+    return _parse_row(create_biography)
