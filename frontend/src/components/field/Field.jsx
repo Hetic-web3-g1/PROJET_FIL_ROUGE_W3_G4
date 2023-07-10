@@ -22,7 +22,7 @@ function HideAndShowPassword () {
                 placeholder={placeholder}
                 onChange={onChange}
                 id={id}
-                checked={false}/>
+                defaultChecked={false}/>
             <svg  
                 className={['field-icon', `field-icon-${type}`].join(' ')}
                 onClick={HideAndShowPassword}/>
