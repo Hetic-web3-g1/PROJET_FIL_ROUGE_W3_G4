@@ -8,7 +8,7 @@ from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
-    environment: Literal["dev", "development", "prod"] = os.getenv("CONFIG_NAME")
+    environment: Literal["development", "production"] = os.getenv("CONFIG_NAME")
     postgres_url: str
 
     # hash keys
