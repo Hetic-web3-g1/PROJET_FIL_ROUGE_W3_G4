@@ -5,14 +5,10 @@ from datetime import datetime
 class AnnotationCreate(BaseModel):
     measure: int
     content: str
-    created_by: UUID
 
 class Annotation(AnnotationCreate):
     id: int
+    created_by: UUID
     created_at: datetime
-
-class AnnotationUpdate(BaseModel):
-    measure: int | None
-    content: str | None
-    updated_at: datetime = datetime.now()
-    updated_by: UUID
+    updated_at: datetime | None
+    updated_by: UUID | None

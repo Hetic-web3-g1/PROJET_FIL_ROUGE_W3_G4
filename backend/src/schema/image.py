@@ -9,10 +9,7 @@ class ImageCreate(BaseModel):
 
 class Image(ImageCreate):
     id: UUID
+    created_by: UUID
     created_at: datetime
-
-class ImageUpdate(BaseModel):
-    title: str | None
-    file_name: str | None
-    updated_at: datetime = datetime.now()
-    updated_by: UUID
+    updated_at: datetime | None
+    updated_by: UUID | None

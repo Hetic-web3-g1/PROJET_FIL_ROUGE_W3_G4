@@ -12,14 +12,16 @@ import {
 } from 'redux-persist';
 
 import profile from '../reducers/profile';
+import filters from '../reducers/filters';
 
 const persistConfig = {
-  key: 'user',
+  key: ['user', 'filters'],
   storage,
 };
 
 const reducers = combineReducers({
   user: profile,
+  filters: filters
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);

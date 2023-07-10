@@ -1,11 +1,11 @@
 from fastapi import APIRouter
 from typing import List, Union
 
-from database.db_engine import engine
-from schema.response import ResponseModel
-from utils.route_function import check_id, route_response, get_route_response
-from schema.work_analysis import WorkAnalysis, WorkAnalysisCreate, WorkAnalysisUpdate
-from manager import work_analysis_manager
+from src.database.db_engine import engine
+from src.schema.response import ResponseModel
+from src.utils.route_function import check_id, route_response, get_route_response
+from src.schema.work_analysis import WorkAnalysis, WorkAnalysisCreate
+from src.manager import work_analysis_manager
 
 router = APIRouter(
     prefix="/work_analysis",
@@ -36,7 +36,7 @@ def create_work_analysis(work_analysis: WorkAnalysisCreate):
 
 # Update work_analysis
 @router.put("/{work_analysis_id}", response_model=ResponseModel)
-def update_work_analysis(work_analysis_id: str, work_analysis: WorkAnalysisUpdate):
+def update_work_analysis(work_analysis_id: str, work_analysis: WorkAnalysis):
     check_id(work_analysis_id)
     with engine.begin() as conn:
         response = work_analysis_manager.update_work_analysis(conn, work_analysis_id, work_analysis)

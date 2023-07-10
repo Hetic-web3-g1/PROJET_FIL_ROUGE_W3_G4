@@ -8,7 +8,7 @@ export const Checkbox = ({ checkedByDefault, label, disabled, primary }) => {
   return (
     <div style={{marginTop: '10px'}}>
       <input disabled={disabled} checked={checked} onChange={(e) => setChecked(e.target.checked)} type="checkbox" />
-      <label className={mode} for="label">{label}</label>
+      <label className={mode} htmlFor="label">{label}</label>
     </div>
   );
 };

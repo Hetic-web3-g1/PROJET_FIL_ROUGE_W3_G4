@@ -1,40 +1,18 @@
-import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from src.utils.env import settings
-from src.database.db_engine import metadata, engine
-from src.database.db_engine_log import metadata_log, engine_log
-
-
-# from src.database.tables import (
-#     academy,
-#     annotation,
-#     biography,
-#     comment,
-#     image,
-#     masterclass,
-#     partition,
-#     subtitle,
-#     tag,
-#     timecode,
-#     user,
-#     video,
-#     work_analysis,
-# )
-# from src.utils.fake_data import generate_data
-# from src.router.router import routing
+from config import settings
 
 # from utils.meilisearch import search
+from src.utils.fake_data import generate_data
 
 origins = []
-if settings.environment == "dev":
-    # frontend_port = os.getenv("FRONTEND_PORT", "")
-    # origins.extend(["http://localhost:" + frontend_port, "localhost:" + frontend_port])
+
+if settings.environment in {"development"}:
     origins = ["*"]
 else:
     pass
-    # Todo, add dns of the frontend
+    # Todo: production, add dns of the frontend
 
 app = FastAPI(
     # root_path="/api"
@@ -48,14 +26,18 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# search('Mad')
-
 from src.users.router import router as user_router
 from src.authentification.router import router as auth_router
-from src.academy.models import academy
+from src.masterclasses.router import router as masterclass_router
+from src.biographies.router import router as biography_router
+from src.partitions.router import router as partition_router
 
 app.include_router(user_router)
 app.include_router(auth_router)
 
-metadata_log.create_all(bind=engine_log)
-metadata.create_all(engine)
+app.include_router(masterclass_router)
+app.include_router(biography_router)
+app.include_router(partition_router)
+
+# Todo: remove when have clean data
+generate_data()

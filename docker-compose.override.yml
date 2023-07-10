@@ -41,7 +41,7 @@ services:
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
-      - POSTGRES_DB=db
+      - POSTGRES_DB=db_saline_royale
       - DATABASE_HOST=postgres
     restart: unless-stopped
     ports:

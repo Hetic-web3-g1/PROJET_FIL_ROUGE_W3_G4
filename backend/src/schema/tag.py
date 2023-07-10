@@ -5,7 +5,3 @@ class TagCreate(BaseModel):
 
 class Tag(TagCreate):
     id: int
-
-class TagUpdate(BaseModel):
-    id: int | None
-    content: str

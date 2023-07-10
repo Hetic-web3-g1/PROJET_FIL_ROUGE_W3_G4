@@ -2,9 +2,9 @@ from sqlalchemy.engine import Connection
 from sqlalchemy import select
 from typing import Union, Generator
 
-from database import db_srv
-from schema.annotation import Annotation, AnnotationCreate, AnnotationUpdate
-from database.tables.annotation import annotation_table
+from src.database import db_srv
+from src.schema.annotation import Annotation, AnnotationCreate
+from src.database.tables.annotation import annotation_table
 
 def get_all_annotation(conn: Connection) -> Generator[Annotation, None, None]:
     result = conn.execute(select(annotation_table))
@@ -26,12 +26,12 @@ def get_annotation_by_id(conn: Connection, annotation_id: str) -> Union[Annotati
 
 def create_annotation(conn: Connection, annotation: AnnotationCreate):
     try:
-        result = db_srv.create_object(conn, 'annotation', annotation)
+        result = db_srv.create_object(conn, annotation_table, annotation)
         return {"status": "success", "message": "Annotation created successfully", "value": result}
     except Exception as e:
         return {"status": "error", "message": str(e)}
 
-def update_annotation(conn: Connection, annotation_id: str, annotation: AnnotationUpdate):
+def update_annotation(conn: Connection, annotation_id: str, annotation: Annotation):
     try:
         # Filter out None values from the annotation object
         filtered_annotation = {k: v for k, v in annotation.dict().items() if v is not None}

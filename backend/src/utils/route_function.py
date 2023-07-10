@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 from typing import Union
 import uuid, json, re
 
-from utils.json_encoder import CustomJSONEncoder
+from src.utils.json_encoder import CustomJSONEncoder
 
 def check_id(id: Union[str, int]):
     id_str = str(id)  # Convert id to a string

@@ -1,11 +1,10 @@
 from sqlalchemy.engine import Connection
 from sqlalchemy import select
 from typing import Union, Generator
-from uuid import uuid4
 
-from database import db_srv
-from schema.comment import Comment, CommentCreate, CommentUpdate
-from database.tables.comment import comment_table
+from src.database import db_srv
+from src.comments.schemas import Comment, CommentCreate
+from src.comments.models import comment_table
 
 def get_all_comment(conn: Connection) -> Generator[Comment, None, None]:
     result = conn.execute(select(comment_table))
@@ -25,14 +24,14 @@ def get_comment_by_id(conn: Connection, comment_id: str) -> Union[Comment, None]
         comment_dict = comment_row._asdict()
         return Comment(**comment_dict)
 
-def create_comment(conn: Connection, comment: CommentCreate):
-    try:
-        result = db_srv.create_object(conn, 'comment', comment)
-        return {"status": "success", "message": "Comment created successfully", "value": result}
-    except Exception as e:
-        return {"status": "error", "message": str(e)}
+# def create_comment(conn: Connection, comment: CommentCreate):
+#     try:
+#         result = db_srv.create_object(conn, comment_table, comment)
+#         return {"status": "success", "message": "Comment created successfully", "value": result}
+#     except Exception as e:
+#         return {"status": "error", "message": str(e)}
 
-def update_comment(conn: Connection, comment_id: str, comment: CommentUpdate):
+def update_comment(conn: Connection, comment_id: str, comment: Comment):
     try:
         filtered_comment = {k: v for k, v in comment.dict().items() if v is not None}
         result = db_srv.update_object(conn, 'comment', comment_id, filtered_comment)

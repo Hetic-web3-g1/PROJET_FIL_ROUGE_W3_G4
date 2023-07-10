@@ -1,11 +1,11 @@
 from fastapi import APIRouter
 from typing import List, Union
 
-from database.db_engine import engine
-from schema.response import ResponseModel
-from utils.route_function import check_id, route_response, get_route_response
-from schema.biography import Biography, BiographyCreate, BiographyUpdate
-from manager import biography_manager
+from src.database.db_engine import engine
+from src.schema.response import ResponseModel
+from src.utils.route_function import check_id, route_response, get_route_response
+from src.schema.biography import Biography, BiographyCreate
+from src.manager import biography_manager
 
 router = APIRouter(
     prefix="/biography",
@@ -36,7 +36,7 @@ def create_biography(biography: BiographyCreate):
 
 # Update biography
 @router.put("/{biography_id}", response_model=ResponseModel)
-def update_biography(biography_id: str, biography: BiographyUpdate):
+def update_biography(biography_id: str, biography: Biography):
     check_id(biography_id)
     with engine.begin() as conn:
         response = biography_manager.update_biography(conn, biography_id, biography)

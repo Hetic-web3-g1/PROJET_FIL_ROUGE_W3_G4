@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { ProfileActions } from '../../features/actions/profile';
 import { useNavigate } from "react-router-dom";
 import { ReactReduxContext } from 'react-redux'
+import { Link } from "react-router-dom";
 
 export const Login = ({ }) => {
   const [email, setEmail] = useState('');
@@ -50,6 +51,7 @@ export const Login = ({ }) => {
           <label for="password" className='login-field' >Password</label>
           <Field type="password" placeholder="Enter your password" onChange={(e) => {setPassword(e.target.value)}}/>
           <Button label="Login" className="button button-secondary padded" onClick={loginForm}/>
+          <div className='reset-password-link'>Forgot your password ? <Link to="/reset-password">Reset Password</Link></div>
       </form>
     </div>
   );

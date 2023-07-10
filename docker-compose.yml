@@ -39,7 +39,7 @@ services:
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
-      - POSTGRES_DB=db
+      - POSTGRES_DB=db_saline_royale
       - DATABASE_HOST=postgres
     restart: unless-stopped
     ports:
@@ -47,28 +47,28 @@ services:
     networks:
       - db-network
 
-  meilisearch:
-    container_name: meilisearch
-    image: getmeili/meilisearch:latest
-    ports:
-      - 7700:7700
-    depends_on:
-      - db
-    networks:
-      - db-network
+  # meilisearch:
+  #   container_name: meilisearch
+  #   image: getmeili/meilisearch:latest
+  #   ports:
+  #     - 7700:7700
+  #   depends_on:
+  #     - db
+  #   networks:
+  #     - db-network
 
-  grafana:
-      container_name: grafana
-      image: grafana/grafana:latest
-      restart: unless-stopped
-      ports:
-        - 3001:3000
-      volumes:
-        - ./grafana:/var/lib/grafana
-      networks:
-        - db-network
-      depends_on:
-        - db
+  # grafana:
+  #     container_name: grafana
+  #     image: grafana/grafana:latest
+  #     restart: unless-stopped
+  #     ports:
+  #       - 3001:3000
+  #     volumes:
+  #       - ./grafana:/var/lib/grafana
+  #     networks:
+  #       - db-network
+  #     depends_on:
+  #       - db
 
   adminer:
     container_name: db-adminer
