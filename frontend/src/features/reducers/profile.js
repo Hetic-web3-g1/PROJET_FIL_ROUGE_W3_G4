@@ -34,6 +34,11 @@ const reducer = (state = initialState, action) => {
             profileImage: action.payload.image
           }
         }
+      case Types.DISCONNECT:
+        return {
+          ...state,
+          user_token: '',
+        }
       default:
         return state;
     }

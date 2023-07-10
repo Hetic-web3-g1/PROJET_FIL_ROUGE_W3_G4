@@ -10,6 +10,8 @@ import Home from "./pages/home/Home";
 import Masterclass from "./pages/masterclass/Masterclass";
 import Login from "./pages/login/Login";
 import ErrorPage from "./pages/errorPage";
+import ResetPasswordEmail from "./pages/auth/reset/ResetPasswordEmail";
+import ResetPassword from "./pages/auth/reset/ResetPassword";
 
 import { Provider } from 'react-redux'
 
@@ -35,6 +37,16 @@ const router = createBrowserRouter([
   {
     path: "/Login",
     element: <Login />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/reset-password",
+    element: <ResetPasswordEmail />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/reset-password/:token",
+    element: <ResetPassword />,
     errorElement: <ErrorPage />,
   },
   {

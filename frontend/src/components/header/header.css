@@ -40,6 +40,12 @@
     border: 1px solid white;
 }
 
+.header-user-dropdown {
+    background-color: #161C3D;
+    position: absolute;
+    border: 1px solid white;
+}
+
 .header-create-dropdown-item {
     padding: 5px 5px;
     display: flex;
