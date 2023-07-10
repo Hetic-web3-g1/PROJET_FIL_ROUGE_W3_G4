@@ -26,3 +26,25 @@ export const Password = {
         type: 'password',
     },
 };
+
+export const Nationality = {
+    args: {
+        placeholder: 'Nationality',
+        type: 'text',
+    },
+};
+
+export const Website = {
+    args: {
+        placeholder: 'Website',
+        type: 'text',
+    },
+};
+
+export const Awards = {
+    args: {
+        placeholder: 'Awards',
+        type: 'text',
+    },
+};
+
