@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from config import settings
 
 # from utils.meilisearch import search
+from src.utils.fake_data import generate_data
 
 origins = []
 
@@ -30,3 +31,5 @@ from src.authentification.router import router as auth_router
 
 app.include_router(user_router)
 app.include_router(auth_router)
+
+generate_data()
