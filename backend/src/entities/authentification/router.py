@@ -4,8 +4,8 @@ from . import exceptions as user_exceptions
 from . import service as auth_service
 from . import exceptions as auth_exceptions
 
-import src.users.exceptions as user_exceptions
-import src.users.service as user_service
+from ..users import exceptions as user_exceptions
+from ..users import service as user_service
 from src.database.db_engine import engine
 
 router = APIRouter(

@@ -2,12 +2,12 @@ from fastapi import APIRouter, HTTPException, Depends
 from uuid import UUID
 
 from .schemas import Masterclass, MasterclassCreate, MasterclassUser, MasterclassUserCreate
-from src.users.schemas import User
+from ..users.schemas import User
 from . import exceptions as masterclass_exceptions
 from . import service as masterclass_service
 from src.database.db_engine import engine
-from src.authentification import service as auth_service
-from src.authentification.dependencies import CustomSecurity
+from ..authentification import service as auth_service
+from ..authentification.dependencies import CustomSecurity
 
 router = APIRouter(
     prefix="/masterclasses",

@@ -7,18 +7,18 @@ from sqlalchemy.engine import Connection
 
 from src.database import db_srv
 from src.database.db_engine import engine
-from src.academies.models import academy_table
-from src.academies.schemas import AcademyCreate
-from src.academies.service import create_academy
-from src.users.models import user_table
-from src.users.schemas import UserCreate
-from src.users.service import create_user
-from src.masterclasses.models import masterclass_table
-from src.masterclasses.schemas import MasterclassCreate
-from src.masterclasses.service import create_masterclass
-from src.comments.models import comment_table
-from src.comments.schemas import CommentCreate
-from src.comments.service import create_comment
+from src.entities.academies.models import academy_table
+from src.entities.academies.schemas import AcademyCreate
+from src.entities.academies.service import create_academy
+from src.entities.users.models import user_table
+from src.entities.users.schemas import UserCreate
+from src.entities.users.service import create_user
+from src.entities.masterclasses.models import masterclass_table
+from src.entities.masterclasses.schemas import MasterclassCreate
+from src.entities.masterclasses.service import create_masterclass
+from src.entities.comments.models import comment_table
+from src.entities.comments.schemas import CommentCreate
+from src.entities.comments.service import create_comment
 
 def create_academy_fake():
     with engine.begin() as conn:

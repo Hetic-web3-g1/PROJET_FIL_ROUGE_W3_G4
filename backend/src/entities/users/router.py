@@ -5,8 +5,8 @@ from .schemas import User, UserCreate
 from . import exceptions as user_exceptions
 from . import service as user_service
 from src.database.db_engine import engine
-from src.authentification import service as auth_service
-from src.authentification.dependencies import CustomSecurity
+from ..authentification import service as auth_service
+from ..authentification.dependencies import CustomSecurity
 
 router = APIRouter(
     prefix="/users",

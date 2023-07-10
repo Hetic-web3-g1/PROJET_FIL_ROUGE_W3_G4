@@ -1,6 +1,6 @@
 from meilisearch import Client
 
-from utils.env import settings
+from config import settings
 
 client = Client('http://meilisearch:7700', settings.meilisearch_masterkey)
 

@@ -7,7 +7,7 @@ from src.database import db_srv
 from src.database.db_engine import engine
 from .schemas import WorkAnalysis, WorkAnalysisCreate
 from .models import work_analysis_table
-from src.users.models import user_table
+from ..users.models import user_table
 from .exceptions import WorkAnalysisNotFound
 
 

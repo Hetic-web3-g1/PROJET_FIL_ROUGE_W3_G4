@@ -3,8 +3,8 @@ from fastapi.security import APIKeyHeader
 
 from .schemas import ServicesRights
 from . import service as auth_service
-from src.users.schemas import User
-from src.masterclasses.models import masterclass_user_table
+from ..users.schemas import User
+from ..masterclasses.models import masterclass_user_table
 
 
 class CustomSecurity:

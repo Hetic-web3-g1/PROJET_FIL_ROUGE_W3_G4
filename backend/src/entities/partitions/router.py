@@ -3,12 +3,12 @@ from uuid import UUID
 
 
 from .schemas import Partition, PartitionCreate
-from src.users.schemas import User
+from ..users.schemas import User
 from . import exceptions as partition_exceptions
 from . import service as partition_service
 from src.database.db_engine import engine
-from src.authentification import service as auth_service
-from src.authentification.dependencies import CustomSecurity
+from ..authentification import service as auth_service
+from ..authentification.dependencies import CustomSecurity
 
 router = APIRouter(
     prefix="/partitions",

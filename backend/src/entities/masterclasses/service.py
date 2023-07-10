@@ -7,7 +7,7 @@ from src.database import db_srv
 from src.database.db_engine import engine
 from .schemas import Masterclass, MasterclassCreate
 from .models import masterclass_table
-from src.users.models import user_table
+from ..users.models import user_table
 from .exceptions import MasterclassNotFound
 
 
