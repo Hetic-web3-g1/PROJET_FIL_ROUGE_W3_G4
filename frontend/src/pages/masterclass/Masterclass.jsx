@@ -7,6 +7,7 @@ import { Tabs } from "../../components/tabs/Tabs";
 import { UploadCard } from "../../components/upload/UploadCard";
 
 import MasterClassData from '../../mocks/masterClassMocks'
+import DashboardVideo from "../../components/dashboard/DashboardVideo";
 
 export const Masterclass = () => {
 
@@ -29,7 +30,7 @@ export const Masterclass = () => {
         break;
 
       case 'Video':
-      setComponent(<></>);
+      setComponent(<DashboardVideo/>);
       break;
 
       case 'Partition':
