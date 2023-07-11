@@ -4,7 +4,7 @@ import './field.css';
 
 const searchIcon = '../../assets/search/search.svg';
 
-export const Field = ({ type, placeholder, onChange, id, checked }) => {
+export const Field = ({ type, placeholder, onChange, id, value }) => {
   
 function HideAndShowPassword () {
     var x = document.getElementById(id);
@@ -22,7 +22,9 @@ function HideAndShowPassword () {
                 placeholder={placeholder}
                 onChange={onChange}
                 id={id}
-                defaultChecked={false}/>
+                defaultChecked={false}
+                value={value}
+            />
             <svg  
                 className={['field-icon', `field-icon-${type}`].join(' ')}
                 onClick={HideAndShowPassword}/>

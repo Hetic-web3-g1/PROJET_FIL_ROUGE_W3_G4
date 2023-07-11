@@ -25,6 +25,10 @@
     background-color: #17a2b8;
 }
 
+.label-created {
+    background-color: #dc3545;
+}
+
 input[type="search"]::-webkit-search-cancel-button {
     display: none;
 }

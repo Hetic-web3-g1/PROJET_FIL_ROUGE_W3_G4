@@ -7,7 +7,6 @@ import { ModalMasterClass } from '../Modal/modalMasterclass/ModalMasterclass';
 import { ModalBioProf } from '../Modal/modalbioprof/Modalbioprof.jsx';
 import { ModalWorkAnalysis } from '../Modal/modalworkanalysis/ModalWorkanalysis';
 import { ReactReduxContext } from 'react-redux'
-import { purgeStoredState } from 'redux-persist'
 import { ProfileActions } from '../../features/actions/profile';
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -125,6 +124,9 @@ export const Header = ({academyName}) => {
                             userModal ?
                                 <>
                                     <div className="header-user-dropdown">
+                                        <div className="header-user-dropdown-item" onClick={() => navigate("/profile")}>
+                                            Profile
+                                        </div>
                                         <div className="header-user-dropdown-item" onClick={() => handleDisconnect()}>
                                             Disconnect
                                         </div>

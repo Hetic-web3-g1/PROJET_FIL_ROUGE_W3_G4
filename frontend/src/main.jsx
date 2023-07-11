@@ -12,6 +12,7 @@ import Login from "./pages/login/Login";
 import ErrorPage from "./pages/errorPage";
 import ResetPasswordEmail from "./pages/auth/reset/ResetPasswordEmail";
 import ResetPassword from "./pages/auth/reset/ResetPassword";
+import Profile from "./pages/profile/profile";
 
 import { Provider } from 'react-redux'
 
@@ -53,7 +54,12 @@ const router = createBrowserRouter([
     path: "/Masterclass",
     element: <Masterclass />,
     errorElement: <ErrorPage />,
-  }
+  },
+  {
+    path: "/Profile",
+    element: <Profile />,
+    errorElement: <ErrorPage />,
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
