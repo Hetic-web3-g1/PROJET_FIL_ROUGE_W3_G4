@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 
 import { Label } from '../label/Label'
@@ -8,10 +8,22 @@ import './masterCard.css';
 import placeholderImg from '../../assets/cardPlaceholder.png';
 import partitionPlaceholder from '../../assets/partitionPlaceholder.png';
 
-export const MasterCard = ({type, content, ...props }) => {
+export const MasterCard = ({type, content, token, ...props }) => {
 
     const createdAt = new Date(content.created_at);
     const cardImg = type === 'masterCard' ? placeholderImg : partitionPlaceholder;
+
+    const [createdBy, setCreatedBy] = useState('');
+
+    useEffect(() => {
+        const userOptions = {
+            method: 'GET',
+            headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${token}` },
+        };
+        fetch(`http://localhost:4000/users/${content.created_by}`, userOptions).then((response) => response.json()).then(data => {
+            setCreatedBy(data.first_name + ' ' + data.last_name);
+        });
+    },[])            
 
     return (
         <div
@@ -34,7 +46,7 @@ export const MasterCard = ({type, content, ...props }) => {
                     </div>
                     <div className="masterCard-content-date-wrapper">
                         <div>
-                            {content.created_by}
+                            {createdBy}
                         </div>
                         <div>
                             {createdAt.toLocaleDateString()}
