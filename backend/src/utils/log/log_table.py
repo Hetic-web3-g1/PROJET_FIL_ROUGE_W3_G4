@@ -10,4 +10,5 @@ log_table = Table(
     Column("level", String(), nullable=False),
     Column("message", String(), nullable=False),
     Column("time", DateTime(), default=datetime.utcnow, nullable=False),
+    schema="logging"
 )
