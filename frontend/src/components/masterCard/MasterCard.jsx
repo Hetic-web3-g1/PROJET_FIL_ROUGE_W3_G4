@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useMemo} from 'react';
 import PropTypes from 'prop-types';
 
 import { Label } from '../label/Label'
@@ -15,7 +15,7 @@ export const MasterCard = ({type, content, token, ...props }) => {
 
     const [createdBy, setCreatedBy] = useState('');
 
-    useEffect(() => {
+    useMemo(() => {
         const userOptions = {
             method: 'GET',
             headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${token}` },
