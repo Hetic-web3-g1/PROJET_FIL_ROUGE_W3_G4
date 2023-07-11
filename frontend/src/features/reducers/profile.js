@@ -9,7 +9,7 @@ const initialState = {
     email: '',
     interests: [],
     profileImage: '',
-    token: '',
+    id: '',
   },
   user_token: '',
 }
