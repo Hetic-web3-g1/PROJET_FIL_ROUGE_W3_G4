@@ -68,7 +68,7 @@ export const Header = ({academyName}) => {
     return (
         <>
             {
-                createMasterClassModal ? <ModalMasterClass handleClose={handleCreateMasterClass}/> : null
+                createMasterClassModal ? <ModalMasterClass handleClose={handleCreateMasterClass} store={store}/> : null
             }
             {
                 createBiographyModal ? <ModalBioProf handleClose={handleCreateBiography} store={store}/> : null

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import propTypes from 'prop-types'
 
 
@@ -14,11 +14,6 @@ import Uploadcard from '../../upload/UploadCard'
 export const ModalBioProf = ({ handleClose, store }) => {
 
     const [status, setStatus] = React.useState(1);
-
-    const radioHandler = (status) => {
-        setStatus(status);
-      };
-
     const [instrument, setInstrument] = React.useState([]);
     const [firstName, setFirstName] = React.useState('');
     const [lastName, setLastName] = React.useState('');
@@ -27,17 +22,22 @@ export const ModalBioProf = ({ handleClose, store }) => {
     const [website, setWebsite] = React.useState('');
     const [awards, setAwards] = React.useState([]);
     const [type, setType] = React.useState('Professor');
-    const [body, setBody] = React.useState();
 
     const createdBy = store.getState().user.profile.id;
+
+    const radioHandler = (status) => {
+        setStatus(status);
+    };
 
     const handleInstrument = (instrument) => {
         setInstrument([instrument]);
     };
 
     const handleSave = () => {
-        if (status === 1) {
-            setBody({
+        const bioOptions = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}` },
+          body : JSON.stringify({
                 instrument: instrument,
                 first_name: firstName,
                 last_name: lastName,
@@ -47,24 +47,10 @@ export const ModalBioProf = ({ handleClose, store }) => {
                 awards: awards,
                 type: type,
                 created_by: createdBy,
-            });
-        } else {
-            setBody({
-                instrument: instrument,
-                first_name: firstName,
-                last_name: lastName,
-                bio: bio,
-                type: type,
-                created_by: createdBy,
-            });
-        }
-        const bioOptions = {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}` },
-          body: JSON.stringify(body),
+            }),
         };
         fetch('http://localhost:4000/biographies/biography', bioOptions).then((response) => response.json()).then(data => {
-          if (data.detail[0].msg != "field required") {
+          if (data?.detail[0].msg != "field required") {
             handleClose();
           } else {
             alert('Invalid data');
