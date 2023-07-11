@@ -47,5 +47,3 @@ def create_academy_user(
             status_code=400,
             detail="Email already exist",
         )
-
-

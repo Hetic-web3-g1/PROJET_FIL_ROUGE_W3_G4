@@ -53,6 +53,6 @@ class CustomSecurity:
         Returns:
             bool: True if the user is an admin, False otherwise.
         """
-        if user.role != 'admin':
+        if user.primary_role != 'admin':
             return False
         return True
