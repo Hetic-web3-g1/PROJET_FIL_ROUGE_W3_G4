@@ -30,7 +30,7 @@ masterclass_user_table = Table(
     Column("id", Integer, primary_key=True, unique=True, nullable=False),
     Column("user_id", UUID(as_uuid=True), ForeignKey("user.id"), nullable=False),
     Column("masterclass_id", UUID(as_uuid=True), ForeignKey("masterclass.id"), nullable=False),
-    Column("role", String(), nullable=False)
+    Column("masterclass_role", String(), nullable=False)
 )
 
 masterclass_video_table = Table(

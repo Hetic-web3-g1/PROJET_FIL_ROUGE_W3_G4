@@ -13,9 +13,9 @@ from src.entities.academies.service import create_academy
 from src.entities.users.models import user_table
 from src.entities.users.schemas import UserCreate
 from src.entities.users.service import create_user
-from src.entities.masterclasses.models import masterclass_table
-from src.entities.masterclasses.schemas import MasterclassCreate
-from src.entities.masterclasses.service import create_masterclass
+from src.entities.masterclasses.models import masterclass_table, masterclass_user_table
+from src.entities.masterclasses.schemas import MasterclassCreate, MasterclassUserCreate
+from src.entities.masterclasses.service import create_masterclass, attribute_user_to_masterclass
 from src.entities.comments.models import comment_table
 from src.entities.comments.schemas import CommentCreate
 from src.entities.comments.service import create_comment
@@ -90,6 +90,20 @@ def create_masterclass_fake():
         })
         create_masterclass(conn, masterclass)
 
+def create_fixed_masterclass(conn: Connection, masterclass: MasterclassCreate):
+    return db_srv.create_object(conn, masterclass_table, masterclass.dict(), object_id="12345648-1234-1234-1234-123456789123")
+
+def create_fixed_masterclass_fake():
+    with engine.begin() as conn:
+        masterclass = MasterclassCreate(**{
+            "academy_id": "12345648-1234-1234-1234-123456789123",
+            "title": "Masterclass 1",
+            "description": "Description of masterclass 1",
+            "status": "created",
+            "created_by": "12345648-1234-1234-1234-123456789123"
+        })
+        create_fixed_masterclass(conn, masterclass)
+
 # def create_partition_fake():
 #     with engine.begin() as conn:
 #         partition = PartitionCreate(**{
@@ -108,13 +122,15 @@ def create_masterclass_fake():
 
 def create_user_fake():
     with engine.begin() as conn:
-        roles = ["user", "teacher", "admin"]
+        primary_roles = ["user", "admin"]
+        secondary_roles = ["teacher", "video_editor", "traductor", "writer"]
         user = UserCreate(**{
             "first_name": Faker().first_name(),
             "last_name": Faker().last_name(),
             "email": Faker().email(),
             "password": Faker().password(),
-            "role": random.choice(roles),
+            "primary_role": random.choice(primary_roles),
+            "secondary_role": [random.choice(secondary_roles), random.choice(secondary_roles)],
             "academy_id" : uuid.UUID("12345648-1234-1234-1234-123456789123")
         })
         create_user(conn, user)
@@ -129,10 +145,21 @@ def create_fixed_user_fake():
             "last_name": "admin",
             "email": "admin@admin.com",
             "password": "admin",
-            "role": "admin",
+            "primary_role": "admin",
+            "secondary_role": ["teacher", "video_editor", "traductor", "writer"],
             "academy_id": uuid.UUID("12345648-1234-1234-1234-123456789123")
         })
         create_fixed_user(conn, user)      
+
+def attribute_user_to_masterclass_fake():
+    with engine.begin() as conn:
+        masterclass_roles = ["teacher", "composer"]
+        user = MasterclassUserCreate(**{
+            "user_id": uuid.UUID("12345648-1234-1234-1234-123456789123"),
+            "masterclass_id": uuid.UUID("12345648-1234-1234-1234-123456789123"),
+            "masterclass_role": random.choice(masterclass_roles)
+        })
+        attribute_user_to_masterclass(conn, user)
 
 # def create_video_fake():
 #     with engine.begin() as conn:
@@ -170,6 +197,7 @@ def generate_data():
         comment_table: create_comment_fake,
         # image_table: create_image_fake,
         masterclass_table: create_masterclass_fake,
+        masterclass_user_table: attribute_user_to_masterclass_fake,
         # partition_table: create_partition_fake,
         # tag_table: create_tag_fake,
         # video_table: create_video_fake,
@@ -183,5 +211,7 @@ def generate_data():
                     create_fixed_academy_fake()
                 if table == user_table:
                     create_fixed_user_fake()
+                if table == masterclass_table:
+                    create_fixed_masterclass_fake()
                 for _ in range(10):
                     create_func()

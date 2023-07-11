@@ -2,7 +2,7 @@ from uuid import UUID
 
 import sqlalchemy as sa
 
-from src.masterclasses.models import masterclass_user_table
+from ..masterclasses.models import masterclass_user_table
 
 # TODO move to CustomSecurity
 def has_masterclass_role(conn, role_to_check: str, user_id: UUID, masterclass_id: UUID):
@@ -17,7 +17,7 @@ def has_masterclass_role(conn, role_to_check: str, user_id: UUID, masterclass_id
         bool: True if the user has a masterclass role, False otherwise.
     """
     result = conn.execute(
-        sa.select(masterclass_user_table.c.role)
+        sa.select(masterclass_user_table.c.masterclass_role)
         .where(masterclass_user_table.c.masterclass_id == masterclass_id)
         .where(masterclass_user_table.c.user_id == user_id)
     ).first()
