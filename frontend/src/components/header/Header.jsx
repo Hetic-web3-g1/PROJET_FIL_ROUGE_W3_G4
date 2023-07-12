@@ -8,13 +8,14 @@ import { ModalBioProf } from '../Modal/modalbioprof/Modalbioprof.jsx';
 import { ModalWorkAnalysis } from '../Modal/modalworkanalysis/ModalWorkanalysis';
 import { ReactReduxContext } from 'react-redux'
 import { ProfileActions } from '../../features/actions/profile';
+import { AcademyActions } from '../../features/actions/academy';
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 import './header.css';
 
-export const Header = ({academyName}) => {
+export const Header = () => {
     const [createModal, setCreateModal] = useState(false);
     const [createMasterClassModal, setCreateMasterClassModal] = useState(false);
     const [createBiographyModal, setCreateBiographyModal] = useState(false);
@@ -24,7 +25,7 @@ export const Header = ({academyName}) => {
     const navigate = useNavigate();
 
     const { store } = useContext(ReactReduxContext)
-      
+
     useEffect(() => {
         if(!store.getState().user.user_token) {
           navigate("/");
@@ -32,13 +33,25 @@ export const Header = ({academyName}) => {
       }, [store.getState().user.user_token])
     
     useEffect(() => {
-        if(!store.getState().user.profile.id) {
+        if(!store.getState().user.profile?.id) {
             const userOptions = {
                 method: 'GET',
                 headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}` },
             };
             fetch(`http://localhost:4000/users/user/me`, userOptions).then((response) => response.json()).then(data => {
                 dispatch(ProfileActions.updateProfile(data));
+            });
+        }
+    },)
+
+    useEffect(() => {
+        if(!store.getState().academy.academy?.id) {
+            const userOptions = {
+                method: 'GET',
+                headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}` },
+            };
+            fetch(`http://localhost:4000/academies/${store.getState().user.profile.academy_id}`, userOptions).then((response) => response.json()).then(data => {
+                dispatch(AcademyActions.setAcademy(data));
             });
         }
     },)
@@ -83,7 +96,7 @@ export const Header = ({academyName}) => {
                         </Link>
                     </div>
                     <div className="header-title">
-                        {academyName}
+                        {store.getState().academy.academy.name}
                     </div>
                 </div>
                 <div className="header-searchbar">
