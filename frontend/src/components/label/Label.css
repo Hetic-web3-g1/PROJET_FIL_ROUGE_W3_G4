@@ -9,20 +9,49 @@
     color: white
 }
 
+.label-log{
+    font-size: 13px;
+    padding: 0.3em 0.3em;
+    border-radius: 10px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: normal;
+    display: inline-block;
+    border-radius: 10px;
+    border: transparent; 
+    width: 6%;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 100 ;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.label-tags{
+    background-color: #020A33;
+    margin-bottom: 10px;
+    border-radius: 15px;
+}
+.label-plus{
+    background-color: #020A33;
+    margin: 0;
+}
+
 .label-completed {
     background-color: #007bff;
 }
 
-.label-in-progress {
-    background-color: #ffc107;
+.label-cancelled {
+    background-color: #BA2F30;
 }
 
-.label-archive {
-    background-color: #28a745;
+.label-validated {
+    background-color: #00875A;
 }
 
 .label-review {
-    background-color: #17a2b8;
+    background-color: #5F5F5F;
+}
+.label-in-progress {
+    background-color: #ffc107;
 }
 
 input[type="search"]::-webkit-search-cancel-button {
