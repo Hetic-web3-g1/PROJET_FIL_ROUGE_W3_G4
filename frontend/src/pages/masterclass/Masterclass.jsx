@@ -8,6 +8,7 @@ import { UploadCard } from "../../components/upload/UploadCard";
 
 import MasterClassData from '../../mocks/masterClassMocks'
 import DashboardVideo from "../../components/dashboard/DashboardVideo";
+import DashboardTeam from "../../components/dashboard-team/DashboardTeam";
 
 export const Masterclass = () => {
 
@@ -26,7 +27,7 @@ export const Masterclass = () => {
         break;
 
       case 'Team':
-        setComponent(<></>);
+        setComponent(<DashboardTeam/>);
         break;
 
       case 'Video':

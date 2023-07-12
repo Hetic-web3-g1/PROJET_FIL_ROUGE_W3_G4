@@ -1,0 +1,64 @@
+.team-container{
+    width: 90%;
+    color: gray;
+}
+.team-header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.rect{
+    width: 2px;
+    height: 26px;
+    background-color: gray;
+    margin-right: 24px;
+}
+.rect-container{
+    display: flex;
+    align-items: center;
+}
+.role-avatar{
+    height: 30px;
+    width: 30px;
+    border-radius: 25px;
+    margin-right: 10px;
+}
+.width-fix-1{
+    width: 165px;
+    display: flex;
+    align-items: center;
+}
+.width-fix-2{
+    width: 328px;
+}
+.role-list{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.line{
+    width: 106%;
+    height: 1px;
+    margin-left: -3%;
+    background: gray;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+.roles{
+    width: 140px;
+}
+.role-add{
+    display: flex;
+    flex-direction: row;
+    margin-top: 20px;
+}
+.role-container{
+    width: 30%;
+}
+.description-container{
+    margin-right: 154px;
+    width: 20%;
+    height: 50%;
+}
