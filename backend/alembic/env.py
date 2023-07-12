@@ -30,7 +30,7 @@ from src.entities.work_analyses.models import *
 # This line sets up loggers basically.
 config = context.config
 
-config.set_main_option("sqlalchemy.url", settings.postgres_url)
+config.set_main_option("sqlalchemy.url", str(settings.postgres_url))
 fileConfig(config.config_file_name)
 
 # add your model's MetaData object here
