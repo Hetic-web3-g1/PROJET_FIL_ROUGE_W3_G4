@@ -9,9 +9,35 @@
     padding: 0 3rem;
 }
 
+.upload-file-container .btn {
+    position: absolute;
+    transform: translate(-80%, -50%);
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 15px;
+    color: white;
+    background-color: #161C3D;
+    border: 2px solid #161C3D; 
+}
+
+.upload-file-pdf .btn {
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 15px;
+    color: white;
+    background-color: #161C3D;
+    border: 2px solid #161C3D; 
+}
+
 .upload-card {
-    width: 95%;
-    height: 100%;
+    margin: 0 !important;
+    min-width: 50%;
+}
+
+.pdf-container {
+    margin: 25px;
+    max-height: 500px;
+    overflow: auto;
 }
 
 .upload-card-drop {
