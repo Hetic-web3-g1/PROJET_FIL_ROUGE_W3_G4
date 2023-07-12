@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
-import { DashboardVideo } from './components/dashboard/DashboardVideo';
-import Masterclass from './pages/masterclass/Masterclass';  
+import { Landing } from './pages/landing/Landing.jsx';
 
 
 function App() {
   return (
     <>
-      <Masterclass />
+      <Landing />
     </>
   );
 }
