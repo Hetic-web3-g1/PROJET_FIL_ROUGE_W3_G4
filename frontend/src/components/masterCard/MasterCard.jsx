@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useMemooà} from 'react';
+import React, {useState, useEffect, useMemo} from 'react';
 import PropTypes from 'prop-types';
 
 import { Label } from '../label/Label'
