@@ -14,13 +14,6 @@ import Label from '../label/Label'
 import Logs from '../../mocks/logMocks.js'
 
 export const DashboardVideo = ({ MasterCardData, Videoname }) => {
-
-    // const [country, setCountry] = React.useState('');
-
-    // const handleCountry = (country) => {
-    //     setCountry(country);
-    // };
-
     return ( 
         <div>
         <div className='display-main'>
@@ -62,20 +55,6 @@ export const DashboardVideo = ({ MasterCardData, Videoname }) => {
                 <Label type='tags' label='Vues'/>
             </div>
             </div>
-            
-            {/* <div className='tags-wrapper'>
-                <span>Tags</span>
-                <div className='tags-marg'>
-                {Tags.map((tag, index) =>  {
-                    return (
-                        <div key={index}  >
-                            <div className='tag'>
-                                <span>{tag.title}</span>
-                            </div>
-                        </div>
-                )})}
-                </div>
-            </div> */}
         </div>
         <div className='versionning'>
         <div className='versionning-header'>
