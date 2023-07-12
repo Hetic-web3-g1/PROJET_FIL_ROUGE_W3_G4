@@ -31,7 +31,7 @@ export const DashboardVideo = ({ MasterCardData, Videoname }) => {
             </div>
             <div className='right-side-wrapper'>
             <div className='country-wrapper'>
-                <span className='body1semibold'>Subtitles</span>
+                <span className='body1semibold bluetext'>Subtitles</span>
                 <div className='country-marg'>
                 {Countries.map((country, index) =>  {
                     return (
@@ -50,7 +50,7 @@ export const DashboardVideo = ({ MasterCardData, Videoname }) => {
             </div>
             <div className='label-wrapper'>
                 <div className='label-wrapper-header'>
-                    <span className='body1semibold'>Tags</span>
+                    <span className='body1semibold bluetext'>Tags</span>
                     <Label type='plus' label='+'/>
                 </div>
                 <Label type='tags' label='Compositor Name'/>

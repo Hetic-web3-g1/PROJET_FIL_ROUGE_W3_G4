@@ -2,7 +2,6 @@ video {
     width: 80%;
     top: 0;
     left: 0;
-
 }
 
 video::-webkit-media-controls {
@@ -10,7 +9,8 @@ video::-webkit-media-controls {
 }
 
 .main-video{
-    width: 70%;
+    width: 55%;
+    height: fit-content;
 }
 
 .video-wrapper {

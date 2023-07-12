@@ -25,18 +25,19 @@
 .country-marg{
     margin: 8px 0;
     overflow-y: scroll;
-
+    height: 92px;
 }
 .right-side-wrapper{
-    width: 250px;
+    width: 300px;
     margin-left: 25px;
+    height: 332px;
 }
 .label-wrapper{
     margin-top: 20px;
     border: 1px dotted #020A33;
     padding: 5px;
     overflow-y: auto;
-    height: 40%;
+    height: 41%;
 }
 .label-wrapper-header{
     display: flex;
@@ -69,4 +70,7 @@
 .log-list{
     overflow-y: auto;
     height: 100px;
+}
+.versionning{
+    margin-top: 1%;
 }
