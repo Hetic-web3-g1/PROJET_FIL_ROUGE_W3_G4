@@ -1,5 +1,5 @@
 .display-main{
-    height: 66vh;
+    /* height: 66vh; */
     /* width: 100%; */
     display: flex;
 }
@@ -25,18 +25,18 @@
 .country-marg{
     margin: 8px 0;
     overflow-y: scroll;
-    height: 92px;
+
 }
 .right-side-wrapper{
-    width: 270px;
+    width: 250px;
     margin-left: 25px;
 }
 .label-wrapper{
-    margin-top: 40px;
+    margin-top: 20px;
     border: 1px dotted #020A33;
     padding: 5px;
     overflow-y: auto;
-    height: 58%;
+    height: 40%;
 }
 .label-wrapper-header{
     display: flex;
@@ -55,6 +55,7 @@
     justify-content: space-between;
     width: 40%;
     align-items: center;
+    margin-bottom: 1%;
 }
 .versionning-logs{
     display: flex;

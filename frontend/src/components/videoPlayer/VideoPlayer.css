@@ -1,11 +1,8 @@
 video {
-    height: auto;
-    /* object-fit: cover;
-    position: absolute; */
+    width: 80%;
     top: 0;
     left: 0;
-    /* background-image: url('../../assets/kirbok.jpg');
-    background-size: contain; */
+
 }
 
 video::-webkit-media-controls {
@@ -13,13 +10,10 @@ video::-webkit-media-controls {
 }
 
 .main-video{
-    width: 80%;
+    width: 70%;
 }
 
 .video-wrapper {
-   
-    overflow: hidden;
-    position: relative;
     text-align: -webkit-center;
 }
 

@@ -31,14 +31,14 @@ export const DashboardVideo = ({ MasterCardData, Videoname }) => {
             </div>
             <div className='right-side-wrapper'>
             <div className='country-wrapper'>
-                <span>Subtitles</span>
+                <span className='body1semibold'>Subtitles</span>
                 <div className='country-marg'>
                 {Countries.map((country, index) =>  {
                     return (
                         <div key={index}  >
                             <div className='country'>
                                 <img className='country-img' src={country.image}></img>
-                                <span>{country.title}</span>
+                                <span className='body2regular'>{country.title}</span>
                             </div>
                         </div>
                 )})}
