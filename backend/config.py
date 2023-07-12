@@ -20,9 +20,12 @@ class Settings(BaseSettings):
     reset_token_key: str
     jwt_private_key: str
 
-    # s3 keys
+    # s3
     scality_access_key_id: str
     scality_secret_access_key: str
+    s3_hostname: str
+    s3_port: int
+    bucket_name: str
 
     # external keys
     meilisearch_masterkey: str | None = None
