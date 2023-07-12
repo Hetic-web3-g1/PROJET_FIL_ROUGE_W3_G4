@@ -123,11 +123,12 @@ export const Header = ({academyName}) => {
                         {
                             userModal ?
                                 <>
-                                    <div className="header-user-dropdown">
-                                        <div className="header-user-dropdown-item" onClick={() => navigate("/profile")}>
+                                    <div className="header-create-dropdown-content">
+                                        <div className="header-create-dropdown-item" onClick={() => navigate("/profile")}>
                                             Profile
                                         </div>
-                                        <div className="header-user-dropdown-item" onClick={() => handleDisconnect()}>
+                                        <Divider />
+                                        <div className="header-create-dropdown-item" onClick={() => handleDisconnect()}>
                                             Disconnect
                                         </div>
                                     </div>

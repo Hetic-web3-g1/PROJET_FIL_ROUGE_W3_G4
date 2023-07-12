@@ -1,6 +1,7 @@
 import React, {useContext, useState} from 'react';
 import { ReactReduxContext } from 'react-redux'
 import { useDispatch } from "react-redux";
+import { ProfileActions } from '../../features/actions/profile';
 
 import './Profile.css';
 import {Field} from '../../components/field/Field';
@@ -17,7 +18,8 @@ export const Profile = () => {
     const [lastName, setLastName] = useState(profile.last_name)
     const [email, setEmail] = useState(profile.email)
 
-    const handleSave = () => {
+    const handleSave = (e) => {
+        e.preventDefault();
         const userOptions = {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}` },
@@ -25,10 +27,11 @@ export const Profile = () => {
                 first_name: firstName,
                 last_name: lastName,
                 email: email,
+                academy_id: profile.academy_id,
             }),
         }
         fetch(`http://localhost:4000/users/user/${profile.id}`, userOptions).then((response) => response.json()).then(data => {
-            dispatch(ProfileActions.updateProfile(profile = {                
+            dispatch(ProfileActions.updateProfile({                
                 first_name: firstName,
                 last_name: lastName,
                 email: email,
@@ -44,18 +47,18 @@ export const Profile = () => {
             <form className="profile-wrap">
                 <div className="profile-field">
                     First Name
-                    <Field label="First name" type="text" placeholder="First name" value={`${profile.first_name}`} onChange={(e) => setFirstName(e.target.value)}/>
+                    <Field label="First name" type="text" placeholder="First name" value={`${firstName}`} onChange={(e) => setFirstName(e.target.value)}/>
                 </div>
                 <div className="profile-field">
                     Last Name
-                    <Field label="Last name" type="text" placeholder="Last name" value={`${profile.last_name}`} onChange={(e) => setLastName(e.target.value)}/>
+                    <Field label="Last name" type="text" placeholder="Last name" value={`${lastName}`} onChange={(e) => setLastName(e.target.value)}/>
                 </div>
                 <div className="profile-field">
                     Email
-                    <Field label="Email" type="email" placeholder="Email" value={`${profile.email}`} onChange={(e) => setEmail(e.target.value)}/>
+                    <Field label="Email" type="email" placeholder="Email" value={`${email}`} onChange={(e) => setEmail(e.target.value)}/>
                 </div>
                 <div className="profile-save">
-                    <Button label="Save" type="primary" onClick={() => {handleSave()}}/>
+                    <Button label="Save" type="primary" onClick={(e) => {handleSave(e)}}/>
                 </div>
             </form>
         </div>
