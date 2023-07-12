@@ -39,6 +39,7 @@ export const UploadCard = ({  }) => {
     function previousPage() {
         changePage(-1);
     }
+    
     /**
      * Go to next page
      */
