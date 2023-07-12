@@ -85,7 +85,7 @@ export const Profile = () => {
                     <Field label="Email" type="email" placeholder="Email" value={`${email}`} onChange={(e) => setEmail(e.target.value)}/>
                 </div>
                 <div className="profile-save">
-                    <Button label="Save" type="primary" onClick={(e) => {handleSaveProfile(e)}}/>
+                    <Button label="Save" onClick={(e) => {handleSaveProfile(e)}}/>
                 </div>
             </form>
             {
@@ -112,7 +112,7 @@ export const Profile = () => {
                             <Dropdown callback={(e) => setUserPrimaryRole(e)} options={['user', 'admin']} defaultValue="user"/>
                         </div>
                         <div className="profile-user-create">
-                            <Button label="Create User" type="primary" onClick={(e) => {handleCreateUser(e)}}/>
+                            <Button label="Create User" onClick={(e) => {handleCreateUser(e)}}/>
                         </div>
                     </form>
                 </div>

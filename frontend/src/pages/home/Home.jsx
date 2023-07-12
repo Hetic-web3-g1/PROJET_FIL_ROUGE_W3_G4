@@ -55,7 +55,7 @@ export const Home = () => {
     return (
         <div className="home">
             <div className="home-header">
-                <Header academyName="Flamingo Academy"/>
+                <Header/>
             </div>
             <div className="home-body">
                 <div className="home-sidebar">
