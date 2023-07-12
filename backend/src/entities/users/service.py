@@ -3,7 +3,7 @@ from uuid import UUID
 import sqlalchemy as sa
 from sqlalchemy.engine import Connection
 
-from src.database import db_srv
+from src.database import service as db_service
 from .schemas import User, UserCreate
 from .models import user_table
 from .exceptions import EmailAlreadyExist, UserNotFound
@@ -75,5 +75,5 @@ def create_user(conn: Connection, user: UserCreate) -> User:
     if result is not None:
         raise EmailAlreadyExist
 
-    created_user = db_srv.create_object(conn, user_table, user.dict())
+    created_user = db_service.create_object(conn, user_table, user.dict())
     return _parse_row(created_user)

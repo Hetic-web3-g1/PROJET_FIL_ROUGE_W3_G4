@@ -5,7 +5,7 @@ import uuid
 
 from sqlalchemy.engine import Connection
 
-from src.database import db_srv
+from src.database import service as db_service
 from src.database.db_engine import engine
 from src.entities.academies.models import academy_table
 from src.entities.academies.schemas import AcademyCreate
@@ -28,7 +28,7 @@ def create_academy_fake():
         create_academy(conn, academy)
   
 def create_fixed_academy(conn: Connection, academy: AcademyCreate):
-    return db_srv.create_object(conn, academy_table, academy.dict(), object_id="12345648-1234-1234-1234-123456789123")
+    return db_service.create_object(conn, academy_table, academy.dict(), object_id="12345648-1234-1234-1234-123456789123")
 
 def create_fixed_academy_fake():
     with engine.begin() as conn:
@@ -91,7 +91,7 @@ def create_masterclass_fake():
         create_masterclass(conn, masterclass)
 
 def create_fixed_masterclass(conn: Connection, masterclass: MasterclassCreate):
-    return db_srv.create_object(conn, masterclass_table, masterclass.dict(), object_id="12345648-1234-1234-1234-123456789123")
+    return db_service.create_object(conn, masterclass_table, masterclass.dict(), object_id="12345648-1234-1234-1234-123456789123")
 
 def create_fixed_masterclass_fake():
     with engine.begin() as conn:
@@ -136,7 +136,7 @@ def create_user_fake():
         create_user(conn, user)
 
 def create_fixed_user(conn: Connection, user: UserCreate):
-    return db_srv.create_object(conn, user_table, user.dict(), object_id="12345648-1234-1234-1234-123456789123")
+    return db_service.create_object(conn, user_table, user.dict(), object_id="12345648-1234-1234-1234-123456789123")
 
 def create_fixed_user_fake():
     with engine.begin() as conn:

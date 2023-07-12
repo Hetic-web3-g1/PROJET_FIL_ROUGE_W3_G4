@@ -3,7 +3,6 @@ from uuid import UUID
 import sqlalchemy as sa
 from sqlalchemy.engine import Connection
 
-from src.database import db_srv
 from src.database.db_engine import engine
 from .schemas import WorkAnalysis, WorkAnalysisCreate
 from .models import work_analysis_table

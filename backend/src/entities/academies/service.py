@@ -3,7 +3,7 @@ from uuid import UUID
 import sqlalchemy as sa
 from sqlalchemy.engine import Connection
 
-from src.database import db_srv
+from src.database import service as db_service
 from src.database.db_engine import engine
 from .schemas import Academy, AcademyCreate
 from .models import academy_table
@@ -37,5 +37,5 @@ def get_academy_by_id(conn: Connection, academy_id: UUID) -> Academy:
 
 
 def create_academy(conn: Connection, academy: AcademyCreate) -> Academy:
-    created_academy = db_srv.create_object(conn, academy_table, academy.dict())
+    created_academy = db_service.create_object(conn, academy_table, academy.dict())
     return created_academy

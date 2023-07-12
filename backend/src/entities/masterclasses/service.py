@@ -3,7 +3,7 @@ from uuid import UUID
 import sqlalchemy as sa
 from sqlalchemy.engine import Connection
 
-from src.database import db_srv
+from src.database import service as db_service
 from src.database.db_engine import engine
 from .schemas import Masterclass, MasterclassCreate, MasterclassUserCreate, MasterclassUser
 from .models import masterclass_table, masterclass_user_table
@@ -78,7 +78,7 @@ def create_masterclass(conn: Connection, masterclass: MasterclassCreate) -> Mast
     Returns:
         Masterclass: The created Masterclass object.
     """
-    result = db_srv.create_object(conn, masterclass_table, masterclass.dict())
+    result = db_service.create_object(conn, masterclass_table, masterclass.dict())
     return _parse_row(result)
 
 
@@ -92,5 +92,5 @@ def attribute_user_to_masterclass(conn: Connection, masterclass_user: Masterclas
     Returns:
         MasterclassUser: The created MasterclassUser object.
     """
-    result = db_srv.create_object(conn, masterclass_user_table, masterclass_user.dict())
+    result = db_service.create_object(conn, masterclass_user_table, masterclass_user.dict())
     return _parse_row_masterclass_user(result)

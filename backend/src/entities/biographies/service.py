@@ -4,7 +4,7 @@ import sqlalchemy as sa
 from sqlalchemy.engine import Connection
 
 
-from src.database import db_srv
+from src.database import service as db_service
 from src.database.db_engine import engine
 from .schemas import Biography, BiographyCreate
 from .models import biography_table
@@ -59,5 +59,5 @@ def create_biography(conn: Connection, biography: BiographyCreate) -> Biography:
     Returns:
         Biography: The created Biography object.
     """
-    create_biography = db_srv.create_object(conn, biography_table, biography.dict())
+    create_biography = db_service.create_object(conn, biography_table, biography.dict())
     return _parse_row(create_biography)

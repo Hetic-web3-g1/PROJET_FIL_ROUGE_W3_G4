@@ -3,7 +3,7 @@ from uuid import UUID
 import sqlalchemy as sa
 from sqlalchemy.engine import Connection
 
-from src.database import db_srv
+from src.database import service as db_service
 from src.database.db_engine import engine
 from .schemas import Partition, PartitionCreate
 from .models import partition_table
@@ -58,5 +58,5 @@ def create_partition(conn: Connection, partition: PartitionCreate) -> Partition:
     Returns:
         Partition: The created Partition object.
     """
-    create_partition = db_srv.create_object(conn, partition_table, partition.dict())
+    create_partition = db_service.create_object(conn, partition_table, partition.dict())
     return _parse_row(create_partition)
