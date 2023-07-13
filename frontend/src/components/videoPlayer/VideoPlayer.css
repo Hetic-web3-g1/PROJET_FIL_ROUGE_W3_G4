@@ -52,16 +52,12 @@ video::-webkit-media-controls {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    /* position: absolute; */
     width: 97%;
     bottom: 0;
-    padding: 1%;
+    padding: 2px;
     flex-wrap: wrap;
     background: rgba(0, 0, 0, 0.25);
-    border-radius: 10px;
     border: 1px solid rgba(0, 0, 0, 0.20);
-    /* transform: translateY(150%); */
-    /* transition: all 0.3s ease-in-out; */
 }
 
 .video-player-controls button {

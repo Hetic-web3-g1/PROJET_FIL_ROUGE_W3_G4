@@ -83,7 +83,7 @@ export const ModalMasterClass = ({ handleClose, store }) => {
                     })}
                 </div>
             </div>
-            <div style={{ display: 'flex','flex-direction': 'column'}}>
+            <div style={{ display: 'flex','flexDirection': 'column'}}>
                 <span>Description</span>
                 <textarea className="modal-bio-prof-textarea" placeholder="..." row='20' onChange={(e) => setDescription(e.target.value)}/>
             </div>
