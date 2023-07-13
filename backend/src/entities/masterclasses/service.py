@@ -19,7 +19,7 @@ def _parse_row_masterclass_user(row: sa.Row):
     return MasterclassUser(**row._asdict())
 
 
-def get_all_masterclasses(conn: Connection):
+def get_all_masterclasses(conn: Connection) -> list[Masterclass]:
     """
     Get all masterclasses.
 

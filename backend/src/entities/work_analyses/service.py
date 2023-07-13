@@ -15,7 +15,7 @@ def _parse_row(row: sa.Row):
     return WorkAnalysis(**row._asdict())
 
 
-def get_all_work_analysis(conn: Connection):
+def get_all_work_analysis(conn: Connection) -> list[WorkAnalysis]:
     """
     Get all work_analysis.
 

@@ -15,7 +15,7 @@ def _parse_row(row: sa.Row):
     return Partition(**row._asdict())
 
 
-def get_all_partitions(conn: Connection):
+def get_all_partitions(conn: Connection) -> list[Partition]:
     """
     Get all partitions.
 

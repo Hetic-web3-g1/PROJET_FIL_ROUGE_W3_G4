@@ -16,7 +16,7 @@ def _parse_row(row: sa.Row):
     return Biography(**row._asdict())
 
 
-def get_all_biographies(conn: Connection):
+def get_all_biographies(conn: Connection) -> list[Biography]:
     """
     Get all biographies.
 
