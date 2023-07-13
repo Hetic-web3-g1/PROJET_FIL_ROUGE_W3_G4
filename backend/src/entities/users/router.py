@@ -55,7 +55,7 @@ def update_academy_user(
 ):
     try:
         with engine.begin() as conn:
-            new_user = user_service.update_user(conn, UUID(user_id), new_user)
+            user_service.update_user(conn, UUID(user_id), new_user)
 
     except user_exceptions.UserNotFound:
         raise HTTPException(
