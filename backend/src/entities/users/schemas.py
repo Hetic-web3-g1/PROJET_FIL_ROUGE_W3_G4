@@ -7,7 +7,8 @@ class UserCreate(BaseModel):
     first_name: str
     last_name: str
     email: str
-    role: str = "test"
+    primary_role: str = "User"
+    secondary_role: list[str] | None
     academy_id: UUID
     image_id: UUID | None
 

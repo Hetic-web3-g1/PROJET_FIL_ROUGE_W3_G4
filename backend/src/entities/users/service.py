@@ -77,3 +77,46 @@ def create_user(conn: Connection, user: UserCreate) -> User:
 
     created_user = db_srv.create_object(conn, user_table, user.dict())
     return _parse_row(created_user)
+
+
+def update_user(conn: Connection, user_id: UUID, user: UserCreate) -> User:
+    """
+    Update a user.
+
+    Args:
+        user_id (UUID): The id of the user.
+        user (UserCreate): UserCreate object.
+
+    Raises:
+        UserNotFound: If the user does not exist.
+
+    Returns:
+        User: The updated User object.
+    """
+    result = conn.execute(
+        sa.select(user_table).where(user_table.c.id == user_id)
+    ).first()
+    if result is None:
+        raise UserNotFound
+
+    updated_user = db_srv.update_object(conn, user_table, user_id, user.dict())
+    return updated_user
+
+
+def delete_user(conn: Connection, user_id: UUID) -> None:
+    """
+    Delete a user.
+
+    Args:
+        user_id (UUID): The id of the user.
+
+    Raises:
+        UserNotFound: If the user does not exist.
+    """
+    result = conn.execute(
+        sa.select(user_table).where(user_table.c.id == user_id)
+    ).first()
+    if result is None:
+        raise UserNotFound
+
+    db_srv.delete_object(conn, user_table, user_id)

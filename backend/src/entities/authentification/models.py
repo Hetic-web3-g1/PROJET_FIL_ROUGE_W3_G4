@@ -12,7 +12,7 @@ reset_token = sa.Table(
     "reset_token",
     metadata,
     Column("id", UUID(as_uuid=True), primary_key=True, unique=True, default=uuid4),
-    Column("user_id", UUID(as_uuid=True), ForeignKey("user.id"), nullable=False),
+    Column("user_id", UUID(as_uuid=True), ForeignKey("user.id", ondelete='CASCADE'), nullable=False),
     Column("hash", LargeBinary(), nullable=False),
     Column("expires_at", DateTime(), nullable=False),
 )

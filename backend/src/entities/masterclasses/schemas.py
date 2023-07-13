@@ -25,7 +25,7 @@ class Masterclass(MasterclassCreate):
 class MasterclassUserCreate(BaseModel):
     user_id: UUID
     masterclass_id: UUID
-    role: str
+    masterclass_role: str
 
 class MasterclassUser(MasterclassUserCreate):
     id: int

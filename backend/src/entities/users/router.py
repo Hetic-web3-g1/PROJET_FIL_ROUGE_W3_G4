@@ -47,5 +47,33 @@ def create_academy_user(
             status_code=400,
             detail="Email already exist",
         )
+    
+
+@router.put("/user/{user_id}")
+def update_academy_user(
+    user_id: str, new_user: UserCreate, user: User = Depends(CustomSecurity())
+):
+    try:
+        with engine.begin() as conn:
+            new_user = user_service.update_user(conn, UUID(user_id), new_user)
+
+    except user_exceptions.UserNotFound:
+        raise HTTPException(
+            status_code=400,
+            detail="User not found",
+        )
 
 
+@router.delete("/user/{user_id}")
+def delete_academy_user(
+    user_id: str, user: User = Depends(CustomSecurity())
+):
+    try:
+        with engine.begin() as conn:
+            user_service.delete_user(conn, UUID(user_id))
+
+    except user_exceptions.UserNotFound:
+        raise HTTPException(
+            status_code=400,
+            detail="User not found",
+        )

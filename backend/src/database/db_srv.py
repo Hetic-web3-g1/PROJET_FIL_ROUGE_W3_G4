@@ -63,16 +63,13 @@ def create_object(
 
 def update_object(
     conn: Connection,
-    object_name: str,
+    table: Table,
     object_id: Union[str, UUID, int],
     object_data: Any,
     user_id: Optional[str] = None,
     parser: Optional[Callable[[Any], T]] = None,
     id_key: str = "id",
 ) -> T:
-    table = get_table_object(object_name)
-    if isinstance(object_data, BaseModel):
-        object_data = object_data.dict()
 
     # Check if object exists
     stmt = sa.select(table).where(table.c[id_key] == object_id)
@@ -116,11 +113,10 @@ def update_object(
 
 def delete_object(
     conn: Connection,
-    object_name: str,
+    table: Table,
     object_id: Union[str, UUID, int],
     id_key: str = "id",
 ):
-    table = get_table_object(object_name)
 
     # Check if object exists
     stmt = sa.select(table).where(table.c[id_key] == object_id)
