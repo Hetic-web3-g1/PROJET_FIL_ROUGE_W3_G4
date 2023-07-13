@@ -82,6 +82,30 @@ def create_masterclass(conn: Connection, masterclass: MasterclassCreate) -> Mast
     return _parse_row(result)
 
 
+def update_masterclass(conn: Connection, masterclass_id: UUID, masterclass: MasterclassCreate) -> Masterclass:
+    """
+    Update a masterclass.
+
+    Args:
+        masterclass_id (UUID): The id of the masterclass.
+        masterclass (MasterclassCreate): MasterclassCreate object.
+
+    Raises:
+        MasterclassNotFound: If the masterclass does not exist.
+
+    Returns:
+        Masterclass: The updated Masterclass object.
+    """
+    result = conn.execute(
+        sa.select(masterclass_table).where(masterclass_table.c.id == masterclass_id)
+    ).first()
+    if result is None:
+        raise MasterclassNotFound
+    
+    updated_masterclass = db_srv.update_object(conn, masterclass_table, masterclass_id, masterclass.dict())
+    return updated_masterclass
+
+
 def attribute_user_to_masterclass(conn: Connection, masterclass_user: MasterclassUserCreate):
     """
     Attribute a user to a masterclass.
