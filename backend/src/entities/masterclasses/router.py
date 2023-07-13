@@ -54,3 +54,21 @@ def create_masterclass(
 ):
     with engine.begin() as conn:
         new_masterclass = masterclass_service.create_masterclass(conn, new_masterclass)
+
+
+# Update masterclass
+@router.put("/{masterclass_id}")
+def update_masterclass(
+    masterclass_id: UUID,
+    updated_masterclass: MasterclassCreate,
+    user: User = Depends(CustomSecurity()),
+):
+    try:
+        with engine.begin() as conn:
+            masterclass_service.update_masterclass(conn, masterclass_id, updated_masterclass)
+
+    except masterclass_exceptions.MasterclassNotFound:
+        raise HTTPException(
+            status_code=404,
+            detail="Masterclass not found",
+        )
