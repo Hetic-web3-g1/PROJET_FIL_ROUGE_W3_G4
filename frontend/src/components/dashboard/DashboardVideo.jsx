@@ -5,22 +5,18 @@ import './dashboardvideo.css'
 import './../textstyle/textstyles.css'
 
 import Countries from '../../constants/countries'
-import Uploadcard  from '../../components/upload/UploadCard.jsx'
 import VideoPlayer  from '../../components/videoPlayer/VideoPlayer.jsx'
-import MasterCardData  from '../../mocks/masterClassMocks.js'
 import peppapig from '../../assets/peppa pig wow.mp4'
 import Button from '../button/Button'
 import Label from '../label/Label'
 import Logs from '../../mocks/logMocks.js'
 
-export const DashboardVideo = ({ MasterCardData, Videoname }) => {
+export const DashboardVideo = ({}) => {
     return ( 
         <div>
         <div className='display-main'>
-            {/* <h3 className='upload-label'>No Video Uploaded yet ...</h3>
-            <Uploadcard/> */}
             <div className='main-video'>
-            <VideoPlayer video={peppapig}/>
+                <VideoPlayer video={peppapig}/>
             </div>
             <div className='right-side-wrapper'>
             <div className='country-wrapper'>

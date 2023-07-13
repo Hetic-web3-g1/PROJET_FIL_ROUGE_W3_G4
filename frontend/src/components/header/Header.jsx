@@ -104,24 +104,24 @@ export const Header = () => {
                 </div>
                 <div className='header-group'>
                     <div className="header-create-dropdown" onClick={() => handleCreateModal()}>
-                        <img src={"src/assets/header/create.svg"} />
+                        <img src={"../src/assets/header/create.svg"} />
                         {
                             createModal ?
                                 <>
                                     <div className="header-create-dropdown-content">
                                         <div className="header-create-dropdown-item">
                                             Masterclass
-                                            <img src={"src/assets/header/circle-plus.svg"} onClick={() => handleCreateMasterClass()}/>
+                                            <img src={"../src/assets/header/circle-plus.svg"}  onClick={() => handleCreateMasterClass()}/>
                                         </div>
                                         <Divider />
                                         <div className="header-create-dropdown-item">
                                             Biography
-                                            <img src={"src/assets/header/circle-plus.svg"} onClick={() => handleCreateBiography()}/>
+                                            <img src={"../src/assets/header/circle-plus.svg"} onClick={() => handleCreateBiography()}/>
                                         </div>
                                         <Divider />
                                         <div className="header-create-dropdown-item">
                                             Work Analysis
-                                            <img src={"src/assets/header/circle-plus.svg"} onClick={() => handleCreateWorkAnalysis()}/>
+                                            <img src={"../src/assets/header/circle-plus.svg"} style={{marginLeft: "5px"}} onClick={() => handleCreateWorkAnalysis()}/>
                                         </div>
                                     </div>
                                 </>

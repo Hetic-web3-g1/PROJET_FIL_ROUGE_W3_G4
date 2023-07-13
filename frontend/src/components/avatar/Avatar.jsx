@@ -5,7 +5,7 @@ import './avatar.css';
 export const Avatar = ({ onClick, size }) => {
   return (
     <div onClick={onClick}>
-        <img style={{height: size}} className='image-style' src="src\assets\ours.jpg" alt="placeholder" />
+        <img style={{height: size}} className='image-style' src="../src\assets\kirbok.jpg" alt="placeholder" />
     </div>
   );
 };
