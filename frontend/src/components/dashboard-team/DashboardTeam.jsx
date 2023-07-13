@@ -18,13 +18,13 @@ export const DashboardTeam = ({ MasterCardData, Videoname }) => {
 
             <div className='rect-container'>
             <div className='rect'></div>
-            <span className='subtitle2'>Name</span>
+            <span className='subtitle2'>Description</span>
             </div>
             <div className='rect-container'>
             <div className='rect'></div>
-            <span className='subtitle2'>Description</span>
+            <span className='subtitle2'>Assigned Users</span>
             </div>
-            <Button label='Add New User'/>
+            {/* <Button label='Add New User'/> */}
         </div>
 
         {Roles.map((role, index) =>  {
@@ -34,16 +34,19 @@ export const DashboardTeam = ({ MasterCardData, Videoname }) => {
 
                 <div key={index} className='role-list'>
                     <span className='subtitle2 roles'>{role.role}</span>
-                    <div className='width-fix-1'>
+                    {/* <div className='width-fix-1'>
                         <img className='role-avatar' src={role.avatar}></img>
                         <span className='subtitle2'>{role.name}</span>
-                    </div>
+                    </div> */}
                     <span className='width-fix-2 subtitle2'>{role.description}</span>
-                    <div></div>
+                    <div className='drop-container'>
+                    <Dropdown type='multi' options={['Jose ', 'John ', 'Kelly ', 'Helen ', 'Sartin ']} defaultValue={'Role'}/>
+                    </div>
                 </div>
                 </div>
         )})}
         <div className='line'></div>
+        {/* <div className='line'></div>
         <div className='role-add'>
         <div className='role-container'>
         <Dropdown options={['Administrator', 'Video Editor', 'Writer', 'Traductor', 'Professor']} defaultValue={'Role'}/>
@@ -56,7 +59,7 @@ export const DashboardTeam = ({ MasterCardData, Videoname }) => {
         </div>
         <Button label='Add'/>
         </div>
-        <div className='line'></div>
+        <div className='line'></div> */}
 
         </div>
     )}

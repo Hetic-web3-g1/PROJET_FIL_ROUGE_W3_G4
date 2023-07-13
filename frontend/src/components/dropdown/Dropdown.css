@@ -24,7 +24,9 @@
   height: 40px;
   cursor: pointer;
 }
-
+.multi{
+  width: 100%;
+}
 .div-dropdown > span {
   margin-left: 10px;
 }

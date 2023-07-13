@@ -17,6 +17,7 @@
 .rect-container{
     display: flex;
     align-items: center;
+    width: 475px;
 }
 .role-avatar{
     height: 30px;
@@ -24,13 +25,11 @@
     border-radius: 25px;
     margin-right: 10px;
 }
-.width-fix-1{
-    width: 165px;
-    display: flex;
-    align-items: center;
-}
 .width-fix-2{
-    width: 328px;
+    width: 544px;
+}
+.drop-container{
+    width: 450px;
 }
 .role-list{
     display: flex;
