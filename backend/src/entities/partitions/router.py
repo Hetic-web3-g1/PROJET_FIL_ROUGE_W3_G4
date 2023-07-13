@@ -43,4 +43,4 @@ def create_partition(
     new_partition: PartitionCreate, User: User = Depends(CustomSecurity())
 ):
     with engine.begin() as conn:
-        new_partition = partition_service.create_partition(conn, new_partition)
+        partition_service.create_partition(conn, new_partition)

@@ -14,8 +14,10 @@ from .exceptions import MasterclassNotFound
 def _parse_row(row: sa.Row):
     return Masterclass(**row._asdict())
 
+
 def _parse_row_masterclass_user(row: sa.Row):
     return MasterclassUser(**row._asdict())
+
 
 def get_all_masterclasses(conn: Connection):
     """
@@ -24,8 +26,8 @@ def get_all_masterclasses(conn: Connection):
     Returns:
         Masterclasses: Dict of Masterclass objects.
     """
-    result = conn.execute(sa.select(masterclass_table)).fetchall()
-    return [_parse_row(row) for row in result]
+    response = conn.execute(sa.select(masterclass_table)).fetchall()
+    return [_parse_row(row) for row in response]
 
 
 def get_masterclass_by_id(conn: Connection, masterclass_id: UUID) -> Masterclass:
@@ -41,13 +43,13 @@ def get_masterclass_by_id(conn: Connection, masterclass_id: UUID) -> Masterclass
     Raises:
         MasterclassNotFound: If the masterclass does not exist.
     """
-    result = conn.execute(
+    response = conn.execute(
         sa.select(masterclass_table).where(masterclass_table.c.id == masterclass_id)
     ).first()
-    if result is None:
+    if response is None:
         raise MasterclassNotFound
 
-    return _parse_row(result)
+    return _parse_row(response)
 
 
 def get_masterclasses_by_user(conn: Connection, user_id: UUID):
@@ -60,15 +62,15 @@ def get_masterclasses_by_user(conn: Connection, user_id: UUID):
     Returns:
         Masterclasses: Dict of Masterclass objects.
     """
-    result = conn.execute(
+    response = conn.execute(
         sa.select(masterclass_table)
         .where(masterclass_table.c.created_by == user_id)
         .order_by(masterclass_table.c.created_at)
     ).fetchall()
-    return [_parse_row(row) for row in result]
+    return [_parse_row(row) for row in response]
 
 
-def create_masterclass(conn: Connection, masterclass: MasterclassCreate) -> Masterclass:
+def create_masterclass(conn: Connection, masterclass: MasterclassCreate) -> None:
     """
     Create a masterclass.
 
@@ -78,11 +80,10 @@ def create_masterclass(conn: Connection, masterclass: MasterclassCreate) -> Mast
     Returns:
         Masterclass: The created Masterclass object.
     """
-    result = db_srv.create_object(conn, masterclass_table, masterclass.dict())
-    return _parse_row(result)
+    db_srv.create_object(conn, masterclass_table, masterclass.dict())
 
 
-def update_masterclass(conn: Connection, masterclass_id: UUID, masterclass: MasterclassCreate) -> Masterclass:
+def update_masterclass(conn: Connection, masterclass_id: UUID, masterclass: MasterclassCreate) -> None:
     """
     Update a masterclass.
 
@@ -96,14 +97,13 @@ def update_masterclass(conn: Connection, masterclass_id: UUID, masterclass: Mast
     Returns:
         Masterclass: The updated Masterclass object.
     """
-    result = conn.execute(
+    check = conn.execute(
         sa.select(masterclass_table).where(masterclass_table.c.id == masterclass_id)
     ).first()
-    if result is None:
+    if check is None:
         raise MasterclassNotFound
     
-    updated_masterclass = db_srv.update_object(conn, masterclass_table, masterclass_id, masterclass.dict())
-    return updated_masterclass
+    db_srv.update_object(conn, masterclass_table, masterclass_id, masterclass.dict())
 
 
 def attribute_user_to_masterclass(conn: Connection, masterclass_user: MasterclassUserCreate):
@@ -116,5 +116,5 @@ def attribute_user_to_masterclass(conn: Connection, masterclass_user: Masterclas
     Returns:
         MasterclassUser: The created MasterclassUser object.
     """
-    result = db_srv.create_object(conn, masterclass_user_table, masterclass_user.dict())
-    return _parse_row_masterclass_user(result)
+    response = db_srv.create_object(conn, masterclass_user_table, masterclass_user.dict())
+    return _parse_row_masterclass_user(response)

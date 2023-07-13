@@ -22,8 +22,8 @@ def get_all_work_analysis(conn: Connection):
     Returns:
         WorkAnalysis: Dict of WorkAnalysis objects.
     """
-    result = conn.execute(sa.select(work_analysis_table)).fetchall()
-    return [_parse_row(row) for row in result]
+    response = conn.execute(sa.select(work_analysis_table)).fetchall()
+    return [_parse_row(row) for row in response]
 
 
 def get_work_analysis_by_id(conn: Connection, work_analysis_id: UUID) -> WorkAnalysis:
@@ -39,16 +39,16 @@ def get_work_analysis_by_id(conn: Connection, work_analysis_id: UUID) -> WorkAna
     Raises:
         WorkAnalysisNotFound: If the work_analysis does not exist.
     """
-    result = conn.execute(
+    response = conn.execute(
         sa.select(work_analysis_table).where(work_analysis_table.c.id == work_analysis_id)
     ).first()
-    if result is None:
+    if response is None:
         raise WorkAnalysisNotFound
 
-    return _parse_row(result)
+    return _parse_row(response)
 
 
-def create_work_analysis(conn: Connection, work_analysis: WorkAnalysisCreate) -> WorkAnalysis:
+def create_work_analysis(conn: Connection, work_analysis: WorkAnalysisCreate) -> None:
     """
     Create a work_analysis.
 
@@ -58,7 +58,4 @@ def create_work_analysis(conn: Connection, work_analysis: WorkAnalysisCreate) ->
     Returns:
         WorkAnalysis: The created WorkAnalysis object.
     """
-    result = conn.execute(
-        sa.insert(work_analysis_table).values(**work_analysis.dict())
-    )
-    return result
+    db_srv.create_object(conn, work_analysis_table, work_analysis.dict())

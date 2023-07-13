@@ -23,8 +23,8 @@ def get_all_biographies(conn: Connection):
     Returns:
         Biographies: Dict of Biography objects.
     """
-    result = conn.execute(sa.select(biography_table)).fetchall()
-    return [_parse_row(row) for row in result]
+    response = conn.execute(sa.select(biography_table)).fetchall()
+    return [_parse_row(row) for row in response]
 
 
 def get_biography_by_id(con: Connection, biography_id: UUID) -> Biography:
@@ -40,16 +40,16 @@ def get_biography_by_id(con: Connection, biography_id: UUID) -> Biography:
         BiographyNotFound: If the biography does not exist.
 
     """
-    result = con.execute(
+    response = con.execute(
         sa.select(biography_table).where(biography_table.c.id == biography_id)
     ).first()
-    if result is None:
+    if response is None:
         raise BiographyNotFound
 
-    return _parse_row(result)
+    return _parse_row(response)
 
 
-def create_biography(conn: Connection, biography: BiographyCreate) -> Biography:
+def create_biography(conn: Connection, biography: BiographyCreate) -> None:
     """
     Create a biography.
 
@@ -59,5 +59,4 @@ def create_biography(conn: Connection, biography: BiographyCreate) -> Biography:
     Returns:
         Biography: The created Biography object.
     """
-    create_biography = db_srv.create_object(conn, biography_table, biography.dict())
-    return _parse_row(create_biography)
+    db_srv.create_object(conn, biography_table, biography.dict())

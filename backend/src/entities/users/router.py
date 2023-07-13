@@ -16,9 +16,9 @@ router = APIRouter(
 
 @router.get("/user/me")
 def get_user_by_token(
-    user: User = Depends(CustomSecurity()),
+    response: User = Depends(CustomSecurity()),
 ):
-    return user
+    return response
     
 
 # Get user by id

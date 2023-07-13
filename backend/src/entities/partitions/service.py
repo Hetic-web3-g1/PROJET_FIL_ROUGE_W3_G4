@@ -22,8 +22,8 @@ def get_all_partitions(conn: Connection):
     Returns:
         Partitions: Dict of Partition objects.
     """
-    result = conn.execute(sa.select(partition_table)).fetchall()
-    return [_parse_row(row) for row in result]
+    response = conn.execute(sa.select(partition_table)).fetchall()
+    return [_parse_row(row) for row in response]
 
 
 def get_partition_by_id(conn: Connection, partition_id: UUID) -> Partition:
@@ -39,16 +39,16 @@ def get_partition_by_id(conn: Connection, partition_id: UUID) -> Partition:
     Raises:
         PartitionNotFound: If the partition does not exist.
     """
-    result = conn.execute(
+    response = conn.execute(
         sa.select(partition_table).where(partition_table.c.id == partition_id)
     ).first()
-    if result is None:
+    if response is None:
         raise PartitionNotFound
 
-    return _parse_row(result)
+    return _parse_row(response)
 
 
-def create_partition(conn: Connection, partition: PartitionCreate) -> Partition:
+def create_partition(conn: Connection, partition: PartitionCreate) -> None:
     """
     Create a partition.
 
@@ -58,5 +58,4 @@ def create_partition(conn: Connection, partition: PartitionCreate) -> Partition:
     Returns:
         Partition: The created Partition object.
     """
-    create_partition = db_srv.create_object(conn, partition_table, partition.dict())
-    return _parse_row(create_partition)
+    db_srv.create_object(conn, partition_table, partition.dict())

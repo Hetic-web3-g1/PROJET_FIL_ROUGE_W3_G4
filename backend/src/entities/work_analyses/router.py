@@ -42,4 +42,4 @@ def create_work_analysis(
     new_work_analysis: WorkAnalysisCreate, User: User = Depends(CustomSecurity())
 ):
     with engine.begin() as conn:
-        new_work_analysis = work_analysis_service.create_work_analysis(conn, new_work_analysis)
+        work_analysis_service.create_work_analysis(conn, new_work_analysis)

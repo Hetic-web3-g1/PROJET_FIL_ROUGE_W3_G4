@@ -53,7 +53,7 @@ def create_masterclass(
     new_masterclass: MasterclassCreate, User: User = Depends(CustomSecurity())
 ):
     with engine.begin() as conn:
-        new_masterclass = masterclass_service.create_masterclass(conn, new_masterclass)
+        masterclass_service.create_masterclass(conn, new_masterclass)
 
 
 # Update masterclass

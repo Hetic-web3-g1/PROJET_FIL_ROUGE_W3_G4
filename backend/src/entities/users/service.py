@@ -8,6 +8,7 @@ from .schemas import User, UserCreate
 from .models import user_table
 from .exceptions import EmailAlreadyExist, UserNotFound
 
+
 def _parse_row(row: sa.Row):
     return User(**row._asdict())
 
@@ -25,13 +26,13 @@ def get_user_by_id(conn: Connection, user_id: UUID) -> User:
     Raises:
         UserNotFound: If the user does not exist.
     """
-    result = conn.execute(
+    response = conn.execute(
         sa.select(user_table).where(user_table.c.id == user_id)
     ).first()
-    if result is None:
+    if response is None:
         raise UserNotFound
 
-    return _parse_row(result)
+    return _parse_row(response)
 
 
 def get_user_by_email(conn: Connection, email: str) -> User:
@@ -47,13 +48,13 @@ def get_user_by_email(conn: Connection, email: str) -> User:
     Raises:
         UserNotFound: If the user does not exist.
     """
-    result = conn.execute(
+    response = conn.execute(
         sa.select(user_table).where(user_table.c.email == email)
     ).first()
-    if result is None:
+    if response is None:
         raise UserNotFound
 
-    return _parse_row(result)
+    return _parse_row(response)
 
 
 def create_user(conn: Connection, user: UserCreate) -> User:
@@ -69,17 +70,17 @@ def create_user(conn: Connection, user: UserCreate) -> User:
     Returns:
         User: The created User object.
     """
-    result = conn.execute(
+    check = conn.execute(
         sa.select(user_table).where(user_table.c.email == user.email)
     ).first()
-    if result is not None:
+    if check is not None:
         raise EmailAlreadyExist
 
-    created_user = db_srv.create_object(conn, user_table, user.dict())
-    return _parse_row(created_user)
+    response = db_srv.create_object(conn, user_table, user.dict())
+    return _parse_row(response)
 
 
-def update_user(conn: Connection, user_id: UUID, user: UserCreate) -> User:
+def update_user(conn: Connection, user_id: UUID, user: UserCreate) -> None:
     """
     Update a user.
 
@@ -93,14 +94,13 @@ def update_user(conn: Connection, user_id: UUID, user: UserCreate) -> User:
     Returns:
         User: The updated User object.
     """
-    result = conn.execute(
+    check = conn.execute(
         sa.select(user_table).where(user_table.c.id == user_id)
     ).first()
-    if result is None:
+    if check is None:
         raise UserNotFound
 
-    updated_user = db_srv.update_object(conn, user_table, user_id, user.dict())
-    return updated_user
+    db_srv.update_object(conn, user_table, user_id, user.dict())
 
 
 def delete_user(conn: Connection, user_id: UUID) -> None:
@@ -113,10 +113,10 @@ def delete_user(conn: Connection, user_id: UUID) -> None:
     Raises:
         UserNotFound: If the user does not exist.
     """
-    result = conn.execute(
+    check = conn.execute(
         sa.select(user_table).where(user_table.c.id == user_id)
     ).first()
-    if result is None:
+    if check is None:
         raise UserNotFound
 
     db_srv.delete_object(conn, user_table, user_id)

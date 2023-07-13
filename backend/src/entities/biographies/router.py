@@ -42,4 +42,4 @@ def create_biography(
     new_biography: BiographyCreate, User: User = Depends(CustomSecurity())
 ):
     with engine.begin() as conn:
-        new_biography = biography_service.create_biography(conn, new_biography)
+        biography_service.create_biography(conn, new_biography)
