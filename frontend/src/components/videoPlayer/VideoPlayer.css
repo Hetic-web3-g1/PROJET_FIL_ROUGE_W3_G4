@@ -1,8 +1,5 @@
 video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    position: absolute;
+    width: 80%;
     top: 0;
     left: 0;
 }
@@ -11,14 +8,13 @@ video::-webkit-media-controls {
     display: none;
 }
 
+.main-video{
+    width: 55%;
+    height: fit-content;
+}
+
 .video-wrapper {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    overflow: hidden;
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 */
-    height: 0;
+    text-align: -webkit-center;
 }
 
 .video-wrapper:hover .video-player-controls {
@@ -56,16 +52,16 @@ video::-webkit-media-controls {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    position: absolute;
-    width: 100%;
+    /* position: absolute; */
+    width: 97%;
     bottom: 0;
-    padding: 14px;
+    padding: 1%;
     flex-wrap: wrap;
     background: rgba(0, 0, 0, 0.25);
     border-radius: 10px;
     border: 1px solid rgba(0, 0, 0, 0.20);
-    transform: translateY(150%);
-    transition: all 0.3s ease-in-out;
+    /* transform: translateY(150%); */
+    /* transition: all 0.3s ease-in-out; */
 }
 
 .video-player-controls button {
@@ -80,7 +76,7 @@ video::-webkit-media-controls {
     background: none;
     border: none;
     color: #fff;
-    font-size: 1rem;
+    font-size: 0.8rem;
     cursor: pointer;
     outline: none;
 }
@@ -91,8 +87,8 @@ video::-webkit-media-controls {
     color: #fff;
     background: none;
     text-align: center;
-    font-size: 1rem;
-    padding-top: 1vh;
+    font-size: 0.8rem;
+    padding-top: 0.4vh;
 }
 
 .controls-svg {

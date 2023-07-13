@@ -16,6 +16,10 @@ h2 {
   margin: 0;
 }
 
+button {
+  cursor: pointer;
+}
+
 body {
   min-width: 320px;
   min-height: 100vh;

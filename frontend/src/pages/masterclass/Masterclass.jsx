@@ -8,6 +8,7 @@ import { Tabs } from "../../components/tabs/Tabs";
 import { UploadCard } from "../../components/upload/UploadCard";
 
 import MasterClassData from '../../mocks/masterClassMocks'
+import DashboardVideo from "../../components/dashboard/DashboardVideo";
 
 export const Masterclass = () => {
 
@@ -44,7 +45,7 @@ export const Masterclass = () => {
         break;
 
       case 'Video':
-      setComponent(<></>);
+      setComponent(<DashboardVideo/>);
       break;
 
       case 'Partition':
@@ -75,12 +76,15 @@ export const Masterclass = () => {
     <div className="masterclass-page">
       <Header/>
 
-      <div style={tabName !== 'Masterclass' ? {display: 'none'} : null} className="masterclass-page-container">
+      <div  className="masterclass-page-container">
 
-        <div className="masterclass-overview">
-          <h1>{MasterClassData.title}</h1>
-
-          <div className="masterclass-information">
+        <div className="masterclass-overview" >
+          
+          <h1 >{MasterClassData.title}</h1>
+          <div style={tabName !== 'Masterclass' ? {display: 'none'} : null}>
+            
+          
+          <div className="masterclass-information" >
 
             <div className="masterclass-information-col">
               <section>
@@ -105,7 +109,7 @@ export const Masterclass = () => {
               </section>
             </div>
 
-            <div className="masterclass-information-col">
+            <div className="masterclass-information-col" >
               <section>
                 <span className="masterclass-span">Piece</span>
                 <span>{MasterClassData.piece}</span>
@@ -128,8 +132,9 @@ export const Masterclass = () => {
               </section>
             </div>
           </div>
+          </div>
         </div>
-        <div className="masterclass-status">
+        <div className="masterclass-status" style={tabName !== 'Masterclass' ? {display: 'none'} : null} >
           <h2>Status</h2>
           <section className="masterclass-section-status">
             <span>Team</span>
@@ -158,6 +163,7 @@ export const Masterclass = () => {
         </div>
 
       </div>
+      
 
       <Tabs callback={handleCallback}/>
 
@@ -166,6 +172,7 @@ export const Masterclass = () => {
       </div>
 
     </div>
+
     );
 }
 

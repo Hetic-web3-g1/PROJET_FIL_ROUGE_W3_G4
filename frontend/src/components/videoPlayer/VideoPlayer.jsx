@@ -80,15 +80,15 @@ const VideoPlayer = ({ video }) => {
                             <object 
                                 className="controls-svg" 
                                 data={pauseButton} 
-                                width="25" 
-                                height="25"
+                                width="15" 
+                                height="15"
                             /> 
                             : 
                             <object 
                                 className="controls-svg" 
                                 data={playButton} 
-                                width="25" 
-                                height="25"
+                                width="15" 
+                                height="15"
                             />
                         }
                     </button>
@@ -97,7 +97,7 @@ const VideoPlayer = ({ video }) => {
                         onClick={handleTimeRewind}
                     >
                         <object className="controls-svg" data={rewindButton}
-                            width="25" height="25"
+                            width="15" height="15"
                         />
                     </button>
                     <button
@@ -105,14 +105,14 @@ const VideoPlayer = ({ video }) => {
                         onClick={handleTimeForward}
                     >
                         <object className="controls-svg" data={forwardButton}
-                            width="25" height="25"
+                            width="15" height="15"
                         />
                     </button>
                     <button
                         onClick={() => setVolumeHovered(true)}
                     >
                         <object className="controls-svg" data={volumeButton} 
-                            width="25" height="25"
+                            width="15" height="15"
                         />
                     </button>
                     {volumeHovered ?
@@ -152,7 +152,7 @@ const VideoPlayer = ({ video }) => {
                         className="video-player-controls-fullscreen"
                         onClick={handleFullscreen}
                     >
-                        <object className="controls-svg" data={fullScreenButton} width="25" height="25"/>
+                        <object className="controls-svg" data={fullScreenButton} width="15" height="15"/>
                     </button>
                 </div>
             </div>
