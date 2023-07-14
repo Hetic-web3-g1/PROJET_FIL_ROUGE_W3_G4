@@ -20,7 +20,8 @@ export const ModalBioProf = ({ handleClose, store }) => {
     const [bio, setBio] = React.useState('');
     const [nationality, setNationality] = React.useState('');
     const [website, setWebsite] = React.useState('');
-    const [awards, setAwards] = React.useState([]);
+    const [awards, setAwards] = React.useState(['']);
+    const [tmpAward, setTmpAward] = React.useState('');
     const [type, setType] = React.useState('Professor');
 
     const createdBy = store.getState().user.profile.id;
@@ -120,8 +121,8 @@ export const ModalBioProf = ({ handleClose, store }) => {
                         <span>Awards</span>
                         <Field placeholder="Awards" onChange={(e) => setAwards([e.target.value])}/>
                         <div className='modal-bio-prof-infos-field-add'>
-                            <img src={'../../src/assets/plus.svg'} alt="plus" style={{marginRight: '1vw', cursor: 'pointer'}} onClick={() => setAwards([...awards, ''])}/>
-                            <Field placeholder="Awards" onChange={(e) => setAwards([e.target.value])}/>
+                            <img src={'../../src/assets/plus.svg'} alt="plus" style={{marginRight: '1vw', cursor: 'pointer'}} onClick={() => setAwards([...awards, tmpAward])}/>
+                            <Field placeholder="Awards" onChange={(e) => setTmpAward(e.target.value)}/>
                         </div>
                     </div>
                 </div> 
