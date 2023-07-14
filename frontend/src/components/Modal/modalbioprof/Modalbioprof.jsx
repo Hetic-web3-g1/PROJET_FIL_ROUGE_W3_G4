@@ -119,6 +119,10 @@ export const ModalBioProf = ({ handleClose, store }) => {
                     <div className='modal-bio-prof-infos-field full-width'>
                         <span>Awards</span>
                         <Field placeholder="Awards" onChange={(e) => setAwards([e.target.value])}/>
+                        <div className='modal-bio-prof-infos-field-add'>
+                            <img src={'../../src/assets/plus.svg'} alt="plus" style={{marginRight: '1vw', cursor: 'pointer'}} onClick={() => setAwards([...awards, ''])}/>
+                            <Field placeholder="Awards" onChange={(e) => setAwards([e.target.value])}/>
+                        </div>
                     </div>
                 </div> 
             : null }

@@ -91,6 +91,11 @@
 
 }
 
+.modal-bio-prof-infos-field-add {
+    display: flex;
+    margin-top: 1vh;
+}
+
 
 @media screen and (max-width: 1305px) {
     .modal-bio-prof-instrument{
