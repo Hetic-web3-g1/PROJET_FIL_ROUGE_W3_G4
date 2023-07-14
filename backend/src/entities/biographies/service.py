@@ -86,3 +86,22 @@ def update_biography(conn: Connection, biography_id: UUID, biography: BiographyC
         raise BiographyNotFound
     
     db_srv.update_object(conn, biography_table, biography_id, biography.dict(), user_id=user.id)
+
+
+def delete_biography(conn: Connection, biography_id: UUID) -> None:
+    """ 
+    Delete a biography.
+
+    Args:
+        biography_id (UUID): The id of the biography.
+
+    Raises:
+        BiographyNotFound: If the biography does not exist.
+    """
+    check = conn.execute(
+        sa.select(biography_table).where(biography_table.c.id == biography_id)
+    ).first()
+    if check is None:
+        raise BiographyNotFound
+    
+    db_srv.delete_object(conn, biography_table, biography_id)

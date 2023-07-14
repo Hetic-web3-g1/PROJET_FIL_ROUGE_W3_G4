@@ -56,3 +56,20 @@ def update_partition(
 ):
     with engine.begin() as conn:
         partition_service.update_partition(conn, partition_id, partition, user)
+
+
+# Delete partition
+@router.delete("/partition/{partition_id}")
+def delete_partition(
+    partition_id: UUID,
+    user: User = Depends(CustomSecurity())
+):
+    try:
+        with engine.begin() as conn:
+            partition_service.delete_partition(conn, partition_id)
+
+    except partition_exceptions.PartitionNotFound:
+        raise HTTPException(
+            status_code=404,
+            detail="Partition not found",
+        )

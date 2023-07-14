@@ -85,3 +85,22 @@ def update_partition(conn: Connection, partition_id: UUID, partition: PartitionC
         raise PartitionNotFound
 
     db_srv.update_object(conn, partition_table, partition_id, partition.dict(), user_id=user.id)
+
+
+def delete_partition(conn: Connection, connection_id: UUID) -> None:
+    """
+    Delete a partition.
+
+    Args:
+        partition_id (UUID): The id of the partition.
+
+    Raises:
+        PartitionNotFound: If the partition does not exist.
+    """
+    check = conn.execute(
+        sa.select(partition_table).where(partition_table.c.id == connection_id)
+    ).first()
+    if check is None:
+        raise PartitionNotFound
+
+    db_srv.delete_object(conn, partition_table, connection_id)

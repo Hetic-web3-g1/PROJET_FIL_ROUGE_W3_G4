@@ -85,3 +85,22 @@ def update_work_analysis(conn: Connection, work_analysis_id: UUID, work_analysis
         raise WorkAnalysisNotFound
 
     db_srv.update_object(conn, work_analysis_table, work_analysis_id, work_analysis.dict(), user_id=user.id)
+
+
+def delete_work_analysis(conn: Connection, work_analysis_id: UUID) -> None:
+    """
+    Delete a work_analysis.
+
+    Args:
+        work_analysis_id (UUID): The id of the work_analysis.
+
+    Raises:
+        WorkAnalysisNotFound: If the work_analysis does not exist.
+    """
+    check = conn.execute(
+        sa.select(work_analysis_table).where(work_analysis_table.c.id == work_analysis_id)
+    ).first()
+    if check is None:
+        raise WorkAnalysisNotFound
+
+    db_srv.delete_object(conn, work_analysis_table, work_analysis_id)

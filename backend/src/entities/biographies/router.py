@@ -53,5 +53,29 @@ def update_biography(
     biography: BiographyCreate,
     user: User = Depends(CustomSecurity()),
 ):
-    with engine.begin() as conn:
-        biography_service.update_biography(conn, biography_id, biography, user)
+    try: 
+        with engine.begin() as conn:
+            biography_service.update_biography(conn, biography_id, biography, user)
+
+    except biography_exceptions.BiographyNotFound:
+        raise HTTPException(
+            status_code=404,
+            detail="Biography not found",
+        )
+
+
+# Delete biography
+@router.delete("/biography/{biography_id}")
+def delete_biography(
+    biography_id: UUID,
+    user: User = Depends(CustomSecurity()),
+):
+    try:
+        with engine.begin() as conn:
+            biography_service.delete_biography(conn, biography_id)
+
+    except biography_exceptions.BiographyNotFound:
+        raise HTTPException(
+            status_code=404,
+            detail="Biography not found",
+        )

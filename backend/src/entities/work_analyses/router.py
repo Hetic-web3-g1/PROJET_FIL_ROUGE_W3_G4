@@ -62,3 +62,20 @@ def update_work_analysis(
             status_code=404,
             detail="Work Analysis not found",
         )
+
+
+# Delete work_analysis
+@router.delete("/work_analysis/{work_analysis_id}")
+def delete_work_analysis(
+    work_analysis_id: UUID,
+    user: User = Depends(CustomSecurity())
+):
+    try:
+        with engine.begin() as conn:
+            work_analysis_service.delete_work_analysis(conn, work_analysis_id)
+
+    except work_analysis_exceptions.WorkAnalysisNotFound:
+        raise HTTPException(
+            status_code=404,
+            detail="Work Analysis not found",
+        )
