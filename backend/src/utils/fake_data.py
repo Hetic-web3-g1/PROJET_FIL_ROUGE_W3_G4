@@ -19,7 +19,7 @@ from src.entities.biographies.schemas import BiographyCreate
 from src.entities.biographies.service import create_biography
 from src.entities.masterclasses.models import masterclass_table, masterclass_user_table
 from src.entities.masterclasses.schemas import MasterclassCreate, MasterclassUserCreate
-from src.entities.masterclasses.service import create_masterclass, assigne_user_to_masterclass
+from src.entities.masterclasses.service import create_masterclass, assign_user_to_masterclass
 from src.entities.partitions.models import partition_table
 from src.entities.partitions.schemas import PartitionCreate
 from src.entities.partitions.service import create_partition
@@ -170,7 +170,7 @@ def create_fixed_user_fake():
         })
         create_fixed_user(conn, fixed_user, user)      
 
-def assigne_user_to_masterclass_fake():
+def assign_user_to_masterclass_fake():
     with engine.begin() as conn:
         masterclass_roles = ["teacher", "composer"]
         userr = MasterclassUserCreate(**{
@@ -178,7 +178,7 @@ def assigne_user_to_masterclass_fake():
             "masterclass_id": UUID("12345648-1234-1234-1234-123456789123"),
             "masterclass_role": random.choice(masterclass_roles)
         })
-        assigne_user_to_masterclass(conn, userr)
+        assign_user_to_masterclass(conn, userr)
 
 # def create_video_fake():
 #     with engine.begin() as conn:
@@ -214,7 +214,7 @@ def generate_data():
         comment_table: create_comment_fake,
         # image_table: create_image_fake,
         masterclass_table: create_masterclass_fake,
-        masterclass_user_table: assigne_user_to_masterclass_fake,
+        masterclass_user_table: assign_user_to_masterclass_fake,
         partition_table: create_partition_fake,
         # tag_table: create_tag_fake,
         # video_table: create_video_fake,

@@ -23,8 +23,8 @@ def get_all_work_analysis(conn: Connection) -> list[WorkAnalysis]:
     Returns:
         WorkAnalysis: Dict of WorkAnalysis objects.
     """
-    response = conn.execute(sa.select(work_analysis_table)).fetchall()
-    return [_parse_row(row) for row in response]
+    result = conn.execute(sa.select(work_analysis_table)).fetchall()
+    return [_parse_row(row) for row in result]
 
 
 def get_work_analysis_by_id(conn: Connection, work_analysis_id: UUID) -> WorkAnalysis:
@@ -40,16 +40,16 @@ def get_work_analysis_by_id(conn: Connection, work_analysis_id: UUID) -> WorkAna
     Raises:
         WorkAnalysisNotFound: If the work_analysis does not exist.
     """
-    response = conn.execute(
+    result = conn.execute(
         sa.select(work_analysis_table).where(work_analysis_table.c.id == work_analysis_id)
     ).first()
-    if response is None:
+    if result is None:
         raise WorkAnalysisNotFound
 
-    return _parse_row(response)
+    return _parse_row(result)
 
 
-def create_work_analysis(conn: Connection, work_analysis: WorkAnalysisCreate, user: User) -> None:
+def create_work_analysis(conn: Connection, work_analysis: WorkAnalysisCreate, user: User) -> WorkAnalysis:
     """
     Create a work_analysis.
 
@@ -60,10 +60,11 @@ def create_work_analysis(conn: Connection, work_analysis: WorkAnalysisCreate, us
     Returns:
         WorkAnalysis: The created WorkAnalysis object.
     """
-    db_srv.create_object(conn, work_analysis_table, work_analysis.dict(), user_id=user.id)
+    result = db_srv.create_object(conn, work_analysis_table, work_analysis.dict(), user_id=user.id)
+    return _parse_row(result)
 
 
-def update_work_analysis(conn: Connection, work_analysis_id: UUID, work_analysis: WorkAnalysisCreate, user: User) -> None:
+def update_work_analysis(conn: Connection, work_analysis_id: UUID, work_analysis: WorkAnalysisCreate, user: User) -> WorkAnalysis:
     """
     Update a work_analysis.
 
@@ -84,8 +85,8 @@ def update_work_analysis(conn: Connection, work_analysis_id: UUID, work_analysis
     if check is None:
         raise WorkAnalysisNotFound
 
-    db_srv.update_object(conn, work_analysis_table, work_analysis_id, work_analysis.dict(), user_id=user.id)
-
+    result = db_srv.update_object(conn, work_analysis_table, work_analysis_id, work_analysis.dict(), user_id=user.id)
+    return _parse_row(result)
 
 def delete_work_analysis(conn: Connection, work_analysis_id: UUID) -> None:
     """
@@ -104,3 +105,7 @@ def delete_work_analysis(conn: Connection, work_analysis_id: UUID) -> None:
         raise WorkAnalysisNotFound
 
     db_srv.delete_object(conn, work_analysis_table, work_analysis_id)
+
+
+    # ('483f0848-320b-44b0-9008-da1064082d0c', 'Yes', ['Smit'], 'Youpilapin', 'created', '2023-07-14 16:11:47.089795', '2023-07-14 16:14:41.985109', '12345648-1234-1234-1234-123456789123', '12345648-1234-1234-1234-123456789123')
+    # (UUID('5a28f399-6b6b-4d3b-85c6-f7d4005e212b'), 'Yes', ['Smit'], 'Youpi', 'created', datetime.datetime(2023, 7, 14, 16, 15, 7, 32526), None, UUID('12345648-1234-1234-1234-123456789123'), None)

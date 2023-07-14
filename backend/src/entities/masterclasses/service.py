@@ -44,13 +44,13 @@ def get_masterclass_by_id(conn: Connection, masterclass_id: UUID) -> Masterclass
     Raises:
         MasterclassNotFound: If the masterclass does not exist.
     """
-    response = conn.execute(
+    result = conn.execute(
         sa.select(masterclass_table).where(masterclass_table.c.id == masterclass_id)
     ).first()
-    if response is None:
+    if result is None:
         raise MasterclassNotFound
 
-    return _parse_row(response)
+    return _parse_row(result)
 
 
 def get_masterclasses_by_user(conn: Connection, user_id: UUID):
@@ -63,15 +63,16 @@ def get_masterclasses_by_user(conn: Connection, user_id: UUID):
     Returns:
         Masterclasses: Dict of Masterclass objects.
     """
-    response = conn.execute(
+    result = conn.execute(
         sa.select(masterclass_table)
         .where(masterclass_table.c.created_by == user_id)
         .order_by(masterclass_table.c.created_at)
     ).fetchall()
-    return [_parse_row(row) for row in response]
+
+    return [_parse_row(row) for row in result]
 
 
-def create_masterclass(conn: Connection, masterclass: MasterclassCreate, user: User) -> None:
+def create_masterclass(conn: Connection, masterclass: MasterclassCreate, user: User) -> Masterclass:
     """
     Create a masterclass.
 
@@ -82,10 +83,10 @@ def create_masterclass(conn: Connection, masterclass: MasterclassCreate, user: U
     Returns:
         Masterclass: The created Masterclass object.
     """
-    db_srv.create_object(conn, masterclass_table, masterclass.dict(), user_id=user.id)
+    result = db_srv.create_object(conn, masterclass_table, masterclass.dict(), user_id=user.id)
+    return _parse_row(result)
 
-
-def update_masterclass(conn: Connection, masterclass_id: UUID, masterclass: MasterclassCreate, user=User) -> None:
+def update_masterclass(conn: Connection, masterclass_id: UUID, masterclass: MasterclassCreate, user: User) -> Masterclass:
     """
     Update a masterclass.
 
@@ -106,7 +107,8 @@ def update_masterclass(conn: Connection, masterclass_id: UUID, masterclass: Mast
     if check is None:
         raise MasterclassNotFound
     
-    db_srv.update_object(conn, masterclass_table, masterclass_id, masterclass.dict(), user_id=user.id)
+    result = db_srv.update_object(conn, masterclass_table, masterclass_id, masterclass.dict(), user_id=user.id)
+    return _parse_row(result)
 
 
 def delete_masterclass(conn: Connection, masterclass_id: UUID) -> None:
@@ -146,10 +148,10 @@ def get_user_by_id_and_masterclass_id_from_masterclass_user(conn: Connection, ma
         (masterclass_user_table.c.masterclass_id == masterclass_user.masterclass_id)
     )
 
-    response = conn.execute(query).first()
-    if response is None:
+    result = conn.execute(query).first()
+    if result is None:
         return None
-    return _parse_row_masterclass_user(response)
+    return _parse_row_masterclass_user(result)
 
 
 def update_user_masterclass(conn: Connection, masterclass_user: MasterclassUser):
@@ -169,7 +171,7 @@ def update_user_masterclass(conn: Connection, masterclass_user: MasterclassUser)
     db_srv.update_object(conn, masterclass_user_table, masterclass_user.id, masterclass_user.dict())
 
 
-def assigne_user_to_masterclass(conn: Connection, masterclass_user: MasterclassUserCreate):
+def assign_user_to_masterclass(conn: Connection, masterclass_user: MasterclassUserCreate):
     """
     Attribute a user to a masterclass.
 
@@ -187,11 +189,11 @@ def assigne_user_to_masterclass(conn: Connection, masterclass_user: MasterclassU
             masterclass_role=masterclass_user.masterclass_role,
             id=check.id
         )
-        reponse = update_user_masterclass(conn, new_masterclass_user)
-        return reponse
+        result = update_user_masterclass(conn, new_masterclass_user)
+        return result
     else:
-        response = db_srv.create_object(conn, masterclass_user_table, masterclass_user.dict())
-        return _parse_row_masterclass_user(response)
+        result = db_srv.create_object(conn, masterclass_user_table, masterclass_user.dict())
+        return _parse_row_masterclass_user(result)
     
 
 def unassigne_user_from_masterclass(conn: Connection, masterclass_user: MasterclassUserCreate):

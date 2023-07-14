@@ -21,8 +21,8 @@ def get_all_users(conn: Connection) -> list[User]:
     Returns:
         Masterclasses: Dict of Masterclass objects.
     """
-    response = conn.execute(sa.select(user_table)).fetchall()
-    return [_parse_row(row) for row in response]
+    result = conn.execute(sa.select(user_table)).fetchall()
+    return [_parse_row(row) for row in result]
 
 
 def get_all_users_by_academy(conn: Connection, academy_id: UUID) -> list[User]:
@@ -35,8 +35,8 @@ def get_all_users_by_academy(conn: Connection, academy_id: UUID) -> list[User]:
     Returns:
         Users: Dict of User objects.
     """
-    response = conn.execute(sa.select(user_table).where(user_table.c.academy_id == academy_id)).fetchall()
-    return [_parse_row(row) for row in response]
+    result = conn.execute(sa.select(user_table).where(user_table.c.academy_id == academy_id)).fetchall()
+    return [_parse_row(row) for row in result]
 
 
 def get_all_users_by_masterclass(conn: Connection, masterclass_id: UUID) -> list[User]:
@@ -54,22 +54,8 @@ def get_all_users_by_masterclass(conn: Connection, masterclass_id: UUID) -> list
                 user_table.c.id == masterclass_user_table.c.user_id)
     ).where(masterclass_user_table.c.masterclass_id == masterclass_id)
 
-    response = conn.execute(query).fetchall()
-    return [_parse_row(row) for row in response]
-
-
-# def get_all_users_by_masterclass(conn: Connection, masterclass_id: UUID) -> list[User]:
-#     """
-#     Get all users by the given masterclass.
-
-#     Args:
-#         masterclass_id (UUID): The id of the masterclass.
-    
-#     Returns:
-#         Users: Dict of User objects.
-#     """
-#     response = conn.execute(sa.select(user_table).where(user_table.c.masterclass_id == masterclass_id)).fetchall()
-#     return [_parse_row(row) for row in response]
+    result = conn.execute(query).fetchall()
+    return [_parse_row(row) for row in result]
 
 
 def get_user_by_id(conn: Connection, user_id: UUID) -> User:
@@ -85,13 +71,13 @@ def get_user_by_id(conn: Connection, user_id: UUID) -> User:
     Raises:
         UserNotFound: If the user does not exist.
     """
-    response = conn.execute(
+    result = conn.execute(
         sa.select(user_table).where(user_table.c.id == user_id)
     ).first()
-    if response is None:
+    if result is None:
         raise UserNotFound
 
-    return _parse_row(response)
+    return _parse_row(result)
 
 
 def get_user_by_email(conn: Connection, email: str) -> User:
@@ -107,13 +93,13 @@ def get_user_by_email(conn: Connection, email: str) -> User:
     Raises:
         UserNotFound: If the user does not exist.
     """
-    response = conn.execute(
+    result = conn.execute(
         sa.select(user_table).where(user_table.c.email == email)
     ).first()
-    if response is None:
+    if result is None:
         raise UserNotFound
 
-    return _parse_row(response)
+    return _parse_row(result)
 
 
 def create_user(conn: Connection, new_user: UserCreate, user: User) -> User:
@@ -136,11 +122,11 @@ def create_user(conn: Connection, new_user: UserCreate, user: User) -> User:
     if check is not None:
         raise EmailAlreadyExist
 
-    response = db_srv.create_object(conn, user_table, new_user.dict(), user_id=user.id)
-    return _parse_row(response)
+    result = db_srv.create_object(conn, user_table, new_user.dict(), user_id=user.id)
+    return _parse_row(result)
 
 
-def update_user(conn: Connection, user_id: UUID, new_user: UserCreate, user: User) -> None:
+def update_user(conn: Connection, user_id: UUID, new_user: UserCreate, user: User) -> User:
     """
     Update a user.
 
@@ -161,23 +147,5 @@ def update_user(conn: Connection, user_id: UUID, new_user: UserCreate, user: Use
     if check is None:
         raise UserNotFound
 
-    db_srv.update_object(conn, user_table, user_id, new_user.dict(), user_id=user.id)
-
-
-def delete_user(conn: Connection, user_id: UUID) -> None:
-    """
-    Delete a user.
-
-    Args:
-        user_id (UUID): The id of the user.
-
-    Raises:
-        UserNotFound: If the user does not exist.
-    """
-    check = conn.execute(
-        sa.select(user_table).where(user_table.c.id == user_id)
-    ).first()
-    if check is None:
-        raise UserNotFound
-
-    db_srv.delete_object(conn, user_table, user_id)
+    result = db_srv.update_object(conn, user_table, user_id, new_user.dict(), user_id=user.id)
+    return _parse_row(result)

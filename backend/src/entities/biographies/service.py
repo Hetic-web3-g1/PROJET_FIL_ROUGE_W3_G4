@@ -24,8 +24,9 @@ def get_all_biographies(conn: Connection) -> list[Biography]:
     Returns:
         Biographies: Dict of Biography objects.
     """
-    response = conn.execute(sa.select(biography_table)).fetchall()
-    return [_parse_row(row) for row in response]
+    result = conn.execute(sa.select(biography_table)).fetchall()
+    for row in result:
+        yield _parse_row(row)
 
 
 def get_biography_by_id(con: Connection, biography_id: UUID) -> Biography:
@@ -41,16 +42,16 @@ def get_biography_by_id(con: Connection, biography_id: UUID) -> Biography:
         BiographyNotFound: If the biography does not exist.
 
     """
-    response = con.execute(
+    result = con.execute(
         sa.select(biography_table).where(biography_table.c.id == biography_id)
     ).first()
-    if response is None:
+    if result is None:
         raise BiographyNotFound
 
-    return _parse_row(response)
+    return _parse_row(result)
 
 
-def create_biography(conn: Connection, biography: BiographyCreate, user: User) -> None:
+def create_biography(conn: Connection, biography: BiographyCreate, user: User) -> Biography:
     """
     Create a biography.
 
@@ -61,10 +62,11 @@ def create_biography(conn: Connection, biography: BiographyCreate, user: User) -
     Returns:
         Biography: The created Biography object.
     """
-    db_srv.create_object(conn, biography_table, biography.dict(), user_id=user.id)
+    result = db_srv.create_object(conn, biography_table, biography.dict(), user_id=user.id)
+    return _parse_row(result)
 
 
-def update_biography(conn: Connection, biography_id: UUID, biography: BiographyCreate, user: User) -> None:
+def update_biography(conn: Connection, biography_id: UUID, biography: BiographyCreate, user: User) -> Biography:
     """
     Update a biography.
 
@@ -85,7 +87,8 @@ def update_biography(conn: Connection, biography_id: UUID, biography: BiographyC
     if check is None:
         raise BiographyNotFound
     
-    db_srv.update_object(conn, biography_table, biography_id, biography.dict(), user_id=user.id)
+    result = db_srv.update_object(conn, biography_table, biography_id, biography.dict(), user_id=user.id)
+    return _parse_row(result)
 
 
 def delete_biography(conn: Connection, biography_id: UUID) -> None:

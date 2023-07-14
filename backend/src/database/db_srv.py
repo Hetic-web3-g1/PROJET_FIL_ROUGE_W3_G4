@@ -90,14 +90,7 @@ def update_object(
     )
 
     result = conn.execute(stmt).first()
-
-    # Convert UUID objects to strings
-    result = tuple(str(item) if isinstance(item, UUID) else item for item in result)
-    # Convert datetime object to string
-    result = tuple(
-        str(item) if isinstance(item, datetime.datetime) else item for item in result
-    )
-
+    
     if parser is not None:
         return parser(result)
     else:

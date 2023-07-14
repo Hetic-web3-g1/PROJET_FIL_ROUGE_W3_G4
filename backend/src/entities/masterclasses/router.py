@@ -92,13 +92,13 @@ def delete_masterclass(
 
 
 @router.post("/masterclass/assign_user")
-def assigne_user_to_masterclass(
+def assign_user_to_masterclass(
     masterclass_user: MasterclassUserCreate,
     user: User = Depends(CustomSecurity()),
 ):
     try:
         with engine.begin() as conn:
-            masterclass_service.assigne_user_to_masterclass(conn, masterclass_user)
+            masterclass_service.assign_user_to_masterclass(conn, masterclass_user)
     
     except masterclass_exceptions.MasterclassNotFound:
         raise HTTPException(
