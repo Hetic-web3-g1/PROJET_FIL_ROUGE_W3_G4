@@ -52,23 +52,23 @@ def get_masterclasses_by_user(
 # Create masterclass
 @router.post("/masterclass")
 def create_masterclass(
-    new_masterclass: MasterclassCreate,
+    masterclass: MasterclassCreate,
     user: User = Depends(CustomSecurity())
 ):
     with engine.begin() as conn:
-        masterclass_service.create_masterclass(conn, new_masterclass, user)
+        masterclass_service.create_masterclass(conn, masterclass, user)
 
 
 # Update masterclass
 @router.put("/masterclass/{masterclass_id}")
 def update_masterclass(
     masterclass_id: UUID,
-    updated_masterclass: MasterclassCreate,
+    masterclass: MasterclassCreate,
     user: User = Depends(CustomSecurity()),
 ):
     try:
         with engine.begin() as conn:
-            masterclass_service.update_masterclass(conn, masterclass_id, updated_masterclass)
+            masterclass_service.update_masterclass(conn, masterclass_id, masterclass, user)
 
     except masterclass_exceptions.MasterclassNotFound:
         raise HTTPException(

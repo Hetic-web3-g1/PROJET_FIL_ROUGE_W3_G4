@@ -116,12 +116,13 @@ def get_user_by_email(conn: Connection, email: str) -> User:
     return _parse_row(response)
 
 
-def create_user(conn: Connection, user: UserCreate) -> User:
+def create_user(conn: Connection, new_user: UserCreate, user: User) -> User:
     """
     Create a user.
 
     Args:
-        user (UserCreate): UserCreate object.
+        new_user (UserCreate): UserCreate object.
+        user (User): The user that is creating the user. 
 
     Raises:
         EmailAlreadyExist: If the email already exist.
@@ -130,22 +131,23 @@ def create_user(conn: Connection, user: UserCreate) -> User:
         User: The created User object.
     """
     check = conn.execute(
-        sa.select(user_table).where(user_table.c.email == user.email)
+        sa.select(user_table).where(user_table.c.email == new_user.email)
     ).first()
     if check is not None:
         raise EmailAlreadyExist
 
-    response = db_srv.create_object(conn, user_table, user.dict())
+    response = db_srv.create_object(conn, user_table, new_user.dict(), user_id=user.id)
     return _parse_row(response)
 
 
-def update_user(conn: Connection, user_id: UUID, user: UserCreate) -> None:
+def update_user(conn: Connection, user_id: UUID, new_user: UserCreate, user: User) -> None:
     """
     Update a user.
 
     Args:
         user_id (UUID): The id of the user.
-        user (UserCreate): UserCreate object.
+        new_user (UserCreate): UserCreate object.
+        user (User): The user that is updating the user.
 
     Raises:
         UserNotFound: If the user does not exist.
@@ -159,7 +161,7 @@ def update_user(conn: Connection, user_id: UUID, user: UserCreate) -> None:
     if check is None:
         raise UserNotFound
 
-    db_srv.update_object(conn, user_table, user_id, user.dict())
+    db_srv.update_object(conn, user_table, user_id, new_user.dict(), user_id=user.id)
 
 
 def delete_user(conn: Connection, user_id: UUID) -> None:

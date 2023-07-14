@@ -14,6 +14,7 @@ router = APIRouter(
 )
 
 
+# Send email reset password
 @router.get("/forgot-password")
 def send_email_reset_password(
     email: str,
@@ -28,6 +29,7 @@ def send_email_reset_password(
         pass
 
 
+# Reset password
 @router.post("/reset-password")
 def reset_password(
     token: str = Body(...),
@@ -49,6 +51,7 @@ def reset_password(
         )
 
 
+# Login
 @router.post("/login")
 def login(
     email: str = Body(...),
@@ -70,6 +73,7 @@ def login(
         )
 
 
+# Refrest authorization token
 @router.post("/refresh-token")
 def refresh_auth_token(
     refresh_token: str = Body(...),

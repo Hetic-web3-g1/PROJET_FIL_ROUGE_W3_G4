@@ -66,18 +66,11 @@ def update_object(
     table: Table,
     object_id: Union[str, UUID, int],
     object_data: Any,
-    user_id: Optional[str] = None,
+    user_id: Optional[UUID] = None,
     parser: Optional[Callable[[Any], T]] = None,
     id_key: str = "id",
 ) -> T:
-
-    # Check if object exists
-    stmt = sa.select(table).where(table.c[id_key] == object_id)
-    result = conn.execute(stmt).fetchone()
-    if result is None:
-        # Return a custom error response indicating that the object does not exist
-        raise ValueError(f"Object with ID {object_id} does not exist")
-
+    
     values = {}
     for column in table.columns:
         if column.name != "data" and column.name in object_data:

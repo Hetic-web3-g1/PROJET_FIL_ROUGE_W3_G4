@@ -39,19 +39,19 @@ def get_biography_by_id(
 # Create biography
 @router.post("/biography")
 def create_biography(
-    new_biography: BiographyCreate,
+    biography: BiographyCreate,
     user: User = Depends(CustomSecurity())
 ):
     with engine.begin() as conn:
-        biography_service.create_biography(conn, new_biography, user)
+        biography_service.create_biography(conn, biography, user)
 
 
 # Update biography
 @router.put("/biography/{biography_id}")
 def update_biography(
     biography_id: UUID,
-    biography: Biography,
+    biography: BiographyCreate,
     user: User = Depends(CustomSecurity()),
 ):
     with engine.begin() as conn:
-        biography_service.update_biography(conn, biography_id, biography)
+        biography_service.update_biography(conn, biography_id, biography, user)

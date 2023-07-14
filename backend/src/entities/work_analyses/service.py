@@ -61,3 +61,27 @@ def create_work_analysis(conn: Connection, work_analysis: WorkAnalysisCreate, us
         WorkAnalysis: The created WorkAnalysis object.
     """
     db_srv.create_object(conn, work_analysis_table, work_analysis.dict(), user_id=user.id)
+
+
+def update_work_analysis(conn: Connection, work_analysis_id: UUID, work_analysis: WorkAnalysisCreate, user: User) -> None:
+    """
+    Update a work_analysis.
+
+    Args:
+        work_analysis_id (UUID): The id of the work_analysis.
+        work_analysis (WorkAnalysisCreate): WorkAnalysisCreate object.
+        user (User): The user updating the work_analysis.
+
+    Returns:
+        WorkAnalysis: The updated WorkAnalysis object.
+
+    Raises:
+        WorkAnalysisNotFound: If the work_analysis does not exist.
+    """
+    check = conn.execute(
+        sa.select(work_analysis_table).where(work_analysis_table.c.id == work_analysis_id)
+    ).first()
+    if check is None:
+        raise WorkAnalysisNotFound
+
+    db_srv.update_object(conn, work_analysis_table, work_analysis_id, work_analysis.dict(), user_id=user.id)

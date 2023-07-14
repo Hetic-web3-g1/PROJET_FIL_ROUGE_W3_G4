@@ -40,8 +40,19 @@ def get_partition_by_id(
 # Create partition
 @router.post("/partition")
 def create_partition(
-    new_partition: PartitionCreate,
+    partition: PartitionCreate,
     user: User = Depends(CustomSecurity())
 ):
     with engine.begin() as conn:
-        partition_service.create_partition(conn, new_partition, user)
+        partition_service.create_partition(conn, partition, user)
+
+
+# Update partition
+@router.put("/partition/{partition_id}")
+def update_partition(
+    partition_id: UUID,
+    partition: PartitionCreate,
+    user: User = Depends(CustomSecurity())
+):
+    with engine.begin() as conn:
+        partition_service.update_partition(conn, partition_id, partition, user)

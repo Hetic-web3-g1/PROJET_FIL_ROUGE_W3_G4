@@ -61,3 +61,27 @@ def create_partition(conn: Connection, partition: PartitionCreate, user: User) -
         Partition: The created Partition object.
     """
     db_srv.create_object(conn, partition_table, partition.dict(), user_id=user.id)
+
+
+def update_partition(conn: Connection, partition_id: UUID, partition: PartitionCreate, user: User) -> None:
+    """
+    Update a partition.
+
+    Args:
+        partition_id (UUID): The id of the partition to update.
+        partition (PartitionCreate): PartitionCreate object.
+        user (User): The user updating the partition.
+
+    Raises:
+        PartitionNotFound: If the partition does not exist.
+
+    Returns:
+        Partition: The updated Partition object.
+    """
+    check = conn.execute(
+        sa.select(partition_table).where(partition_table.c.id == partition_id)
+    ).first()
+    if check is None:
+        raise PartitionNotFound
+
+    db_srv.update_object(conn, partition_table, partition_id, partition.dict(), user_id=user.id)

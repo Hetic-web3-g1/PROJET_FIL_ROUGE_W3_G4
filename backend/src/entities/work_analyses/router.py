@@ -44,3 +44,21 @@ def create_work_analysis(
 ):
     with engine.begin() as conn:
         work_analysis_service.create_work_analysis(conn, new_work_analysis, user)
+
+
+# Update work_analysis
+@router.put("/work_analysis/{work_analysis_id}")
+def update_work_analysis(
+    work_analysis_id: UUID,
+    work_analysis: WorkAnalysisCreate, 
+    user: User = Depends(CustomSecurity())
+):
+    try:
+        with engine.begin() as  conn:
+            work_analysis_service.update_work_analysis(conn, work_analysis_id, work_analysis, user)
+    
+    except work_analysis_exceptions.WorkAnalysisNotFound:
+        raise HTTPException(
+            status_code=404,
+            detail="Work Analysis not found",
+        )

@@ -85,13 +85,14 @@ def create_masterclass(conn: Connection, masterclass: MasterclassCreate, user: U
     db_srv.create_object(conn, masterclass_table, masterclass.dict(), user_id=user.id)
 
 
-def update_masterclass(conn: Connection, masterclass_id: UUID, masterclass: MasterclassCreate) -> None:
+def update_masterclass(conn: Connection, masterclass_id: UUID, masterclass: MasterclassCreate, user=User) -> None:
     """
     Update a masterclass.
 
     Args:
         masterclass_id (UUID): The id of the masterclass.
         masterclass (MasterclassCreate): MasterclassCreate object.
+        user (User): The user who updated the masterclass.
 
     Raises:
         MasterclassNotFound: If the masterclass does not exist.
@@ -105,7 +106,7 @@ def update_masterclass(conn: Connection, masterclass_id: UUID, masterclass: Mast
     if check is None:
         raise MasterclassNotFound
     
-    db_srv.update_object(conn, masterclass_table, masterclass_id, masterclass.dict())
+    db_srv.update_object(conn, masterclass_table, masterclass_id, masterclass.dict(), user_id=user.id)
 
 
 def delete_masterclass(conn: Connection, masterclass_id: UUID) -> None:

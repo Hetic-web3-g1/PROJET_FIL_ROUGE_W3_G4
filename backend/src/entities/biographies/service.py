@@ -64,13 +64,14 @@ def create_biography(conn: Connection, biography: BiographyCreate, user: User) -
     db_srv.create_object(conn, biography_table, biography.dict(), user_id=user.id)
 
 
-def update_biography(conn: Connection, biography_id: UUID, biography: Biography) -> None:
+def update_biography(conn: Connection, biography_id: UUID, biography: BiographyCreate, user: User) -> None:
     """
     Update a biography.
 
     Args:
         biography_id (UUID): The id of the biography.
         biography (Biography): The Biography object.
+        user (User): The user updating the biography.
 
     Returns:
         Biography: The updated Biography object.
@@ -84,4 +85,4 @@ def update_biography(conn: Connection, biography_id: UUID, biography: Biography)
     if check is None:
         raise BiographyNotFound
     
-    db_srv.update_object(conn, biography_table, biography_id, biography.dict())
+    db_srv.update_object(conn, biography_table, biography_id, biography.dict(), user_id=user.id)

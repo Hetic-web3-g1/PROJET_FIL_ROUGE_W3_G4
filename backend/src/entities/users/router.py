@@ -65,17 +65,18 @@ def get_user_by_id(
         return response
 
 
+# Get user by email
 @router.post("/academy/{academy_id}/user")
 def create_academy_user(
     academy_id: str, new_user: UserCreate,
     user: User = Depends(CustomSecurity())
 ):
+    print(new_user)
     try:
         with engine.begin() as conn:
-            new_user = user_service.create_user(conn, new_user)
+            new_user = user_service.create_user(conn, new_user, user)
             token = auth_service.create_reset_token(conn, new_user.id)
             auth_service.send_reset_password_email(new_user.email, token)
-
     except user_exceptions.EmailAlreadyExist:
         raise HTTPException(
             status_code=400,
@@ -83,14 +84,16 @@ def create_academy_user(
         )
     
 
+# Update user
 @router.put("/user/{user_id}")
 def update_academy_user(
-    user_id: str, new_user: UserCreate,
+    user_id: str,
+    new_user: UserCreate,
     user: User = Depends(CustomSecurity())
 ):
     try:
         with engine.begin() as conn:
-            user_service.update_user(conn, UUID(user_id), new_user)
+            user_service.update_user(conn, UUID(user_id), new_user, user)
 
     except user_exceptions.UserNotFound:
         raise HTTPException(
@@ -99,6 +102,7 @@ def update_academy_user(
         )
 
 
+# Delete user
 @router.delete("/user/{user_id}")
 def delete_academy_user(
     user_id: str,
