@@ -27,8 +27,8 @@ def get_all_masterclasses(conn: Connection) -> list[Masterclass]:
     Returns:
         Masterclasses: Dict of Masterclass objects.
     """
-    response = conn.execute(sa.select(masterclass_table)).fetchall()
-    return [_parse_row(row) for row in response]
+    result = conn.execute(sa.select(masterclass_table)).fetchall()
+    return [_parse_row(row) for row in result]
 
 
 def get_masterclass_by_id(conn: Connection, masterclass_id: UUID) -> Masterclass:
