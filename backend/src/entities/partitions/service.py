@@ -6,6 +6,7 @@ from sqlalchemy.engine import Connection
 from src.database import db_srv
 from src.database.db_engine import engine
 from .schemas import Partition, PartitionCreate
+from ..users.schemas import User
 from .models import partition_table
 from ..users.models import user_table
 from .exceptions import PartitionNotFound
@@ -48,14 +49,15 @@ def get_partition_by_id(conn: Connection, partition_id: UUID) -> Partition:
     return _parse_row(response)
 
 
-def create_partition(conn: Connection, partition: PartitionCreate) -> None:
+def create_partition(conn: Connection, partition: PartitionCreate, user: User) -> None:
     """
     Create a partition.
 
     Args:
         partition (PartitionCreate): PartitionCreate object.
+        user (User): The user creating the partition.
 
     Returns:
         Partition: The created Partition object.
     """
-    db_srv.create_object(conn, partition_table, partition.dict())
+    db_srv.create_object(conn, partition_table, partition.dict(), user_id=user.id)

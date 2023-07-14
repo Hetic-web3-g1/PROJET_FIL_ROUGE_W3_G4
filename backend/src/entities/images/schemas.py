@@ -5,7 +5,6 @@ from datetime import datetime
 class ImageCreate(BaseModel):
     title: str
     file_name: str
-    created_by: UUID
 
 class Image(ImageCreate):
     id: UUID

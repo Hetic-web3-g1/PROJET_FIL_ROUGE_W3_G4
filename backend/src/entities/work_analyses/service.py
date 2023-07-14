@@ -6,6 +6,7 @@ from sqlalchemy.engine import Connection
 from src.database import db_srv
 from src.database.db_engine import engine
 from .schemas import WorkAnalysis, WorkAnalysisCreate
+from ..users.schemas import User
 from .models import work_analysis_table
 from ..users.models import user_table
 from .exceptions import WorkAnalysisNotFound
@@ -48,14 +49,15 @@ def get_work_analysis_by_id(conn: Connection, work_analysis_id: UUID) -> WorkAna
     return _parse_row(response)
 
 
-def create_work_analysis(conn: Connection, work_analysis: WorkAnalysisCreate) -> None:
+def create_work_analysis(conn: Connection, work_analysis: WorkAnalysisCreate, user: User) -> None:
     """
     Create a work_analysis.
 
     Args:
         work_analysis (WorkAnalysisCreate): WorkAnalysisCreate object.
+        user (User): The user creating the work_analysis.
 
     Returns:
         WorkAnalysis: The created WorkAnalysis object.
     """
-    db_srv.create_object(conn, work_analysis_table, work_analysis.dict())
+    db_srv.create_object(conn, work_analysis_table, work_analysis.dict(), user_id=user.id)

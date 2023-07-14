@@ -26,7 +26,7 @@ def get_all_biographies(
     
 
 # Get biography by id
-@router.get("/{biography_id}")
+@router.get("/biography/{biography_id}")
 def get_biography_by_id(
     biography_id: UUID,
     user: User = Depends(CustomSecurity()),
@@ -39,7 +39,19 @@ def get_biography_by_id(
 # Create biography
 @router.post("/biography")
 def create_biography(
-    new_biography: BiographyCreate, User: User = Depends(CustomSecurity())
+    new_biography: BiographyCreate,
+    user: User = Depends(CustomSecurity())
 ):
     with engine.begin() as conn:
-        biography_service.create_biography(conn, new_biography)
+        biography_service.create_biography(conn, new_biography, user)
+
+
+# Update biography
+@router.put("/biography/{biography_id}")
+def update_biography(
+    biography_id: UUID,
+    biography: Biography,
+    user: User = Depends(CustomSecurity()),
+):
+    with engine.begin() as conn:
+        biography_service.update_biography(conn, biography_id, biography)

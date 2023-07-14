@@ -13,7 +13,6 @@ class MasterclassCreate(BaseModel):
     partition_id: UUID | None
     instrument: List[str] | None
     status: str = "created"
-    created_by: UUID
 
 class Masterclass(MasterclassCreate):
     id: UUID

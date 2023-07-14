@@ -28,8 +28,8 @@ masterclass_user_table = Table(
     "masterclass_user",
     metadata,
     Column("id", Integer, primary_key=True, unique=True, nullable=False),
-    Column("user_id", UUID(as_uuid=True), ForeignKey("user.id"), nullable=False),
-    Column("masterclass_id", UUID(as_uuid=True), ForeignKey("masterclass.id"), nullable=False),
+    Column("user_id", UUID(as_uuid=True), ForeignKey("user.id", ondelete='CASCADE'), nullable=False),
+    Column("masterclass_id", UUID(as_uuid=True), ForeignKey("masterclass.id", ondelete='CASCADE'), nullable=False),
     Column("masterclass_role", String(), nullable=False)
 )
 

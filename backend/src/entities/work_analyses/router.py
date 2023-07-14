@@ -26,7 +26,7 @@ def get_all_work_analysis(
 
 
 # Get work_analysis by id
-@router.get("/{work_analysis_id}")
+@router.get("/work_analysis/{work_analysis_id}")
 def get_work_analysis_by_id(
     work_analysis_id: UUID,
     user: User = Depends(CustomSecurity()),
@@ -39,7 +39,8 @@ def get_work_analysis_by_id(
 # Create work_analysis
 @router.post("/work_analysis")
 def create_work_analysis(
-    new_work_analysis: WorkAnalysisCreate, User: User = Depends(CustomSecurity())
+    new_work_analysis: WorkAnalysisCreate, 
+    user: User = Depends(CustomSecurity())
 ):
     with engine.begin() as conn:
-        work_analysis_service.create_work_analysis(conn, new_work_analysis)
+        work_analysis_service.create_work_analysis(conn, new_work_analysis, user)

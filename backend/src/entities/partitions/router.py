@@ -27,7 +27,7 @@ def get_all_partitions(
 
 
 # Get partition by id
-@router.get("/{partition_id}")
+@router.get("/partition/{partition_id}")
 def get_partition_by_id(
     partition_id: UUID,
     user: User = Depends(CustomSecurity()),
@@ -40,7 +40,8 @@ def get_partition_by_id(
 # Create partition
 @router.post("/partition")
 def create_partition(
-    new_partition: PartitionCreate, User: User = Depends(CustomSecurity())
+    new_partition: PartitionCreate,
+    user: User = Depends(CustomSecurity())
 ):
     with engine.begin() as conn:
-        partition_service.create_partition(conn, new_partition)
+        partition_service.create_partition(conn, new_partition, user)

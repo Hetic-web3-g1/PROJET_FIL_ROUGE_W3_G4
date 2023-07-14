@@ -8,7 +8,6 @@ class WorkAnalysisCreate(BaseModel):
     learning: List[str]
     content: str | None
     status: str = "created"
-    created_by: UUID
 
 class WorkAnalysis(WorkAnalysisCreate):
     id: UUID

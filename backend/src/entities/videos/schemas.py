@@ -12,7 +12,6 @@ class VideoCreate(BaseModel):
 
 class Video(VideoCreate):
     id: UUID
-    created_by: UUID
     created_at: datetime
     updated_at: datetime | None
     updated_by: UUID | None

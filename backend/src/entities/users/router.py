@@ -14,6 +14,39 @@ router = APIRouter(
 )
 
 
+# Get all users
+@router.get("")
+def get_all_users(
+    user: User = Depends(CustomSecurity()),
+):
+    with engine.begin() as conn:
+        response = user_service.get_all_users(conn)
+        return response
+
+
+# Get all users by academy
+@router.get("/academy/{academy_id}")
+def get_all_users_by_academy(
+    academy_id: UUID,
+    user: User = Depends(CustomSecurity()),
+):
+    with engine.begin() as conn:
+        response = user_service.get_all_users_by_academy(conn, academy_id)
+        return response
+
+
+# Get all users by masterclass
+@router.get("/masterclass/{masterclass_id}")
+def get_all_users_by_masterclass(
+    masterclass_id: UUID,
+    user: User = Depends(CustomSecurity()),
+):
+    with engine.begin() as conn:
+        response = user_service.get_all_users_by_masterclass(conn, masterclass_id)
+        return response
+
+
+# Get user by his token
 @router.get("/user/me")
 def get_user_by_token(
     response: User = Depends(CustomSecurity()),
@@ -34,7 +67,8 @@ def get_user_by_id(
 
 @router.post("/academy/{academy_id}/user")
 def create_academy_user(
-    academy_id: str, new_user: UserCreate, user: User = Depends(CustomSecurity())
+    academy_id: str, new_user: UserCreate,
+    user: User = Depends(CustomSecurity())
 ):
     try:
         with engine.begin() as conn:
@@ -51,7 +85,8 @@ def create_academy_user(
 
 @router.put("/user/{user_id}")
 def update_academy_user(
-    user_id: str, new_user: UserCreate, user: User = Depends(CustomSecurity())
+    user_id: str, new_user: UserCreate,
+    user: User = Depends(CustomSecurity())
 ):
     try:
         with engine.begin() as conn:
@@ -66,7 +101,8 @@ def update_academy_user(
 
 @router.delete("/user/{user_id}")
 def delete_academy_user(
-    user_id: str, user: User = Depends(CustomSecurity())
+    user_id: str,
+    user: User = Depends(CustomSecurity())
 ):
     try:
         with engine.begin() as conn:

@@ -6,11 +6,70 @@ from sqlalchemy.engine import Connection
 from src.database import db_srv
 from .schemas import User, UserCreate
 from .models import user_table
+from ..masterclasses.models import masterclass_user_table
 from .exceptions import EmailAlreadyExist, UserNotFound
 
 
 def _parse_row(row: sa.Row):
     return User(**row._asdict())
+
+
+def get_all_users(conn: Connection) -> list[User]:
+    """
+    Get all users.
+
+    Returns:
+        Masterclasses: Dict of Masterclass objects.
+    """
+    response = conn.execute(sa.select(user_table)).fetchall()
+    return [_parse_row(row) for row in response]
+
+
+def get_all_users_by_academy(conn: Connection, academy_id: UUID) -> list[User]:
+    """
+    Get all users by the given academy.
+
+    Args:
+        academy_id (UUID): The id of the academy.
+    
+    Returns:
+        Users: Dict of User objects.
+    """
+    response = conn.execute(sa.select(user_table).where(user_table.c.academy_id == academy_id)).fetchall()
+    return [_parse_row(row) for row in response]
+
+
+def get_all_users_by_masterclass(conn: Connection, masterclass_id: UUID) -> list[User]:
+    """
+    Get all users by the given masterclass.
+
+    Args:
+        masterclass_id (UUID): The id of the masterclass.
+    
+    Returns:
+        Users: Dict of User objects.
+    """
+    query = sa.select(user_table).select_from(
+        sa.join(user_table, masterclass_user_table,
+                user_table.c.id == masterclass_user_table.c.user_id)
+    ).where(masterclass_user_table.c.masterclass_id == masterclass_id)
+
+    response = conn.execute(query).fetchall()
+    return [_parse_row(row) for row in response]
+
+
+# def get_all_users_by_masterclass(conn: Connection, masterclass_id: UUID) -> list[User]:
+#     """
+#     Get all users by the given masterclass.
+
+#     Args:
+#         masterclass_id (UUID): The id of the masterclass.
+    
+#     Returns:
+#         Users: Dict of User objects.
+#     """
+#     response = conn.execute(sa.select(user_table).where(user_table.c.masterclass_id == masterclass_id)).fetchall()
+#     return [_parse_row(row) for row in response]
 
 
 def get_user_by_id(conn: Connection, user_id: UUID) -> User:
