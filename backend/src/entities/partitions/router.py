@@ -16,7 +16,6 @@ router = APIRouter(
 )
 
 
-# Get all partitions
 @router.get("")
 def get_all_partitions(
     user: User = Depends(CustomSecurity()),
@@ -26,7 +25,6 @@ def get_all_partitions(
         return response
 
 
-# Get partition by id
 @router.get("/partition/{partition_id}")
 def get_partition_by_id(
     partition_id: UUID,
@@ -37,7 +35,6 @@ def get_partition_by_id(
         return response
     
 
-# Create partition
 @router.post("/partition")
 def create_partition(
     partition: PartitionCreate,
@@ -47,7 +44,6 @@ def create_partition(
         partition_service.create_partition(conn, partition, user)
 
 
-# Update partition
 @router.put("/partition/{partition_id}")
 def update_partition(
     partition_id: UUID,
@@ -58,7 +54,6 @@ def update_partition(
         partition_service.update_partition(conn, partition_id, partition, user)
 
 
-# Delete partition
 @router.delete("/partition/{partition_id}")
 def delete_partition(
     partition_id: UUID,

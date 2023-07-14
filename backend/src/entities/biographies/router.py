@@ -36,7 +36,6 @@ def get_biography_by_id(
         return response
 
 
-# Create biography
 @router.post("/biography")
 def create_biography(
     biography: BiographyCreate,
@@ -46,7 +45,6 @@ def create_biography(
         biography_service.create_biography(conn, biography, user)
 
 
-# Update biography
 @router.put("/biography/{biography_id}")
 def update_biography(
     biography_id: UUID,
@@ -64,7 +62,6 @@ def update_biography(
         )
 
 
-# Delete biography
 @router.delete("/biography/{biography_id}")
 def delete_biography(
     biography_id: UUID,

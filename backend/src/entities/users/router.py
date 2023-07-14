@@ -35,7 +35,6 @@ def get_all_users_by_academy(
         return response
 
 
-# Get all users by masterclass
 @router.get("/masterclass/{masterclass_id}")
 def get_all_users_by_masterclass(
     masterclass_id: UUID,
@@ -46,7 +45,6 @@ def get_all_users_by_masterclass(
         return response
 
 
-# Get user by his token
 @router.get("/user/me")
 def get_user_by_token(
     response: User = Depends(CustomSecurity()),
@@ -54,7 +52,6 @@ def get_user_by_token(
     return response
     
 
-# Get user by id
 @router.get("/{user_id}")
 def get_user_by_id(
     user_id: UUID,
@@ -65,7 +62,6 @@ def get_user_by_id(
         return response
 
 
-# Get user by email
 @router.post("/academy/{academy_id}/user")
 def create_academy_user(
     academy_id: str, new_user: UserCreate,
@@ -84,7 +80,6 @@ def create_academy_user(
         )
     
 
-# Update user
 @router.put("/user/{user_id}")
 def update_academy_user(
     user_id: str,
@@ -102,7 +97,6 @@ def update_academy_user(
         )
 
 
-# Delete user
 @router.delete("/user/{user_id}")
 def delete_academy_user(
     user_id: str,

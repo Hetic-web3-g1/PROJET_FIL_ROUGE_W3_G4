@@ -15,7 +15,6 @@ router = APIRouter(
 )
 
 
-# Get all work_analysis
 @router.get("")
 def get_all_work_analysis(
     user: User = Depends(CustomSecurity()),
@@ -25,7 +24,6 @@ def get_all_work_analysis(
         return response
 
 
-# Get work_analysis by id
 @router.get("/work_analysis/{work_analysis_id}")
 def get_work_analysis_by_id(
     work_analysis_id: UUID,
@@ -36,7 +34,6 @@ def get_work_analysis_by_id(
         return response
 
 
-# Create work_analysis
 @router.post("/work_analysis")
 def create_work_analysis(
     new_work_analysis: WorkAnalysisCreate, 
@@ -46,7 +43,6 @@ def create_work_analysis(
         work_analysis_service.create_work_analysis(conn, new_work_analysis, user)
 
 
-# Update work_analysis
 @router.put("/work_analysis/{work_analysis_id}")
 def update_work_analysis(
     work_analysis_id: UUID,
@@ -64,7 +60,6 @@ def update_work_analysis(
         )
 
 
-# Delete work_analysis
 @router.delete("/work_analysis/{work_analysis_id}")
 def delete_work_analysis(
     work_analysis_id: UUID,

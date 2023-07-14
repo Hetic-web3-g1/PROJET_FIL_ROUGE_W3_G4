@@ -17,7 +17,6 @@ router = APIRouter(
 )
 
 
-# Get all masterclasses
 @router.get("")
 def get_all_masterclasses(
     user: User = Depends(CustomSecurity()),
@@ -27,7 +26,6 @@ def get_all_masterclasses(
         return response
     
 
-# Get masterclass by id
 @router.get("/masterclass/{masterclass_id}")
 def get_masterclass_by_id(
     masterclass_id: UUID,
@@ -38,7 +36,6 @@ def get_masterclass_by_id(
         return response
 
 
-# Get masterclasses by user
 @router.get("/masterclass/user/{user_id}")
 def get_masterclasses_by_user(
     user_id: UUID,
@@ -49,7 +46,6 @@ def get_masterclasses_by_user(
         return response
 
 
-# Create masterclass
 @router.post("/masterclass")
 def create_masterclass(
     masterclass: MasterclassCreate,
@@ -59,7 +55,6 @@ def create_masterclass(
         masterclass_service.create_masterclass(conn, masterclass, user)
 
 
-# Update masterclass
 @router.put("/masterclass/{masterclass_id}")
 def update_masterclass(
     masterclass_id: UUID,
@@ -77,7 +72,6 @@ def update_masterclass(
         )
 
 
-# Delete masterclass
 @router.delete("/masterclass/{masterclass_id}")
 def delete_masterclass(
     masterclass_id: UUID,
@@ -97,7 +91,6 @@ def delete_masterclass(
 # ---------------------------------------------------------------------------------------------------- #
 
 
-# Assign user to masterclass and update role if already assigned
 @router.post("/masterclass/assign_user")
 def assigne_user_to_masterclass(
     masterclass_user: MasterclassUserCreate,
@@ -126,7 +119,6 @@ def assigne_user_to_masterclass(
         )
 
 
-# Unassign user from masterclass
 @router.delete("/masterclass/unassign_user")
 def unassigne_user_from_masterclass(
     masterclass_user: MasterclassUserCreate,

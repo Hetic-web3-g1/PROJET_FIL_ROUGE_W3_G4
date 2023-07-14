@@ -15,7 +15,6 @@ router = APIRouter(
 )
 
 
-# Get academy by id
 @router.get("/{academy_id}")
 def get_academy_by_id(
     academy_id: UUID,
