@@ -1,6 +1,5 @@
 from fastapi import APIRouter, HTTPException, Body
 
-from . import exceptions as user_exceptions
 from . import service as auth_service
 from . import exceptions as auth_exceptions
 

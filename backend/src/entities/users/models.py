@@ -2,7 +2,16 @@ from uuid import uuid4
 from datetime import datetime
 
 from sqlalchemy.types import UUID
-from sqlalchemy import Table, Column, ForeignKey, Integer, String, DateTime, LargeBinary, ARRAY
+from sqlalchemy import (
+    Table,
+    Column,
+    ForeignKey,
+    Integer,
+    String,
+    DateTime,
+    LargeBinary,
+    ARRAY,
+)
 from src.database.db_engine import metadata
 
 
