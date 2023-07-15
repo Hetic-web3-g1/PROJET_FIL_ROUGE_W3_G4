@@ -4,11 +4,8 @@ import sqlalchemy as sa
 from sqlalchemy.engine import Connection
 
 from src.database import db_srv
-from src.database.db_engine import engine
 from .schemas import Academy, AcademyCreate
-from ..users.schemas import User
 from .models import academy_table
-from ..users.models import user_table
 from .exceptions import AcademyNotFound
 
 

@@ -1,12 +1,9 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, Depends
 from uuid import UUID
 
-from .schemas import Academy, AcademyCreate
 from ..users.schemas import User
-from . import exceptions as academy_exceptions
 from . import service as academy_service
 from src.database.db_engine import engine
-from ..authentification import service as auth_service
 from ..authentification.dependencies import CustomSecurity
 
 router = APIRouter(
@@ -21,5 +18,5 @@ def get_academy_by_id(
     user: User = Depends(CustomSecurity()),
 ):
     with engine.begin() as conn:
-        response = academy_service.get_academy_by_id(conn, academy_id)
-        return response
+        academy = academy_service.get_academy_by_id(conn, academy_id)
+        return academy

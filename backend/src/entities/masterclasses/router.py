@@ -1,14 +1,12 @@
 from fastapi import APIRouter, HTTPException, Depends
 from uuid import UUID
 
-from .schemas import Masterclass, MasterclassCreate, MasterclassUser, MasterclassUserCreate
+from .schemas import MasterclassCreate, MasterclassUserCreate
 from ..users.schemas import User
 from . import exceptions as masterclass_exceptions
-from . exceptions import MasterclassNotFound, MasterclassUserAlreadyExist
 from ..users import exceptions as user_exceptions
 from . import service as masterclass_service
 from src.database.db_engine import engine
-from ..authentification import service as auth_service
 from ..authentification.dependencies import CustomSecurity
 
 router = APIRouter(
@@ -22,9 +20,9 @@ def get_all_masterclasses(
     user: User = Depends(CustomSecurity()),
 ):
     with engine.begin() as conn:
-        response = masterclass_service.get_all_masterclasses(conn)
-        return response
-    
+        masterclasses = masterclass_service.get_all_masterclasses(conn)
+        return masterclasses
+
 
 @router.get("/masterclass/{masterclass_id}")
 def get_masterclass_by_id(
@@ -32,8 +30,8 @@ def get_masterclass_by_id(
     user: User = Depends(CustomSecurity()),
 ):
     with engine.begin() as conn:
-        response = masterclass_service.get_masterclass_by_id(conn, masterclass_id)
-        return response
+        masterclass = masterclass_service.get_masterclass_by_id(conn, masterclass_id)
+        return masterclass
 
 
 @router.get("/masterclass/user/{user_id}")
@@ -42,14 +40,13 @@ def get_masterclasses_by_user(
     user: User = Depends(CustomSecurity()),
 ):
     with engine.begin() as conn:
-        response = masterclass_service.get_masterclasses_by_user(conn, user_id)
-        return response
+        masterclasses = masterclass_service.get_masterclasses_by_user(conn, user_id)
+        return masterclasses
 
 
 @router.post("/masterclass")
 def create_masterclass(
-    masterclass: MasterclassCreate,
-    user: User = Depends(CustomSecurity())
+    masterclass: MasterclassCreate, user: User = Depends(CustomSecurity())
 ):
     with engine.begin() as conn:
         masterclass_service.create_masterclass(conn, masterclass, user)
@@ -63,7 +60,9 @@ def update_masterclass(
 ):
     try:
         with engine.begin() as conn:
-            masterclass_service.update_masterclass(conn, masterclass_id, masterclass, user)
+            masterclass_service.update_masterclass(
+                conn, masterclass_id, masterclass, user
+            )
 
     except masterclass_exceptions.MasterclassNotFound:
         raise HTTPException(
@@ -98,20 +97,22 @@ def assign_user_to_masterclass(
 ):
     try:
         with engine.begin() as conn:
-            masterclass_service.assign_user_to_masterclass(conn, masterclass_user)
-    
+            return masterclass_service.assign_user_to_masterclass(
+                conn, masterclass_user
+            )
+
     except masterclass_exceptions.MasterclassNotFound:
         raise HTTPException(
             status_code=404,
             detail="Masterclass not found",
         )
-    
+
     except user_exceptions.UserNotFound:
         raise HTTPException(
             status_code=404,
             detail="User not found",
         )
-    
+
     except masterclass_exceptions.MasterclassUserAlreadyExist:
         raise HTTPException(
             status_code=400,
@@ -120,9 +121,9 @@ def assign_user_to_masterclass(
 
 
 @router.delete("/masterclass/unassign_user")
-def unassigne_user_from_masterclass(
+def unassign_user_from_masterclass(
     masterclass_user: MasterclassUserCreate,
     user: User = Depends(CustomSecurity()),
 ):
     with engine.begin() as conn:
-        masterclass_service.unassigne_user_from_masterclass(conn, masterclass_user)
+        masterclass_service.unassign_user_from_masterclass(conn, masterclass_user)

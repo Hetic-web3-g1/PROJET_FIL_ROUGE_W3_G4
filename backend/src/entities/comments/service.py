@@ -1,5 +1,3 @@
-from uuid import UUID
-
 import sqlalchemy as sa
 from sqlalchemy.engine import Connection
 
@@ -24,5 +22,7 @@ def create_comment(conn: Connection, comment: CommentCreate, user: User) -> Comm
     Returns:
         Comment: The created Comment object.
     """
-    created_comment = db_srv.create_object(conn, comment_table, comment.dict(), user_id=user.id)
+    created_comment = db_srv.create_object(
+        conn, comment_table, comment.dict(), user_id=user.id
+    )
     return _parse_row(created_comment)

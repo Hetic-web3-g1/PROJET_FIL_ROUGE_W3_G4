@@ -4,12 +4,18 @@ import sqlalchemy as sa
 from sqlalchemy.engine import Connection
 
 from src.database import db_srv
-from src.database.db_engine import engine
-from .schemas import Masterclass, MasterclassCreate, MasterclassUserCreate, MasterclassUser
+from .schemas import (
+    Masterclass,
+    MasterclassCreate,
+    MasterclassUserCreate,
+    MasterclassUser,
+)
 from ..users.schemas import User
 from .models import masterclass_table, masterclass_user_table
-from ..users.models import user_table
-from .exceptions import MasterclassNotFound, MasterclassUserAlreadyExist, MasterclassUserNotFound
+from .exceptions import (
+    MasterclassNotFound,
+    MasterclassUserNotFound,
+)
 
 
 def _parse_row(row: sa.Row):
@@ -72,7 +78,9 @@ def get_masterclasses_by_user(conn: Connection, user_id: UUID):
     return [_parse_row(row) for row in result]
 
 
-def create_masterclass(conn: Connection, masterclass: MasterclassCreate, user: User) -> Masterclass:
+def create_masterclass(
+    conn: Connection, masterclass: MasterclassCreate, user: User
+) -> Masterclass:
     """
     Create a masterclass.
 
@@ -83,10 +91,15 @@ def create_masterclass(conn: Connection, masterclass: MasterclassCreate, user: U
     Returns:
         Masterclass: The created Masterclass object.
     """
-    result = db_srv.create_object(conn, masterclass_table, masterclass.dict(), user_id=user.id)
+    result = db_srv.create_object(
+        conn, masterclass_table, masterclass.dict(), user_id=user.id
+    )
     return _parse_row(result)
 
-def update_masterclass(conn: Connection, masterclass_id: UUID, masterclass: MasterclassCreate, user: User) -> Masterclass:
+
+def update_masterclass(
+    conn: Connection, masterclass_id: UUID, masterclass: MasterclassCreate, user: User
+) -> Masterclass:
     """
     Update a masterclass.
 
@@ -106,8 +119,10 @@ def update_masterclass(conn: Connection, masterclass_id: UUID, masterclass: Mast
     ).first()
     if check is None:
         raise MasterclassNotFound
-    
-    result = db_srv.update_object(conn, masterclass_table, masterclass_id, masterclass.dict(), user_id=user.id)
+
+    result = db_srv.update_object(
+        conn, masterclass_table, masterclass_id, masterclass.dict(), user_id=user.id
+    )
     return _parse_row(result)
 
 
@@ -126,26 +141,28 @@ def delete_masterclass(conn: Connection, masterclass_id: UUID) -> None:
     ).first()
     if check is None:
         raise MasterclassNotFound
-    
+
     db_srv.delete_object(conn, masterclass_table, masterclass_id)
 
 
 # ---------------------------------------------------------------------------------------------------- #
 
 
-def get_user_by_id_and_masterclass_id_from_masterclass_user(conn: Connection, masterclass_user: MasterclassUserCreate) -> MasterclassUser | None:
+def get_user_by_id_and_masterclass_id_from_masterclass_user(
+    conn: Connection, masterclass_user: MasterclassUserCreate
+) -> MasterclassUser | None:
     """
     Get a user by the given id and masterclass id.
 
     Args:
         masterclass_user (MasterclassUserCreate): MasterclassUserCreate object.
-    
+
     Returns:
         MasterclassUser: The MasterclassUser object. | None
     """
     query = sa.select(masterclass_user_table).where(
-        (masterclass_user_table.c.user_id == masterclass_user.user_id) &
-        (masterclass_user_table.c.masterclass_id == masterclass_user.masterclass_id)
+        (masterclass_user_table.c.user_id == masterclass_user.user_id)
+        & (masterclass_user_table.c.masterclass_id == masterclass_user.masterclass_id)
     )
 
     result = conn.execute(query).first()
@@ -164,14 +181,20 @@ def update_user_masterclass(conn: Connection, masterclass_user: MasterclassUser)
     Returns:
         MasterclassUser: The updated MasterclassUser object.
     """
-    check = get_user_by_id_and_masterclass_id_from_masterclass_user(conn, masterclass_user)
+    check = get_user_by_id_and_masterclass_id_from_masterclass_user(
+        conn, masterclass_user
+    )
     if check is None:
         raise MasterclassUserNotFound
-    
-    db_srv.update_object(conn, masterclass_user_table, masterclass_user.id, masterclass_user.dict())
+
+    db_srv.update_object(
+        conn, masterclass_user_table, masterclass_user.id, masterclass_user.dict()
+    )
 
 
-def assign_user_to_masterclass(conn: Connection, masterclass_user: MasterclassUserCreate):
+def assign_user_to_masterclass(
+    conn: Connection, masterclass_user: MasterclassUserCreate
+):
     """
     Attribute a user to a masterclass.
 
@@ -181,33 +204,41 @@ def assign_user_to_masterclass(conn: Connection, masterclass_user: MasterclassUs
     Returns:
         MasterclassUser: The created MasterclassUser object.
     """
-    check = get_user_by_id_and_masterclass_id_from_masterclass_user(conn, masterclass_user)
+    check = get_user_by_id_and_masterclass_id_from_masterclass_user(
+        conn, masterclass_user
+    )
     if check:
         new_masterclass_user = MasterclassUser(
             user_id=check.user_id,
             masterclass_id=check.masterclass_id,
             masterclass_role=masterclass_user.masterclass_role,
-            id=check.id
+            id=check.id,
         )
         result = update_user_masterclass(conn, new_masterclass_user)
         return result
     else:
-        result = db_srv.create_object(conn, masterclass_user_table, masterclass_user.dict())
+        result = db_srv.create_object(
+            conn, masterclass_user_table, masterclass_user.dict()
+        )
         return _parse_row_masterclass_user(result)
-    
 
-def unassigne_user_from_masterclass(conn: Connection, masterclass_user: MasterclassUserCreate):
+
+def unassign_user_from_masterclass(
+    conn: Connection, masterclass_user: MasterclassUserCreate
+):
     """
     Delete a user from a masterclass.
 
     Args:
         masterclass_user (MasterclassUserCreate): MasterclassUserCreate object.
-    
+
     Returns:
         MasterclassUser: The deleted MasterclassUser object.
     """
-    check = get_user_by_id_and_masterclass_id_from_masterclass_user(conn, masterclass_user)
+    check = get_user_by_id_and_masterclass_id_from_masterclass_user(
+        conn, masterclass_user
+    )
     if check is None:
         raise MasterclassUserNotFound
-    
+
     db_srv.delete_object(conn, masterclass_user_table, check.id)

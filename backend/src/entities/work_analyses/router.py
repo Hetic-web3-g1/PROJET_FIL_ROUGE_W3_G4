@@ -1,12 +1,11 @@
 from fastapi import APIRouter, HTTPException, Depends
 from uuid import UUID
 
-from .schemas import WorkAnalysis, WorkAnalysisCreate
+from .schemas import WorkAnalysisCreate
 from ..users.schemas import User
 from . import exceptions as work_analysis_exceptions
 from . import service as work_analysis_service
 from src.database.db_engine import engine
-from ..authentification import service as auth_service
 from ..authentification.dependencies import CustomSecurity
 
 router = APIRouter(
@@ -36,8 +35,7 @@ def get_work_analysis_by_id(
 
 @router.post("/work_analysis")
 def create_work_analysis(
-    new_work_analysis: WorkAnalysisCreate, 
-    user: User = Depends(CustomSecurity())
+    new_work_analysis: WorkAnalysisCreate, user: User = Depends(CustomSecurity())
 ):
     with engine.begin() as conn:
         work_analysis_service.create_work_analysis(conn, new_work_analysis, user)
@@ -46,13 +44,15 @@ def create_work_analysis(
 @router.put("/work_analysis/{work_analysis_id}")
 def update_work_analysis(
     work_analysis_id: UUID,
-    work_analysis: WorkAnalysisCreate, 
-    user: User = Depends(CustomSecurity())
+    work_analysis: WorkAnalysisCreate,
+    user: User = Depends(CustomSecurity()),
 ):
     try:
-        with engine.begin() as  conn:
-            work_analysis_service.update_work_analysis(conn, work_analysis_id, work_analysis, user)
-    
+        with engine.begin() as conn:
+            work_analysis_service.update_work_analysis(
+                conn, work_analysis_id, work_analysis, user
+            )
+
     except work_analysis_exceptions.WorkAnalysisNotFound:
         raise HTTPException(
             status_code=404,
@@ -62,8 +62,7 @@ def update_work_analysis(
 
 @router.delete("/work_analysis/{work_analysis_id}")
 def delete_work_analysis(
-    work_analysis_id: UUID,
-    user: User = Depends(CustomSecurity())
+    work_analysis_id: UUID, user: User = Depends(CustomSecurity())
 ):
     try:
         with engine.begin() as conn:

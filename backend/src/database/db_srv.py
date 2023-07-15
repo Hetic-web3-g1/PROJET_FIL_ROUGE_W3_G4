@@ -1,4 +1,3 @@
-import datetime
 from uuid import UUID
 from typing import Callable, Optional, TypeVar, Type, Union, Any
 
@@ -34,7 +33,6 @@ def create_object(
     user_id: Optional[UUID] = None,
     parser: Optional[Callable[[Any], T]] = None,
 ) -> T:
-    
     if isinstance(object_data, BaseModel):
         object_data = object_data.dict()
 
@@ -70,7 +68,6 @@ def update_object(
     parser: Optional[Callable[[Any], T]] = None,
     id_key: str = "id",
 ) -> T:
-    
     values = {}
     for column in table.columns:
         if column.name != "data" and column.name in object_data:
@@ -81,7 +78,7 @@ def update_object(
 
     if user_id is not None:
         values["updated_by"] = user_id
-        
+
     stmt = (
         sa.update(table)
         .values(**values)
@@ -90,7 +87,7 @@ def update_object(
     )
 
     result = conn.execute(stmt).first()
-    
+
     if parser is not None:
         return parser(result)
     else:
@@ -103,7 +100,6 @@ def delete_object(
     object_id: Union[str, UUID, int],
     id_key: str = "id",
 ):
-
     # Check if object exists
     stmt = sa.select(table).where(table.c[id_key] == object_id)
     result = conn.execute(stmt).fetchone()
