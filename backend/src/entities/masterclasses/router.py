@@ -21,7 +21,7 @@ def get_all_masterclasses(
 ):
     with engine.begin() as conn:
         masterclasses = masterclass_service.get_all_masterclasses(conn)
-        return masterclasses
+        return list(masterclasses)
 
 
 @router.get("/masterclass/{masterclass_id}")
@@ -41,7 +41,7 @@ def get_masterclasses_by_user(
 ):
     with engine.begin() as conn:
         masterclasses = masterclass_service.get_masterclasses_by_user(conn, user_id)
-        return masterclasses
+        return list(masterclasses)
 
 
 @router.post("/masterclass")
