@@ -14,7 +14,6 @@ class BiographyCreate(BaseModel):
     type: str
     status: str = "created"
     image_id: UUID | None
-    created_by: UUID
 
 class Biography(BiographyCreate):
     id: UUID

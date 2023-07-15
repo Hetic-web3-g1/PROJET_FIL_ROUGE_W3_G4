@@ -8,7 +8,6 @@ class VideoCreate(BaseModel):
     duration: float
     status: str
     file_name: str
-    created_by: UUID
 
 class Video(VideoCreate):
     id: UUID
