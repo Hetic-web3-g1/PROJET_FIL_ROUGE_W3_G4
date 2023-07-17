@@ -5,7 +5,7 @@ from datetime import datetime
 
 class S3ObjectCreate(BaseModel):
     object_key: str
-    original_filename: str | None
+    filename: str | None
     bucket: str
     public: bool
     major_type: str | None

@@ -1,4 +1,4 @@
-import mimetypes
+import magic
 from fastapi import HTTPException, UploadFile
 from botocore.exceptions import ClientError
 
@@ -25,9 +25,14 @@ def check_mimetype(file: UploadFile):
         "image": ["jpg", "jpeg", "png", "svg"],
         "video": ["mp4"],
         "application": ["pdf"],
+        "text": ["srt"],
     }
 
-    mime_type, _ = mimetypes.guess_type(file.filename)
+    # Use python-magic to detect the file's actual MIME type based on its content
+    mime_type = magic.from_buffer(file.file.read(1024), mime=True)
+    file.file.seek(0)
+
+    # mime_type, _ = mimetypes.guess_type(file.filename)
     if mime_type is None:
         raise HTTPException(status_code=400, detail="No file type not supported")
 
@@ -42,7 +47,7 @@ def check_mimetype(file: UploadFile):
     return major_type, minor_type
 
 
-def file_validation(file: UploadFile) -> None:
+def file_validation(file: UploadFile) -> tuple:
     """
     Validate the file.
 
@@ -57,7 +62,7 @@ def file_validation(file: UploadFile) -> None:
         HTTPException: File too large.
 
     Returns:
-        None: If no error.
+        tuple: The major and minor type of the file.
     """
     KB = 1000
     MB = KB * KB
@@ -86,8 +91,8 @@ def file_validation(file: UploadFile) -> None:
             detail=f"File too large, max size is 10MB, this file weight {size} bytes",
         )
 
-    check_mimetype(file)
-    return None
+    type = check_mimetype(file)
+    return type
 
 
 def create_presigned_url(bucket_name, object_name, expiration=3600):

@@ -65,7 +65,7 @@ services:
     restart: unless-stopped
     command: /bin/sh -c "cp -R ./config.docker config.json && yarn start"
     networks:
-      - back-network
+      - app-network
 
 networks:
   app-network:
