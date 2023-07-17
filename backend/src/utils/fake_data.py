@@ -155,12 +155,12 @@ def create_fixed_masterclass_fake():
         create_fixed_masterclass(conn, masterclass, user)
 
 
-def create_partition_fake():
-    with engine.begin() as conn:
-        partition = PartitionCreate(
-            **{"status": "created", "file_name": Faker().word()}
-        )
-        create_partition(conn, partition, user)
+# def create_partition_fake():
+#     with engine.begin() as conn:
+#         partition = PartitionCreate(
+#             **{"status": "created", "file_name": Faker().word()}
+#         )
+#         create_partition(conn, partition, user)
 
 
 # def create_tag_fake():
@@ -285,7 +285,7 @@ def generate_data():
         # image_table: create_image_fake,
         masterclass_table: create_masterclass_fake,
         masterclass_user_table: assign_user_to_masterclass_fake,
-        partition_table: create_partition_fake,
+        # partition_table: create_partition_fake,
         # tag_table: create_tag_fake,
         # video_table: create_video_fake,
         work_analysis_table: create_work_analyse_fake,

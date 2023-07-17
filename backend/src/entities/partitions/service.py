@@ -91,7 +91,7 @@ def update_partition(
     if check is None:
         raise PartitionNotFound
 
-    result = db_srv.update_object(
+    result = db_service.update_object(
         conn, partition_table, partition_id, partition.dict(), user_id=user.id
     )
     return _parse_row(result)
@@ -113,4 +113,4 @@ def delete_partition(conn: Connection, connection_id: UUID) -> None:
     if check is None:
         raise PartitionNotFound
 
-    db_srv.delete_object(conn, partition_table, connection_id)
+    db_service.delete_object(conn, partition_table, connection_id)
