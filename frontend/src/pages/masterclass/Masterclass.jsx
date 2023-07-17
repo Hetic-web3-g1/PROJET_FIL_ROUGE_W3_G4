@@ -1,4 +1,5 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useContext} from "react";
+import { ReactReduxContext } from 'react-redux'
 
 import './Masterclass.css'
 
@@ -7,11 +8,26 @@ import { Tabs } from "../../components/tabs/Tabs";
 import { UploadCard } from "../../components/upload/UploadCard";
 
 import MasterClassData from '../../mocks/masterClassMocks'
+import DashboardVideo from "../../components/dashboard/DashboardVideo";
 
 export const Masterclass = () => {
 
+  const { store } = useContext(ReactReduxContext)
+
   const [component, setComponent] = useState('');
   const [tabName, setTabName] = useState('');
+  const [masterclassData, setMasterclassData] = useState();
+  const masterclassId = window.location.href.split('/')[4];
+  
+  useEffect(() => {
+    const Options = {
+      method: 'GET',
+      headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}`},
+    };
+    fetch(`http://localhost:4000/masterclasses/${masterclassId}`, Options).then((response) => response.json()).then(data => {
+      setMasterclassData(data)
+    });
+  },[])
 
   /**
    * Get data from tabs component and depending of the value set the corresponding component in the HTML.
@@ -29,7 +45,7 @@ export const Masterclass = () => {
         break;
 
       case 'Video':
-      setComponent(<></>);
+      setComponent(<DashboardVideo/>);
       break;
 
       case 'Partition':
@@ -60,12 +76,15 @@ export const Masterclass = () => {
     <div className="masterclass-page">
       <Header/>
 
-      <div style={tabName !== 'Masterclass' ? {display: 'none'} : null} className="masterclass-page-container">
+      <div  className="masterclass-page-container">
 
-        <div className="masterclass-overview">
-          <h1>{MasterClassData.title}</h1>
-
-          <div className="masterclass-information">
+        <div className="masterclass-overview" >
+          
+          <h1 >{MasterClassData.title}</h1>
+          <div style={tabName !== 'Masterclass' ? {display: 'none'} : null}>
+            
+          
+          <div className="masterclass-information" >
 
             <div className="masterclass-information-col">
               <section>
@@ -90,7 +109,7 @@ export const Masterclass = () => {
               </section>
             </div>
 
-            <div className="masterclass-information-col">
+            <div className="masterclass-information-col" >
               <section>
                 <span className="masterclass-span">Piece</span>
                 <span>{MasterClassData.piece}</span>
@@ -113,36 +132,38 @@ export const Masterclass = () => {
               </section>
             </div>
           </div>
+          </div>
         </div>
-        <div className="masterclass-status">
+        <div className="masterclass-status" style={tabName !== 'Masterclass' ? {display: 'none'} : null} >
           <h2>Status</h2>
           <section className="masterclass-section-status">
             <span>Team</span>
-            <img src="src\assets\status\done.svg" alt="done" />
+            <img src="..\src\assets\status\done.svg" alt="done" />
           </section>
           <section className="masterclass-section-status">
             <span>Video</span>
-            <img src="src\assets\status\incomplete.svg" alt="incomplete" />
+            <img src="..\src\assets\status\incomplete.svg" alt="incomplete" />
           </section>
           <section className="masterclass-section-status">
             <span>Partition</span>
-            <img src="src\assets\status\incomplete.svg" alt="incomplete" />
+            <img src="..\src\assets\status\incomplete.svg" alt="incomplete" />
           </section>
           <section className="masterclass-section-status">
             <span>Biographie P.</span>
-            <img src="src\assets\status\done.svg" alt="done" />
+            <img src="..\src\assets\status\done.svg" alt="done" />
           </section>
           <section className="masterclass-section-status">
             <span>Biographie C.</span>
-            <img src="src\assets\status\incomplete.svg" alt="incomplete" />
+            <img src="..\src\assets\status\incomplete.svg" alt="incomplete" />
           </section>
           <section className="masterclass-section-status">
             <span>Work Analysis</span>
-            <img src="src\assets\status\done.svg" alt="done" />
+            <img src="..\src\assets\status\done.svg" alt="done" />
           </section>
         </div>
 
       </div>
+      
 
       <Tabs callback={handleCallback}/>
 
@@ -151,6 +172,7 @@ export const Masterclass = () => {
       </div>
 
     </div>
+
     );
 }
 

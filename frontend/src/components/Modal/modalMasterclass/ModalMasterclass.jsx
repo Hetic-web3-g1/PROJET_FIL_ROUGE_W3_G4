@@ -9,43 +9,65 @@ import Instruments from '../../../constants/instruments'
 import Field from '../../field/Field'
 import Uploadcard from '../../upload/UploadCard'
 
-export const ModalMasterClass = ({ biography, content, handleClose, handleSave }) => {
+export const ModalMasterClass = ({ handleClose, store }) => {
 
     const [instrument, setInstrument] = React.useState('');
+    const [composer, setComposer] = React.useState('');
+    const [piece, setPiece] = React.useState('');
+    const [professor, setProfessor] = React.useState('');
+    const [description, setDescription] = React.useState('');
+    const [title, setTitle] = React.useState('');
+
+    const createdBy = store.getState().user.profile.id;
+    const academyId = store.getState().user.profile.academy_id;
 
     const handleInstrument = (instrument) => {
-        setInstrument(instrument);
+        setInstrument([instrument]);
+    };
+
+    const handleSave = () => {
+        const masterclassOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}` },
+            body: JSON.stringify({
+                academy_id: academyId,
+                title: title,
+                description: description,
+                //teacher_bio_id: professor,
+                //composer_bio_id: composer,
+                //partition_id: piece,
+                instrument: instrument,
+                created_by: createdBy,
+            }),
+        };
+        fetch(`http://localhost:4000/masterclasses/masterclass`, masterclassOptions).then((response) => response.json()).then(data => {
+            if (data?.detail[0].msg != "field required") {
+                handleClose();
+            } else {
+                alert('Invalid data');
+            }
+        });
     };
 
     const masterclassContent = (
-        <div className="modal-masterclass-content">
+        <form className="modal-masterclass-content">
             <div className="modal-masterclass-infos">
                 <div className="modal-masterclass-infos-1">
                     <div className="modal-masterclass-infos-field">
-                        Composer
-                        <Field placeholder="Composer"/>
+                        Title
+                        <Field placeholder="Title" onChange={(e) => setTitle(e.target.value)}/>
                     </div>
                     <div className="modal-masterclass-infos-field">
-                        Piece
+                        Partition
                         <Field placeholder="Piece"/>
                     </div>
-                    <div className="modal-masterclass-infos-element">
+                    <div className="modal-masterclass-infos-field">
                         Professor
                         <Field placeholder="Professor"/>
                     </div>
-                </div>
-                <div className="modal-masterclass-infos-2">
                     <div className="modal-masterclass-infos-field">
-                        Student
+                        Composer
                         <Field placeholder="Student"/>
-                    </div>
-                    <div className="modal-masterclass-infos-field">
-                        Producer
-                        <Field placeholder="Producer"/>
-                    </div>
-                    <div className="modal-masterclass-infos-element">
-                        Spoken Language
-                        <Field placeholder="Spoken Language"/>
                     </div>
                 </div>
             </div>
@@ -61,13 +83,11 @@ export const ModalMasterClass = ({ biography, content, handleClose, handleSave }
                     })}
                 </div>
             </div>
-            <div className="modal-masterclass-background-wrapper">
-                Background Image
-                <div className="modal-masterclass-background-upload">
-                    <Uploadcard/>
-                </div>
+            <div style={{ display: 'flex','flexDirection': 'column'}}>
+                <span>Description</span>
+                <textarea className="modal-bio-prof-textarea" placeholder="..." row='20' onChange={(e) => setDescription(e.target.value)}/>
             </div>
-        </div>
+        </form>
     );
 
     return(

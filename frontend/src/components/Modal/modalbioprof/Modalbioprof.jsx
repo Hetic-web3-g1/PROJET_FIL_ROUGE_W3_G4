@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import propTypes from 'prop-types'
 
 
@@ -9,24 +9,54 @@ import './modalbioprof.css'
 import Instruments from '../../../constants/instruments'
 import Field from '../../field/Field'
 import Uploadcard from '../../upload/UploadCard'
-import Professorfields from '../../professorfields/Professorfields'
 
 
-export const ModalBioProf = ({ biography, content, handleClose, handleSave, isChecked }) => {
+export const ModalBioProf = ({ handleClose, store }) => {
 
-    const [status, setStatus] = React.useState(isChecked = 1);
+    const [status, setStatus] = React.useState(1);
+    const [instrument, setInstrument] = React.useState([]);
+    const [firstName, setFirstName] = React.useState('');
+    const [lastName, setLastName] = React.useState('');
+    const [bio, setBio] = React.useState('');
+    const [nationality, setNationality] = React.useState('');
+    const [website, setWebsite] = React.useState('');
+    const [awards, setAwards] = React.useState([]);
+    const [type, setType] = React.useState('Professor');
+
+    const createdBy = store.getState().user.profile.id;
 
     const radioHandler = (status) => {
         setStatus(status);
-      };
-
-    const [instrument, setInstrument] = React.useState('');
-
-    const handleInstrument = (instrument) => {
-        setInstrument(instrument);
     };
 
+    const handleInstrument = (instrument) => {
+        setInstrument([instrument]);
+    };
 
+    const handleSave = () => {
+        const bioOptions = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}` },
+          body : JSON.stringify({
+                instrument: instrument,
+                first_name: firstName,
+                last_name: lastName,
+                bio: bio,
+                nationality: nationality,
+                website: website,
+                awards: awards,
+                type: type,
+                created_by: createdBy,
+            }),
+        };
+        fetch('http://localhost:4000/biographies/biography', bioOptions).then((response) => response.json()).then(data => {
+          if (data?.detail[0].msg != "field required") {
+            handleClose();
+          } else {
+            alert('Invalid data');
+          }
+        });
+    };
 
     const bioContent = (
         <div className="modal-bio-prof-content">
@@ -34,27 +64,24 @@ export const ModalBioProf = ({ biography, content, handleClose, handleSave, isCh
                 <div className="modal-bio-prof-infos-1">
                     <div className="modal-bio-prof-infos-field marg-right">
                         First Name
-                        <Field placeholder="First Name"/>
+                        <Field placeholder="First Name" onChange={(e) => setFirstName(e.target.value)}/>
                     </div>
                     <div className="modal-bio-prof-infos-field marg-right">
                         Last Name
-                        <Field placeholder="Last Name"/>
+                        <Field placeholder="Last Name" onChange={(e) => setLastName(e.target.value)}/>
                     </div>
                     <div className="modal-bio-prof-infos-checkbox">
                         <div className="modal-bio-prof-infos-element">
-                            <input checked={status === 1} onClick={(e) => radioHandler(1)}  type='radio' id='radio-1' placeholder="Professor" name='user' unchecked/>
+                            <input checked={status === 1} onClick={(e) => {radioHandler(1); setType('Professor')}}  type='radio' id='radio-1' placeholder="Professor" name='user' unchecked/>
                             <span>Professor</span>
 
                         </div>
                         <div className="modal-bio-prof-infos-element">
-                            <input checked={status === 2} onClick={(e) => radioHandler(2)} type='radio' id='radio-2' placeholder="Compositor" name='user' unchecked/>
+                            <input checked={status === 2} onClick={(e) => {radioHandler(2); setType('Compositor')}} type='radio' id='radio-2' placeholder="Compositor" name='user' unchecked/>
                             <span>Compositor</span>
 
                         </div>
                     </div>
-                    {/* <div className='upload-avatar'>
-                        <input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg"/>
-                    </div> */}
                         <div className="modal-bio-prof-background-wrapper">
                         <span>Avatar</span>
                             <div className="modal-bio-prof-background-upload">
@@ -77,12 +104,28 @@ export const ModalBioProf = ({ biography, content, handleClose, handleSave, isCh
                 </div>
             </div>
 
-            { status === 1 ? < Professorfields/> : null }
-            { status === 2 ? null : null }
+            { status === 1 ?        
+                <div>
+                    <div className='field-container'>
+                        <div className='modal-bio-prof-infos-field marg-right'>
+                            <span>Nationality</span>
+                            <Field placeholder="Nationality" onChange={(e) => setNationality(e.target.value)}/>
+                        </div>
+                        <div className='modal-bio-prof-infos-field fix-width'>
+                            <span>Website</span>
+                            <Field placeholder="Website" onChange={(e) => setWebsite(e.target.value)}/>
+                        </div>
+                    </div>
+                    <div className='modal-bio-prof-infos-field full-width'>
+                        <span>Awards</span>
+                        <Field placeholder="Awards" onChange={(e) => setAwards([e.target.value])}/>
+                    </div>
+                </div> 
+            : null }
    
             <div style={{ display: 'flex','flex-direction': 'column'}}>
                 <span>Biography</span>
-                <textarea className="modal-bio-prof-textarea" placeholder="..." row='20'/>
+                <textarea className="modal-bio-prof-textarea" placeholder="..." row='20' onChange={(e) => setBio(e.target.value)}/>
             </div>
         </div>
     );

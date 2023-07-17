@@ -13,15 +13,17 @@ import {
 
 import profile from '../reducers/profile';
 import filters from '../reducers/filters';
+import academy from '../reducers/academy';
 
 const persistConfig = {
-  key: ['user', 'filters'],
+  key: ['user', 'filters', 'academy'],
   storage,
 };
 
 const reducers = combineReducers({
   user: profile,
-  filters: filters
+  filters: filters,
+  academy: academy,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);

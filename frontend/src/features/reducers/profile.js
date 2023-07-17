@@ -5,11 +5,11 @@ const initialState = {
     firstName: '',
     lastName: '',
     telephone: '',
-    age: 66,
+    age: '',
     email: '',
     interests: [],
     profileImage: '',
-    token: '',
+    id: '',
   },
   user_token: '',
 }
@@ -36,8 +36,7 @@ const reducer = (state = initialState, action) => {
         }
       case Types.DISCONNECT:
         return {
-          ...state,
-          user_token: '',
+          initialState,
         }
       default:
         return state;

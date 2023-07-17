@@ -23,6 +23,7 @@ from src.entities.timecodes.models import *
 from src.entities.users.models import *
 from src.entities.videos.models import *
 from src.entities.work_analyses.models import *
+from src.utils.log.log_table import *
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
