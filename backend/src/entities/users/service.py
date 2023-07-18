@@ -131,7 +131,9 @@ def create_user(conn: Connection, new_user: UserCreate, user: User) -> User:
     if check is not None:
         raise EmailAlreadyExist
 
-    result = db_srv.create_object(conn, user_table, new_user.dict(), user_id=user.id)
+    result = db_service.create_object(
+        conn, user_table, new_user.dict(), user_id=user.id
+    )
     return _parse_row(result)
 
 

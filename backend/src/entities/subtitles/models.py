@@ -9,9 +9,10 @@ subtitle_table = Table(
     "subtitle",
     metadata,
     Column("id", UUID(as_uuid=True), primary_key=True, unique=True, default=uuid4),
-    Column("video_id", UUID(as_uuid=True), ForeignKey("video.id"), nullable=False),
+    Column("name", String(), nullable=False),
     Column("language", String(), nullable=False),
     Column("status", String(), nullable=False, default="created"),
+    Column("video_id", UUID(as_uuid=True), ForeignKey("video.id"), nullable=False),
     Column(
         "s3_object_id",
         UUID(as_uuid=True),

@@ -8,7 +8,6 @@ from src.database.db_engine import engine
 from .schemas import Partition, PartitionCreate
 from ..users.schemas import User
 from .models import partition_table
-from ..users.models import user_table
 from .exceptions import PartitionNotFound
 
 

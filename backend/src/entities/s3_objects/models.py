@@ -9,7 +9,7 @@ s3_object_table = Table(
     "s3_object",
     metadata,
     Column("id", UUID(as_uuid=True), primary_key=True, default=uuid4),
-    Column("object_key", UUID(as_uuid=True), nullable=False),
+    Column("object_key", String, nullable=False),
     Column("filename", String, nullable=False),
     Column("bucket", String, nullable=False),
     Column("public", Boolean, nullable=False),

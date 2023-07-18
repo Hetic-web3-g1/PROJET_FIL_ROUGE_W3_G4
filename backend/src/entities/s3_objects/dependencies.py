@@ -6,7 +6,7 @@ from src.utils.s3.s3_engine import s3_client
 
 
 # TODO give the url for a true validation of the file
-def check_mimetype(file: UploadFile):
+def check_mimetype(file: UploadFile, file_type: str):
     """
     Check if the mimetype is supported.
 
@@ -21,18 +21,23 @@ def check_mimetype(file: UploadFile):
     Returns:
         tuple: The major and minor type of the file.
     """
+    conversion_file_types = {
+        "image": "image",
+        "video": "video",
+        "partition": "application",
+        "subtitle": "application",
+    }
+
     supported_file_types = {
         "image": ["jpg", "jpeg", "png", "svg"],
         "video": ["mp4"],
-        "application": ["pdf"],
-        "text": ["srt"],
+        "application": ["pdf", "x-subrip"],
     }
 
     # Use python-magic to detect the file's actual MIME type based on its content
     mime_type = magic.from_buffer(file.file.read(1024), mime=True)
     file.file.seek(0)
 
-    # mime_type, _ = mimetypes.guess_type(file.filename)
     if mime_type is None:
         raise HTTPException(status_code=400, detail="No file type not supported")
 
@@ -41,18 +46,22 @@ def check_mimetype(file: UploadFile):
     if major_type not in supported_file_types:
         raise HTTPException(status_code=400, detail="File type not supported")
 
+    if conversion_file_types[file_type] != major_type:
+        raise HTTPException(status_code=400, detail="File type not supported")
+
     if minor_type not in supported_file_types[major_type]:
         raise HTTPException(status_code=400, detail="File type not supported")
 
     return major_type, minor_type
 
 
-def file_validation(file: UploadFile) -> tuple:
+def file_validation(file: UploadFile, file_type: str) -> tuple:
     """
     Validate the file.
 
     Args:
         file (UploadFile): The file to upload.
+        file_type (str): The type of the file.
 
     Raises:
         HTTPException: No file provided
@@ -91,11 +100,11 @@ def file_validation(file: UploadFile) -> tuple:
             detail=f"File too large, max size is 10MB, this file weight {size} bytes",
         )
 
-    type = check_mimetype(file)
+    type = check_mimetype(file, file_type)
     return type
 
 
-def create_presigned_url(bucket_name, object_name, expiration=3600):
+def create_presigned_url(bucket_name, object_key, expiration=3600):
     """
     Generate a presigned URL to share an S3 object
 
@@ -110,7 +119,7 @@ def create_presigned_url(bucket_name, object_name, expiration=3600):
     try:
         response = s3_client.generate_presigned_url(
             "get_object",
-            Params={"Bucket": bucket_name, "Key": object_name},
+            Params={"Bucket": bucket_name, "Key": object_key},
             ExpiresIn=expiration,
         )
     except ClientError as e:

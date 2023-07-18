@@ -4,7 +4,7 @@ from datetime import datetime
 
 
 class ImageCreate(BaseModel):
-    title: str
+    name: str | None
     s3_object_id: UUID
 
 

@@ -4,10 +4,10 @@ from datetime import datetime
 
 
 class VideoCreate(BaseModel):
-    version: float
-    title: str
-    duration: float
-    status: str
+    name: str | None
+    duration: float | None
+    status: str | None
+    version: float | None
     s3_object_id: UUID
 
 

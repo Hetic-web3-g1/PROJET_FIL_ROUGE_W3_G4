@@ -4,9 +4,10 @@ from datetime import datetime
 
 
 class SubtitleCreate(BaseModel):
-    video_id: UUID
+    name: str | None
     language: str
-    status: str = "created"
+    status: str | None
+    video_id: UUID | None
     s3_object_id: UUID
 
 
