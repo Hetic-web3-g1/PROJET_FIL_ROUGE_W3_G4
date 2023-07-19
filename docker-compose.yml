@@ -47,16 +47,6 @@ services:
     networks:
       - db-network
 
-  # meilisearch:
-  #   container_name: meilisearch
-  #   image: getmeili/meilisearch:latest
-  #   ports:
-  #     - 7700:7700
-  #   depends_on:
-  #     - db
-  #   networks:
-  #     - db-network
-
   # grafana:
   #     container_name: grafana
   #     image: grafana/grafana:latest

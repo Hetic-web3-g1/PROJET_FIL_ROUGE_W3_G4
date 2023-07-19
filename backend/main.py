@@ -3,7 +3,6 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from config import settings
 
-# from utils.meilisearch import search
 from src.utils.fake_data import generate_data
 
 origins = []
