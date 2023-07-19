@@ -16,7 +16,6 @@ class Settings(BaseSettings):
     jwt_private_key: str
 
     # external keys
-    meilisearch_masterkey: str | None = None
     sendgrid_api_key: str
 
     class Config:

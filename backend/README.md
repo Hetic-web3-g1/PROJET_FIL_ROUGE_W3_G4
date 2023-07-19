@@ -14,15 +14,27 @@ If the version of python (via `python -V`) is the the same of the version select
 ### Env file Structure
 
 ```TOML
-DATABASE_URL = # database_url (format: "postgresql+psycopg2://scott:tiger@localhost:5432")
-MAIN_DATABASE_NAME = # ""
-LOGS_DATABASE_NAME = # ""
+DATABASE_HOST = "postgres"
+POSTGRES_USER = "changeme"
+POSTGRES_PASSWORD = "changeme"
+POSTGRES_HOSTNAME = "db-postgres"
+POSTGRES_PORT = "5432"
+POSTGRES_DB = "db_saline_royale"
 
-RESET_TOKEN_KEY = # ""
-JWT_PRIVATE_KEY = # ""
+# S3
+SCALITY_ACCESS_KEY_ID=changeme
+SCALITY_SECRET_ACCESS_KEY=changeme
+S3_HOSTNAME=changeme
+S3_PORT=changeme
+BUCKET_NAME=changeme
 
-MEILISEARCH_MASTERKEY = # ""
-SENDGRIP_API_KEY = # ""
+# Hash keys
+RESET_TOKEN_KEY="changeme"
+JWT_PRIVATE_KEY="changeme"
+
+# External keys
+SENDGRID_API_KEY="changeme"
+
 ```
 
 ## Install
@@ -32,7 +44,7 @@ pyenv install
 poetry install
 ```
 
-This will install the pythoin version for the project and create a python virtual environment and install all the dependencies.
+This will install the python version for the project and create a python virtual environment and install all the dependencies.
 
 ## Run
 
