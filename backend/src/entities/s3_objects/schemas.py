@@ -4,12 +4,12 @@ from datetime import datetime
 
 
 class S3ObjectCreate(BaseModel):
-    object_key: str | None
-    filename: str | None
+    object_key: str
+    filename: str
     bucket: str
     public: bool
-    major_type: str | None
-    minor_type: str | None
+    major_type: str
+    minor_type: str
 
 
 class S3Object(S3ObjectCreate):

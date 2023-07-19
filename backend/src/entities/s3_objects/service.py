@@ -1,7 +1,6 @@
 from fastapi import UploadFile
 from uuid import uuid4, UUID
 from typing import Optional
-from datetime import timezone
 import os
 
 import sqlalchemy as sa
@@ -30,6 +29,19 @@ def _parse_row(row: sa.Row):
     return S3Object(**row._asdict())
 
 
+def get_all_buckets_and_all_s3_objects():
+    """
+    Get all buckets and objects from S3.
+
+    Returns:
+        dict: The buckets and objects.
+    """
+    response_bucket = s3_client.list_buckets()
+    response_object = s3_client.list_objects_v2(Bucket=settings.bucket_name)
+
+    return response_bucket["Buckets"], response_object
+
+
 def get_s3_object_by_id(conn: Connection, s3_object_id: UUID) -> S3Object:
     """
     Get a s3_object by its id.
@@ -46,6 +58,88 @@ def get_s3_object_by_id(conn: Connection, s3_object_id: UUID) -> S3Object:
     if result is None:
         raise s3ObjectNotFound
     return _parse_row(result)
+
+
+def get_s3_object_by_object_key(conn: Connection, object_key: str) -> S3Object:
+    """
+    Get a s3_object by its object_key.
+
+    Args:
+        object_key (str): The s3_object object_key.
+
+    Returns:
+        S3Object: The s3_object.
+    """
+    result = conn.execute(
+        sa.select(s3_object_table).where(s3_object_table.c.object_key == object_key)
+    ).first()
+    if result is None:
+        raise s3ObjectNotFound
+    return _parse_row(result)
+
+
+def get_url(s3_object: S3Object):
+    """
+    Get presigned url.
+
+    Args:
+        object_key (str): The object_key of the file.
+
+    Returns:
+        str: The presigned url.
+    """
+    with engine.begin() as conn:
+        s3_object = get_s3_object_by_id(conn, s3_object.id)
+
+    if s3_object.public is False:
+        url = s3_dependencies.create_presigned_url(
+            settings.bucket_name, s3_object.object_key
+        )
+        if os.getenv("CONFIG_NAME") == "development":
+            url = str(url).replace("http://s3", "http://localhost")
+
+    else:
+        url = "http://{hostname}:{port}/{bucket}/{key}".format(
+            hostname="localhost"
+            if os.getenv("CONFIG_NAME") == "development"
+            else settings.s3_hostname,
+            port=settings.s3_port,
+            bucket=settings.bucket_name,
+            key=s3_object.object_key,
+        )
+    return url
+
+
+def get_object_info(object_key: str):
+    """
+    Get object info.
+
+    Args:
+        object_key (str): The object_key of the file.
+
+    Returns:
+        dict: The object info.
+    """
+    response = s3_client.head_object(Bucket=settings.bucket_name, Key=object_key)
+    return response
+
+
+def get_url_and_object_info(s3_object_id: UUID):
+    """
+    Get presigned url and object info.
+
+    Args:
+        object_key (str): The object_key of the file.
+
+    Returns:
+        dict: The presigned url and object info.
+    """
+    with engine.begin() as conn:
+        s3_object = get_s3_object_by_id(conn, s3_object_id)
+
+    url = get_url(s3_object)
+    object_info = get_object_info(s3_object.object_key)
+    return {"url": url, "object_info": object_info}
 
 
 def create_s3_object(s3_object: S3ObjectCreate, user: User):
@@ -179,64 +273,3 @@ def upload(
         raise s3Error
 
     return response, result
-
-
-def get_url(id: UUID):
-    """
-    Get presigned url.
-
-    Args:
-        file (UploadFile): The file to upload.
-
-    Returns:
-        str: The presigned url.
-    """
-    with engine.begin() as conn:
-        s3_object = get_s3_object_by_id(conn, id)
-
-    if s3_object.public is False:
-        url = s3_dependencies.create_presigned_url(
-            settings.bucket_name, s3_object.object_key, user_filename="user_filename"
-        )
-        if os.getenv("CONFIG_NAME") == "development":
-            url = str(url).replace("http://s3", "http://localhost")
-
-    else:
-        # Todo replace localhost by real host variable
-        url = "http://{hostname}:{port}/{bucket}/{key}".format(
-            hostname="localhost"
-            if os.getenv("CONFIG_NAME") == "development"
-            else settings.s3_hostname,
-            port=settings.s3_port,
-            bucket=settings.bucket_name,
-            key=s3_object.object_key,
-        )
-    return url
-
-
-def info():
-    response_bucket = s3_client.list_buckets()
-    response_object = s3_client.list_objects_v2(Bucket=settings.bucket_name)
-
-    return response_bucket["Buckets"], response_object
-
-
-def info_object(object_id: str):
-    response_individual_object = s3_client.get_object(
-        Bucket=settings.bucket_name, Key=object_id
-    )
-    last_modified_str = (
-        response_individual_object["LastModified"].astimezone(timezone.utc).isoformat()
-    )
-
-    response_individual_object = {
-        key: value
-        for key, value in response_individual_object.items()
-        if key
-        in {"ResponseMetadata", "AcceptRanges", "ContentLength", "ETag", "Metadata"}
-    }
-    response_individual_object["LastModified"] = last_modified_str
-
-    header = s3_client.head_object(Bucket=settings.bucket_name, Key=object_id)
-
-    return response_individual_object, header
