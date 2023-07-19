@@ -2,7 +2,7 @@ import magic
 from fastapi import HTTPException, UploadFile
 from botocore.exceptions import ClientError
 
-from src.utils.s3.s3_engine import s3_client
+from src.database.s3_engine import s3_client
 
 
 # TODO give the url for a true validation of the file

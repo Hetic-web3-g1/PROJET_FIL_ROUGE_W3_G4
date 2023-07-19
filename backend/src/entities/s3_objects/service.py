@@ -9,7 +9,7 @@ from sqlalchemy.engine import Connection
 from config import settings
 from src.database import service as db_service
 from src.database.db_engine import engine
-from src.utils.s3.s3_engine import s3_client
+from src.database.s3_engine import s3_client
 from .schemas import S3Object, S3ObjectCreate
 from ..images.schemas import ImageCreate
 from ..videos.schemas import VideoCreate
