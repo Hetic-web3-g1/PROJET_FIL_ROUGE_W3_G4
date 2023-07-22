@@ -16,7 +16,7 @@ def _parse_row(row: sa.Row):
     return Partition(**row._asdict())
 
 
-def get_all_partitions(conn: Connection) -> list[Partition]:
+def get_all_partitions(conn: Connection):
     """
     Get all partitions.
 
@@ -24,7 +24,8 @@ def get_all_partitions(conn: Connection) -> list[Partition]:
         Partitions: Dict of Partition objects.
     """
     result = conn.execute(sa.select(partition_table)).fetchall()
-    return [_parse_row(row) for row in result]
+    for row in result:
+        yield _parse_row(row)
 
 
 def get_partition_by_id(conn: Connection, partition_id: UUID) -> Partition:
@@ -49,7 +50,9 @@ def get_partition_by_id(conn: Connection, partition_id: UUID) -> Partition:
     return _parse_row(result)
 
 
-def create_partition(conn: Connection, partition: PartitionCreate, user: User) -> Partition:
+def create_partition(
+    conn: Connection, partition: PartitionCreate, user: User
+) -> Partition:
     """
     Create a partition.
 
@@ -60,11 +63,15 @@ def create_partition(conn: Connection, partition: PartitionCreate, user: User) -
     Returns:
         Partition: The created Partition object.
     """
-    result = db_srv.create_object(conn, partition_table, partition.dict(), user_id=user.id)
+    result = db_srv.create_object(
+        conn, partition_table, partition.dict(), user_id=user.id
+    )
     return _parse_row(result)
 
 
-def update_partition(conn: Connection, partition_id: UUID, partition: PartitionCreate, user: User) -> Partition:
+def update_partition(
+    conn: Connection, partition_id: UUID, partition: PartitionCreate, user: User
+) -> Partition:
     """
     Update a partition.
 
@@ -85,7 +92,9 @@ def update_partition(conn: Connection, partition_id: UUID, partition: PartitionC
     if check is None:
         raise PartitionNotFound
 
-    result = db_srv.update_object(conn, partition_table, partition_id, partition.dict(), user_id=user.id)
+    result = db_srv.update_object(
+        conn, partition_table, partition_id, partition.dict(), user_id=user.id
+    )
     return _parse_row(result)
 
 
