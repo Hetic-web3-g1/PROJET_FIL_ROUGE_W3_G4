@@ -2,6 +2,9 @@ from pydantic import BaseModel
 from typing import List
 from uuid import UUID
 from datetime import datetime
+from sqlalchemy.orm import sessionmaker, relationship
+from ..tags.schemas import Tag
+
 
 class BiographyCreate(BaseModel):
     first_name: str
@@ -14,6 +17,7 @@ class BiographyCreate(BaseModel):
     type: str
     status: str = "created"
     image_id: UUID | None
+
 
 class Biography(BiographyCreate):
     id: UUID

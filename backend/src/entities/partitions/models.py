@@ -14,35 +14,46 @@ partition_table = Table(
     Column("created_at", DateTime(), default=datetime.utcnow, nullable=False),
     Column("updated_at", DateTime(), onupdate=datetime.utcnow, nullable=True),
     Column("created_by", UUID(as_uuid=True), ForeignKey("user.id"), nullable=False),
-    Column("updated_by", UUID(as_uuid=True), ForeignKey("user.id"), nullable=True)
+    Column("updated_by", UUID(as_uuid=True), ForeignKey("user.id"), nullable=True),
 )
 
 partition_annotation_table = Table(
     "partition_annotation",
     metadata,
-    Column("partition_id", UUID(as_uuid=True), ForeignKey("partition.id"), nullable=False),
-    Column("annotation_id", Integer, ForeignKey("annotation.id"), nullable=False)
+    Column(
+        "partition_id", UUID(as_uuid=True), ForeignKey("partition.id"), nullable=False
+    ),
+    Column("annotation_id", Integer, ForeignKey("annotation.id"), nullable=False),
 )
 
 partition_comment_table = Table(
     "partition_comment",
     metadata,
-    Column("partition_id", UUID(as_uuid=True), ForeignKey("partition.id"), nullable=False),
-    Column("comment_id", Integer, ForeignKey("comment.id"), nullable=False)
+    Column(
+        "partition_id", UUID(as_uuid=True), ForeignKey("partition.id"), nullable=False
+    ),
+    Column("comment_id", Integer, ForeignKey("comment.id"), nullable=False),
 )
 
 partition_tag_table = Table(
     "partition_tag",
     metadata,
-    Column("partition_id", UUID(as_uuid=True), ForeignKey("partition.id"), nullable=False),
-    Column("tag_id", Integer, ForeignKey("tag.id"), nullable=False)
+    Column(
+        "partition_id",
+        UUID(as_uuid=True),
+        ForeignKey("partition.id", ondelete="CASCADE"),
+        nullable=False,
+    ),
+    Column("tag_id", Integer, ForeignKey("tag.id", ondelete="CASCADE"), nullable=False),
 )
 
 partition_meta_table = Table(
     "partition_meta",
     metadata,
     Column("id", Integer, primary_key=True, unique=True, nullable=False),
-    Column("partition_id", UUID(as_uuid=True), ForeignKey("partition.id"), nullable=False),
+    Column(
+        "partition_id", UUID(as_uuid=True), ForeignKey("partition.id"), nullable=False
+    ),
     Column("meta_key", String(), nullable=False),
-    Column("meta_value", String(), nullable=False)
+    Column("meta_value", String(), nullable=False),
 )

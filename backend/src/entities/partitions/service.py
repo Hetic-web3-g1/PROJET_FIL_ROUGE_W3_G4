@@ -4,11 +4,9 @@ import sqlalchemy as sa
 from sqlalchemy.engine import Connection
 
 from src.database import db_srv
-from src.database.db_engine import engine
 from .schemas import Partition, PartitionCreate
 from ..users.schemas import User
 from .models import partition_table
-from ..users.models import user_table
 from .exceptions import PartitionNotFound
 
 
@@ -49,7 +47,9 @@ def get_partition_by_id(conn: Connection, partition_id: UUID) -> Partition:
     return _parse_row(result)
 
 
-def create_partition(conn: Connection, partition: PartitionCreate, user: User) -> Partition:
+def create_partition(
+    conn: Connection, partition: PartitionCreate, user: User
+) -> Partition:
     """
     Create a partition.
 
@@ -60,11 +60,15 @@ def create_partition(conn: Connection, partition: PartitionCreate, user: User) -
     Returns:
         Partition: The created Partition object.
     """
-    result = db_srv.create_object(conn, partition_table, partition.dict(), user_id=user.id)
+    result = db_srv.create_object(
+        conn, partition_table, partition.dict(), user_id=user.id
+    )
     return _parse_row(result)
 
 
-def update_partition(conn: Connection, partition_id: UUID, partition: PartitionCreate, user: User) -> Partition:
+def update_partition(
+    conn: Connection, partition_id: UUID, partition: PartitionCreate, user: User
+) -> Partition:
     """
     Update a partition.
 
@@ -85,7 +89,9 @@ def update_partition(conn: Connection, partition_id: UUID, partition: PartitionC
     if check is None:
         raise PartitionNotFound
 
-    result = db_srv.update_object(conn, partition_table, partition_id, partition.dict(), user_id=user.id)
+    result = db_srv.update_object(
+        conn, partition_table, partition_id, partition.dict(), user_id=user.id
+    )
     return _parse_row(result)
 
 

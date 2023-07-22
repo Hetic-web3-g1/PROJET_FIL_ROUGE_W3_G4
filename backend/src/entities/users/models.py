@@ -37,6 +37,11 @@ user_table = Table(
 user_tag_table = Table(
     "user_tag",
     metadata,
-    Column("user_id", UUID(as_uuid=True), ForeignKey("user.id"), nullable=False),
-    Column("tag_id", Integer, ForeignKey("tag.id"), nullable=False),
+    Column(
+        "user_id",
+        UUID(as_uuid=True),
+        ForeignKey("user.id", ondelete="CASCADE"),
+        nullable=False,
+    ),
+    Column("tag_id", Integer, ForeignKey("tag.id", ondelete="CASCADE"), nullable=False),
 )
