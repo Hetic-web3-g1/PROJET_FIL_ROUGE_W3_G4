@@ -26,7 +26,7 @@ def _parse_row_masterclass_user(row: sa.Row):
     return MasterclassUser(**row._asdict())
 
 
-def get_all_masterclasses(conn: Connection) -> list[Masterclass]:
+def get_all_masterclasses(conn: Connection):
     """
     Get all masterclasses.
 
@@ -34,7 +34,8 @@ def get_all_masterclasses(conn: Connection) -> list[Masterclass]:
         Masterclasses: Dict of Masterclass objects.
     """
     result = conn.execute(sa.select(masterclass_table)).fetchall()
-    return [_parse_row(row) for row in result]
+    for row in result:
+        yield _parse_row(row)
 
 
 def get_masterclass_by_id(conn: Connection, masterclass_id: UUID) -> Masterclass:
@@ -74,8 +75,8 @@ def get_masterclasses_by_user(conn: Connection, user_id: UUID):
         .where(masterclass_table.c.created_by == user_id)
         .order_by(masterclass_table.c.created_at)
     ).fetchall()
-
-    return [_parse_row(row) for row in result]
+    for row in result:
+        yield _parse_row(row)
 
 
 def create_masterclass(

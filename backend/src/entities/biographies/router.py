@@ -24,7 +24,7 @@ def get_all_biographies(
 ):
     with engine.begin() as conn:
         response = biography_service.get_all_biographies(conn)
-        return response
+        return list(response)
 
 
 @router.get("/biography/{biography_id}")

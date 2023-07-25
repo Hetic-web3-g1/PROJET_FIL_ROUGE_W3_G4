@@ -14,23 +14,14 @@ router = APIRouter(
 )
 
 
-@router.get("")
-def get_all_users(
-    user: User = Depends(CustomSecurity()),
-):
-    with engine.begin() as conn:
-        response = user_service.get_all_users(conn)
-        return response
-
-
 @router.get("/academy/{academy_id}")
 def get_all_users_by_academy(
     academy_id: UUID,
     user: User = Depends(CustomSecurity()),
 ):
     with engine.begin() as conn:
-        response = user_service.get_all_users_by_academy(conn, academy_id)
-        return response
+        users = user_service.get_all_users_by_academy(conn, academy_id)
+        return list(users)
 
 
 @router.get("/masterclass/{masterclass_id}")
@@ -39,8 +30,8 @@ def get_all_users_by_masterclass(
     user: User = Depends(CustomSecurity()),
 ):
     with engine.begin() as conn:
-        response = user_service.get_all_users_by_masterclass(conn, masterclass_id)
-        return response
+        users = user_service.get_all_users_by_masterclass(conn, masterclass_id)
+        return list(users)
 
 
 @router.get("/user/me")
@@ -70,6 +61,8 @@ def create_academy_user(
             new_user = user_service.create_user(conn, new_user, user)
             token = auth_service.create_reset_token(conn, new_user.id)
             auth_service.send_reset_password_email(new_user.email, token)
+            return new_user
+
     except user_exceptions.EmailAlreadyExist:
         raise HTTPException(
             status_code=400,
@@ -83,7 +76,7 @@ def update_academy_user(
 ):
     try:
         with engine.begin() as conn:
-            user_service.update_user(conn, UUID(user_id), new_user, user)
+            return user_service.update_user(conn, UUID(user_id), new_user, user)
 
     except user_exceptions.UserNotFound:
         raise HTTPException(

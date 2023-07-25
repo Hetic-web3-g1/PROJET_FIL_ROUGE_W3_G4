@@ -23,8 +23,8 @@ def get_all_partitions(
     user: User = Depends(CustomSecurity()),
 ):
     with engine.begin() as conn:
-        response = partition_service.get_all_partitions(conn)
-        return response
+        partitions = partition_service.get_all_partitions(conn)
+        return list(partitions)
 
 
 @router.get("/partition/{partition_id}")
@@ -33,8 +33,8 @@ def get_partition_by_id(
     user: User = Depends(CustomSecurity()),
 ):
     with engine.begin() as conn:
-        response = partition_service.get_partition_by_id(conn, partition_id)
-        return response
+        partition = partition_service.get_partition_by_id(conn, partition_id)
+        return partition
 
 
 @router.post("/partition")

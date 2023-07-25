@@ -14,15 +14,16 @@ def _parse_row(row: sa.Row):
     return WorkAnalysis(**row._asdict())
 
 
-def get_all_work_analysis(conn: Connection) -> list[WorkAnalysis]:
+def get_all_work_analyzes(conn: Connection):
     """
-    Get all work_analysis.
+    Get all work_analyzes.
 
     Returns:
         WorkAnalysis: Dict of WorkAnalysis objects.
     """
     result = conn.execute(sa.select(work_analysis_table)).fetchall()
-    return [_parse_row(row) for row in result]
+    for row in result:
+        yield _parse_row(row)
 
 
 def get_work_analysis_by_id(conn: Connection, work_analysis_id: UUID) -> WorkAnalysis:

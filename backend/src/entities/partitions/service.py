@@ -14,7 +14,7 @@ def _parse_row(row: sa.Row):
     return Partition(**row._asdict())
 
 
-def get_all_partitions(conn: Connection) -> list[Partition]:
+def get_all_partitions(conn: Connection):
     """
     Get all partitions.
 
@@ -22,7 +22,8 @@ def get_all_partitions(conn: Connection) -> list[Partition]:
         Partitions: Dict of Partition objects.
     """
     result = conn.execute(sa.select(partition_table)).fetchall()
-    return [_parse_row(row) for row in result]
+    for row in result:
+        yield _parse_row(row)
 
 
 def get_partition_by_id(conn: Connection, partition_id: UUID) -> Partition:

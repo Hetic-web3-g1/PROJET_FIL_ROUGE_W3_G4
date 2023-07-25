@@ -8,7 +8,7 @@ from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
-    environment: Literal["development", "production"] = os.getenv("CONFIG_NAME")
+    environment: Literal["development", "production"] = os.getenv("CONFIG_NAME")  # type: ignore
     postgres_url: str
 
     # hash keys
@@ -27,4 +27,4 @@ class Settings(BaseSettings):
             raise ValueError(f"No {config}.env file found")
 
 
-settings = Settings()
+settings = Settings()  # type: ignore
