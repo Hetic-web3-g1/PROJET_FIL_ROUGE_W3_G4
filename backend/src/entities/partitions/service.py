@@ -2,20 +2,19 @@ from uuid import UUID
 
 import sqlalchemy as sa
 from sqlalchemy.engine import Connection
-
 from src.database import service as db_service
-from src.database.db_engine import engine
-from .schemas import Partition, PartitionCreate
+
 from ..users.schemas import User
-from .models import partition_table
 from .exceptions import PartitionNotFound
+from .models import partition_table
+from .schemas import Partition, PartitionCreate
 
 
 def _parse_row(row: sa.Row):
     return Partition(**row._asdict())
 
 
-def get_all_partitions(conn: Connection) -> list[Partition]:
+def get_all_partitions(conn: Connection):
     """
     Get all partitions.
 
@@ -23,7 +22,8 @@ def get_all_partitions(conn: Connection) -> list[Partition]:
         Partitions: Dict of Partition objects.
     """
     result = conn.execute(sa.select(partition_table)).fetchall()
-    return [_parse_row(row) for row in result]
+    for row in result:
+        yield _parse_row(row)
 
 
 def get_partition_by_id(conn: Connection, partition_id: UUID) -> Partition:

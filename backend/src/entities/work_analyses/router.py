@@ -9,18 +9,18 @@ from src.database.db_engine import engine
 from ..authentification.dependencies import CustomSecurity
 
 router = APIRouter(
-    prefix="/work_analyses",
+    prefix="/work_analyzes",
     tags=["WorkAnalysis"],
 )
 
 
 @router.get("")
-def get_all_work_analysis(
+def get_all_work_analyzes(
     user: User = Depends(CustomSecurity()),
 ):
     with engine.begin() as conn:
-        response = work_analysis_service.get_all_work_analysis(conn)
-        return response
+        work_analyzes = work_analysis_service.get_all_work_analyzes(conn)
+        return list(work_analyzes)
 
 
 @router.get("/work_analysis/{work_analysis_id}")
@@ -29,8 +29,10 @@ def get_work_analysis_by_id(
     user: User = Depends(CustomSecurity()),
 ):
     with engine.begin() as conn:
-        response = work_analysis_service.get_work_analysis_by_id(conn, work_analysis_id)
-        return response
+        work_analysis = work_analysis_service.get_work_analysis_by_id(
+            conn, work_analysis_id
+        )
+        return work_analysis
 
 
 @router.post("/work_analysis")
@@ -38,7 +40,7 @@ def create_work_analysis(
     new_work_analysis: WorkAnalysisCreate, user: User = Depends(CustomSecurity())
 ):
     with engine.begin() as conn:
-        work_analysis_service.create_work_analysis(conn, new_work_analysis, user)
+        return work_analysis_service.create_work_analysis(conn, new_work_analysis, user)
 
 
 @router.put("/work_analysis/{work_analysis_id}")

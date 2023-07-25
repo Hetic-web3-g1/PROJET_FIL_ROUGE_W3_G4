@@ -2,30 +2,19 @@ from uuid import UUID
 
 import sqlalchemy as sa
 from sqlalchemy.engine import Connection
-
 from src.database import service as db_service
-from .schemas import User, UserCreate
-from .models import user_table
+
 from ..masterclasses.models import masterclass_user_table
 from .exceptions import EmailAlreadyExist, UserNotFound
+from .models import user_table
+from .schemas import User, UserCreate
 
 
 def _parse_row(row: sa.Row):
     return User(**row._asdict())
 
 
-def get_all_users(conn: Connection) -> list[User]:
-    """
-    Get all users.
-
-    Returns:
-        Masterclasses: Dict of Masterclass objects.
-    """
-    result = conn.execute(sa.select(user_table)).fetchall()
-    return [_parse_row(row) for row in result]
-
-
-def get_all_users_by_academy(conn: Connection, academy_id: UUID) -> list[User]:
+def get_all_users_by_academy(conn: Connection, academy_id: UUID):
     """
     Get all users by the given academy.
 
@@ -38,10 +27,11 @@ def get_all_users_by_academy(conn: Connection, academy_id: UUID) -> list[User]:
     result = conn.execute(
         sa.select(user_table).where(user_table.c.academy_id == academy_id)
     ).fetchall()
-    return [_parse_row(row) for row in result]
+    for row in result:
+        yield _parse_row(row)
 
 
-def get_all_users_by_masterclass(conn: Connection, masterclass_id: UUID) -> list[User]:
+def get_all_users_by_masterclass(conn: Connection, masterclass_id: UUID):
     """
     Get all users by the given masterclass.
 
@@ -49,9 +39,9 @@ def get_all_users_by_masterclass(conn: Connection, masterclass_id: UUID) -> list
         masterclass_id (UUID): The id of the masterclass.
 
     Returns:
-        Users: Dict of User objects.
+        Users: Generator of User objects.
     """
-    query = (
+    stmt = (
         sa.select(user_table)
         .select_from(
             sa.join(
@@ -63,8 +53,9 @@ def get_all_users_by_masterclass(conn: Connection, masterclass_id: UUID) -> list
         .where(masterclass_user_table.c.masterclass_id == masterclass_id)
     )
 
-    result = conn.execute(query).fetchall()
-    return [_parse_row(row) for row in result]
+    result = conn.execute(stmt).fetchall()
+    for row in result:
+        yield _parse_row(row)
 
 
 def get_user_by_id(conn: Connection, user_id: UUID) -> User:

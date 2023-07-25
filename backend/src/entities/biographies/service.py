@@ -16,7 +16,7 @@ def _parse_row(row: sa.Row):
     return Biography(**row._asdict())
 
 
-def get_all_biographies(conn: Connection) -> list[Biography]:
+def get_all_biographies(conn: Connection):
     """
     Get all biographies.
 
@@ -24,7 +24,8 @@ def get_all_biographies(conn: Connection) -> list[Biography]:
         Biographies: Dict of Biography objects.
     """
     result = conn.execute(sa.select(biography_table)).fetchall()
-    return [_parse_row(row) for row in result]
+    for row in result:
+        yield _parse_row(row)
 
 
 def get_biography_by_id(con: Connection, biography_id: UUID) -> Biography:

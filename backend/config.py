@@ -1,15 +1,15 @@
 import os
 from typing import Literal
-from sqlalchemy.engine.url import URL
 
 from pydantic import BaseSettings
+from sqlalchemy.engine.url import URL
 
 # Pydantic BaseSetting, permet de declarer un mapping du `.env` .
 # En donnant le chemin d'acces au fichier .env, pydantic gère l'import des variables.
 
 
 class Settings(BaseSettings):
-    environment: Literal["development", "production"] = os.getenv("CONFIG_NAME")
+    environment: Literal["development", "production"] = os.getenv("CONFIG_NAME")  # type: ignore
     postgres_user: str
     postgres_password: str
     postgres_hostname: str
@@ -53,4 +53,4 @@ class Settings(BaseSettings):
             raise ValueError(f"No {config}.env file found")
 
 
-settings = Settings()
+settings = Settings()  # type: ignore
