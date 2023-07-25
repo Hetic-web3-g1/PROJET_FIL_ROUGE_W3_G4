@@ -3,7 +3,7 @@ from uuid import UUID
 import sqlalchemy as sa
 from sqlalchemy.engine import Connection
 
-from src.database import db_srv
+from src.database import service as db_service
 from .schemas import (
     Masterclass,
     MasterclassCreate,
@@ -92,7 +92,7 @@ def create_masterclass(
     Returns:
         Masterclass: The created Masterclass object.
     """
-    result = db_srv.create_object(
+    result = db_service.create_object(
         conn, masterclass_table, masterclass.dict(), user_id=user.id
     )
     return _parse_row(result)
@@ -121,7 +121,7 @@ def update_masterclass(
     if check is None:
         raise MasterclassNotFound
 
-    result = db_srv.update_object(
+    result = db_service.update_object(
         conn, masterclass_table, masterclass_id, masterclass.dict(), user_id=user.id
     )
     return _parse_row(result)
@@ -143,7 +143,7 @@ def delete_masterclass(conn: Connection, masterclass_id: UUID) -> None:
     if check is None:
         raise MasterclassNotFound
 
-    db_srv.delete_object(conn, masterclass_table, masterclass_id)
+    db_service.delete_object(conn, masterclass_table, masterclass_id)
 
 
 # ---------------------------------------------------------------------------------------------------- #
@@ -188,7 +188,7 @@ def update_user_masterclass(conn: Connection, masterclass_user: MasterclassUser)
     if check is None:
         raise MasterclassUserNotFound
 
-    db_srv.update_object(
+    db_service.update_object(
         conn, masterclass_user_table, masterclass_user.id, masterclass_user.dict()
     )
 
@@ -218,7 +218,7 @@ def assign_user_to_masterclass(
         result = update_user_masterclass(conn, new_masterclass_user)
         return result
     else:
-        result = db_srv.create_object(
+        result = db_service.create_object(
             conn, masterclass_user_table, masterclass_user.dict()
         )
         return _parse_row_masterclass_user(result)
@@ -242,4 +242,4 @@ def unassign_user_from_masterclass(
     if check is None:
         raise MasterclassUserNotFound
 
-    db_srv.delete_object(conn, masterclass_user_table, check.id)
+    db_service.delete_object(conn, masterclass_user_table, check.id)

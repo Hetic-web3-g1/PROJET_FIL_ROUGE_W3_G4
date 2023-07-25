@@ -2,12 +2,14 @@ from pydantic import BaseModel
 from uuid import UUID
 from datetime import datetime
 
+
 class VideoCreate(BaseModel):
-    version: float
-    title: str
-    duration: float
-    status: str
-    file_name: str
+    name: str | None
+    duration: float | None
+    status: str | None
+    version: float | None
+    s3_object_id: UUID
+
 
 class Video(VideoCreate):
     id: UUID

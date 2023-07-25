@@ -1,7 +1,7 @@
 import sqlalchemy as sa
 from sqlalchemy.engine import Connection
 
-from src.database import db_srv
+from src.database import service as db_service
 from .schemas import Comment, CommentCreate
 from ..users.schemas import User
 from .models import comment_table
@@ -22,7 +22,7 @@ def create_comment(conn: Connection, comment: CommentCreate, user: User) -> Comm
     Returns:
         Comment: The created Comment object.
     """
-    created_comment = db_srv.create_object(
+    created_comment = db_service.create_object(
         conn, comment_table, comment.dict(), user_id=user.id
     )
     return _parse_row(created_comment)

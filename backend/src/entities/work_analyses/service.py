@@ -3,7 +3,7 @@ from uuid import UUID
 import sqlalchemy as sa
 from sqlalchemy.engine import Connection
 
-from src.database import db_srv
+from src.database import service as db_service
 from .schemas import WorkAnalysis, WorkAnalysisCreate
 from ..users.schemas import User
 from .models import work_analysis_table
@@ -63,7 +63,7 @@ def create_work_analysis(
     Returns:
         WorkAnalysis: The created WorkAnalysis object.
     """
-    result = db_srv.create_object(
+    result = db_service.create_object(
         conn, work_analysis_table, work_analysis.dict(), user_id=user.id
     )
     return _parse_row(result)
@@ -97,7 +97,7 @@ def update_work_analysis(
     if check is None:
         raise WorkAnalysisNotFound
 
-    result = db_srv.update_object(
+    result = db_service.update_object(
         conn,
         work_analysis_table,
         work_analysis_id,
@@ -125,7 +125,4 @@ def delete_work_analysis(conn: Connection, work_analysis_id: UUID) -> None:
     if check is None:
         raise WorkAnalysisNotFound
 
-    db_srv.delete_object(conn, work_analysis_table, work_analysis_id)
-
-    # ('483f0848-320b-44b0-9008-da1064082d0c', 'Yes', ['Smit'], 'Youpilapin', 'created', '2023-07-14 16:11:47.089795', '2023-07-14 16:14:41.985109', '12345648-1234-1234-1234-123456789123', '12345648-1234-1234-1234-123456789123')
-    # (UUID('5a28f399-6b6b-4d3b-85c6-f7d4005e212b'), 'Yes', ['Smit'], 'Youpi', 'created', datetime.datetime(2023, 7, 14, 16, 15, 7, 32526), None, UUID('12345648-1234-1234-1234-123456789123'), None)
+    db_service.delete_object(conn, work_analysis_table, work_analysis_id)

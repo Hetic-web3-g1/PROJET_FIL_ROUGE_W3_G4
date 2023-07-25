@@ -2,11 +2,14 @@ from pydantic import BaseModel
 from uuid import UUID
 from datetime import datetime
 
+
 class SubtitleCreate(BaseModel):
-    video_id: UUID
+    name: str | None
     language: str
-    status: str = "created"
-    file_name: str
+    status: str | None
+    video_id: UUID | None
+    s3_object_id: UUID
+
 
 class Subtitle(SubtitleCreate):
     id: UUID
