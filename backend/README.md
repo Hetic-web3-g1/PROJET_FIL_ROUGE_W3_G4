@@ -13,28 +13,38 @@ If the version of python (via `python -V`) is the the same of the version select
 
 ### Env file Structure
 
+.env
+
 ```TOML
-DATABASE_HOST = "postgres"
-POSTGRES_USER = "changeme"
-POSTGRES_PASSWORD = "changeme"
-POSTGRES_HOSTNAME = "db-postgres"
-POSTGRES_PORT = "5432"
-POSTGRES_DB = "db_saline_royale"
+# Databese
+POSTGRES_USER = ""
+POSTGRES_PASSWORD = ""
+POSTGRES_HOSTNAME = ""
+POSTGRES_PORT = ""
+POSTGRES_DB = ""
 
 # S3
-SCALITY_ACCESS_KEY_ID=changeme
-SCALITY_SECRET_ACCESS_KEY=changeme
-S3_HOSTNAME=changeme
-S3_PORT=changeme
-BUCKET_NAME=changeme
+SCALITY_ACCESS_KEY_ID=
+SCALITY_SECRET_ACCESS_KEY=
+S3_HOSTNAME=
+S3_PORT=
+BUCKET_NAME=
 
 # Hash keys
-RESET_TOKEN_KEY="changeme"
-JWT_PRIVATE_KEY="changeme"
+RESET_TOKEN_KEY=""
+JWT_PRIVATE_KEY=""
 
 # External keys
-SENDGRID_API_KEY="changeme"
+SENDGRID_API_KEY=""
+# MEILISEARCH_MASTERKEY =""
+```
 
+s3-config/credentials
+
+```TOML
+[default]
+aws_access_key_id=
+aws_secret_access_key=
 ```
 
 ## Install

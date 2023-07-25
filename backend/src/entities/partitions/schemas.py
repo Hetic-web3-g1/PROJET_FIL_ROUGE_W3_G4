@@ -4,8 +4,10 @@ from datetime import datetime
 
 
 class PartitionCreate(BaseModel):
-    status: str = "created"
-    file_name: str
+    name: str | None
+    status: str | None
+    s3_object_id: UUID
+
 
 
 class Partition(PartitionCreate):

@@ -2,9 +2,11 @@ from pydantic import BaseModel
 from uuid import UUID
 from datetime import datetime
 
+
 class ImageCreate(BaseModel):
-    title: str
-    file_name: str
+    name: str | None
+    s3_object_id: UUID
+
 
 class Image(ImageCreate):
     id: UUID

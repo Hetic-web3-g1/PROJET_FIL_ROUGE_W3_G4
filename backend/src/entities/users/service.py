@@ -2,12 +2,12 @@ from uuid import UUID
 
 import sqlalchemy as sa
 from sqlalchemy.engine import Connection
+from src.database import service as db_service
 
-from src.database import db_srv
-from .schemas import User, UserCreate
-from .models import user_table
 from ..masterclasses.models import masterclass_user_table
 from .exceptions import EmailAlreadyExist, UserNotFound
+from .models import user_table
+from .schemas import User, UserCreate
 
 
 def _parse_row(row: sa.Row):
@@ -122,7 +122,9 @@ def create_user(conn: Connection, new_user: UserCreate, user: User) -> User:
     if check is not None:
         raise EmailAlreadyExist
 
-    result = db_srv.create_object(conn, user_table, new_user.dict(), user_id=user.id)
+    result = db_service.create_object(
+        conn, user_table, new_user.dict(), user_id=user.id
+    )
     return _parse_row(result)
 
 

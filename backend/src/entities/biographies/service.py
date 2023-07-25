@@ -4,7 +4,8 @@ import sqlalchemy as sa
 from sqlalchemy.engine import Connection
 
 
-from src.database import db_srv
+from src.database import service as db_service
+from src.database.db_engine import engine
 from .schemas import Biography, BiographyCreate
 from ..users.schemas import User
 from .models import biography_table
@@ -62,7 +63,7 @@ def create_biography(
     Returns:
         Biography: The created Biography object.
     """
-    result = db_srv.create_object(
+    result = db_service.create_object(
         conn, biography_table, biography.dict(), user_id=user.id
     )
     return _parse_row(result)
@@ -91,7 +92,7 @@ def update_biography(
     if check is None:
         raise BiographyNotFound
 
-    result = db_srv.update_object(
+    result = db_service.update_object(
         conn, biography_table, biography_id, biography.dict(), user_id=user.id
     )
     return _parse_row(result)
@@ -113,4 +114,4 @@ def delete_biography(conn: Connection, biography_id: UUID) -> None:
     if check is None:
         raise BiographyNotFound
 
-    db_srv.delete_object(conn, biography_table, biography_id)
+    db_service.delete_object(conn, biography_table, biography_id)

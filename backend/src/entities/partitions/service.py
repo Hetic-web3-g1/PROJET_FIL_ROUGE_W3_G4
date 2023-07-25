@@ -2,12 +2,12 @@ from uuid import UUID
 
 import sqlalchemy as sa
 from sqlalchemy.engine import Connection
+from src.database import service as db_service
 
-from src.database import db_srv
-from .schemas import Partition, PartitionCreate
 from ..users.schemas import User
-from .models import partition_table
 from .exceptions import PartitionNotFound
+from .models import partition_table
+from .schemas import Partition, PartitionCreate
 
 
 def _parse_row(row: sa.Row):
@@ -61,7 +61,7 @@ def create_partition(
     Returns:
         Partition: The created Partition object.
     """
-    result = db_srv.create_object(
+    result = db_service.create_object(
         conn, partition_table, partition.dict(), user_id=user.id
     )
     return _parse_row(result)
@@ -90,7 +90,7 @@ def update_partition(
     if check is None:
         raise PartitionNotFound
 
-    result = db_srv.update_object(
+    result = db_service.update_object(
         conn, partition_table, partition_id, partition.dict(), user_id=user.id
     )
     return _parse_row(result)
@@ -112,4 +112,4 @@ def delete_partition(conn: Connection, connection_id: UUID) -> None:
     if check is None:
         raise PartitionNotFound
 
-    db_srv.delete_object(conn, partition_table, connection_id)
+    db_service.delete_object(conn, partition_table, connection_id)

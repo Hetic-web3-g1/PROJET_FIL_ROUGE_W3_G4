@@ -3,15 +3,16 @@ from uuid import UUID
 from datetime import datetime
 
 
-class SubtitleCreate(BaseModel):
-    name: str | None
-    language: str
-    status: str | None
-    video_id: UUID | None
-    s3_object_id: UUID
+class S3ObjectCreate(BaseModel):
+    object_key: str
+    filename: str
+    bucket: str
+    public: bool
+    major_type: str
+    minor_type: str
 
 
-class Subtitle(SubtitleCreate):
+class S3Object(S3ObjectCreate):
     id: UUID
     created_by: UUID
     created_at: datetime
