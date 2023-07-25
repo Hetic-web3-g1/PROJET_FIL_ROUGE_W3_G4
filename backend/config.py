@@ -32,8 +32,8 @@ class Settings(BaseSettings):
     sendgrid_api_key: str
 
     @property
-    def postgres_url(self):
-        url = URL.create(
+    def postgres_url(self) -> URL:
+        return URL.create(
         drivername="postgresql+psycopg2",
         username=self.postgres_user,
         password=self.postgres_password,
@@ -41,7 +41,6 @@ class Settings(BaseSettings):
         port=self.postgres_port,
         database=self.postgres_db,
         )
-        return url.render_as_string(hide_password=False)
 
         
     class Config:

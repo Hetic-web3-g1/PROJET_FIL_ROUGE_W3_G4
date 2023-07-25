@@ -12,10 +12,11 @@
 If the version of python (via `python -V`) is the the same of the version selected with pyenv (via `pyenv local`), check that the path of your python runtime is set to pyenv's shims directory (via `which python`).
 
 ### Env file Structure
+
 .env
+
 ```TOML
 # Databese
-DATABASE_HOST = ""
 POSTGRES_USER = ""
 POSTGRES_PASSWORD = ""
 POSTGRES_HOSTNAME = ""
@@ -39,6 +40,7 @@ SENDGRID_API_KEY=""
 ```
 
 s3-config/credentials
+
 ```TOML
 [default]
 aws_access_key_id=

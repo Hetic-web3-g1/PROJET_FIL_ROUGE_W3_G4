@@ -1,13 +1,9 @@
 from logging.config import fileConfig
 
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
-
 from alembic import context
-
-from src.database.db_engine import metadata
 from config import settings
-
+from sqlalchemy import engine_from_config, pool
+from src.database.db_engine import metadata
 from src.entities.academies.models import *
 from src.entities.annotations.models import *
 from src.entities.authentification.models import *
@@ -16,8 +12,8 @@ from src.entities.comments.models import *
 from src.entities.images.models import *
 from src.entities.masterclasses.models import *
 from src.entities.partitions.models import *
-from src.entities.subtitles.models import *
 from src.entities.s3_objects.models import *
+from src.entities.subtitles.models import *
 from src.entities.tags.models import *
 from src.entities.timecodes.models import *
 from src.entities.users.models import *
@@ -32,8 +28,9 @@ from src.utils.log.log_table import *
 # This line sets up loggers basically.
 config = context.config
 
-config.set_main_option("sqlalchemy.url", str(settings.postgres_url))
-fileConfig(config.config_file_name)
+config.set_main_option("sqlalchemy.url", settings.postgres_url.render_as_string(False))
+if config.config_file_name:
+    fileConfig(config.config_file_name)
 
 # add your model's MetaData object here
 # for 'autogenerate' support
