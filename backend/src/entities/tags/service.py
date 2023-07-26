@@ -2,7 +2,7 @@ import sqlalchemy as sa
 from sqlalchemy.sql import func
 from sqlalchemy.engine import Connection
 
-from src.database import db_srv
+from src.database import service as db_service
 from .schemas import Tag, TagCreate
 from ..biographies.schemas import Biography
 from ..masterclasses.schemas import Masterclass
@@ -173,7 +173,7 @@ def create_tag(conn: Connection, tag: TagCreate, user: User) -> Tag:
     Returns:
         Tag: The created Tag object.
     """
-    result = db_srv.create_object(conn, tag_table, tag.dict())
+    result = db_service.create_object(conn, tag_table, tag.dict())
     return _parse_row(result)
 
 
@@ -188,5 +188,5 @@ def create_link_table(conn: Connection, entity, entity_table, user: User):
     Returns:
         Entity: The created Entity object.
     """
-    result = db_srv.create_object(conn, entity_table, entity.dict())
+    result = db_service.create_object(conn, entity_table, entity.dict())
     return result
