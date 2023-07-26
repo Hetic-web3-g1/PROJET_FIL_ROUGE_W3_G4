@@ -11,7 +11,7 @@ from . import service as masterclass_service
 from ..tags import service as tag_service
 from src.database.db_engine import engine
 from ..authentification.dependencies import CustomSecurity
-from src.utils.sanitize import sanitize_string
+from src.utils.string_utils import sanitizeAndLowerCase
 
 router = APIRouter(
     prefix="/masterclasses",
@@ -62,7 +62,7 @@ def create_masterclass(
 
         for content in tags:
             tag = TagCreate(
-                content=sanitize_string(content), tag_type=str(masterclass_table)
+                content=sanitizeAndLowerCase(content), tag_type=str(masterclass_table)
             )
             created_tag = tag_service.create_tag(conn, tag, user)
             masterclass_tag = MasterclassTag(

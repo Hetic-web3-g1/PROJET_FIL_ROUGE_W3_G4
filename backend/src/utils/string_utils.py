@@ -3,9 +3,6 @@ import re
 
 
 def sanitize_string(input_string: str) -> str:
-    # Lowercase the input_string
-    input_string = input_string.lower()
-
     # Remove accents and special symbols from input_string
     sanitized_string = (
         unicodedata.normalize("NFKD", input_string)
@@ -17,3 +14,9 @@ def sanitize_string(input_string: str) -> str:
     sanitized_string = re.sub(r"[^\w\s]", "", sanitized_string)
 
     return sanitized_string
+
+
+def sanitizeAndLowerCase(input_string: str) -> str:
+    # Lowercase the input_string
+    sanitized_string = sanitize_string(input_string)
+    return sanitized_string.lower()

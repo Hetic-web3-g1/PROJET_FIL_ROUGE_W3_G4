@@ -10,7 +10,7 @@ from . import service as partition_service
 from ..tags import service as tag_service
 from src.database.db_engine import engine
 from ..authentification.dependencies import CustomSecurity
-from src.utils.sanitize import sanitize_string
+from src.utils.string_utils import sanitizeAndLowerCase
 
 router = APIRouter(
     prefix="/partitions",
@@ -44,7 +44,8 @@ def create_partition(
     with engine.begin() as conn:
         created_partition = partition_service.create_partition(conn, partition, user)
         tag = TagCreate(
-            content=sanitize_string(partition.file_name), tag_type=str(partition_table)
+            content=sanitizeAndLowerCase(partition.name),
+            tag_type=str(partition_table),
         )
         created_tag = tag_service.create_tag(conn, tag, user)
         partition_tag = PartitionTag(
