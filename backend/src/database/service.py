@@ -1,5 +1,5 @@
 from uuid import UUID
-from typing import Callable, Optional, TypeVar, Type, Union, Any
+from typing import Callable, Optional, TypeVar, Type, Union, List, Any
 
 from fastapi.encoders import jsonable_encoder
 from pydantic import parse_obj_as
@@ -111,11 +111,37 @@ def delete_object(
     return result.rowcount
 
 
-def delete_multi(conn: Connection, object_name: str, object_key: str, object_id: Any):
-    table = get_table_object(object_name)
+def delete_objects(
+    conn: Connection,
+    table: Table,
+    object_ids: List[Union[str, UUID, int]],
+):
+    if not object_ids:
+        # If the list of object_ids is empty, return immediately
+        return 0
+
+    # Check if objects exist
+    stmt = sa.select(table).where(table.c.id.in_(object_ids))
+    results = conn.execute(stmt).fetchall()
+    existing_ids = {str(row[0]) for row in results}
+
+    # Find IDs that don't exist in the table
+    non_existing_ids = [str(obj_id) for obj_id in object_ids if str(obj_id) not in existing_ids]
+
+    if non_existing_ids:
+        # Return a custom error response indicating the non-existing objects
+        raise ValueError(f"Objects with IDs {non_existing_ids} do not exist")
+
+    # Perform the deletion
+    delete_stmt = table.delete().where(table.c.id.in_(object_ids))
+    result = conn.execute(delete_stmt)
+
+    return result.rowcount
+
+
+def delete_object_column(conn: Connection, table: Table, object_key: str, object_id: Any):
     conn.execute(table.delete(table.c[object_key] == object_id))
 
 
-def clean_table(conn: Connection, object_name: str):
-    table = get_table_object(object_name)
+def clean_table(conn: Connection, table: Table):
     conn.execute(table.delete())

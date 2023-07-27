@@ -4,18 +4,21 @@ import sqlalchemy as sa
 from sqlalchemy.engine import Connection
 
 from src.database import service as db_service
+from ..tags import service as tag_service
 from .schemas import (
     Masterclass,
     MasterclassCreate,
     MasterclassUserCreate,
     MasterclassUser,
 )
+from ..tags.schemas import TagCreate, MasterclassTag
 from ..users.schemas import User
-from .models import masterclass_table, masterclass_user_table
+from .models import masterclass_table, masterclass_user_table, masterclass_tag_table
 from .exceptions import (
     MasterclassNotFound,
     MasterclassUserNotFound,
 )
+from src.utils.string_utils import sanitizeAndLowerCase
 
 
 def _parse_row(row: sa.Row):
@@ -95,6 +98,24 @@ def create_masterclass(
     result = db_service.create_object(
         conn, masterclass_table, masterclass.dict(), user_id=user.id
     )
+
+    tags = [masterclass.title]
+    if masterclass.instrument:
+        tags.extend(masterclass.instrument)
+
+    for content in tags:
+        tag = TagCreate(
+            content=sanitizeAndLowerCase(content), tag_type=str(masterclass_table)
+        )
+        created_tag = tag_service.create_tag(conn, tag, user)
+        masterclass_tag = MasterclassTag(
+            masterclass_id=result.id,
+            tag_id=created_tag.id,
+        )
+        tag_service.create_link_table(
+            conn, masterclass_tag, masterclass_tag_table, user
+        )
+
     return _parse_row(result)
 
 
@@ -144,6 +165,7 @@ def delete_masterclass(conn: Connection, masterclass_id: UUID) -> None:
         raise MasterclassNotFound
 
     db_service.delete_object(conn, masterclass_table, masterclass_id)
+    tag_service.delete_orphaned_tags(conn, masterclass_tag_table, masterclass_table)
 
 
 # ---------------------------------------------------------------------------------------------------- #

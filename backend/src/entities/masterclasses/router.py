@@ -3,15 +3,11 @@ from uuid import UUID
 
 from .schemas import MasterclassCreate, MasterclassUserCreate
 from ..users.schemas import User
-from ..tags.schemas import TagCreate, MasterclassTag
-from src.entities.masterclasses.models import masterclass_table, masterclass_tag_table
 from . import exceptions as masterclass_exceptions
 from ..users import exceptions as user_exceptions
 from . import service as masterclass_service
-from ..tags import service as tag_service
 from src.database.db_engine import engine
 from ..authentification.dependencies import CustomSecurity
-from src.utils.string_utils import sanitizeAndLowerCase
 
 router = APIRouter(
     prefix="/masterclasses",
@@ -53,25 +49,7 @@ def create_masterclass(
     masterclass: MasterclassCreate, user: User = Depends(CustomSecurity())
 ):
     with engine.begin() as conn:
-        created_masterclass = masterclass_service.create_masterclass(
-            conn, masterclass, user
-        )
-        tags = [masterclass.title]
-        if masterclass.instrument:
-            tags.extend(masterclass.instrument)
-
-        for content in tags:
-            tag = TagCreate(
-                content=sanitizeAndLowerCase(content), tag_type=str(masterclass_table)
-            )
-            created_tag = tag_service.create_tag(conn, tag, user)
-            masterclass_tag = MasterclassTag(
-                masterclass_id=created_masterclass.id,
-                tag_id=created_tag.id,
-            )
-            tag_service.create_link_table(
-                conn, masterclass_tag, masterclass_tag_table, user
-            )
+        masterclass_service.create_masterclass(conn, masterclass, user)
 
 
 @router.put("/masterclass/{masterclass_id}")

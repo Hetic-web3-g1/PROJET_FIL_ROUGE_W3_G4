@@ -190,3 +190,22 @@ def create_link_table(conn: Connection, entity, entity_table, user: User):
     """
     result = db_service.create_object(conn, entity_table, entity.dict())
     return result
+
+
+def delete_orphaned_tags(conn: Connection, link_table, entity_table):
+    """
+    Delete orphaned tags.
+
+    Args:
+        link_table (Table): Table linking tag to entity.
+        entity_table (Table): Table of entity.
+    """
+    orphaned_tags = conn.execute(
+        sa.select(tag_table).where(
+            (tag_table.c.tag_type == str(entity_table))
+            & sa.not_(tag_table.c.id.in_(sa.select(link_table.c.tag_id)))
+        )
+    ).fetchall()
+    print(orphaned_tags)
+    orphaned_tag_ids = [tag.id for tag in orphaned_tags]
+    db_service.delete_objects(conn, tag_table, orphaned_tag_ids)

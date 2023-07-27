@@ -5,11 +5,14 @@ from sqlalchemy.engine import Connection
 
 
 from src.database import service as db_service
-from src.database.db_engine import engine
+from ..tags import service as tag_service
 from .schemas import Biography, BiographyCreate
+from ..tags.schemas import BiographyTag
+from ..tags.schemas import TagCreate
 from ..users.schemas import User
-from .models import biography_table
+from .models import biography_table, biography_tag_table
 from .exceptions import BiographyNotFound
+from src.utils.string_utils import sanitizeAndLowerCase
 
 
 def _parse_row(row: sa.Row):
@@ -66,6 +69,23 @@ def create_biography(
     result = db_service.create_object(
         conn, biography_table, biography.dict(), user_id=user.id
     )
+
+    name = biography.first_name + " " + biography.last_name
+    tags = [biography.first_name, biography.last_name, name]
+    if biography.instrument:
+        tags.extend(biography.instrument)
+
+    for content in tags:
+        tag = TagCreate(
+            content=sanitizeAndLowerCase(content), tag_type=str(biography_table)
+        )
+        created_tag = tag_service.create_tag(conn, tag, user)
+        biography_tag = BiographyTag(
+            biography_id=result.id,
+            tag_id=created_tag.id,
+        )
+        tag_service.create_link_table(conn, biography_tag, biography_tag_table, user)
+
     return _parse_row(result)
 
 
@@ -115,3 +135,4 @@ def delete_biography(conn: Connection, biography_id: UUID) -> None:
         raise BiographyNotFound
 
     db_service.delete_object(conn, biography_table, biography_id)
+    tag_service.delete_orphaned_tags(conn, biography_tag_table, biography_table)
