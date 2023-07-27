@@ -3,10 +3,14 @@ from uuid import UUID
 
 from .schemas import BiographyCreate
 from ..users.schemas import User
+from ..tags.schemas import TagCreate, BiographyTag
+from ..biographies.models import biography_table, biography_tag_table
 from . import exceptions as biography_exceptions
 from . import service as biography_service
+from ..tags import service as tag_service
 from src.database.db_engine import engine
 from ..authentification.dependencies import CustomSecurity
+from src.utils.string_utils import sanitizeAndLowerCase
 
 router = APIRouter(
     prefix="/biographies",
@@ -38,7 +42,24 @@ def create_biography(
     biography: BiographyCreate, user: User = Depends(CustomSecurity())
 ):
     with engine.begin() as conn:
-        return biography_service.create_biography(conn, biography, user)
+        created_biography = biography_service.create_biography(conn, biography, user)
+        name = biography.first_name + " " + biography.last_name
+        tags = [biography.first_name, biography.last_name, name]
+        if biography.instrument:
+            tags.extend(biography.instrument)
+
+        for content in tags:
+            tag = TagCreate(
+                content=sanitizeAndLowerCase(content), tag_type=str(biography_table)
+            )
+            created_tag = tag_service.create_tag(conn, tag, user)
+            biography_tag = BiographyTag(
+                biography_id=created_biography.id,
+                tag_id=created_tag.id,
+            )
+            tag_service.create_link_table(
+                conn, biography_tag, biography_tag_table, user
+            )
 
 
 @router.put("/biography/{biography_id}")

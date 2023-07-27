@@ -55,7 +55,6 @@ def get_user_by_id(
 def create_academy_user(
     academy_id: str, new_user: UserCreate, user: User = Depends(CustomSecurity())
 ):
-    print(new_user)
     try:
         with engine.begin() as conn:
             new_user = user_service.create_user(conn, new_user, user)

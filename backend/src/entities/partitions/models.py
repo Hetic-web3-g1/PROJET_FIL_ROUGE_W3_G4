@@ -1,8 +1,8 @@
-from sqlalchemy import Table, Column, ForeignKey, Integer, String, Text, DateTime
-from sqlalchemy.dialects.postgresql import UUID
-from uuid import uuid4
 from datetime import datetime
+from uuid import uuid4
 
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Table
+from sqlalchemy.dialects.postgresql import UUID
 from src.database.db_engine import metadata
 
 partition_table = Table(
@@ -45,9 +45,12 @@ partition_tag_table = Table(
     "partition_tag",
     metadata,
     Column(
-        "partition_id", UUID(as_uuid=True), ForeignKey("partition.id"), nullable=False
+        "partition_id",
+        UUID(as_uuid=True),
+        ForeignKey("partition.id", ondelete="CASCADE"),
+        nullable=False,
     ),
-    Column("tag_id", Integer, ForeignKey("tag.id"), nullable=False),
+    Column("tag_id", Integer, ForeignKey("tag.id", ondelete="CASCADE"), nullable=False),
 )
 
 partition_meta_table = Table(

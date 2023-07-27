@@ -24,5 +24,4 @@ def create_video(conn: Connection, video: VideoCreate, user: User) -> Video:
         Video: The created video.
     """
     result = db_service.create_object(conn, video_table, video, user_id=user.id)
-    print(result)
     return _parse_row(result)

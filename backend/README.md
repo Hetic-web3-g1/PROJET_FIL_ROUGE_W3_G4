@@ -54,7 +54,7 @@ pyenv install
 poetry install
 ```
 
-This will install the pythoin version for the project and create a python virtual environment and install all the dependencies.
+This will install the python version for the project and create a python virtual environment and install all the dependencies.
 
 ## Run
 

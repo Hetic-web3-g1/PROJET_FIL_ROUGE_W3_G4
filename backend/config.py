@@ -28,7 +28,6 @@ class Settings(BaseSettings):
     bucket_name: str
 
     # external keys
-    meilisearch_masterkey: str | None = None
     sendgrid_api_key: str
 
     @property

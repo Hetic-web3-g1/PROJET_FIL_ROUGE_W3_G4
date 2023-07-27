@@ -9,6 +9,7 @@ class PartitionCreate(BaseModel):
     s3_object_id: UUID
 
 
+
 class Partition(PartitionCreate):
     id: UUID
     created_by: UUID
