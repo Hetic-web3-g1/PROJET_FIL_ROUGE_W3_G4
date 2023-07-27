@@ -20,15 +20,12 @@ COPY pyproject.toml poetry.lock ./
 # Install dependencies
 RUN poetry install --no-root --no-interaction
 
-# Copy the entire project to the container
-COPY . .
-
 # Set environment variables
 # Keeps Python from generating .pyc files in the container
 ENV PYTHONDONTWRITEBYTECODE=1
 # Turns off buffering for easier container logging
 ENV PYTHONUNBUFFERED=1
-
+# Declare the environment as development
 ENV CONFIG_NAME=development
 
 WORKDIR /app
@@ -50,12 +47,8 @@ COPY requirement.txt .
 # Install dependencies
 RUN pip install --no-cache-dir -r requirement.txt
 
-# Copy the entire project to the container
-COPY . .
-
 # Set environment variables
-# ENV FASTAPI_ENV=development
-# ENV PYTHONUNBUFFERED=1
+# Declare the environment as development
 ENV CONFIG_NAME=production
 
 WORKDIR /app

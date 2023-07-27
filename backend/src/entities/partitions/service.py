@@ -2,13 +2,12 @@ from uuid import UUID
 
 import sqlalchemy as sa
 from sqlalchemy.engine import Connection
+from src.database import service as db_service
 
-from src.database import db_srv
-from src.database.db_engine import engine
-from .schemas import Partition, PartitionCreate
-from .models import partition_table
-from ..users.models import user_table
+from ..users.schemas import User
 from .exceptions import PartitionNotFound
+from .models import partition_table
+from .schemas import Partition, PartitionCreate
 
 
 def _parse_row(row: sa.Row):
@@ -23,7 +22,8 @@ def get_all_partitions(conn: Connection):
         Partitions: Dict of Partition objects.
     """
     result = conn.execute(sa.select(partition_table)).fetchall()
-    return [_parse_row(row) for row in result]
+    for row in result:
+        yield _parse_row(row)
 
 
 def get_partition_by_id(conn: Connection, partition_id: UUID) -> Partition:
@@ -48,15 +48,68 @@ def get_partition_by_id(conn: Connection, partition_id: UUID) -> Partition:
     return _parse_row(result)
 
 
-def create_partition(conn: Connection, partition: PartitionCreate) -> Partition:
+def create_partition(
+    conn: Connection, partition: PartitionCreate, user: User
+) -> Partition:
     """
     Create a partition.
 
     Args:
         partition (PartitionCreate): PartitionCreate object.
+        user (User): The user creating the partition.
 
     Returns:
         Partition: The created Partition object.
     """
-    create_partition = db_srv.create_object(conn, partition_table, partition.dict())
-    return _parse_row(create_partition)
+    result = db_service.create_object(
+        conn, partition_table, partition.dict(), user_id=user.id
+    )
+    return _parse_row(result)
+
+
+def update_partition(
+    conn: Connection, partition_id: UUID, partition: PartitionCreate, user: User
+) -> Partition:
+    """
+    Update a partition.
+
+    Args:
+        partition_id (UUID): The id of the partition to update.
+        partition (PartitionCreate): PartitionCreate object.
+        user (User): The user updating the partition.
+
+    Raises:
+        PartitionNotFound: If the partition does not exist.
+
+    Returns:
+        Partition: The updated Partition object.
+    """
+    check = conn.execute(
+        sa.select(partition_table).where(partition_table.c.id == partition_id)
+    ).first()
+    if check is None:
+        raise PartitionNotFound
+
+    result = db_service.update_object(
+        conn, partition_table, partition_id, partition.dict(), user_id=user.id
+    )
+    return _parse_row(result)
+
+
+def delete_partition(conn: Connection, connection_id: UUID) -> None:
+    """
+    Delete a partition.
+
+    Args:
+        partition_id (UUID): The id of the partition.
+
+    Raises:
+        PartitionNotFound: If the partition does not exist.
+    """
+    check = conn.execute(
+        sa.select(partition_table).where(partition_table.c.id == connection_id)
+    ).first()
+    if check is None:
+        raise PartitionNotFound
+
+    db_service.delete_object(conn, partition_table, connection_id)

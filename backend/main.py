@@ -31,6 +31,7 @@ from src.entities.authentification.router import router as auth_router
 from src.entities.biographies.router import router as biography_router
 from src.entities.masterclasses.router import router as masterclass_router
 from src.entities.partitions.router import router as partition_router
+from src.entities.s3_objects.router import router as s3_object_router
 from src.entities.users.router import router as user_router
 from src.entities.work_analyses.router import router as work_analysis_router
 
@@ -39,6 +40,7 @@ app.include_router(auth_router)
 app.include_router(biography_router)
 app.include_router(masterclass_router)
 app.include_router(partition_router)
+app.include_router(s3_object_router)
 app.include_router(user_router)
 app.include_router(work_analysis_router)
 

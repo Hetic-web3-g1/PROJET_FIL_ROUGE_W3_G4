@@ -55,7 +55,7 @@ def verify_reset_token(conn: Connection, token: str) -> UUID:
 
     hash = scrypt(
         base64.urlsafe_b64decode(token),
-        salt="test".encode("utf-8"),
+        salt=settings.reset_token_key.encode("utf-8"),
         n=2**14,
         r=8,
         p=1,

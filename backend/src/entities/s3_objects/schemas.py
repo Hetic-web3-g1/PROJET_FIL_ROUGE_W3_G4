@@ -3,13 +3,16 @@ from uuid import UUID
 from datetime import datetime
 
 
-class PartitionCreate(BaseModel):
-    name: str | None
-    status: str | None
-    s3_object_id: UUID
+class S3ObjectCreate(BaseModel):
+    object_key: str
+    filename: str
+    bucket: str
+    public: bool
+    major_type: str
+    minor_type: str
 
 
-class Partition(PartitionCreate):
+class S3Object(S3ObjectCreate):
     id: UUID
     created_by: UUID
     created_at: datetime
