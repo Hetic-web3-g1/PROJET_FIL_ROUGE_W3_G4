@@ -163,14 +163,6 @@ def create_fixed_masterclass_fake():
 #         create_partition(conn, partition, user)
 
 
-# def create_tag_fake():
-#     with engine.begin() as conn:
-#         tag = TagCreate(**{
-#             "content": Faker().word()
-#         })
-#         create_tag(conn, tag)
-
-
 def create_user_fake():
     with engine.begin() as conn:
         primary_roles = ["user", "admin"]
