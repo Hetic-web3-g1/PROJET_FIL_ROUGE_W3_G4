@@ -2,19 +2,23 @@ from uuid import UUID
 
 import sqlalchemy as sa
 from sqlalchemy.engine import Connection
+
 from src.database import service as db_service
 
 from ..tags import service as tag_service
 from ..tags.schemas import MasterclassTag
 from ..users.schemas import User
 from .exceptions import MasterclassNotFound, MasterclassUserNotFound
-from .models import (masterclass_table, masterclass_tag_table,
-                     masterclass_user_table)
-from .schemas import (Masterclass, MasterclassCreate, MasterclassUser,
-                      MasterclassUserCreate)
+from .models import masterclass_table, masterclass_tag_table, masterclass_user_table
+from .schemas import (
+    Masterclass,
+    MasterclassCreate,
+    MasterclassUser,
+    MasterclassUserCreate,
+)
 
 
-def _parse_row(row: sa.Row): 
+def _parse_row(row: sa.Row):
     return Masterclass(**row._asdict())
 
 

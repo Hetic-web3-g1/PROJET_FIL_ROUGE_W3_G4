@@ -1,6 +1,7 @@
 import sqlalchemy as sa
 from sqlalchemy.engine import Connection
 from sqlalchemy.sql import func
+
 from src.database import service as db_service
 from src.database.db_engine import metadata
 from src.utils.string_utils import sanitizeAndLowerCase
@@ -23,7 +24,7 @@ from .models import tag_table
 from .schemas import Tag, TagCreate
 
 
-def _parse_row(row: sa.Row): 
+def _parse_row(row: sa.Row):
     return Tag(**row._asdict())
 
 
