@@ -6,7 +6,7 @@ from src.database.s3_engine import s3_client
 
 
 # TODO give the url for a true validation of the file
-def check_mimetype(file: UploadFile, file_type: str):
+def check_mimetype(file: UploadFile):
     """
     Check if the mimetype is supported.
 
@@ -46,16 +46,13 @@ def check_mimetype(file: UploadFile, file_type: str):
     if major_type not in supported_file_types:
         raise HTTPException(status_code=400, detail="File type not supported")
 
-    if conversion_file_types[file_type] != major_type:
-        raise HTTPException(status_code=400, detail="File type not supported")
-
     if minor_type not in supported_file_types[major_type]:
         raise HTTPException(status_code=400, detail="File type not supported")
 
     return major_type, minor_type
 
 
-def file_validation(file: UploadFile, file_type: str) -> tuple:
+def file_validation(file: UploadFile) -> tuple:
     """
     Validate the file.
 
@@ -100,7 +97,7 @@ def file_validation(file: UploadFile, file_type: str) -> tuple:
             detail=f"File too large, max size is 10MB, this file weight {size} bytes",
         )
 
-    type = check_mimetype(file, file_type)
+    type = check_mimetype(file)
     return type
 
 

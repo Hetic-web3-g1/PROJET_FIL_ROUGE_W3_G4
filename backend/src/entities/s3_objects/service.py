@@ -11,15 +11,7 @@ from src.database import service as db_service
 from src.database.db_engine import engine
 from src.database.s3_engine import s3_client
 from .schemas import S3Object, S3ObjectCreate
-from ..images.schemas import ImageCreate
-from ..videos.schemas import VideoCreate
-from ..partitions.schemas import PartitionCreate
-from ..subtitles.schemas import SubtitleCreate
 from ..users.schemas import User
-from ..images import service as image_service
-from ..videos import service as video_service
-from ..partitions import service as partition_service
-from ..subtitles import service as subtitle_service
 from .models import s3_object_table
 from . import dependencies as s3_dependencies
 from .exceptions import s3Error, s3ObjectNotFound
@@ -161,20 +153,18 @@ def create_s3_object(s3_object: S3ObjectCreate, user: User):
 
 
 def upload(
-    file_type,
     file: UploadFile,
     user: User,
     public: bool,
-    status: Optional[str],
-    version: Optional[float],
-    video_id: Optional[UUID],
-    video_duration: Optional[float],
+    status: Optional[str] = None,
+    version: Optional[float] = None,
+    video_id: Optional[UUID] = None,
+    video_duration: Optional[float] = None,
 ):
     """
     Upload a file to S3.
 
     Args:
-        file_type (str): The type of the file to upload: image, video, partition.
         file (UploadFile): The file to upload.
         user (User): The user who uploaded the file.
         public (bool): If the file is public or not.
@@ -189,11 +179,11 @@ def upload(
     Returns:
         dict: The response from S3 and the created s3_object.
     """
-    type = s3_dependencies.file_validation(file, file_type)
+    type = s3_dependencies.file_validation(file)
 
     s3_object = S3ObjectCreate(
         object_key=str(uuid4()),
-        filename=file.filename,
+        filename=file.filename,  # type: ignore
         bucket=settings.bucket_name,
         public=True,
         major_type=type[0],
@@ -229,47 +219,7 @@ def upload(
         )
     result = create_s3_object(s3_object, user)
 
-    match file_type:
-        case "image":
-            image = ImageCreate(
-                name=file.filename,
-                s3_object_id=result.id,
-            )
-            with engine.begin() as conn:
-                image_service.create_image(conn, image, user)
-        case "video":
-            video = VideoCreate(
-                name=file.filename,
-                duration=video_duration,
-                status=status,
-                version=version,
-                s3_object_id=result.id,
-            )
-            with engine.begin() as conn:
-                video_service.create_video(conn, video, user)
-        case "partition":
-            partition = PartitionCreate(
-                name=file.filename,
-                status=status,
-                s3_object_id=result.id,
-            )
-            with engine.begin() as conn:
-                partition_service.create_partition(conn, partition, user)
-        case "subtitle":
-            subtitle_language = file.filename.split(".")[-2]
-            subtitle = SubtitleCreate(
-                name=file.filename,
-                language=subtitle_language,
-                status=status,
-                video_id=video_id,
-                s3_object_id=result.id,
-            )
-            with engine.begin() as conn:
-                subtitle_service.create_subtitle(conn, subtitle, user)
-        case _:
-            return "No corresponding file type was provided."
-
     if response is not None:
         raise s3Error
-
-    return response, result
+    print(result)
+    return result

@@ -1,3 +1,4 @@
+from fastapi import UploadFile, File
 from uuid import UUID
 
 import sqlalchemy as sa
@@ -5,9 +6,13 @@ from sqlalchemy.engine import Connection
 from src.database import service as db_service
 
 from ..users.schemas import User
+from ..tags.schemas import TagCreate, PartitionTag
 from .exceptions import PartitionNotFound
-from .models import partition_table
+from .models import partition_table, partition_tag_table
 from .schemas import Partition, PartitionCreate
+from ..s3_objects import service as s3_service
+from ..tags import service as tag_service
+from src.utils.string_utils import sanitizeAndLowerCase
 
 
 def _parse_row(row: sa.Row):
@@ -49,21 +54,45 @@ def get_partition_by_id(conn: Connection, partition_id: UUID) -> Partition:
 
 
 def create_partition(
-    conn: Connection, partition: PartitionCreate, user: User
+    conn: Connection,
+    user: User,
+    public: bool,
+    file: UploadFile = File(...),
 ) -> Partition:
     """
     Create a partition.
 
     Args:
-        partition (PartitionCreate): PartitionCreate object.
         user (User): The user creating the partition.
+        public (bool): Whether the partition file should be public or not.
+        file (UploadFile): The file to upload.
 
     Returns:
         Partition: The created Partition object.
     """
+    object = s3_service.upload(file, user, public)
+
+    partition = PartitionCreate(
+        name=object.filename,
+        status="uploaded",
+        s3_object_id=object.id,
+    )
+
     result = db_service.create_object(
         conn, partition_table, partition.dict(), user_id=user.id
     )
+
+    tag = TagCreate(
+        content=sanitizeAndLowerCase(partition.name),
+        tag_type=str(partition_table),
+    )
+    created_tag = tag_service.create_tag(conn, tag, user)
+    partition_tag = PartitionTag(
+        partition_id=result.id,
+        tag_id=created_tag.id,
+    )
+    tag_service.create_link_table(conn, partition_tag, partition_tag_table, user)
+
     return _parse_row(result)
 
 
