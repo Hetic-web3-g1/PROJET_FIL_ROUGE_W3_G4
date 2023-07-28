@@ -3,6 +3,7 @@ from uuid import UUID
 import sqlalchemy as sa
 from fastapi import File, UploadFile
 from sqlalchemy.engine import Connection
+
 from src.database import service as db_service
 
 from ..s3_objects import service as s3_service
@@ -14,7 +15,7 @@ from .models import partition_table, partition_tag_table
 from .schemas import Partition, PartitionCreate
 
 
-def _parse_row(row: sa.Row): 
+def _parse_row(row: sa.Row):
     return Partition(**row._asdict())
 
 

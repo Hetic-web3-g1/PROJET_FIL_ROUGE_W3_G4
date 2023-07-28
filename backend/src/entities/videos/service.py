@@ -1,6 +1,7 @@
 import sqlalchemy as sa
 from fastapi import File, UploadFile
 from sqlalchemy.engine import Connection
+
 from src.database import service as db_service
 
 from ..s3_objects import service as s3_service
@@ -9,7 +10,7 @@ from .models import video_table
 from .schemas import Video, VideoCreate
 
 
-def _parse_row(row: sa.Row): 
+def _parse_row(row: sa.Row):
     return Video(**row._asdict())
 
 

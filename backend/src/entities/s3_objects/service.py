@@ -3,9 +3,10 @@ from typing import Optional
 from uuid import UUID, uuid4
 
 import sqlalchemy as sa
-from config import settings
 from fastapi import UploadFile
 from sqlalchemy.engine import Connection
+
+from config import settings
 from src.database import service as db_service
 from src.database.db_engine import engine
 from src.database.s3_engine import s3_client
@@ -17,7 +18,7 @@ from .models import s3_object_table
 from .schemas import S3Object, S3ObjectCreate
 
 
-def _parse_row(row: sa.Row): 
+def _parse_row(row: sa.Row):
     return S3Object(**row._asdict())
 
 

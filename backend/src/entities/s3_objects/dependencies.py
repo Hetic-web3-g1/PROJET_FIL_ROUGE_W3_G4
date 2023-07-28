@@ -20,12 +20,6 @@ def check_mimetype(file: UploadFile):
     Returns:
         tuple: The major and minor type of the file.
     """
-    conversion_file_types = {
-        "image": "image",
-        "video": "video",
-        "partition": "application",
-        "subtitle": "application",
-    }
 
     supported_file_types = {
         "image": ["jpg", "jpeg", "png", "svg"],
