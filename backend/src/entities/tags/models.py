@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Table
 
-from src.database.db_engine import metadata
+from ...database.db_engine import metadata
 
 tag_table = Table(
     "tag",

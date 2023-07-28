@@ -1,7 +1,7 @@
 from sqlalchemy import Column, ForeignKey, Integer, Table
 from sqlalchemy.dialects.postgresql import UUID
 
-from src.database.db_engine import metadata
+from ...database.db_engine import metadata
 
 timecode_table = Table(
     "timecode",

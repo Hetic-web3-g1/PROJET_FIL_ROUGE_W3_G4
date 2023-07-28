@@ -4,7 +4,7 @@ from uuid import uuid4
 from sqlalchemy import ARRAY, Column, DateTime, ForeignKey, Integer, String, Table
 from sqlalchemy.dialects.postgresql import UUID
 
-from src.database.db_engine import metadata
+from ...database.db_engine import metadata
 
 masterclass_table = Table(
     "masterclass",

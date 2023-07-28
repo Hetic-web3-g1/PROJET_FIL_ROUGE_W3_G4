@@ -4,7 +4,7 @@ from uuid import uuid4
 from sqlalchemy import ARRAY, Column, DateTime, ForeignKey, Integer, String, Table, Text
 from sqlalchemy.dialects.postgresql import UUID
 
-from src.database.db_engine import metadata
+from ...database.db_engine import metadata
 
 biography_table = Table(
     "biography",

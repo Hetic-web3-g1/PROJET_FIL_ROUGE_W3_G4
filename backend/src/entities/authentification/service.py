@@ -185,4 +185,4 @@ def send_reset_password_email(email: str, token: ResetToken) -> None:
         token (ResetToken): The reset token to include in the email.
     """
     return
-    sg = sendgrid.SendGridAPIClient(api_key=settings.sendgrid_api_key)
+    sendgrid.SendGridAPIClient(api_key=settings.sendgrid_api_key)

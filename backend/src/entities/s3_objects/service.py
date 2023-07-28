@@ -9,13 +9,10 @@ from sqlalchemy.engine import Connection
 from config import settings
 from src.database import service as db_service
 from src.database.db_engine import engine
-from src.database.s3_engine import s3_client
 
 from ..users.schemas import User
 from . import dependencies as s3_dependencies
 from .exceptions import s3Error, s3ObjectNotFound
-from .models import s3_object_table
-from .schemas import S3Object, S3ObjectCreate
 
 
 def _parse_row(row: sa.Row):

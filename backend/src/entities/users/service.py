@@ -2,12 +2,12 @@ from uuid import UUID
 
 import sqlalchemy as sa
 from sqlalchemy.engine import Connection
-from src.database import service as db_service
 
-from ..masterclasses.models import masterclass_user_table
 from .exceptions import EmailAlreadyExist, UserNotFound
 from .models import user_table
 from .schemas import User, UserCreate
+from ..masterclasses.models import masterclass_user_table
+from ...database import service as db_service
 
 
 def _parse_row(row: sa.Row): 
