@@ -1,12 +1,13 @@
 from uuid import UUID
+
 from typing import Callable, Optional, TypeVar, Type, Union, List, Any
 
+import sqlalchemy as sa
 from fastapi.encoders import jsonable_encoder
 from pydantic import parse_obj_as
 from pydantic.main import BaseModel
-import sqlalchemy as sa
-from sqlalchemy.engine import Connection
 from sqlalchemy import Table
+from sqlalchemy.engine import Connection
 
 from .db_engine import metadata
 
@@ -126,7 +127,9 @@ def delete_objects(
     existing_ids = {str(row[0]) for row in results}
 
     # Find IDs that don't exist in the table
-    non_existing_ids = [str(obj_id) for obj_id in object_ids if str(obj_id) not in existing_ids]
+    non_existing_ids = [
+        str(obj_id) for obj_id in object_ids if str(obj_id) not in existing_ids
+    ]
 
     if non_existing_ids:
         # Return a custom error response indicating the non-existing objects
@@ -139,7 +142,9 @@ def delete_objects(
     return result.rowcount
 
 
-def delete_object_column(conn: Connection, table: Table, object_key: str, object_id: Any):
+def delete_object_column(
+    conn: Connection, table: Table, object_key: str, object_id: Any
+):
     conn.execute(table.delete(table.c[object_key] == object_id))
 
 

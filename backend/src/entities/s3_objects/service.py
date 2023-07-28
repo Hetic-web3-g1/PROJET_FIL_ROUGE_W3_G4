@@ -1,20 +1,20 @@
-from fastapi import UploadFile
-from uuid import uuid4, UUID
-from typing import Optional
 import os
+from typing import Optional
+from uuid import uuid4, UUID
 
 import sqlalchemy as sa
+from fastapi import UploadFile
 from sqlalchemy.engine import Connection
 
-from config import settings
-from src.database import service as db_service
-from src.database.db_engine import engine
-from src.database.s3_engine import s3_client
-from .schemas import S3Object, S3ObjectCreate
-from ..users.schemas import User
-from .models import s3_object_table
 from . import dependencies as s3_dependencies
 from .exceptions import s3Error, s3ObjectNotFound
+from .models import s3_object_table
+from .schemas import S3Object, S3ObjectCreate
+from ..users.schemas import User
+from ...database import service as db_service
+from ...database.db_engine import engine
+from ...database.s3_engine import s3_client
+from config import settings
 
 
 def _parse_row(row: sa.Row):

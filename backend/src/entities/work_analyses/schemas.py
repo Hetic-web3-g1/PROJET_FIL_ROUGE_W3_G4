@@ -1,13 +1,16 @@
-from pydantic import BaseModel
+from datetime import datetime
 from typing import List
 from uuid import UUID
-from datetime import datetime
+
+from pydantic import BaseModel
+
 
 class WorkAnalysisCreate(BaseModel):
     about: str | None
     learning: List[str]
     content: str | None
     status: str = "created"
+
 
 class WorkAnalysis(WorkAnalysisCreate):
     id: UUID

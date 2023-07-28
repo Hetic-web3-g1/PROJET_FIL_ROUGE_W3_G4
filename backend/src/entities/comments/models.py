@@ -3,7 +3,7 @@ from datetime import datetime
 from sqlalchemy import Table, Column, ForeignKey, Integer, Text, DateTime
 from sqlalchemy.dialects.postgresql import UUID
 
-from src.database.db_engine import metadata
+from ...database.db_engine import metadata
 
 
 comment_table = Table(

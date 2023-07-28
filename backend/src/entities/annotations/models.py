@@ -1,9 +1,9 @@
-from sqlalchemy import Table, Column, Integer, Text, ForeignKey, DateTime
-from sqlalchemy.dialects.postgresql import UUID
-from uuid import uuid4
 from datetime import datetime
 
-from src.database.db_engine import metadata
+from sqlalchemy import Table, Column, Integer, Text, ForeignKey, DateTime
+from sqlalchemy.dialects.postgresql import UUID
+
+from ...database.db_engine import metadata
 
 annotation_table = Table(
     "annotation",
@@ -14,5 +14,5 @@ annotation_table = Table(
     Column("created_at", DateTime(), default=datetime.utcnow, nullable=False),
     Column("updated_at", DateTime(), onupdate=datetime.utcnow, nullable=True),
     Column("created_by", UUID(as_uuid=True), ForeignKey("user.id"), nullable=False),
-    Column("updated_by", UUID(as_uuid=True), ForeignKey("user.id"), nullable=True)
+    Column("updated_by", UUID(as_uuid=True), ForeignKey("user.id"), nullable=True),
 )

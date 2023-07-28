@@ -1,5 +1,6 @@
 import boto3
 from botocore.utils import fix_s3_host
+
 from config import settings
 
 s3_client = boto3.client(

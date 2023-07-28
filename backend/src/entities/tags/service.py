@@ -1,26 +1,25 @@
 import sqlalchemy as sa
-from sqlalchemy.sql import func
 from sqlalchemy.engine import Connection
+from sqlalchemy.sql import func
 
-from src.database import service as db_service
-from .schemas import Tag, TagCreate
-from ..biographies.schemas import Biography
-from ..masterclasses.schemas import Masterclass
-from ..partitions.schemas import Partition
-from ..subtitles.schemas import Subtitle
-from ..users.schemas import User
-from ..videos.schemas import Video
-from ..work_analyses.schemas import WorkAnalysis
-from ..biographies.models import biography_tag_table, biography_table
-from ..masterclasses.models import masterclass_table, masterclass_tag_table
-from ..partitions.models import partition_table, partition_tag_table
-from ..subtitles.models import subtitle_table, subtitle_tag_table
-from ..users.models import user_table, user_tag_table
-from ..videos.models import video_table, video_tag_table
-from ..work_analyses.models import work_analysis_table, work_analysis_tag_table
-from ..users.schemas import User
 from .models import tag_table
-from src.database.db_engine import metadata
+from .schemas import Tag, TagCreate
+from ..biographies.models import biography_tag_table, biography_table
+from ..biographies.schemas import Biography
+from ..masterclasses.models import masterclass_table, masterclass_tag_table
+from ..masterclasses.schemas import Masterclass
+from ..partitions.models import partition_table, partition_tag_table
+from ..partitions.schemas import Partition
+from ..subtitles.models import subtitle_table, subtitle_tag_table
+from ..subtitles.schemas import Subtitle
+from ..users.models import user_table, user_tag_table
+from ..users.schemas import User
+from ..videos.models import video_table, video_tag_table
+from ..videos.schemas import Video
+from ..work_analyses.models import work_analysis_table, work_analysis_tag_table
+from ..work_analyses.schemas import WorkAnalysis
+from ...database import service as db_service
+from ...database.db_engine import metadata
 
 
 def _parse_row(row: sa.Row):

@@ -1,11 +1,12 @@
-from fastapi import APIRouter, HTTPException, Depends, Body
 from typing import List
 
-from .schemas import Tag
-from ..users.schemas import User
+from fastapi import APIRouter, Depends, Body
+
 from . import service as search_service
-from src.database.db_engine import engine
+from .schemas import Tag
 from ..authentification.dependencies import CustomSecurity
+from ..users.schemas import User
+from ...database.db_engine import engine
 
 router = APIRouter(
     prefix="/tags",

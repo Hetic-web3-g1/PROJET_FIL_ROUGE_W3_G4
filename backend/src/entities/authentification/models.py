@@ -1,9 +1,8 @@
 from uuid import uuid4
 
-from sqlalchemy.types import UUID
+import sqlalchemy as sa
 from sqlalchemy import Column, ForeignKey, DateTime, LargeBinary
 from sqlalchemy.dialects.postgresql import UUID
-import sqlalchemy as sa
 
 from src.database.db_engine import metadata
 

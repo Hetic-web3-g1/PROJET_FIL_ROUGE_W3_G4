@@ -33,15 +33,14 @@ class Settings(BaseSettings):
     @property
     def postgres_url(self) -> URL:
         return URL.create(
-        drivername="postgresql+psycopg2",
-        username=self.postgres_user,
-        password=self.postgres_password,
-        host=self.postgres_hostname,
-        port=self.postgres_port,
-        database=self.postgres_db,
+            drivername="postgresql+psycopg2",
+            username=self.postgres_user,
+            password=self.postgres_password,
+            host=self.postgres_hostname,
+            port=self.postgres_port,
+            database=self.postgres_db,
         )
 
-        
     class Config:
         config = os.getenv("CONFIG_NAME")
         env_file = f"./{config}.env"

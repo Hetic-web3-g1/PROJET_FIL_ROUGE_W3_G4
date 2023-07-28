@@ -1,13 +1,12 @@
-from fastapi import UploadFile, File
-
 import sqlalchemy as sa
+from fastapi import UploadFile, File
 from sqlalchemy.engine import Connection
 
-from src.database import service as db_service
+from .models import video_table
 from .schemas import VideoCreate, Video
 from ..users.schemas import User
-from .models import video_table
 from ..s3_objects import service as s3_service
+from ...database import service as db_service
 
 
 def _parse_row(row: sa.Row):

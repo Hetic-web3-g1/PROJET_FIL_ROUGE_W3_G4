@@ -3,22 +3,22 @@ from uuid import UUID
 import sqlalchemy as sa
 from sqlalchemy.engine import Connection
 
-from src.database import service as db_service
-from ..tags import service as tag_service
+from .exceptions import (
+    MasterclassNotFound,
+    MasterclassUserNotFound,
+)
+from .models import masterclass_table, masterclass_user_table, masterclass_tag_table
 from .schemas import (
     Masterclass,
     MasterclassCreate,
     MasterclassUserCreate,
     MasterclassUser,
 )
+from ..tags import service as tag_service
 from ..tags.schemas import TagCreate, MasterclassTag
 from ..users.schemas import User
-from .models import masterclass_table, masterclass_user_table, masterclass_tag_table
-from .exceptions import (
-    MasterclassNotFound,
-    MasterclassUserNotFound,
-)
-from src.utils.string_utils import sanitizeAndLowerCase
+from ...database import service as db_service
+from ...utils.string_utils import sanitizeAndLowerCase
 
 
 def _parse_row(row: sa.Row):

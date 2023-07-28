@@ -1,7 +1,6 @@
-from sqlalchemy import Table, Column, ForeignKey, Integer, String
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import Table, Column, Integer, String
 
-from src.database.db_engine import metadata
+from ...database.db_engine import metadata
 
 tag_table = Table(
     "tag",

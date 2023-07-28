@@ -1,9 +1,10 @@
+from datetime import datetime
+from uuid import uuid4
+
 from sqlalchemy import Table, Column, ForeignKey, Integer, String, DateTime, ARRAY
 from sqlalchemy.dialects.postgresql import UUID
-from uuid import uuid4
-from datetime import datetime
 
-from src.database.db_engine import metadata
+from ...database.db_engine import metadata
 
 masterclass_table = Table(
     "masterclass",

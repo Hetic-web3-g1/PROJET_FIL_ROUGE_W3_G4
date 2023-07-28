@@ -1,8 +1,8 @@
-from uuid import uuid4
 from datetime import datetime
+from uuid import uuid4
 
-from sqlalchemy.types import UUID
 from sqlalchemy import Table, Column, String, DateTime
+from sqlalchemy.types import UUID
 
 from src.database.db_engine import metadata
 

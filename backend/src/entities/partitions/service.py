@@ -1,18 +1,18 @@
-from fastapi import UploadFile, File
 from uuid import UUID
 
 import sqlalchemy as sa
+from fastapi import UploadFile, File
 from sqlalchemy.engine import Connection
-from src.database import service as db_service
 
-from ..users.schemas import User
-from ..tags.schemas import TagCreate, PartitionTag
 from .exceptions import PartitionNotFound
 from .models import partition_table, partition_tag_table
 from .schemas import Partition, PartitionCreate
-from ..s3_objects import service as s3_service
 from ..tags import service as tag_service
-from src.utils.string_utils import sanitizeAndLowerCase
+from ..tags.schemas import TagCreate, PartitionTag
+from ..users.schemas import User
+from ..s3_objects import service as s3_service
+from ...database import service as db_service
+from ...utils.string_utils import sanitizeAndLowerCase
 
 
 def _parse_row(row: sa.Row):

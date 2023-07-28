@@ -1,12 +1,12 @@
 from fastapi import APIRouter, HTTPException, Depends
 from uuid import UUID
 
-from .schemas import BiographyCreate
-from ..users.schemas import User
 from . import exceptions as biography_exceptions
 from . import service as biography_service
-from src.database.db_engine import engine
+from .schemas import BiographyCreate
 from ..authentification.dependencies import CustomSecurity
+from ..users.schemas import User
+from ...database.db_engine import engine
 
 router = APIRouter(
     prefix="/biographies",

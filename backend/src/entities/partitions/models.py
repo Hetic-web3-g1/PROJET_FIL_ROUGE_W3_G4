@@ -3,7 +3,8 @@ from uuid import uuid4
 
 from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Table
 from sqlalchemy.dialects.postgresql import UUID
-from src.database.db_engine import metadata
+
+from ...database.db_engine import metadata
 
 partition_table = Table(
     "partition",

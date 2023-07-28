@@ -1,14 +1,15 @@
-from fastapi import UploadFile, File
 from uuid import UUID
+
+from fastapi import UploadFile, File
 
 import sqlalchemy as sa
 from sqlalchemy.engine import Connection
 
-from src.database import service as db_service
-from .schemas import Subtitle, SubtitleCreate
-from ..users.schemas import User
 from .models import subtitle_table
+from .schemas import Subtitle, SubtitleCreate
 from ..s3_objects import service as s3_service
+from ..users.schemas import User
+from ...database import service as db_service
 
 
 def _parse_row(row: sa.Row):

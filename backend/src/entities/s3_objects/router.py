@@ -1,12 +1,10 @@
-from typing import Optional
 from uuid import UUID
 
-from fastapi import APIRouter, HTTPException, Depends, UploadFile, File, Body
+from fastapi import APIRouter, Depends
 
-from ..users.schemas import User
-from . import exceptions as s3_exceptions
 from . import service as upload_service
 from ..authentification.dependencies import CustomSecurity
+from ..users.schemas import User
 
 router = APIRouter(
     prefix="/s3_objects",

@@ -1,37 +1,38 @@
-from sqlalchemy import func, select
-from faker import Faker
 import random
-from uuid import UUID
 import datetime
+from uuid import UUID
 
+from faker import Faker
+from sqlalchemy import func, select
 from sqlalchemy.engine import Connection
 
-from src.database import service as db_service
-from src.database.db_engine import engine
-from src.entities.academies.models import academy_table
-from src.entities.academies.schemas import AcademyCreate
-from src.entities.academies.service import create_academy
-from src.entities.comments.models import comment_table
-from src.entities.comments.schemas import CommentCreate
-from src.entities.comments.service import create_comment
-from src.entities.biographies.models import biography_table
-from src.entities.biographies.schemas import BiographyCreate
-from src.entities.biographies.service import create_biography
-from src.entities.masterclasses.models import masterclass_table, masterclass_user_table
-from src.entities.masterclasses.schemas import MasterclassCreate, MasterclassUserCreate
-from src.entities.masterclasses.service import (
+from ..entities.academies.models import academy_table
+from ..entities.academies.schemas import AcademyCreate
+from ..entities.academies.service import create_academy
+from ..entities.comments.models import comment_table
+from ..entities.comments.schemas import CommentCreate
+from ..entities.comments.service import create_comment
+from ..entities.biographies.models import biography_table
+from ..entities.biographies.schemas import BiographyCreate
+from ..entities.biographies.service import create_biography
+from ..entities.masterclasses.models import masterclass_table, masterclass_user_table
+from ..entities.masterclasses.schemas import MasterclassCreate, MasterclassUserCreate
+from ..entities.masterclasses.service import (
     create_masterclass,
     assign_user_to_masterclass,
 )
-from src.entities.partitions.models import partition_table
-from src.entities.partitions.schemas import PartitionCreate
-from src.entities.partitions.service import create_partition
-from src.entities.users.models import user_table
-from src.entities.users.schemas import UserCreate, User
-from src.entities.users.service import create_user
-from src.entities.work_analyses.models import work_analysis_table
-from src.entities.work_analyses.schemas import WorkAnalysisCreate
-from src.entities.work_analyses.service import create_work_analysis
+from ..entities.partitions.models import partition_table
+from ..entities.partitions.schemas import PartitionCreate
+from ..entities.partitions.service import create_partition
+from ..entities.users.models import user_table
+from ..entities.users.schemas import UserCreate, User
+from ..entities.users.service import create_user
+from ..entities.work_analyses.models import work_analysis_table
+from ..entities.work_analyses.schemas import WorkAnalysisCreate
+from ..entities.work_analyses.service import create_work_analysis
+from ..database import service as db_service
+from ..database.db_engine import engine
+
 
 user = User(
     id=UUID("12345648-1234-1234-1234-123456789123"),

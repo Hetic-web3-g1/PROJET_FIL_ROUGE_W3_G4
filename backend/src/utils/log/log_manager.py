@@ -3,9 +3,10 @@ from typing import Literal
 import sqlalchemy as sa
 from sqlalchemy.engine import Connection
 
-from src.database.db_engine import metadata, engine
-from src.utils.log.log_schema import LogCreate
-from src.utils.log.log_table import log_table
+from ...database.db_engine import metadata, engine
+from ...utils.log.log_table import log_table
+from ...utils.log.log_schema import LogCreate
+
 
 def create_log(conn: Connection, log: LogCreate):
     table = metadata.tables["log"]

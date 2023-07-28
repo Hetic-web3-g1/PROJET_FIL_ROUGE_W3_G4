@@ -3,16 +3,15 @@ from uuid import UUID
 import sqlalchemy as sa
 from sqlalchemy.engine import Connection
 
-
-from src.database import service as db_service
-from ..tags import service as tag_service
+from .exceptions import BiographyNotFound
+from .models import biography_table, biography_tag_table
 from .schemas import Biography, BiographyCreate
+from ..tags import service as tag_service
 from ..tags.schemas import BiographyTag
 from ..tags.schemas import TagCreate
 from ..users.schemas import User
-from .models import biography_table, biography_tag_table
-from .exceptions import BiographyNotFound
-from src.utils.string_utils import sanitizeAndLowerCase
+from ...database import service as db_service
+from ...utils.string_utils import sanitizeAndLowerCase
 
 
 def _parse_row(row: sa.Row):

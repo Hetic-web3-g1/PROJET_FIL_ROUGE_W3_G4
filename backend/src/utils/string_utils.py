@@ -1,5 +1,5 @@
-import unicodedata
 import re
+import unicodedata
 
 
 def sanitize_string(input_string: str) -> str:

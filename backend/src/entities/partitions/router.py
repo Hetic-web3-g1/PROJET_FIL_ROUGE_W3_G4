@@ -1,12 +1,13 @@
-from fastapi import APIRouter, HTTPException, Depends, UploadFile, File
 from uuid import UUID
 
-from .schemas import PartitionCreate
-from ..users.schemas import User
+from fastapi import APIRouter, HTTPException, Depends, UploadFile, File
+
 from . import exceptions as partition_exceptions
 from . import service as partition_service
-from src.database.db_engine import engine
+from .schemas import PartitionCreate
 from ..authentification.dependencies import CustomSecurity
+from ..users.schemas import User
+from ...database.db_engine import engine
 
 router = APIRouter(
     prefix="/partitions",
