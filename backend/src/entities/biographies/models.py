@@ -56,7 +56,7 @@ biography_tag_table = Table(
     "biography_tag",
     metadata,
     Column(
-        "biography_id",
+        "entity_id",
         UUID(as_uuid=True),
         ForeignKey("biography.id", ondelete="CASCADE"),
         nullable=False,

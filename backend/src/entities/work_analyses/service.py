@@ -7,10 +7,9 @@ from .exceptions import WorkAnalysisNotFound
 from .models import work_analysis_table, work_analysis_tag_table
 from .schemas import WorkAnalysis, WorkAnalysisCreate
 from ..tags import service as tag_service
-from ..tags.schemas import TagCreate, WorkAnalysisTag
+from ..tags.schemas import WorkAnalysisTag
 from ..users.schemas import User
 from ...database import service as db_service
-from ...utils.string_utils import sanitizeAndLowerCase
 
 
 def _parse_row(row: sa.Row):  # type: ignore
@@ -70,18 +69,15 @@ def create_work_analysis(
         conn, work_analysis_table, work_analysis.dict(), user_id=user.id
     )
 
-    tag = TagCreate(
-        content=sanitizeAndLowerCase(work_analysis.title),
-        tag_type=str(work_analysis_table),
+    tag_service.create_tag_and_link_table(
+        conn,
+        work_analysis.title,
+        work_analysis_table,
+        work_analysis_tag_table,
+        WorkAnalysisTag,
+        result.id,
     )
-    created_tag = tag_service.create_tag(conn, tag, user)
-    work_analysis_tag = WorkAnalysisTag(
-        work_analysis_id=result.id,
-        tag_id=created_tag.id,
-    )
-    tag_service.create_link_table(
-        conn, work_analysis_tag, work_analysis_tag_table, user
-    )
+
     return _parse_row(result)
 
 

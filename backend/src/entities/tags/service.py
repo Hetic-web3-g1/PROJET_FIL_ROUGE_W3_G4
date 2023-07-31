@@ -20,6 +20,7 @@ from ..work_analyses.models import work_analysis_table, work_analysis_tag_table
 from ..work_analyses.schemas import WorkAnalysis
 from ...database import service as db_service
 from ...database.db_engine import metadata
+from ...utils.string_utils import sanitizeAndLowerCase
 
 
 def _parse_row(row: sa.Row):  # type: ignore
@@ -161,13 +162,12 @@ def search_object_by_tag(conn: Connection, tag: Tag):
     return None
 
 
-def create_tag(conn: Connection, tag: TagCreate, user: User) -> Tag:
+def create_tag(conn: Connection, tag: TagCreate) -> Tag:
     """
     Create a tag.
 
     Args:
         tag (TagCreate): TagCreate object.
-        user (User): The user creating the tag.
 
     Returns:
         Tag: The created Tag object.
@@ -176,19 +176,42 @@ def create_tag(conn: Connection, tag: TagCreate, user: User) -> Tag:
     return _parse_row(result)
 
 
-def create_link_table(conn: Connection, entity, entity_table, user: User):
+def create_link_table(conn: Connection, entity, entity_table):
     """
     Link Tag to entity.
 
     Args:
         entity (Entity): Entity object.
-        user (User): The user creating the tag.
 
     Returns:
         Entity: The created Entity object.
     """
     result = db_service.create_object(conn, entity_table, entity.dict())
     return result
+
+
+def create_tag_and_link_table(
+    conn, content, object_table, object_tag_table, object, object_id
+):
+    """
+    Create a tag and link it to an object.
+
+    Args:
+        content (str): Content of the tag.
+        object_table (Table): Table of object.
+        object_tag_table (Table): Table linking tag to object.
+        object (object): Object.
+        object_id (int): Id of object.
+    """
+    tag = TagCreate(content=sanitizeAndLowerCase(content), tag_type=str(object_table))
+
+    created_tag = create_tag(conn, tag)
+
+    entity_tag = object(
+        entity_id=object_id,
+        tag_id=created_tag.id,
+    )
+    create_link_table(conn, entity_tag, object_tag_table)
 
 
 def delete_orphaned_tags(conn: Connection, link_table, entity_table):

@@ -13,35 +13,35 @@ class Tag(TagCreate):
 
 
 class BiographyTag(BaseModel):
-    biography_id: UUID
+    entity_id: UUID
     tag_id: int
 
 
 class MasterclassTag(BaseModel):
-    masterclass_id: UUID
+    entity_id: UUID
     tag_id: int
 
 
 class PartitionTag(BaseModel):
-    partition_id: UUID
+    entity_id: UUID
     tag_id: int
 
 
 class SubtitleTag(BaseModel):
-    subtitle_id: UUID
+    entity_id: UUID
     tag_id: int
 
 
 class UserTag(BaseModel):
-    user_id: UUID
+    entity_id: UUID
     tag_id: int
 
 
 class VideoTag(BaseModel):
-    video_id: UUID
+    entity_id: UUID
     tag_id: int
 
 
 class WorkAnalysisTag(BaseModel):
-    work_analysis_id: UUID
+    entity_id: UUID
     tag_id: int

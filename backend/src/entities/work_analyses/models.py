@@ -58,7 +58,7 @@ work_analysis_tag_table = Table(
     "work_analysis_tag",
     metadata,
     Column(
-        "work_analysis_id",
+        "entity_id",
         UUID(as_uuid=True),
         ForeignKey("work_analysis.id", ondelete="CASCADE"),
         nullable=False,

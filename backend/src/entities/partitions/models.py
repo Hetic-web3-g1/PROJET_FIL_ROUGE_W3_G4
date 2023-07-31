@@ -46,7 +46,7 @@ partition_tag_table = Table(
     "partition_tag",
     metadata,
     Column(
-        "partition_id",
+        "entity_id",
         UUID(as_uuid=True),
         ForeignKey("partition.id", ondelete="CASCADE"),
         nullable=False,

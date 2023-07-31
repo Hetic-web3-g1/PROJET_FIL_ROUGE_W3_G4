@@ -8,11 +8,10 @@ from .exceptions import PartitionNotFound
 from .models import partition_table, partition_tag_table
 from .schemas import Partition, PartitionCreate
 from ..tags import service as tag_service
-from ..tags.schemas import TagCreate, PartitionTag
+from ..tags.schemas import PartitionTag
 from ..users.schemas import User
 from ..s3_objects import service as s3_service
 from ...database import service as db_service
-from ...utils.string_utils import sanitizeAndLowerCase
 
 
 def _parse_row(row: sa.Row):  # type: ignore
@@ -82,16 +81,14 @@ def create_partition(
         conn, partition_table, partition.dict(), user_id=user.id
     )
 
-    tag = TagCreate(
-        content=sanitizeAndLowerCase(partition.filename),
-        tag_type=str(partition_table),
+    tag_service.create_tag_and_link_table(
+        conn,
+        partition.filename,
+        partition_table,
+        partition_tag_table,
+        PartitionTag,
+        result.id,
     )
-    created_tag = tag_service.create_tag(conn, tag, user)
-    partition_tag = PartitionTag(
-        partition_id=result.id,
-        tag_id=created_tag.id,
-    )
-    tag_service.create_link_table(conn, partition_tag, partition_tag_table, user)
 
     return _parse_row(result)
 

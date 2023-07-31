@@ -38,7 +38,7 @@ subtitle_tag_table = Table(
     "subtitle_tag",
     metadata,
     Column(
-        "subtitle_id",
+        "entity_id",
         UUID(as_uuid=True),
         ForeignKey("subtitle.id", ondelete="CASCADE"),
         nullable=False,

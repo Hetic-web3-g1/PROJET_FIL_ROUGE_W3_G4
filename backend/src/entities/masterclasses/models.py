@@ -90,7 +90,7 @@ masterclass_tag_table = Table(
     "masterclass_tag",
     metadata,
     Column(
-        "masterclass_id",
+        "entity_id",
         UUID(as_uuid=True),
         ForeignKey("masterclass.id", ondelete="CASCADE"),
         nullable=False,

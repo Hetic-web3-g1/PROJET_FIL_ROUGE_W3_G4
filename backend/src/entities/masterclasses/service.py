@@ -15,10 +15,9 @@ from .schemas import (
     MasterclassUser,
 )
 from ..tags import service as tag_service
-from ..tags.schemas import TagCreate, MasterclassTag
+from ..tags.schemas import MasterclassTag
 from ..users.schemas import User
 from ...database import service as db_service
-from ...utils.string_utils import sanitizeAndLowerCase
 
 
 def _parse_row(row: sa.Row):  # type: ignore
@@ -104,16 +103,13 @@ def create_masterclass(
         tags.extend(masterclass.instrument)
 
     for content in tags:
-        tag = TagCreate(
-            content=sanitizeAndLowerCase(content), tag_type=str(masterclass_table)
-        )
-        created_tag = tag_service.create_tag(conn, tag, user)
-        masterclass_tag = MasterclassTag(
-            masterclass_id=result.id,
-            tag_id=created_tag.id,
-        )
-        tag_service.create_link_table(
-            conn, masterclass_tag, masterclass_tag_table, user
+        tag_service.create_tag_and_link_table(
+            conn,
+            content,
+            masterclass_table,
+            masterclass_tag_table,
+            MasterclassTag,
+            result.id,
         )
 
     return _parse_row(result)

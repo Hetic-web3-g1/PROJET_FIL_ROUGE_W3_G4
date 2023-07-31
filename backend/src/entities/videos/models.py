@@ -36,7 +36,7 @@ video_tag_table = Table(
     "video_tag",
     metadata,
     Column(
-        "video_id",
+        "entity_id",
         UUID(as_uuid=True),
         ForeignKey("video.id", ondelete="CASCADE"),
         nullable=False,

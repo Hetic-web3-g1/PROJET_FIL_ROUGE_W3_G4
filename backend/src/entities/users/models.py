@@ -39,7 +39,7 @@ user_tag_table = Table(
     "user_tag",
     metadata,
     Column(
-        "user_id",
+        "entity_id",
         UUID(as_uuid=True),
         ForeignKey("user.id", ondelete="CASCADE"),
         nullable=False,

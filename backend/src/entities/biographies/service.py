@@ -8,10 +8,8 @@ from .models import biography_table, biography_tag_table
 from .schemas import Biography, BiographyCreate
 from ..tags import service as tag_service
 from ..tags.schemas import BiographyTag
-from ..tags.schemas import TagCreate
 from ..users.schemas import User
 from ...database import service as db_service
-from ...utils.string_utils import sanitizeAndLowerCase
 
 
 def _parse_row(row: sa.Row):  # type: ignore
@@ -75,15 +73,14 @@ def create_biography(
         tags.extend(biography.instrument)
 
     for content in tags:
-        tag = TagCreate(
-            content=sanitizeAndLowerCase(content), tag_type=str(biography_table)
+        tag_service.create_tag_and_link_table(
+            conn,
+            content,
+            biography_table,
+            biography_tag_table,
+            BiographyTag,
+            result.id,
         )
-        created_tag = tag_service.create_tag(conn, tag, user)
-        biography_tag = BiographyTag(
-            biography_id=result.id,
-            tag_id=created_tag.id,
-        )
-        tag_service.create_link_table(conn, biography_tag, biography_tag_table, user)
 
     return _parse_row(result)
 
