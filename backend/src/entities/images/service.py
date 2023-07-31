@@ -10,7 +10,7 @@ from .models import image_table
 from .schemas import Image, ImageCreate
 
 
-def _parse_row(row: sa.Row):
+def _parse_row(row: sa.Row):  # type: ignore
     return Image(**row._asdict())
 
 

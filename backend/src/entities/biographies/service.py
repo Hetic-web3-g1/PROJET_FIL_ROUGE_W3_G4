@@ -13,7 +13,7 @@ from .models import biography_table, biography_tag_table
 from .schemas import Biography, BiographyCreate
 
 
-def _parse_row(row: sa.Row):
+def _parse_row(row: sa.Row):  # type: ignore
     return Biography(**row._asdict())
 
 

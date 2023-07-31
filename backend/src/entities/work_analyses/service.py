@@ -13,7 +13,7 @@ from .models import work_analysis_table, work_analysis_tag_table
 from .schemas import WorkAnalysis, WorkAnalysisCreate
 
 
-def _parse_row(row: sa.Row):
+def _parse_row(row: sa.Row):  # type: ignore
     return WorkAnalysis(**row._asdict())
 
 

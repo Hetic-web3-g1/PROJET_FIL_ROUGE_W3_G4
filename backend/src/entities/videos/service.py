@@ -10,7 +10,7 @@ from .models import video_table
 from .schemas import Video, VideoCreate
 
 
-def _parse_row(row: sa.Row):
+def _parse_row(row: sa.Row):  # type: ignore
     return Video(**row._asdict())
 
 

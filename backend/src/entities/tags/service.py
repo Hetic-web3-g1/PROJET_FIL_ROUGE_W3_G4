@@ -24,7 +24,7 @@ from .models import tag_table
 from .schemas import Tag, TagCreate
 
 
-def _parse_row(row: sa.Row):
+def _parse_row(row: sa.Row):  # type: ignore
     return Tag(**row._asdict())
 
 

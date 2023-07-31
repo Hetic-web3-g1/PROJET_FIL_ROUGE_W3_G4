@@ -8,7 +8,7 @@ from .models import comment_table
 from .schemas import Comment, CommentCreate
 
 
-def _parse_row(row: sa.Row):
+def _parse_row(row: sa.Row):  # type: ignore
     return Comment(**row._asdict())
 
 

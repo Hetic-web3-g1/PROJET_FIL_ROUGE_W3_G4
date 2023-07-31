@@ -12,7 +12,7 @@ from .models import subtitle_table
 from .schemas import Subtitle, SubtitleCreate
 
 
-def _parse_row(row: sa.Row):
+def _parse_row(row: sa.Row):  # type: ignore
     return Subtitle(**row._asdict())
 
 

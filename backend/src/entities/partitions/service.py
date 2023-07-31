@@ -15,7 +15,7 @@ from .models import partition_table, partition_tag_table
 from .schemas import Partition, PartitionCreate
 
 
-def _parse_row(row: sa.Row):
+def _parse_row(row: sa.Row):  # type: ignore
     return Partition(**row._asdict())
 
 

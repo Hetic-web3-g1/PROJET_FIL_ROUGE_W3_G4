@@ -15,7 +15,7 @@ from . import dependencies as s3_dependencies
 from .exceptions import s3Error, s3ObjectNotFound
 
 
-def _parse_row(row: sa.Row):
+def _parse_row(row: sa.Row):  # type: ignore
     return S3Object(**row._asdict())
 
 

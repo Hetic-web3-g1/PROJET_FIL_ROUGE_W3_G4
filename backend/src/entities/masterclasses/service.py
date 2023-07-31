@@ -18,7 +18,7 @@ from .schemas import (
 )
 
 
-def _parse_row(row: sa.Row):
+def _parse_row(row: sa.Row):  # type: ignore
     return Masterclass(**row._asdict())
 
 
