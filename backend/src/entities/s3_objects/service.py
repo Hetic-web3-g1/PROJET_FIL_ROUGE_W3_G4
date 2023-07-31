@@ -17,7 +17,7 @@ from ...database.s3_engine import s3_client
 from config import settings
 
 
-def _parse_row(row: sa.Row):
+def _parse_row(row: sa.Row):  # type: ignore
     return S3Object(**row._asdict())
 
 

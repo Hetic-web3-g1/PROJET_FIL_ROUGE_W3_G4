@@ -9,7 +9,7 @@ from .schemas import Academy, AcademyCreate
 from ...database import service as db_service
 
 
-def _parse_row(row):
+def _parse_row(row: sa.Row):  # type: ignore
     return Academy(**row._asdict())
 
 

@@ -9,7 +9,7 @@ from ..s3_objects import service as s3_service
 from ...database import service as db_service
 
 
-def _parse_row(row: sa.Row):
+def _parse_row(row: sa.Row):  # type: ignore
     return Video(**row._asdict())
 
 

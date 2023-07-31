@@ -7,7 +7,7 @@ from ..users.schemas import User
 from ...database import service as db_service
 
 
-def _parse_row(row: sa.Row):
+def _parse_row(row: sa.Row):  # type: ignore
     return Comment(**row._asdict())
 
 

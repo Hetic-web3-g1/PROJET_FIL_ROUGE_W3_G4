@@ -22,11 +22,11 @@ from ...database import service as db_service
 from ...database.db_engine import metadata
 
 
-def _parse_row(row: sa.Row):
+def _parse_row(row: sa.Row):  # type: ignore
     return Tag(**row._asdict())
 
 
-def _parse_row_specific_object(row: sa.Row, object_entity):
+def _parse_row_specific_object(row: sa.Row, object_entity):  # type: ignore
     return object_entity(**row._asdict())
 
 

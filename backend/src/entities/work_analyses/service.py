@@ -13,7 +13,7 @@ from ...database import service as db_service
 from ...utils.string_utils import sanitizeAndLowerCase
 
 
-def _parse_row(row: sa.Row):
+def _parse_row(row: sa.Row):  # type: ignore
     return WorkAnalysis(**row._asdict())
 
 

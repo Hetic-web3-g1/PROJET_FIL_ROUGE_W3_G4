@@ -21,11 +21,11 @@ from ...database import service as db_service
 from ...utils.string_utils import sanitizeAndLowerCase
 
 
-def _parse_row(row: sa.Row):
+def _parse_row(row: sa.Row):  # type: ignore
     return Masterclass(**row._asdict())
 
 
-def _parse_row_masterclass_user(row: sa.Row):
+def _parse_row_masterclass_user(row: sa.Row):  # type: ignore
     return MasterclassUser(**row._asdict())
 
 

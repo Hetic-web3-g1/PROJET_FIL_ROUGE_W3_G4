@@ -10,7 +10,7 @@ from ..masterclasses.models import masterclass_user_table
 from ...database import service as db_service
 
 
-def _parse_row(row: sa.Row):
+def _parse_row(row: sa.Row):  # type: ignore
     return User(**row._asdict())
 
 
