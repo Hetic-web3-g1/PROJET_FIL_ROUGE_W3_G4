@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 
 class PartitionCreate(BaseModel):
-    name: str
+    filename: str
     status: str
     s3_object_id: UUID
 

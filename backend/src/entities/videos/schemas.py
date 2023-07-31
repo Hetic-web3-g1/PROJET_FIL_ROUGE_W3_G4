@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 
 class VideoCreate(BaseModel):
-    name: str
+    filename: str
     duration: float
     status: str
     version: float

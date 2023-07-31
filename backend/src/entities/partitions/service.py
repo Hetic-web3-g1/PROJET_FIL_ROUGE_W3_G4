@@ -73,7 +73,7 @@ def create_partition(
     object = s3_service.upload(file, user, public)
 
     partition = PartitionCreate(
-        name=object.filename,
+        filename=object.filename,
         status="uploaded",
         s3_object_id=object.id,
     )
@@ -83,7 +83,7 @@ def create_partition(
     )
 
     tag = TagCreate(
-        content=sanitizeAndLowerCase(partition.name),
+        content=sanitizeAndLowerCase(partition.filename),
         tag_type=str(partition_table),
     )
     created_tag = tag_service.create_tag(conn, tag, user)

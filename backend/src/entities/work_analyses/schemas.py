@@ -6,6 +6,7 @@ from pydantic import BaseModel
 
 
 class WorkAnalysisCreate(BaseModel):
+    title: str
     about: str | None
     learning: List[str]
     content: str | None

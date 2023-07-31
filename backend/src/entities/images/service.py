@@ -33,7 +33,7 @@ def create_image(
     object = s3_service.upload(file, user, public)
 
     image = ImageCreate(
-        name=object.filename,
+        filename=object.filename,
         s3_object_id=object.id,
     )
 

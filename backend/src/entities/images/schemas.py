@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 
 class ImageCreate(BaseModel):
-    name: str
+    filename: str
     s3_object_id: UUID
 
 

@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 
 class SubtitleCreate(BaseModel):
-    name: str | None
+    filename: str | None
     language: str
     status: str | None
     video_id: UUID | None

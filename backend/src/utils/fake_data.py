@@ -229,8 +229,8 @@ def attribute_user_to_masterclass_fake():
         masterclass_roles = ["teacher", "composer"]
         user = MasterclassUserCreate(
             **{
-                "user_id": uuid.UUID("12345648-1234-1234-1234-123456789123"),
-                "masterclass_id": uuid.UUID("12345648-1234-1234-1234-123456789123"),
+                "user_id": UUID("12345648-1234-1234-1234-123456789123"),
+                "masterclass_id": UUID("12345648-1234-1234-1234-123456789123"),
                 "masterclass_role": random.choice(masterclass_roles),
             }
         )
@@ -254,6 +254,7 @@ def create_work_analyse_fake():
     with engine.begin() as conn:
         work_analysis = WorkAnalysisCreate(
             **{
+                "title": Faker().word(),
                 "about": Faker().text(),
                 "learning": [Faker().word()],
                 "content": Faker().text(),

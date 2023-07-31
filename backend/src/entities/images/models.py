@@ -10,7 +10,7 @@ image_table = Table(
     "image",
     metadata,
     Column("id", UUID(as_uuid=True), primary_key=True, unique=True, default=uuid4),
-    Column("name", String(), nullable=False),
+    Column("filename", String(), nullable=False),
     Column(
         "s3_object_id",
         UUID(as_uuid=True),

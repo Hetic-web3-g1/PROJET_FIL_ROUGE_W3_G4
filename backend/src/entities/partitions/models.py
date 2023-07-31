@@ -10,7 +10,7 @@ partition_table = Table(
     "partition",
     metadata,
     Column("id", UUID(as_uuid=True), primary_key=True, unique=True, default=uuid4),
-    Column("name", String(), nullable=False),
+    Column("filename", String(), nullable=False),
     Column("status", String(), nullable=False, default="created"),
     Column(
         "s3_object_id",

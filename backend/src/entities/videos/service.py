@@ -36,7 +36,7 @@ def create_video(
     object = s3_service.upload(file, user, public)
 
     video = VideoCreate(
-        name=object.filename,
+        filename=object.filename,
         duration=duration,
         status="uploaded",
         version=version,

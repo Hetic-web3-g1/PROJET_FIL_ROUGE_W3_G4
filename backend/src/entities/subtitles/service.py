@@ -40,7 +40,7 @@ def create_subtitle(
     object = s3_service.upload(file, user, public)
 
     subtitle = SubtitleCreate(
-        name=object.filename,
+        filename=object.filename,
         language=language,
         status="uploaded",
         video_id=video_id,
