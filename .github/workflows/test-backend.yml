@@ -8,7 +8,7 @@ on:
 jobs:
   container-job:
     runs-on: ubuntu-latest
-    container: python:3.11.4-alpine3.18
+    container: python:3.11.4-slim
 
     steps:
       - uses: actions/checkout@v3
