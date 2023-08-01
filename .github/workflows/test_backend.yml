@@ -1,0 +1,20 @@
+name: "Test backend"
+
+on:
+  pull_request:
+    branches: [master]
+
+jobs:
+  container-job:
+    runs-on: ubuntu-latest
+    container: python:3.11.4-alpine3.18
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+      - name: Run tests
+        run: |
+          pytest
