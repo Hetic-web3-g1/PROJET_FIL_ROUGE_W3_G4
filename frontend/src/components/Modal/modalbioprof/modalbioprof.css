@@ -96,6 +96,10 @@
     margin-top: 1vh;
 }
 
+.modal-bio-prof-award-field {
+    margin-bottom: 1vh;
+}
+
 
 @media screen and (max-width: 1305px) {
     .modal-bio-prof-instrument{

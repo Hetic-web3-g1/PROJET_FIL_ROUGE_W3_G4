@@ -20,7 +20,7 @@ export const ModalBioProf = ({ handleClose, store }) => {
     const [bio, setBio] = React.useState('');
     const [nationality, setNationality] = React.useState('');
     const [website, setWebsite] = React.useState('');
-    const [awards, setAwards] = React.useState(['']);
+    const [awards, setAwards] = React.useState([]);
     const [tmpAward, setTmpAward] = React.useState('');
     const [type, setType] = React.useState('Professor');
 
@@ -119,10 +119,24 @@ export const ModalBioProf = ({ handleClose, store }) => {
                     </div>
                     <div className='modal-bio-prof-infos-field full-width'>
                         <span>Awards</span>
-                        <Field placeholder="Awards" onChange={(e) => setAwards([e.target.value])}/>
+                        {
+                            awards.map((award, index) => {
+                                return(
+                                    <div className='modal-bio-prof-award-field'>
+                                        <Field placeholder="Award" value={award} onChange={(e) => 
+                                            {
+                                            let Array = [...awards];
+                                            Array[index] = e.target.value;
+                                            setAwards(Array);
+                                            }
+                                        }/>
+                                    </div>
+                                )
+                            })
+                        }
                         <div className='modal-bio-prof-infos-field-add'>
                             <img src={'../../src/assets/plus.svg'} alt="plus" style={{marginRight: '1vw', cursor: 'pointer'}} onClick={() => setAwards([...awards, tmpAward])}/>
-                            <Field placeholder="Awards" onChange={(e) => setTmpAward(e.target.value)}/>
+                            <Field placeholder="Awards" onChange={(e) => setTmpAward([e.target.value])}/>
                         </div>
                     </div>
                 </div> 
