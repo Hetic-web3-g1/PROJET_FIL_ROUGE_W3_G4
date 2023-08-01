@@ -2,7 +2,8 @@ name: "Test backend"
 
 on:
   pull_request:
-    branches: [master]
+    branches:
+      - "**"
 
 jobs:
   container-job:
