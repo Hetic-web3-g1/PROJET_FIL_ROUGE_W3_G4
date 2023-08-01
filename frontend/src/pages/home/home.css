@@ -26,3 +26,9 @@
     box-sizing: content-box;
     padding-right: 20px;
 }
+
+.home-spin-wrap {
+    position: absolute;
+    top: 50%;
+    left: 55%;
+}

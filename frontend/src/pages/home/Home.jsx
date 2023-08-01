@@ -6,6 +6,7 @@ import { Header } from "../../components/header/Header";
 import { Sidebar } from "../../components/sidebar/Sidebar";
 import { MasterCard } from "../../components/cards/masterCard/MasterCard";
 import { BiographyCard } from "../../components/cards/biographyCard/BIographyCard";
+import { Spinner } from "../../components/spinner/Spinner";
 import { useSelector, ReactReduxContext } from 'react-redux';
 
 import MasterCardData from '../../mocks/masterCardMocks'
@@ -73,18 +74,25 @@ export const Home = () => {
                 <div className="home-sidebar">
                     <Sidebar/>
                 </div>
-                <div className="home-content">
-                    {
-                        mastercardComponent.map(mastercard => { return mastercard })
-                    }
-                    {
-                        biographyData?.map((bio, index) => {
-                            return(
-                                <BiographyCard content={bio} key={`biography-${index}`}></BiographyCard>
-                            )
-                        })
-                    }
+                {
+                mastercardData ? 
+                    <div className="home-content">
+                        {
+                            mastercardComponent.map(mastercard => { return mastercard })
+                        }
+                        {
+                            biographyData?.map((bio, index) => {
+                                return(
+                                    <BiographyCard content={bio} key={`biography-${index}`}></BiographyCard>
+                                )
+                            })
+                        }
+                    </div>
+                : 
+                <div className="home-spin-wrap">
+                    <Spinner />
                 </div>
+                } 
             </div>
         </div>
     );
