@@ -15,6 +15,9 @@ jobs:
 
     env:
       POETRY_VERSION: 1.4.2
+      CONFIG_NAME: test
+
+      PIP_CACHE_DIR: .cache/pip
 
       POSTGRES_PORT: 5432
       POSTGRES_DB: postgres
@@ -43,7 +46,7 @@ jobs:
         id: pip-cache
         with:
           path: .cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
 
@@ -58,4 +61,5 @@ jobs:
 
       - name: Run tests
         run: |
+          alembic upgrade head
           pytest ./src/tests
