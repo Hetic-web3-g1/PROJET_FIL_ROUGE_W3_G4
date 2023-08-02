@@ -24,6 +24,7 @@ python-magic = "^0.4.27"
 [tool.poetry.group.dev.dependencies]
 black = "^23.3.0"
 faker = "^18.11.2"
+pytest = "^7.4.0"
 
 [build-system]
 requires = ["poetry-core"]
