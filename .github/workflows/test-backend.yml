@@ -35,7 +35,7 @@ jobs:
         id: pip-cache
         with:
           path: backend/${{ env.PIP_CACHE_DIR }}
-          key: ${{ runner.os }}-pip-${{ hashFiles('poetry.lock') }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('backend/poetry.lock') }}
           restore-keys: |
             ${{ runner.os }}-pip-
 
@@ -49,5 +49,5 @@ jobs:
 
       - name: Run tests
         run: |
-          alembic upgrade head
+          # alembic upgrade head
           pytest ./src/tests
