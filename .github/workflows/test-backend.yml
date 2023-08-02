@@ -29,28 +29,12 @@ jobs:
       run:
         working-directory: backend
 
-    services:
-      postgres:
-        image: postgres
-        env:
-          POSTGRES_USER: ${{ env.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
-          POSTGRES_HOSTNAME: ${{ env.POSTGRES_HOSTNAME }}
-          POSTGRES_PORT: ${{ env.POSTGRES_PORT }}
-          POSTGRES_DB: ${{ env.POSTGRES_DB }}
-        # Set health checks to wait until postgres has started
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
     steps:
       - uses: actions/checkout@v3
       - uses: actions/cache@v3
         id: pip-cache
         with:
-          path: ${{ env.PIP_CACHE_DIR }}
+          path: backend/${{ env.PIP_CACHE_DIR }}
           key: ${{ runner.os }}-pip-${{ hashFiles('poetry.lock') }}
           restore-keys: |
             ${{ runner.os }}-pip-
