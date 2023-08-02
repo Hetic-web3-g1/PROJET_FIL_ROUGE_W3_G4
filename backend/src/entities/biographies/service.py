@@ -67,8 +67,7 @@ def create_biography(
         conn, biography_table, biography.dict(), user_id=user.id
     )
 
-    name = biography.first_name + " " + biography.last_name
-    tags = [biography.first_name, biography.last_name, name]
+    tags = [biography.first_name, biography.last_name]
     if biography.instrument:
         tags.extend(biography.instrument)
 
