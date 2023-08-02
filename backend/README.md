@@ -16,7 +16,7 @@ If the version of python (via `python -V`) is the the same of the version select
 .env
 
 ```TOML
-# Databese
+# Database
 POSTGRES_USER = ""
 POSTGRES_PASSWORD = ""
 POSTGRES_HOSTNAME = ""
@@ -36,7 +36,6 @@ JWT_PRIVATE_KEY=""
 
 # External keys
 SENDGRID_API_KEY=""
-# MEILISEARCH_MASTERKEY =""
 ```
 
 s3-config/credentials
