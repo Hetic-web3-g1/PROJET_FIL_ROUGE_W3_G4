@@ -11,6 +11,7 @@ import { useSelector, ReactReduxContext } from 'react-redux';
 
 import MasterCardData from '../../mocks/masterCardMocks'
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 
 export const Home = () => {
 
@@ -19,6 +20,7 @@ export const Home = () => {
     const [mastercardData, setMastercardData] = useState();
     const [biographyData, setBiographyData] = useState();
     const navigate = useNavigate();
+    const { t, i18n } = useTranslation();
 
     const { store } = useContext(ReactReduxContext)
 
