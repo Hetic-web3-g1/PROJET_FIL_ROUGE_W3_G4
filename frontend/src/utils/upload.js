@@ -8,7 +8,7 @@ export const uploadFile = (file, file_type, isPublic) => {
         }),
     };
 
-    fetch(`http://localhost:4000/s3_objects/upload/${file_type}`, uploadOptions).then((response) => response.json()).then(data => {
+    fetch(`http://${import.meta.env.API_ENDPOINT}/s3_objects/upload/${file_type}`, uploadOptions).then((response) => response.json()).then(data => {
         if (data?.detail[0].msg != "field required") {
             handleClose();
         } else {

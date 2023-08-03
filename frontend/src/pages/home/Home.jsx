@@ -48,7 +48,7 @@ export const Home = () => {
                 method: 'GET',
                 headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}` },
             };
-            fetch(`http://localhost:4000/masterclasses`, userOptions).then((response) => response.json()).then(data => {
+            fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/masterclasses`, userOptions).then((response) => response.json()).then(data => {
                 setMastercardData(data)
             });
     },[])
@@ -58,7 +58,7 @@ export const Home = () => {
                 method: 'GET',
                 headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}` },
             };
-            fetch(`http://localhost:4000/biographies`, userOptions).then((response) => response.json()).then(data => {
+            fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/biographies`, userOptions).then((response) => response.json()).then(data => {
                 setBiographyData(data)
             });
     },[])
