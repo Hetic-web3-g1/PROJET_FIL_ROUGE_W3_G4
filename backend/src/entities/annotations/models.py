@@ -1,9 +1,9 @@
 from datetime import datetime
 
-from sqlalchemy import Table, Column, Integer, Text, ForeignKey, DateTime
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, Table, Text
 from sqlalchemy.dialects.postgresql import UUID
 
-from ...database.db_engine import metadata
+from src.database.db_engine import metadata
 
 annotation_table = Table(
     "annotation",

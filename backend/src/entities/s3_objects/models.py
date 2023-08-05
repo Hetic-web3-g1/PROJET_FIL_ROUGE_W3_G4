@@ -1,10 +1,10 @@
 from datetime import datetime
 from uuid import uuid4
 
-from sqlalchemy import Table, Column, ForeignKey, String, Boolean, DateTime
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, String, Table
 from sqlalchemy.dialects.postgresql import UUID
 
-from ...database.db_engine import metadata
+from src.database.db_engine import metadata
 
 s3_object_table = Table(
     "s3_object",

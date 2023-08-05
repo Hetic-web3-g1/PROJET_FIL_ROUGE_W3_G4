@@ -1,13 +1,14 @@
 from uuid import UUID
 
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, Depends, HTTPException
 
+from src.database.db_engine import engine
+
+from ..authentification import service as auth_service
+from ..authentification.dependencies import CustomSecurity
 from . import exceptions as user_exceptions
 from . import service as user_service
 from .schemas import User, UserCreate
-from ..authentification import service as auth_service
-from ..authentification.dependencies import CustomSecurity
-from ...database.db_engine import engine
 
 router = APIRouter(
     prefix="/users",

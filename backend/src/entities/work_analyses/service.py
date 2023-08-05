@@ -3,13 +3,14 @@ from uuid import UUID
 import sqlalchemy as sa
 from sqlalchemy.engine import Connection
 
-from .exceptions import WorkAnalysisNotFound
-from .models import work_analysis_table, work_analysis_tag_table
-from .schemas import WorkAnalysis, WorkAnalysisCreate
+from src.database import service as db_service
+
 from ..tags import service as tag_service
 from ..tags.schemas import WorkAnalysisTag
 from ..users.schemas import User
-from ...database import service as db_service
+from .exceptions import WorkAnalysisNotFound
+from .models import work_analysis_table, work_analysis_tag_table
+from .schemas import WorkAnalysis, WorkAnalysisCreate
 
 
 def _parse_row(row: sa.Row):  # type: ignore

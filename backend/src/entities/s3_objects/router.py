@@ -2,9 +2,9 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends
 
-from . import service as upload_service
 from ..authentification.dependencies import CustomSecurity
 from ..users.schemas import User
+from . import service as upload_service
 
 router = APIRouter(
     prefix="/s3_objects",

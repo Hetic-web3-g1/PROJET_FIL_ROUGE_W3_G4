@@ -4,14 +4,14 @@ version = "0.1.0"
 description = ""
 authors = []
 readme = "README.md"
-packages = [{include = "saline_backend"}]
+packages = [{ include = "saline_backend" }]
 
 [tool.poetry.dependencies]
 python = "^3.11"
 fastapi = "^0.99.1"
 sqlalchemy = "^2.0.17"
 sendgrid = "^6.10.0"
-pydantic = {extras = ["dotenv"], version = "1.10.10"}
+pydantic = { extras = ["dotenv"], version = "1.10.10" }
 uvicorn = "^0.22.0"
 alembic = "^1.11.1"
 psycopg2 = "^2.9.6"
@@ -20,10 +20,17 @@ boto3 = "^1.28.2"
 python-multipart = "^0.0.6"
 python-magic = "^0.4.27"
 
+[tool.ruff]
+src = ["src"]
+
+[tool.isort]
+profile = "black"
+known_first_party = ["config"]
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.3.0"
 faker = "^18.11.2"
+ruff = "^0.0.282"
 
 [build-system]
 requires = ["poetry-core"]

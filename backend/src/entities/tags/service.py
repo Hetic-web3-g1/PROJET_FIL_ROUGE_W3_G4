@@ -2,9 +2,11 @@ import sqlalchemy as sa
 from sqlalchemy.engine import Connection
 from sqlalchemy.sql import func
 
-from .models import tag_table
-from .schemas import Tag, TagCreate
-from ..biographies.models import biography_tag_table, biography_table
+from src.database import service as db_service
+from src.database.db_engine import metadata
+from src.utils.string_utils import sanitizeAndLowerCase
+
+from ..biographies.models import biography_table, biography_tag_table
 from ..biographies.schemas import Biography
 from ..masterclasses.models import masterclass_table, masterclass_tag_table
 from ..masterclasses.schemas import Masterclass
@@ -18,9 +20,8 @@ from ..videos.models import video_table, video_tag_table
 from ..videos.schemas import Video
 from ..work_analyses.models import work_analysis_table, work_analysis_tag_table
 from ..work_analyses.schemas import WorkAnalysis
-from ...database import service as db_service
-from ...database.db_engine import metadata
-from ...utils.string_utils import sanitizeAndLowerCase
+from .models import tag_table
+from .schemas import Tag, TagCreate
 
 
 def _parse_row(row: sa.Row):  # type: ignore

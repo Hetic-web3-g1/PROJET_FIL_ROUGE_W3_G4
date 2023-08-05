@@ -2,10 +2,11 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends
 
-from . import service as academy_service
+from src.database.db_engine import engine
+
 from ..authentification.dependencies import CustomSecurity
 from ..users.schemas import User
-from ...database.db_engine import engine
+from . import service as academy_service
 
 router = APIRouter(
     prefix="/academies",

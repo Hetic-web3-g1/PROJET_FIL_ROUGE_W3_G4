@@ -1,17 +1,18 @@
 from uuid import UUID
 
 import sqlalchemy as sa
-from fastapi import UploadFile, File
+from fastapi import File, UploadFile
 from sqlalchemy.engine import Connection
 
-from .exceptions import PartitionNotFound
-from .models import partition_table, partition_tag_table
-from .schemas import Partition, PartitionCreate
+from src.database import service as db_service
+
+from ..s3_objects import service as s3_service
 from ..tags import service as tag_service
 from ..tags.schemas import PartitionTag
 from ..users.schemas import User
-from ..s3_objects import service as s3_service
-from ...database import service as db_service
+from .exceptions import PartitionNotFound
+from .models import partition_table, partition_tag_table
+from .schemas import Partition, PartitionCreate
 
 
 def _parse_row(row: sa.Row):  # type: ignore

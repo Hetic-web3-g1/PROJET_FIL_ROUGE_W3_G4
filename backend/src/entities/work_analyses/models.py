@@ -1,10 +1,10 @@
-from uuid import uuid4
 from datetime import datetime
+from uuid import uuid4
 
-from sqlalchemy import Table, Column, ForeignKey, Integer, String, Text, DateTime, ARRAY
+from sqlalchemy import ARRAY, Column, DateTime, ForeignKey, Integer, String, Table, Text
 from sqlalchemy.dialects.postgresql import UUID
 
-from ...database.db_engine import metadata
+from src.database.db_engine import metadata
 
 work_analysis_table = Table(
     "work_analysis",

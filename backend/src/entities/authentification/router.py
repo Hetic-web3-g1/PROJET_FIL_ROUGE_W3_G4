@@ -1,10 +1,11 @@
-from fastapi import APIRouter, HTTPException, Body
+from fastapi import APIRouter, Body, HTTPException
 
-from . import exceptions as auth_exceptions
-from . import service as auth_service
+from src.database.db_engine import engine
+
 from ..users import exceptions as user_exceptions
 from ..users import service as user_service
-from ...database.db_engine import engine
+from . import exceptions as auth_exceptions
+from . import service as auth_service
 
 router = APIRouter(
     prefix="/auth",

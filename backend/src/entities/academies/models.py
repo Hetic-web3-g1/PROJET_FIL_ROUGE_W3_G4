@@ -1,11 +1,10 @@
 from datetime import datetime
 from uuid import uuid4
 
-from sqlalchemy import Table, Column, ForeignKey, String, DateTime
+from sqlalchemy import Column, DateTime, ForeignKey, String, Table
 from sqlalchemy.types import UUID
 
 from src.database.db_engine import metadata
-
 
 academy_table = Table(
     "academy",

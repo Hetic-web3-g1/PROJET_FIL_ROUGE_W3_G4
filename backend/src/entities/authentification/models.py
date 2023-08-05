@@ -1,11 +1,10 @@
 from uuid import uuid4
 
 import sqlalchemy as sa
-from sqlalchemy import Column, ForeignKey, DateTime, LargeBinary
+from sqlalchemy import Column, DateTime, ForeignKey, LargeBinary
 from sqlalchemy.dialects.postgresql import UUID
 
 from src.database.db_engine import metadata
-
 
 reset_token = sa.Table(
     "reset_token",

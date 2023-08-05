@@ -1,6 +1,5 @@
+from typing import Any, Callable, List, Optional, Type, TypeVar, Union
 from uuid import UUID
-
-from typing import Callable, Optional, TypeVar, Type, Union, List, Any
 
 import sqlalchemy as sa
 from fastapi.encoders import jsonable_encoder
@@ -10,7 +9,6 @@ from sqlalchemy import Table
 from sqlalchemy.engine import Connection
 
 from .db_engine import metadata
-
 
 T = TypeVar("T")
 

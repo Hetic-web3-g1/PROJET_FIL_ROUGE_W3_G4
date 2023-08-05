@@ -3,10 +3,11 @@ from uuid import UUID
 import sqlalchemy as sa
 from sqlalchemy.engine import Connection
 
+from src.database import service as db_service
+
 from .exceptions import AcademyNotFound
 from .models import academy_table
 from .schemas import Academy, AcademyCreate
-from ...database import service as db_service
 
 
 def _parse_row(row: sa.Row):  # type: ignore

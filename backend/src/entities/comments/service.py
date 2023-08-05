@@ -1,10 +1,11 @@
 import sqlalchemy as sa
 from sqlalchemy.engine import Connection
 
+from src.database import service as db_service
+
+from ..users.schemas import User
 from .models import comment_table
 from .schemas import Comment, CommentCreate
-from ..users.schemas import User
-from ...database import service as db_service
 
 
 def _parse_row(row: sa.Row):  # type: ignore

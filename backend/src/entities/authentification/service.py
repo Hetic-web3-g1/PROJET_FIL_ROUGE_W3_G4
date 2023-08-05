@@ -1,22 +1,23 @@
 import base64
-from datetime import datetime, timedelta
-from hashlib import scrypt
 import hmac
 import os
+from datetime import datetime, timedelta
+from hashlib import scrypt
 from uuid import UUID
 
 import jwt
 import sendgrid
 import sqlalchemy as sa
-from sqlalchemy.engine import Connection
 from fastapi.encoders import jsonable_encoder
+from sqlalchemy.engine import Connection
 
 from config import settings
-from .exceptions import InvalidToken, ExpiredToken, InvalidCredentials
-from .models import reset_token
-from .schemas import ResetToken
+
 from ..users.models import user_table
 from ..users.schemas import User
+from .exceptions import ExpiredToken, InvalidCredentials, InvalidToken
+from .models import reset_token
+from .schemas import ResetToken
 
 
 def create_reset_token(

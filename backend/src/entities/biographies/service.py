@@ -3,16 +3,17 @@ from uuid import UUID
 import sqlalchemy as sa
 from sqlalchemy.engine import Connection
 
-from .exceptions import BiographyNotFound
-from .models import biography_table, biography_tag_table
-from .schemas import Biography, BiographyCreate
+from src.database import service as db_service
+
 from ..tags import service as tag_service
 from ..tags.schemas import BiographyTag
 from ..users.schemas import User
-from ...database import service as db_service
+from .exceptions import BiographyNotFound
+from .models import biography_table, biography_tag_table
+from .schemas import Biography, BiographyCreate
 
 
-def _parse_row(row: sa.Row):  # type: ignore
+def _parse_row(row: sa.Row):
     return Biography(**row._asdict())
 
 

@@ -3,7 +3,8 @@ from uuid import uuid4
 
 from sqlalchemy import Column, DateTime, Float, ForeignKey, Integer, String, Table
 from sqlalchemy.dialects.postgresql import UUID
-from ...database.db_engine import metadata
+
+from src.database.db_engine import metadata
 
 video_table = Table(
     "video",

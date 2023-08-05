@@ -3,7 +3,8 @@ from uuid import uuid4
 
 from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Table
 from sqlalchemy.dialects.postgresql import UUID
-from ...database.db_engine import metadata
+
+from src.database.db_engine import metadata
 
 subtitle_table = Table(
     "subtitle",

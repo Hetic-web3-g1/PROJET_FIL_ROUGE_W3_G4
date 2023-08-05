@@ -1,12 +1,13 @@
 from typing import List
 
-from fastapi import APIRouter, Depends, Body
+from fastapi import APIRouter, Body, Depends
 
-from . import service as search_service
-from .schemas import Tag
+from src.database.db_engine import engine
+
 from ..authentification.dependencies import CustomSecurity
 from ..users.schemas import User
-from ...database.db_engine import engine
+from . import service as search_service
+from .schemas import Tag
 
 router = APIRouter(
     prefix="/tags",
