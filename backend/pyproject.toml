@@ -31,6 +31,7 @@ known_first_party = ["config"]
 black = "^23.3.0"
 faker = "^18.11.2"
 ruff = "^0.0.282"
+pytest = "^7.4.0"
 
 [build-system]
 requires = ["poetry-core"]

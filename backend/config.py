@@ -9,7 +9,7 @@ from sqlalchemy.engine.url import URL
 
 
 class Settings(BaseSettings):
-    environment: Literal["development", "production"] = os.getenv("CONFIG_NAME")  # type: ignore
+    environment: Literal["development", "production", "test"] = os.getenv("CONFIG_NAME")  # type: ignore
     postgres_user: str
     postgres_password: str
     postgres_hostname: str
