@@ -2,7 +2,6 @@ from uuid import UUID
 
 import sqlalchemy as sa
 from sqlalchemy.engine import Connection
-
 from src.database import service as db_service
 
 from ..masterclasses.models import masterclass_user_table
@@ -11,7 +10,7 @@ from .models import user_table
 from .schemas import User, UserCreate
 
 
-def _parse_row(row: sa.Row):  # type: ignore
+def _parse_row(row: sa.Row): 
     return User(**row._asdict())
 
 
