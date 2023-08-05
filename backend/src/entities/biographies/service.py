@@ -3,13 +3,14 @@ from uuid import UUID
 import sqlalchemy as sa
 from sqlalchemy.engine import Connection
 
-
 from src.database import service as db_service
-from src.database.db_engine import engine
-from .schemas import Biography, BiographyCreate
+
+from ..tags import service as tag_service
+from ..tags.schemas import BiographyTag
 from ..users.schemas import User
-from .models import biography_table
 from .exceptions import BiographyNotFound
+from .models import biography_table, biography_tag_table
+from .schemas import Biography, BiographyCreate
 
 
 def _parse_row(row: sa.Row):
@@ -66,6 +67,21 @@ def create_biography(
     result = db_service.create_object(
         conn, biography_table, biography.dict(), user_id=user.id
     )
+
+    tags = [biography.first_name, biography.last_name]
+    if biography.instrument:
+        tags.extend(biography.instrument)
+
+    for content in tags:
+        tag_service.create_tag_and_link_table(
+            conn,
+            content,
+            biography_table,
+            biography_tag_table,
+            BiographyTag,
+            result.id,
+        )
+
     return _parse_row(result)
 
 
@@ -115,3 +131,4 @@ def delete_biography(conn: Connection, biography_id: UUID) -> None:
         raise BiographyNotFound
 
     db_service.delete_object(conn, biography_table, biography_id)
+    tag_service.delete_orphaned_tags(conn, biography_tag_table, biography_table)

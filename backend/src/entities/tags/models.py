@@ -1,5 +1,4 @@
-from sqlalchemy import Table, Column, ForeignKey, Integer, String
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import Column, Integer, String, Table
 
 from src.database.db_engine import metadata
 

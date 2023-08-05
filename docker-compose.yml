@@ -16,6 +16,7 @@ services:
       - back-network
     depends_on:
       - db
+      - s3
 
   frontend-app:
     build:
@@ -91,4 +92,5 @@ volumes:
 networks:
   app-network:
   back-network:
+
 # docker-compose -f docker-compose.yml up -d --build

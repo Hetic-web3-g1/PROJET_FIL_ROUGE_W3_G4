@@ -2,15 +2,17 @@ from uuid import UUID
 
 import sqlalchemy as sa
 from sqlalchemy.engine import Connection
-
 from src.database import service as db_service
-from .schemas import WorkAnalysis, WorkAnalysisCreate
+
+from ..tags import service as tag_service
+from ..tags.schemas import WorkAnalysisTag
 from ..users.schemas import User
-from .models import work_analysis_table
 from .exceptions import WorkAnalysisNotFound
+from .models import work_analysis_table, work_analysis_tag_table
+from .schemas import WorkAnalysis, WorkAnalysisCreate
 
 
-def _parse_row(row: sa.Row):
+def _parse_row(row: sa.Row): 
     return WorkAnalysis(**row._asdict())
 
 
@@ -66,6 +68,16 @@ def create_work_analysis(
     result = db_service.create_object(
         conn, work_analysis_table, work_analysis.dict(), user_id=user.id
     )
+
+    tag_service.create_tag_and_link_table(
+        conn,
+        work_analysis.title,
+        work_analysis_table,
+        work_analysis_tag_table,
+        WorkAnalysisTag,
+        result.id,
+    )
+
     return _parse_row(result)
 
 

@@ -1,16 +1,20 @@
 from uuid import UUID
 
 import sqlalchemy as sa
+from fastapi import File, UploadFile
 from sqlalchemy.engine import Connection
 from src.database import service as db_service
 
+from ..s3_objects import service as s3_service
+from ..tags import service as tag_service
+from ..tags.schemas import PartitionTag
 from ..users.schemas import User
 from .exceptions import PartitionNotFound
-from .models import partition_table
+from .models import partition_table, partition_tag_table
 from .schemas import Partition, PartitionCreate
 
 
-def _parse_row(row: sa.Row):
+def _parse_row(row: sa.Row): 
     return Partition(**row._asdict())
 
 
@@ -49,21 +53,43 @@ def get_partition_by_id(conn: Connection, partition_id: UUID) -> Partition:
 
 
 def create_partition(
-    conn: Connection, partition: PartitionCreate, user: User
+    conn: Connection,
+    user: User,
+    public: bool,
+    file: UploadFile = File(...),
 ) -> Partition:
     """
     Create a partition.
 
     Args:
-        partition (PartitionCreate): PartitionCreate object.
         user (User): The user creating the partition.
+        public (bool): Whether the partition file should be public or not.
+        file (UploadFile): The file to upload.
 
     Returns:
         Partition: The created Partition object.
     """
+    object = s3_service.upload(file, user, public)
+
+    partition = PartitionCreate(
+        filename=object.filename,
+        status="uploaded",
+        s3_object_id=object.id,
+    )
+
     result = db_service.create_object(
         conn, partition_table, partition.dict(), user_id=user.id
     )
+
+    tag_service.create_tag_and_link_table(
+        conn,
+        partition.filename,
+        partition_table,
+        partition_tag_table,
+        PartitionTag,
+        result.id,
+    )
+
     return _parse_row(result)
 
 

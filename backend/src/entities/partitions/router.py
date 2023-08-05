@@ -1,16 +1,14 @@
-from fastapi import APIRouter, HTTPException, Depends
 from uuid import UUID
 
-from .schemas import PartitionCreate
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
+
+from src.database.db_engine import engine
+
+from ..authentification.dependencies import CustomSecurity
 from ..users.schemas import User
-from ..tags.schemas import TagCreate, PartitionTag
-from src.entities.partitions.models import partition_table, partition_tag_table
 from . import exceptions as partition_exceptions
 from . import service as partition_service
-from ..tags import service as tag_service
-from src.database.db_engine import engine
-from ..authentification.dependencies import CustomSecurity
-from src.utils.string_utils import sanitizeAndLowerCase
+from .schemas import PartitionCreate
 
 router = APIRouter(
     prefix="/partitions",
@@ -39,20 +37,12 @@ def get_partition_by_id(
 
 @router.post("/partition")
 def create_partition(
-    partition: PartitionCreate, user: User = Depends(CustomSecurity())
+    file: UploadFile = File(...),
+    public: bool = True,
+    user: User = Depends(CustomSecurity()),
 ):
     with engine.begin() as conn:
-        created_partition = partition_service.create_partition(conn, partition, user)
-        tag = TagCreate(
-            content=sanitizeAndLowerCase(partition.name),
-            tag_type=str(partition_table),
-        )
-        created_tag = tag_service.create_tag(conn, tag, user)
-        partition_tag = PartitionTag(
-            partition_id=created_partition.id,
-            tag_id=created_tag.id,
-        )
-        tag_service.create_link_table(conn, partition_tag, partition_tag_table, user)
+        partition_service.create_partition(conn, user, public, file)
 
 
 @router.put("/partition/{partition_id}")

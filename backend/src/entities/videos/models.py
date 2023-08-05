@@ -3,13 +3,14 @@ from uuid import uuid4
 
 from sqlalchemy import Column, DateTime, Float, ForeignKey, Integer, String, Table
 from sqlalchemy.dialects.postgresql import UUID
+
 from src.database.db_engine import metadata
 
 video_table = Table(
     "video",
     metadata,
     Column("id", UUID(as_uuid=True), primary_key=True, unique=True, default=uuid4),
-    Column("name", String(), nullable=False),
+    Column("filename", String(), nullable=False),
     Column("duration", Float(), nullable=True),
     Column("status", String(), nullable=False, default="created"),
     Column("version", Float(), nullable=False, default=1.0),
@@ -36,7 +37,7 @@ video_tag_table = Table(
     "video_tag",
     metadata,
     Column(
-        "video_id",
+        "entity_id",
         UUID(as_uuid=True),
         ForeignKey("video.id", ondelete="CASCADE"),
         nullable=False,

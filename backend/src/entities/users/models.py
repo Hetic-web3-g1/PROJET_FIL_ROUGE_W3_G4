@@ -1,7 +1,6 @@
-from uuid import uuid4
 from datetime import datetime
+from uuid import uuid4
 
-from sqlalchemy.types import UUID
 from sqlalchemy import (
     Table,
     Column,
@@ -12,6 +11,8 @@ from sqlalchemy import (
     LargeBinary,
     ARRAY,
 )
+from sqlalchemy.types import UUID
+
 from src.database.db_engine import metadata
 
 
@@ -38,7 +39,7 @@ user_tag_table = Table(
     "user_tag",
     metadata,
     Column(
-        "user_id",
+        "entity_id",
         UUID(as_uuid=True),
         ForeignKey("user.id", ondelete="CASCADE"),
         nullable=False,

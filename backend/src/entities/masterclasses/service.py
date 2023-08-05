@@ -2,27 +2,23 @@ from uuid import UUID
 
 import sqlalchemy as sa
 from sqlalchemy.engine import Connection
-
 from src.database import service as db_service
-from .schemas import (
-    Masterclass,
-    MasterclassCreate,
-    MasterclassUserCreate,
-    MasterclassUser,
-)
+
+from ..tags import service as tag_service
+from ..tags.schemas import MasterclassTag
 from ..users.schemas import User
-from .models import masterclass_table, masterclass_user_table
-from .exceptions import (
-    MasterclassNotFound,
-    MasterclassUserNotFound,
-)
+from .exceptions import MasterclassNotFound, MasterclassUserNotFound
+from .models import (masterclass_table, masterclass_tag_table,
+                     masterclass_user_table)
+from .schemas import (Masterclass, MasterclassCreate, MasterclassUser,
+                      MasterclassUserCreate)
 
 
-def _parse_row(row: sa.Row):
+def _parse_row(row: sa.Row): 
     return Masterclass(**row._asdict())
 
 
-def _parse_row_masterclass_user(row: sa.Row):
+def _parse_row_masterclass_user(row: sa.Row):  # type: ignore
     return MasterclassUser(**row._asdict())
 
 
@@ -95,6 +91,21 @@ def create_masterclass(
     result = db_service.create_object(
         conn, masterclass_table, masterclass.dict(), user_id=user.id
     )
+
+    tags = [masterclass.title]
+    if masterclass.instrument:
+        tags.extend(masterclass.instrument)
+
+    for content in tags:
+        tag_service.create_tag_and_link_table(
+            conn,
+            content,
+            masterclass_table,
+            masterclass_tag_table,
+            MasterclassTag,
+            result.id,
+        )
+
     return _parse_row(result)
 
 
@@ -144,6 +155,7 @@ def delete_masterclass(conn: Connection, masterclass_id: UUID) -> None:
         raise MasterclassNotFound
 
     db_service.delete_object(conn, masterclass_table, masterclass_id)
+    tag_service.delete_orphaned_tags(conn, masterclass_tag_table, masterclass_table)
 
 
 # ---------------------------------------------------------------------------------------------------- #

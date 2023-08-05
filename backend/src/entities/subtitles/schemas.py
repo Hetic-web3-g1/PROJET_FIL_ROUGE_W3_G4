@@ -1,10 +1,11 @@
-from pydantic import BaseModel
-from uuid import UUID
 from datetime import datetime
+from uuid import UUID
+
+from pydantic import BaseModel
 
 
 class SubtitleCreate(BaseModel):
-    name: str | None
+    filename: str | None
     language: str
     status: str | None
     video_id: UUID | None

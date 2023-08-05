@@ -1,33 +1,33 @@
 import sqlalchemy as sa
-from sqlalchemy.sql import func
 from sqlalchemy.engine import Connection
-
+from sqlalchemy.sql import func
 from src.database import service as db_service
-from .schemas import Tag, TagCreate
-from ..biographies.schemas import Biography
-from ..masterclasses.schemas import Masterclass
-from ..partitions.schemas import Partition
-from ..subtitles.schemas import Subtitle
-from ..users.schemas import User
-from ..videos.schemas import Video
-from ..work_analyses.schemas import WorkAnalysis
-from ..biographies.models import biography_tag_table, biography_table
-from ..masterclasses.models import masterclass_table, masterclass_tag_table
-from ..partitions.models import partition_table, partition_tag_table
-from ..subtitles.models import subtitle_table, subtitle_tag_table
-from ..users.models import user_table, user_tag_table
-from ..videos.models import video_table, video_tag_table
-from ..work_analyses.models import work_analysis_table, work_analysis_tag_table
-from ..users.schemas import User
-from .models import tag_table
 from src.database.db_engine import metadata
+from src.utils.string_utils import sanitizeAndLowerCase
+
+from ..biographies.models import biography_table, biography_tag_table
+from ..biographies.schemas import Biography
+from ..masterclasses.models import masterclass_table, masterclass_tag_table
+from ..masterclasses.schemas import Masterclass
+from ..partitions.models import partition_table, partition_tag_table
+from ..partitions.schemas import Partition
+from ..subtitles.models import subtitle_table, subtitle_tag_table
+from ..subtitles.schemas import Subtitle
+from ..users.models import user_table, user_tag_table
+from ..users.schemas import User
+from ..videos.models import video_table, video_tag_table
+from ..videos.schemas import Video
+from ..work_analyses.models import work_analysis_table, work_analysis_tag_table
+from ..work_analyses.schemas import WorkAnalysis
+from .models import tag_table
+from .schemas import Tag, TagCreate
 
 
-def _parse_row(row: sa.Row):
+def _parse_row(row: sa.Row): 
     return Tag(**row._asdict())
 
 
-def _parse_row_specific_object(row: sa.Row, object_entity):
+def _parse_row_specific_object(row: sa.Row, object_entity):  # type: ignore
     return object_entity(**row._asdict())
 
 
@@ -162,13 +162,12 @@ def search_object_by_tag(conn: Connection, tag: Tag):
     return None
 
 
-def create_tag(conn: Connection, tag: TagCreate, user: User) -> Tag:
+def create_tag(conn: Connection, tag: TagCreate) -> Tag:
     """
     Create a tag.
 
     Args:
         tag (TagCreate): TagCreate object.
-        user (User): The user creating the tag.
 
     Returns:
         Tag: The created Tag object.
@@ -177,16 +176,58 @@ def create_tag(conn: Connection, tag: TagCreate, user: User) -> Tag:
     return _parse_row(result)
 
 
-def create_link_table(conn: Connection, entity, entity_table, user: User):
+def create_link_table(conn: Connection, entity, entity_table):
     """
     Link Tag to entity.
 
     Args:
         entity (Entity): Entity object.
-        user (User): The user creating the tag.
 
     Returns:
         Entity: The created Entity object.
     """
     result = db_service.create_object(conn, entity_table, entity.dict())
     return result
+
+
+def create_tag_and_link_table(
+    conn, content, object_table, object_tag_table, object, object_id
+):
+    """
+    Create a tag and link it to an object.
+
+    Args:
+        content (str): Content of the tag.
+        object_table (Table): Table of object.
+        object_tag_table (Table): Table linking tag to object.
+        object (object): Object.
+        object_id (int): Id of object.
+    """
+    tag = TagCreate(content=sanitizeAndLowerCase(content), tag_type=str(object_table))
+
+    created_tag = create_tag(conn, tag)
+
+    entity_tag = object(
+        entity_id=object_id,
+        tag_id=created_tag.id,
+    )
+    create_link_table(conn, entity_tag, object_tag_table)
+
+
+def delete_orphaned_tags(conn: Connection, link_table, entity_table):
+    """
+    Delete orphaned tags.
+
+    Args:
+        link_table (Table): Table linking tag to entity.
+        entity_table (Table): Table of entity.
+    """
+    orphaned_tags = conn.execute(
+        sa.select(tag_table).where(
+            (tag_table.c.tag_type == str(entity_table))
+            & sa.not_(tag_table.c.id.in_(sa.select(link_table.c.tag_id)))
+        )
+    ).fetchall()
+    print(orphaned_tags)
+    orphaned_tag_ids = [tag.id for tag in orphaned_tags]
+    db_service.delete_objects(conn, tag_table, orphaned_tag_ids)

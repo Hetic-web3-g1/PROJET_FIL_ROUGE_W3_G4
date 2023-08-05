@@ -1,7 +1,8 @@
-from sqlalchemy import Table, Column, ForeignKey, Integer, String, DateTime
-from sqlalchemy.dialects.postgresql import UUID
-from uuid import uuid4
 from datetime import datetime
+from uuid import uuid4
+
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Table
+from sqlalchemy.dialects.postgresql import UUID
 
 from src.database.db_engine import metadata
 
@@ -9,7 +10,7 @@ image_table = Table(
     "image",
     metadata,
     Column("id", UUID(as_uuid=True), primary_key=True, unique=True, default=uuid4),
-    Column("name", String(), nullable=False),
+    Column("filename", String(), nullable=False),
     Column(
         "s3_object_id",
         UUID(as_uuid=True),

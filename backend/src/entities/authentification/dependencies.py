@@ -1,9 +1,9 @@
-from fastapi import Request, Depends, HTTPException, status
+from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import APIKeyHeader
 
-from .schemas import ServicesRights
-from . import service as auth_service
 from ..users.schemas import User
+from . import service as auth_service
+from .schemas import ServicesRights
 
 
 class CustomSecurity:

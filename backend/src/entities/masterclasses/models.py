@@ -1,7 +1,8 @@
-from sqlalchemy import Table, Column, ForeignKey, Integer, String, DateTime, ARRAY
-from sqlalchemy.dialects.postgresql import UUID
-from uuid import uuid4
 from datetime import datetime
+from uuid import uuid4
+
+from sqlalchemy import ARRAY, Column, DateTime, ForeignKey, Integer, String, Table
+from sqlalchemy.dialects.postgresql import UUID
 
 from src.database.db_engine import metadata
 
@@ -89,7 +90,7 @@ masterclass_tag_table = Table(
     "masterclass_tag",
     metadata,
     Column(
-        "masterclass_id",
+        "entity_id",
         UUID(as_uuid=True),
         ForeignKey("masterclass.id", ondelete="CASCADE"),
         nullable=False,

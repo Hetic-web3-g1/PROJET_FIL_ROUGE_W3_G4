@@ -10,7 +10,7 @@ from .models import user_table
 from .schemas import User, UserCreate
 
 
-def _parse_row(row: sa.Row):
+def _parse_row(row: sa.Row): 
     return User(**row._asdict())
 
 

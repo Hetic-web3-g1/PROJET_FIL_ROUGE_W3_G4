@@ -1,12 +1,14 @@
-from fastapi import APIRouter, HTTPException, Depends
 from uuid import UUID
 
-from .schemas import WorkAnalysisCreate
+from fastapi import APIRouter, Depends, HTTPException
+
+from src.database.db_engine import engine
+
+from ..authentification.dependencies import CustomSecurity
 from ..users.schemas import User
 from . import exceptions as work_analysis_exceptions
 from . import service as work_analysis_service
-from src.database.db_engine import engine
-from ..authentification.dependencies import CustomSecurity
+from .schemas import WorkAnalysisCreate
 
 router = APIRouter(
     prefix="/work_analyzes",

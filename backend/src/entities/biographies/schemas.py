@@ -1,9 +1,8 @@
-from pydantic import BaseModel
+from datetime import datetime
 from typing import List
 from uuid import UUID
-from datetime import datetime
-from sqlalchemy.orm import sessionmaker, relationship
-from ..tags.schemas import Tag
+
+from pydantic import BaseModel
 
 
 class BiographyCreate(BaseModel):

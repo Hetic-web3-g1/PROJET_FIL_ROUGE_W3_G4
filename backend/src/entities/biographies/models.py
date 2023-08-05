@@ -1,7 +1,8 @@
-from sqlalchemy import Table, Column, ForeignKey, Integer, String, Text, DateTime, ARRAY
-from sqlalchemy.dialects.postgresql import UUID
-from uuid import uuid4
 from datetime import datetime
+from uuid import uuid4
+
+from sqlalchemy import ARRAY, Column, DateTime, ForeignKey, Integer, String, Table, Text
+from sqlalchemy.dialects.postgresql import UUID
 
 from src.database.db_engine import metadata
 
@@ -55,7 +56,7 @@ biography_tag_table = Table(
     "biography_tag",
     metadata,
     Column(
-        "biography_id",
+        "entity_id",
         UUID(as_uuid=True),
         ForeignKey("biography.id", ondelete="CASCADE"),
         nullable=False,
