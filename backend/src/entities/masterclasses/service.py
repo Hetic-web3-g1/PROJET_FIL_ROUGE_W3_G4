@@ -8,13 +8,16 @@ from ..tags import service as tag_service
 from ..tags.schemas import MasterclassTag
 from ..users.schemas import User
 from .exceptions import MasterclassNotFound, MasterclassUserNotFound
-from .models import (masterclass_table, masterclass_tag_table,
-                     masterclass_user_table)
-from .schemas import (Masterclass, MasterclassCreate, MasterclassUser,
-                      MasterclassUserCreate)
+from .models import masterclass_table, masterclass_tag_table, masterclass_user_table
+from .schemas import (
+    Masterclass,
+    MasterclassCreate,
+    MasterclassUser,
+    MasterclassUserCreate,
+)
 
 
-def _parse_row(row: sa.Row): 
+def _parse_row(row: sa.Row):
     return Masterclass(**row._asdict())
 
 
@@ -75,6 +78,29 @@ def get_masterclasses_by_user(conn: Connection, user_id: UUID):
         yield _parse_row(row)
 
 
+def create_masterclass_tags(conn: Connection, masterclass: Masterclass) -> None:
+    """
+    Create tags for a masterclass.
+
+    Args:
+        masterclass (MasterclassCreate): MasterclassCreate object.
+        result (sa.Row): Result of masterclass creation.
+    """
+    tags = [masterclass.title]
+    if masterclass.instrument:
+        tags.extend(masterclass.instrument)
+
+    for content in tags:
+        tag_service.create_tag_and_link_table(
+            conn,
+            content,
+            masterclass_table,
+            masterclass_tag_table,
+            MasterclassTag,
+            masterclass.id,
+        )
+
+
 def create_masterclass(
     conn: Connection, masterclass: MasterclassCreate, user: User
 ) -> Masterclass:
@@ -92,19 +118,8 @@ def create_masterclass(
         conn, masterclass_table, masterclass.dict(), user_id=user.id
     )
 
-    tags = [masterclass.title]
-    if masterclass.instrument:
-        tags.extend(masterclass.instrument)
-
-    for content in tags:
-        tag_service.create_tag_and_link_table(
-            conn,
-            content,
-            masterclass_table,
-            masterclass_tag_table,
-            MasterclassTag,
-            result.id,
-        )
+    masterclass = _parse_row(result)
+    create_masterclass_tags(conn, masterclass)
 
     return _parse_row(result)
 
@@ -135,6 +150,14 @@ def update_masterclass(
     result = db_service.update_object(
         conn, masterclass_table, masterclass_id, masterclass.dict(), user_id=user.id
     )
+
+    tag_service.delete_tags_by_object_id(
+        conn, masterclass_id, masterclass_table, masterclass_tag_table
+    )
+
+    masterclass = _parse_row(result)
+    create_masterclass_tags(conn, masterclass)
+
     return _parse_row(result)
 
 
@@ -154,8 +177,10 @@ def delete_masterclass(conn: Connection, masterclass_id: UUID) -> None:
     if check is None:
         raise MasterclassNotFound
 
+    tag_service.delete_tags_by_object_id(
+        conn, masterclass_id, masterclass_table, masterclass_tag_table
+    )
     db_service.delete_object(conn, masterclass_table, masterclass_id)
-    tag_service.delete_orphaned_tags(conn, masterclass_tag_table, masterclass_table)
 
 
 # ---------------------------------------------------------------------------------------------------- #

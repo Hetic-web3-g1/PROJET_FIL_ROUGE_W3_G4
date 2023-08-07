@@ -14,7 +14,7 @@ from .models import partition_table, partition_tag_table
 from .schemas import Partition, PartitionCreate
 
 
-def _parse_row(row: sa.Row): 
+def _parse_row(row: sa.Row):
     return Partition(**row._asdict())
 
 
@@ -52,6 +52,27 @@ def get_partition_by_id(conn: Connection, partition_id: UUID) -> Partition:
     return _parse_row(result)
 
 
+def create_partition_tags(conn: Connection, partition: Partition) -> None:
+    """
+    Create tags for a partition.
+
+    Args:
+        partition (PartitionCreate): PartitionCreate object.
+        result (sa.Row): Result of partition creation.
+    """
+    tags = [partition.filename]
+
+    for content in tags:
+        tag_service.create_tag_and_link_table(
+            conn,
+            content,
+            partition_table,
+            partition_tag_table,
+            PartitionTag,
+            partition.id,
+        )
+
+
 def create_partition(
     conn: Connection,
     user: User,
@@ -81,14 +102,8 @@ def create_partition(
         conn, partition_table, partition.dict(), user_id=user.id
     )
 
-    tag_service.create_tag_and_link_table(
-        conn,
-        partition.filename,
-        partition_table,
-        partition_tag_table,
-        PartitionTag,
-        result.id,
-    )
+    partition = _parse_row(result)
+    create_partition_tags(conn, partition)
 
     return _parse_row(result)
 
@@ -119,10 +134,18 @@ def update_partition(
     result = db_service.update_object(
         conn, partition_table, partition_id, partition.dict(), user_id=user.id
     )
+
+    tag_service.delete_tags_by_object_id(
+        conn, partition_id, partition_table, partition_tag_table
+    )
+
+    partition = _parse_row(result)
+    create_partition_tags(conn, partition)
+
     return _parse_row(result)
 
 
-def delete_partition(conn: Connection, connection_id: UUID) -> None:
+def delete_partition(conn: Connection, partition_id: UUID) -> None:
     """
     Delete a partition.
 
@@ -133,9 +156,12 @@ def delete_partition(conn: Connection, connection_id: UUID) -> None:
         PartitionNotFound: If the partition does not exist.
     """
     check = conn.execute(
-        sa.select(partition_table).where(partition_table.c.id == connection_id)
+        sa.select(partition_table).where(partition_table.c.id == partition_id)
     ).first()
     if check is None:
         raise PartitionNotFound
 
-    db_service.delete_object(conn, partition_table, connection_id)
+    tag_service.delete_tags_by_object_id(
+        conn, partition_id, partition_table, partition_tag_table
+    )
+    db_service.delete_object(conn, partition_table, partition_id)

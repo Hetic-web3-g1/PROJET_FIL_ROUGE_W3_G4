@@ -51,6 +51,32 @@ def get_biography_by_id(con: Connection, biography_id: UUID) -> Biography:
     return _parse_row(result)
 
 
+def create_biography_tag(conn: Connection, biography: Biography) -> None:
+    """
+    Create tags for a biography.
+
+    Args:
+        biography (BiographyCreate): BiographyCreate object.
+        result (sa.Row): Result of masterclass creation.
+
+    Returns:
+        BiographyTag: The created BiographyTag object.
+    """
+    tags = [biography.first_name, biography.last_name]
+    if biography.instrument:
+        tags.extend(biography.instrument)
+
+    for content in tags:
+        tag_service.create_tag_and_link_table(
+            conn,
+            content,
+            biography_table,
+            biography_tag_table,
+            BiographyTag,
+            biography.id,
+        )
+
+
 def create_biography(
     conn: Connection, biography: BiographyCreate, user: User
 ) -> Biography:
@@ -68,19 +94,8 @@ def create_biography(
         conn, biography_table, biography.dict(), user_id=user.id
     )
 
-    tags = [biography.first_name, biography.last_name]
-    if biography.instrument:
-        tags.extend(biography.instrument)
-
-    for content in tags:
-        tag_service.create_tag_and_link_table(
-            conn,
-            content,
-            biography_table,
-            biography_tag_table,
-            BiographyTag,
-            result.id,
-        )
+    biography = _parse_row(result)
+    create_biography_tag(conn, biography)
 
     return _parse_row(result)
 
@@ -111,6 +126,14 @@ def update_biography(
     result = db_service.update_object(
         conn, biography_table, biography_id, biography.dict(), user_id=user.id
     )
+
+    tag_service.delete_tags_by_object_id(
+        conn, biography_id, biography_table, biography_tag_table
+    )
+
+    biography = _parse_row(result)
+    create_biography_tag(conn, biography)
+
     return _parse_row(result)
 
 
@@ -130,5 +153,7 @@ def delete_biography(conn: Connection, biography_id: UUID) -> None:
     if check is None:
         raise BiographyNotFound
 
+    tag_service.delete_tags_by_object_id(
+        conn, biography_id, biography_table, biography_tag_table
+    )
     db_service.delete_object(conn, biography_table, biography_id)
-    tag_service.delete_orphaned_tags(conn, biography_tag_table, biography_table)
