@@ -78,9 +78,7 @@ def get_masterclasses_by_user(conn: Connection, user_id: UUID):
         yield _parse_row(row)
 
 
-def create_masterclass_tags(
-    conn: Connection, masterclass: MasterclassCreate, result
-) -> None:
+def create_masterclass_tags(conn: Connection, masterclass: Masterclass) -> None:
     """
     Create tags for a masterclass.
 
@@ -99,7 +97,7 @@ def create_masterclass_tags(
             masterclass_table,
             masterclass_tag_table,
             MasterclassTag,
-            result.id,
+            masterclass.id,
         )
 
 
@@ -120,7 +118,7 @@ def create_masterclass(
         conn, masterclass_table, masterclass.dict(), user_id=user.id
     )
 
-    create_masterclass_tags(conn, masterclass, result)
+    create_masterclass_tags(conn, result)
 
     return _parse_row(result)
 
@@ -156,7 +154,7 @@ def update_masterclass(
         conn, masterclass_id, masterclass_table, masterclass_tag_table
     )
 
-    create_masterclass_tags(conn, masterclass, result)
+    create_masterclass_tags(conn, result)
 
     return _parse_row(result)
 

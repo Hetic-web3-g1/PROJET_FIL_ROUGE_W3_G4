@@ -51,7 +51,7 @@ def get_biography_by_id(con: Connection, biography_id: UUID) -> Biography:
     return _parse_row(result)
 
 
-def create_biography_tag(conn: Connection, biography: BiographyCreate, result) -> None:
+def create_biography_tag(conn: Connection, biography: Biography) -> None:
     """
     Create tags for a biography.
 
@@ -73,7 +73,7 @@ def create_biography_tag(conn: Connection, biography: BiographyCreate, result) -
             biography_table,
             biography_tag_table,
             BiographyTag,
-            result.id,
+            biography.id,
         )
 
 
@@ -94,7 +94,7 @@ def create_biography(
         conn, biography_table, biography.dict(), user_id=user.id
     )
 
-    create_biography_tag(conn, biography, result)
+    create_biography_tag(conn, result)
 
     return _parse_row(result)
 
@@ -130,7 +130,7 @@ def update_biography(
         conn, biography_id, biography_table, biography_tag_table
     )
 
-    create_biography_tag(conn, biography, result)
+    create_biography_tag(conn, result)
 
     return _parse_row(result)
 

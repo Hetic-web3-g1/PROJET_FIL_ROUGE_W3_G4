@@ -52,7 +52,7 @@ def get_partition_by_id(conn: Connection, partition_id: UUID) -> Partition:
     return _parse_row(result)
 
 
-def create_partition_tags(conn: Connection, partition: PartitionCreate, result) -> None:
+def create_partition_tags(conn: Connection, partition: Partition) -> None:
     """
     Create tags for a partition.
 
@@ -69,7 +69,7 @@ def create_partition_tags(conn: Connection, partition: PartitionCreate, result) 
             partition_table,
             partition_tag_table,
             PartitionTag,
-            result.id,
+            partition.id,
         )
 
 
@@ -102,7 +102,7 @@ def create_partition(
         conn, partition_table, partition.dict(), user_id=user.id
     )
 
-    create_partition_tags(conn, partition, result)
+    create_partition_tags(conn, result)
 
     return _parse_row(result)
 
@@ -138,7 +138,7 @@ def update_partition(
         conn, partition_id, partition_table, partition_tag_table
     )
 
-    create_partition_tags(conn, partition, result)
+    create_partition_tags(conn, result)
 
     return _parse_row(result)
 

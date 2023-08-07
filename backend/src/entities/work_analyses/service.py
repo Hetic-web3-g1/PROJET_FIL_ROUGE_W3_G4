@@ -52,7 +52,7 @@ def get_work_analysis_by_id(conn: Connection, work_analysis_id: UUID) -> WorkAna
     return _parse_row(result)
 
 
-def create_work_analysis_tags(conn, work_analysis, result) -> None:
+def create_work_analysis_tags(conn, work_analysis: WorkAnalysis) -> None:
     """
     Create tags for a work_analysis.
 
@@ -69,7 +69,7 @@ def create_work_analysis_tags(conn, work_analysis, result) -> None:
             work_analysis_table,
             work_analysis_tag_table,
             WorkAnalysisTag,
-            result.id,
+            work_analysis.id,
         )
 
 
@@ -90,7 +90,7 @@ def create_work_analysis(
         conn, work_analysis_table, work_analysis.dict(), user_id=user.id
     )
 
-    create_work_analysis_tags(conn, work_analysis, result)
+    create_work_analysis_tags(conn, result)
 
     return _parse_row(result)
 
@@ -135,7 +135,7 @@ def update_work_analysis(
         conn, work_analysis_id, work_analysis_table, work_analysis_tag_table
     )
 
-    create_work_analysis_tags(conn, work_analysis, result)
+    create_work_analysis_tags(conn, result)
 
     return _parse_row(result)
 
