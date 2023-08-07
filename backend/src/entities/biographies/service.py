@@ -94,8 +94,10 @@ def create_biography(
         conn, biography_table, biography.dict(), user_id=user.id
     )
 
-    create_biography_tag(conn, result)
+    biography = _parse_row(result)
+    create_biography_tag(conn, biography)
 
+    print(create_biography_tag(conn, result))
     return _parse_row(result)
 
 
@@ -130,7 +132,8 @@ def update_biography(
         conn, biography_id, biography_table, biography_tag_table
     )
 
-    create_biography_tag(conn, result)
+    biography = _parse_row(result)
+    create_biography_tag(conn, biography)
 
     return _parse_row(result)
 

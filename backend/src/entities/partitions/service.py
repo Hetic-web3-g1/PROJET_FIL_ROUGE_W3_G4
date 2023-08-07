@@ -102,7 +102,8 @@ def create_partition(
         conn, partition_table, partition.dict(), user_id=user.id
     )
 
-    create_partition_tags(conn, result)
+    partition = _parse_row(result)
+    create_partition_tags(conn, partition)
 
     return _parse_row(result)
 
@@ -138,7 +139,8 @@ def update_partition(
         conn, partition_id, partition_table, partition_tag_table
     )
 
-    create_partition_tags(conn, result)
+    partition = _parse_row(result)
+    create_partition_tags(conn, partition)
 
     return _parse_row(result)
 

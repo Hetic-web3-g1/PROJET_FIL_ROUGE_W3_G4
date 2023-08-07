@@ -118,7 +118,8 @@ def create_masterclass(
         conn, masterclass_table, masterclass.dict(), user_id=user.id
     )
 
-    create_masterclass_tags(conn, result)
+    masterclass = _parse_row(result)
+    create_masterclass_tags(conn, masterclass)
 
     return _parse_row(result)
 
@@ -154,7 +155,8 @@ def update_masterclass(
         conn, masterclass_id, masterclass_table, masterclass_tag_table
     )
 
-    create_masterclass_tags(conn, result)
+    masterclass = _parse_row(result)
+    create_masterclass_tags(conn, masterclass)
 
     return _parse_row(result)
 
