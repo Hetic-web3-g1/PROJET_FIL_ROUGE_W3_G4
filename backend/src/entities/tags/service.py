@@ -23,7 +23,7 @@ from .models import tag_table
 from .schemas import Tag, TagCreate
 
 
-def _parse_row(row: sa.Row): 
+def _parse_row(row: sa.Row):
     return Tag(**row._asdict())
 
 
@@ -148,7 +148,6 @@ def search_object_by_tag(conn: Connection, tag: Tag):
     Args:
         Tag (Tag): Tag object.
 
-
     Returns:
         Object: Object.
     """
@@ -160,6 +159,33 @@ def search_object_by_tag(conn: Connection, tag: Tag):
         return {tag.tag_type: data}
 
     return None
+
+
+def search_tags_by_object(conn: Connection, object_id, object_table, object_tag_table):
+    """
+    Search for Tags linked to an object.
+
+    Args:
+        object_id (int): Id of object.
+        object_table (Table): Table of object.
+        object_tag_table (Table): Table linking tag to object.
+
+    Returns:
+        List[Tag]: List of Tag objects.
+    """
+    query = (
+        sa.select(tag_table)
+        .select_from(
+            tag_table.join(
+                object_tag_table, tag_table.c.id == object_tag_table.c.tag_id
+            ).join(object_table, object_table.c.id == object_tag_table.c.entity_id)
+        )
+        .where(object_table.c.id == object_id)
+    )
+
+    result = conn.execute(query).fetchall()
+    for row in result:
+        yield _parse_row(row)
 
 
 def create_tag(conn: Connection, tag: TagCreate) -> Tag:
@@ -191,7 +217,7 @@ def create_link_table(conn: Connection, entity, entity_table):
 
 
 def create_tag_and_link_table(
-    conn, content, object_table, object_tag_table, object, object_id
+    conn: Connection, content, object_table, object_tag_table, object, object_id
 ):
     """
     Create a tag and link it to an object.
@@ -214,6 +240,24 @@ def create_tag_and_link_table(
     create_link_table(conn, entity_tag, object_tag_table)
 
 
+def delete_tags_by_object_id(
+    conn: Connection, object_id, object_table, object_tag_table
+):
+    """
+    Delete tags linked to an object.
+
+    Args:
+        object_id (int): Id of object.
+        object_table (Table): Table of object.
+        object_tag_table (Table): Table linking tag to object.
+    """
+    result = search_tags_by_object(conn, object_id, object_table, object_tag_table)
+    tag_ids = [tag.id for tag in result]
+    print(tag_ids)
+    db_service.delete_objects(conn, tag_table, tag_ids)
+
+
+# DEPRECIATED
 def delete_orphaned_tags(conn: Connection, link_table, entity_table):
     """
     Delete orphaned tags.
@@ -228,6 +272,5 @@ def delete_orphaned_tags(conn: Connection, link_table, entity_table):
             & sa.not_(tag_table.c.id.in_(sa.select(link_table.c.tag_id)))
         )
     ).fetchall()
-    print(orphaned_tags)
     orphaned_tag_ids = [tag.id for tag in orphaned_tags]
     db_service.delete_objects(conn, tag_table, orphaned_tag_ids)

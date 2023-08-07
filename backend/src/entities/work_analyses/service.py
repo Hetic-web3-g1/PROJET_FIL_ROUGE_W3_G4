@@ -12,7 +12,7 @@ from .models import work_analysis_table, work_analysis_tag_table
 from .schemas import WorkAnalysis, WorkAnalysisCreate
 
 
-def _parse_row(row: sa.Row): 
+def _parse_row(row: sa.Row):
     return WorkAnalysis(**row._asdict())
 
 
@@ -52,6 +52,27 @@ def get_work_analysis_by_id(conn: Connection, work_analysis_id: UUID) -> WorkAna
     return _parse_row(result)
 
 
+def create_work_analysis_tags(conn, work_analysis, result) -> None:
+    """
+    Create tags for a work_analysis.
+
+    Args:
+        work_analysis (WorkAnalysisCreate): WorkAnalysisCreate object.
+        result (sa.Row): Result of work_analysis creation.
+    """
+    tags = [work_analysis.title]
+
+    for content in tags:
+        tag_service.create_tag_and_link_table(
+            conn,
+            content,
+            work_analysis_table,
+            work_analysis_tag_table,
+            WorkAnalysisTag,
+            result.id,
+        )
+
+
 def create_work_analysis(
     conn: Connection, work_analysis: WorkAnalysisCreate, user: User
 ) -> WorkAnalysis:
@@ -69,14 +90,7 @@ def create_work_analysis(
         conn, work_analysis_table, work_analysis.dict(), user_id=user.id
     )
 
-    tag_service.create_tag_and_link_table(
-        conn,
-        work_analysis.title,
-        work_analysis_table,
-        work_analysis_tag_table,
-        WorkAnalysisTag,
-        result.id,
-    )
+    create_work_analysis_tags(conn, work_analysis, result)
 
     return _parse_row(result)
 
@@ -116,6 +130,13 @@ def update_work_analysis(
         work_analysis.dict(),
         user_id=user.id,
     )
+
+    tag_service.delete_tags_by_object_id(
+        conn, work_analysis_id, work_analysis_table, work_analysis_tag_table
+    )
+
+    create_work_analysis_tags(conn, work_analysis, result)
+
     return _parse_row(result)
 
 
@@ -137,4 +158,7 @@ def delete_work_analysis(conn: Connection, work_analysis_id: UUID) -> None:
     if check is None:
         raise WorkAnalysisNotFound
 
+    tag_service.delete_tags_by_object_id(
+        conn, work_analysis_id, work_analysis_table, work_analysis_tag_table
+    )
     db_service.delete_object(conn, work_analysis_table, work_analysis_id)
