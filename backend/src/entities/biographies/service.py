@@ -97,7 +97,6 @@ def create_biography(
     biography = _parse_row(result)
     create_biography_tag(conn, biography)
 
-    print(create_biography_tag(conn, result))
     return _parse_row(result)
 
 
