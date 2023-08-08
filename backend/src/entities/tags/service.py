@@ -132,7 +132,7 @@ def get_object_by_tag(conn: Connection, tag: Tag):
     return None
 
 
-def get_tags_by_object(conn: Connection, object_id, object_table, object_tag_table):
+def get_tags_by_object_id(conn: Connection, object_id, object_table, object_tag_table):
     """
     Search for Tags linked to an object.
 
@@ -223,7 +223,7 @@ def delete_tags_by_object_id(
         object_table (Table): Table of object.
         object_tag_table (Table): Table linking tag to object.
     """
-    result = search_tags_by_object(conn, object_id, object_table, object_tag_table)
+    result = get_tags_by_object_id(conn, object_id, object_table, object_tag_table)
     tag_ids = [tag.id for tag in result]
     db_service.delete_objects(conn, tag_table, tag_ids)
 
