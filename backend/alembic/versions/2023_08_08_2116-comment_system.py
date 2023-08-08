@@ -1,8 +1,8 @@
-"""modify_comment_system
+"""comment_system
 
-Revision ID: d0a638293e09
+Revision ID: a3e24a61b27e
 Revises: c96c3c26c7d1
-Create Date: 2023-08-08 13:14:13.410671
+Create Date: 2023-08-08 21:16:54.402132
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = "d0a638293e09"
+revision = "a3e24a61b27e"
 down_revision = "c96c3c26c7d1"
 branch_labels = None
 depends_on = None
@@ -22,7 +22,18 @@ def upgrade() -> None:
         "biography_comment", sa.Column("entity_id", sa.UUID(), nullable=False)
     )
     op.drop_constraint(
+        "biography_comment_comment_id_fkey", "biography_comment", type_="foreignkey"
+    )
+    op.drop_constraint(
         "biography_comment_biography_id_fkey", "biography_comment", type_="foreignkey"
+    )
+    op.create_foreign_key(
+        op.f("biography_comment_comment_id_fkey"),
+        "biography_comment",
+        "comment",
+        ["comment_id"],
+        ["id"],
+        ondelete="CASCADE",
     )
     op.create_foreign_key(
         op.f("biography_comment_entity_id_fkey"),
@@ -30,10 +41,14 @@ def upgrade() -> None:
         "biography",
         ["entity_id"],
         ["id"],
+        ondelete="CASCADE",
     )
     op.drop_column("biography_comment", "biography_id")
     op.add_column(
         "masterclass_comment", sa.Column("entity_id", sa.UUID(), nullable=False)
+    )
+    op.drop_constraint(
+        "masterclass_comment_comment_id_fkey", "masterclass_comment", type_="foreignkey"
     )
     op.drop_constraint(
         "masterclass_comment_masterclass_id_fkey",
@@ -46,10 +61,22 @@ def upgrade() -> None:
         "masterclass",
         ["entity_id"],
         ["id"],
+        ondelete="CASCADE",
+    )
+    op.create_foreign_key(
+        op.f("masterclass_comment_comment_id_fkey"),
+        "masterclass_comment",
+        "comment",
+        ["comment_id"],
+        ["id"],
+        ondelete="CASCADE",
     )
     op.drop_column("masterclass_comment", "masterclass_id")
     op.add_column(
         "partition_comment", sa.Column("entity_id", sa.UUID(), nullable=False)
+    )
+    op.drop_constraint(
+        "partition_comment_comment_id_fkey", "partition_comment", type_="foreignkey"
     )
     op.drop_constraint(
         "partition_comment_partition_id_fkey", "partition_comment", type_="foreignkey"
@@ -60,11 +87,31 @@ def upgrade() -> None:
         "partition",
         ["entity_id"],
         ["id"],
+        ondelete="CASCADE",
+    )
+    op.create_foreign_key(
+        op.f("partition_comment_comment_id_fkey"),
+        "partition_comment",
+        "comment",
+        ["comment_id"],
+        ["id"],
+        ondelete="CASCADE",
     )
     op.drop_column("partition_comment", "partition_id")
     op.add_column("subtitle_comment", sa.Column("entity_id", sa.UUID(), nullable=False))
     op.drop_constraint(
+        "subtitle_comment_comment_id_fkey", "subtitle_comment", type_="foreignkey"
+    )
+    op.drop_constraint(
         "subtitle_comment_subtitle_id_fkey", "subtitle_comment", type_="foreignkey"
+    )
+    op.create_foreign_key(
+        op.f("subtitle_comment_comment_id_fkey"),
+        "subtitle_comment",
+        "comment",
+        ["comment_id"],
+        ["id"],
+        ondelete="CASCADE",
     )
     op.create_foreign_key(
         op.f("subtitle_comment_entity_id_fkey"),
@@ -72,11 +119,15 @@ def upgrade() -> None:
         "subtitle",
         ["entity_id"],
         ["id"],
+        ondelete="CASCADE",
     )
     op.drop_column("subtitle_comment", "subtitle_id")
     op.add_column("video_comment", sa.Column("entity_id", sa.UUID(), nullable=False))
     op.drop_constraint(
         "video_comment_video_id_fkey", "video_comment", type_="foreignkey"
+    )
+    op.drop_constraint(
+        "video_comment_comment_id_fkey", "video_comment", type_="foreignkey"
     )
     op.create_foreign_key(
         op.f("video_comment_entity_id_fkey"),
@@ -84,6 +135,15 @@ def upgrade() -> None:
         "video",
         ["entity_id"],
         ["id"],
+        ondelete="CASCADE",
+    )
+    op.create_foreign_key(
+        op.f("video_comment_comment_id_fkey"),
+        "video_comment",
+        "comment",
+        ["comment_id"],
+        ["id"],
+        ondelete="CASCADE",
     )
     op.drop_column("video_comment", "video_id")
     op.add_column(
@@ -94,12 +154,26 @@ def upgrade() -> None:
         "work_analysis_comment",
         type_="foreignkey",
     )
+    op.drop_constraint(
+        "work_analysis_comment_comment_id_fkey",
+        "work_analysis_comment",
+        type_="foreignkey",
+    )
+    op.create_foreign_key(
+        op.f("work_analysis_comment_comment_id_fkey"),
+        "work_analysis_comment",
+        "comment",
+        ["comment_id"],
+        ["id"],
+        ondelete="CASCADE",
+    )
     op.create_foreign_key(
         op.f("work_analysis_comment_entity_id_fkey"),
         "work_analysis_comment",
         "work_analysis",
         ["entity_id"],
         ["id"],
+        ondelete="CASCADE",
     )
     op.drop_column("work_analysis_comment", "work_analysis_id")
     # ### end Alembic commands ###
@@ -116,6 +190,18 @@ def downgrade() -> None:
         "work_analysis_comment",
         type_="foreignkey",
     )
+    op.drop_constraint(
+        op.f("work_analysis_comment_comment_id_fkey"),
+        "work_analysis_comment",
+        type_="foreignkey",
+    )
+    op.create_foreign_key(
+        "work_analysis_comment_comment_id_fkey",
+        "work_analysis_comment",
+        "comment",
+        ["comment_id"],
+        ["id"],
+    )
     op.create_foreign_key(
         "work_analysis_comment_work_analysis_id_fkey",
         "work_analysis_comment",
@@ -129,7 +215,17 @@ def downgrade() -> None:
         sa.Column("video_id", sa.UUID(), autoincrement=False, nullable=False),
     )
     op.drop_constraint(
+        op.f("video_comment_comment_id_fkey"), "video_comment", type_="foreignkey"
+    )
+    op.drop_constraint(
         op.f("video_comment_entity_id_fkey"), "video_comment", type_="foreignkey"
+    )
+    op.create_foreign_key(
+        "video_comment_comment_id_fkey",
+        "video_comment",
+        "comment",
+        ["comment_id"],
+        ["id"],
     )
     op.create_foreign_key(
         "video_comment_video_id_fkey", "video_comment", "video", ["video_id"], ["id"]
@@ -142,6 +238,9 @@ def downgrade() -> None:
     op.drop_constraint(
         op.f("subtitle_comment_entity_id_fkey"), "subtitle_comment", type_="foreignkey"
     )
+    op.drop_constraint(
+        op.f("subtitle_comment_comment_id_fkey"), "subtitle_comment", type_="foreignkey"
+    )
     op.create_foreign_key(
         "subtitle_comment_subtitle_id_fkey",
         "subtitle_comment",
@@ -149,10 +248,22 @@ def downgrade() -> None:
         ["subtitle_id"],
         ["id"],
     )
+    op.create_foreign_key(
+        "subtitle_comment_comment_id_fkey",
+        "subtitle_comment",
+        "comment",
+        ["comment_id"],
+        ["id"],
+    )
     op.drop_column("subtitle_comment", "entity_id")
     op.add_column(
         "partition_comment",
         sa.Column("partition_id", sa.UUID(), autoincrement=False, nullable=False),
+    )
+    op.drop_constraint(
+        op.f("partition_comment_comment_id_fkey"),
+        "partition_comment",
+        type_="foreignkey",
     )
     op.drop_constraint(
         op.f("partition_comment_entity_id_fkey"),
@@ -166,10 +277,22 @@ def downgrade() -> None:
         ["partition_id"],
         ["id"],
     )
+    op.create_foreign_key(
+        "partition_comment_comment_id_fkey",
+        "partition_comment",
+        "comment",
+        ["comment_id"],
+        ["id"],
+    )
     op.drop_column("partition_comment", "entity_id")
     op.add_column(
         "masterclass_comment",
         sa.Column("masterclass_id", sa.UUID(), autoincrement=False, nullable=False),
+    )
+    op.drop_constraint(
+        op.f("masterclass_comment_comment_id_fkey"),
+        "masterclass_comment",
+        type_="foreignkey",
     )
     op.drop_constraint(
         op.f("masterclass_comment_entity_id_fkey"),
@@ -183,6 +306,13 @@ def downgrade() -> None:
         ["masterclass_id"],
         ["id"],
     )
+    op.create_foreign_key(
+        "masterclass_comment_comment_id_fkey",
+        "masterclass_comment",
+        "comment",
+        ["comment_id"],
+        ["id"],
+    )
     op.drop_column("masterclass_comment", "entity_id")
     op.add_column(
         "biography_comment",
@@ -193,11 +323,23 @@ def downgrade() -> None:
         "biography_comment",
         type_="foreignkey",
     )
+    op.drop_constraint(
+        op.f("biography_comment_comment_id_fkey"),
+        "biography_comment",
+        type_="foreignkey",
+    )
     op.create_foreign_key(
         "biography_comment_biography_id_fkey",
         "biography_comment",
         "biography",
         ["biography_id"],
+        ["id"],
+    )
+    op.create_foreign_key(
+        "biography_comment_comment_id_fkey",
+        "biography_comment",
+        "comment",
+        ["comment_id"],
         ["id"],
     )
     op.drop_column("biography_comment", "entity_id")

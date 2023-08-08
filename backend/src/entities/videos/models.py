@@ -29,8 +29,18 @@ video_table = Table(
 video_comment_table = Table(
     "video_comment",
     metadata,
-    Column("entity_id", UUID(as_uuid=True), ForeignKey("video.id"), nullable=False),
-    Column("comment_id", Integer, ForeignKey("comment.id"), nullable=False),
+    Column(
+        "entity_id",
+        UUID(as_uuid=True),
+        ForeignKey("video.id", ondelete="CASCADE"),
+        nullable=False,
+    ),
+    Column(
+        "comment_id",
+        Integer,
+        ForeignKey("comment.id", ondelete="CASCADE"),
+        nullable=False,
+    ),
 )
 
 video_tag_table = Table(

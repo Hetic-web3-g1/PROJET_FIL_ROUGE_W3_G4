@@ -3,12 +3,35 @@ from sqlalchemy.engine import Connection
 from src.database import service as db_service
 
 from ..users.schemas import User
+from .exceptions import CommentNotFound
 from .models import comment_table
 from .schemas import Comment, CommentCreate
 
 
 def _parse_row(row: sa.Row):
     return Comment(**row._asdict())
+
+
+def get_comment_by_id(conn: Connection, comment_id: int) -> Comment:
+    """
+    Get comment by id.
+
+    Args:
+        comment_id (int): Id of comment.
+
+    Raises:
+        CommentNotFound: If the comment is not found.
+
+    Returns:
+        Comment: Comment object.
+    """
+    result = conn.execute(
+        sa.select(comment_table).where(comment_table.c.id == comment_id)
+    ).first()
+    if result is None:
+        raise CommentNotFound
+
+    return _parse_row(result)
 
 
 def get_comment_by_object_id(
@@ -99,9 +122,50 @@ def create_comment_and_link_table(
     create_link_table(conn, entity_comment, object)
 
 
-def update_comment():
-    pass
+def update_comment(
+    conn: Connection, comment_id: int, comment: CommentCreate, user: User
+) -> Comment:
+    """
+    Update a comment.
+
+    Args:
+        comment_id (int): Id of comment.
+        comment (CommentCreate): CommentCreate object.
+        user_id (UUID): The id of the user updating the comment.
+
+    Raises:
+        CommentNotFound: If the comment is not found.
+
+    Returns:
+        Comment: The updated Comment object.
+    """
+    check = conn.execute(
+        sa.select(comment_table).where(comment_table.c.id == comment_id)
+    ).first()
+    if check is None:
+        raise CommentNotFound
+
+    result = db_service.update_object(
+        conn, comment_table, comment_id, comment.dict(), user_id=user.id
+    )
+
+    return _parse_row(result)
 
 
-def delete_comment():
-    pass
+def delete_comment(conn: Connection, comment_id: int) -> None:
+    """
+    Delete comment.
+
+    Args:
+        comment_id (int): Id of comment.
+
+    Raises:
+        CommentNotFound: If the comment is not found.
+    """
+    check = conn.execute(
+        sa.select(comment_table).where(comment_table.c.id == comment_id)
+    ).first()
+    if check is None:
+        raise CommentNotFound
+
+    db_service.delete_object(conn, comment_table, comment_id)
