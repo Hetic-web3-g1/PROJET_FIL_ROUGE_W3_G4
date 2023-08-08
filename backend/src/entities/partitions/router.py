@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from src.database.db_engine import engine
 
 from ..authentification.dependencies import CustomSecurity
+from ..comments.schemas import CommentCreate
 from ..users.schemas import User
 from . import exceptions as partition_exceptions
 from . import service as partition_service
@@ -66,3 +67,14 @@ def delete_partition(partition_id: UUID, user: User = Depends(CustomSecurity()))
             status_code=404,
             detail="Partition not found",
         )
+
+
+# ---------------------------------------------------------------------------------------------------- #
+
+
+@router.post("/partition/comment/{partition_id}")
+def create_partition_comment(
+    comment: CommentCreate, partition_id, user: User = Depends(CustomSecurity())
+):
+    with engine.begin() as conn:
+        partition_service.create_partition_comment(conn, comment, partition_id, user)

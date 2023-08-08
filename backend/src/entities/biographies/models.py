@@ -46,9 +46,7 @@ biography_translation_table = Table(
 biography_comment_table = Table(
     "biography_comment",
     metadata,
-    Column(
-        "biography_id", UUID(as_uuid=True), ForeignKey("biography.id"), nullable=False
-    ),
+    Column("entity_id", UUID(as_uuid=True), ForeignKey("biography.id"), nullable=False),
     Column("comment_id", Integer, ForeignKey("comment.id"), nullable=False),
 )
 

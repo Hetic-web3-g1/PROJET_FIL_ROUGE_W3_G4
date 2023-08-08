@@ -208,6 +208,7 @@ def create_link_table(conn: Connection, entity, entity_table):
 
     Args:
         entity (Entity): Entity object.
+        entity_table (Table): Table of entity.
 
     Returns:
         Entity: The created Entity object.
@@ -217,7 +218,7 @@ def create_link_table(conn: Connection, entity, entity_table):
 
 
 def create_tag_and_link_table(
-    conn: Connection, content, object_table, object_tag_table, object, object_id
+    conn: Connection, content, object_table, object, object_tag_table, object_id
 ):
     """
     Create a tag and link it to an object.
@@ -233,11 +234,11 @@ def create_tag_and_link_table(
 
     created_tag = create_tag(conn, tag)
 
-    entity_tag = object(
+    entity_tag = object_tag_table(
         entity_id=object_id,
         tag_id=created_tag.id,
     )
-    create_link_table(conn, entity_tag, object_tag_table)
+    create_link_table(conn, entity_tag, object)
 
 
 def delete_tags_by_object_id(
@@ -253,7 +254,6 @@ def delete_tags_by_object_id(
     """
     result = search_tags_by_object(conn, object_id, object_table, object_tag_table)
     tag_ids = [tag.id for tag in result]
-    print(tag_ids)
     db_service.delete_objects(conn, tag_table, tag_ids)
 
 

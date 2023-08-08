@@ -78,7 +78,7 @@ masterclass_comment_table = Table(
     "masterclass_comment",
     metadata,
     Column(
-        "masterclass_id",
+        "entity_id",
         UUID(as_uuid=True),
         ForeignKey("masterclass.id"),
         nullable=False,

@@ -36,9 +36,7 @@ partition_annotation_table = Table(
 partition_comment_table = Table(
     "partition_comment",
     metadata,
-    Column(
-        "partition_id", UUID(as_uuid=True), ForeignKey("partition.id"), nullable=False
-    ),
+    Column("entity_id", UUID(as_uuid=True), ForeignKey("partition.id"), nullable=False),
     Column("comment_id", Integer, ForeignKey("comment.id"), nullable=False),
 )
 

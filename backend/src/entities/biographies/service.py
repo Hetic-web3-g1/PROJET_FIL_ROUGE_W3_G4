@@ -5,11 +5,13 @@ from sqlalchemy.engine import Connection
 
 from src.database import service as db_service
 
+from ..comments import service as comment_service
+from ..comments.schemas import BiographyComment
 from ..tags import service as tag_service
 from ..tags.schemas import BiographyTag
 from ..users.schemas import User
 from .exceptions import BiographyNotFound
-from .models import biography_table, biography_tag_table
+from .models import biography_table, biography_tag_table, biography_comment_table
 from .schemas import Biography, BiographyCreate
 
 
@@ -157,3 +159,25 @@ def delete_biography(conn: Connection, biography_id: UUID) -> None:
         conn, biography_id, biography_table, biography_tag_table
     )
     db_service.delete_object(conn, biography_table, biography_id)
+
+
+# ---------------------------------------------------------------------------------------------------- #
+
+
+def create_biography_comment(conn: Connection, comment, biography_id, user: User):
+    """
+    Create a comment and link it to a biography.
+
+    Args:
+        comment (str): Comment Object.
+        biography_id (int): Id of biography.
+        user (User): The user creating the comment.
+    """
+    comment_service.create_comment_and_link_table(
+        conn,
+        comment,
+        biography_comment_table,
+        BiographyComment,
+        biography_id,
+        user,
+    )

@@ -29,7 +29,7 @@ video_table = Table(
 video_comment_table = Table(
     "video_comment",
     metadata,
-    Column("video_id", UUID(as_uuid=True), ForeignKey("video.id"), nullable=False),
+    Column("entity_id", UUID(as_uuid=True), ForeignKey("video.id"), nullable=False),
     Column("comment_id", Integer, ForeignKey("comment.id"), nullable=False),
 )
 

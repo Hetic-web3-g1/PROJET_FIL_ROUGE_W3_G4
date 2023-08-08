@@ -17,7 +17,7 @@ from .models import s3_object_table
 from .schemas import S3Object, S3ObjectCreate
 
 
-def _parse_row(row: sa.Row): 
+def _parse_row(row: sa.Row):
     return S3Object(**row._asdict())
 
 
@@ -221,5 +221,5 @@ def upload(
 
     if response is not None:
         raise s3Error
-    print(result)
+
     return result

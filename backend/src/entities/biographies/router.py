@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from src.database.db_engine import engine
 
 from ..authentification.dependencies import CustomSecurity
+from ..comments.schemas import CommentCreate
 from ..users.schemas import User
 from . import exceptions as biography_exceptions
 from . import service as biography_service
@@ -76,3 +77,14 @@ def delete_biography(
             status_code=404,
             detail="Biography not found",
         )
+
+
+# ---------------------------------------------------------------------------------------------------- #
+
+
+@router.post("/biography/comment/{biography_id}")
+def create_biography_comment(
+    comment: CommentCreate, biography_id, user: User = Depends(CustomSecurity())
+):
+    with engine.begin() as conn:
+        biography_service.create_biography_comment(conn, comment, biography_id, user)
