@@ -31,7 +31,7 @@ def _parse_row_specific_object(row: sa.Row, object_entity):  # type: ignore
     return object_entity(**row._asdict())
 
 
-def search_by_table(conn: Connection, search, tables):
+def get_all_tags_by_table(conn: Connection, search, tables):
     """
     Search for a Tag in a list of tables.
 
@@ -45,43 +45,36 @@ def search_by_table(conn: Connection, search, tables):
     objects = {
         "biography": {
             "table": biography_table,
-            "object_id": "biography_id",
             "tag_table": biography_tag_table,
             "entity": Biography,
         },
         "masterclass": {
             "table": masterclass_table,
-            "object_id": "masterclass_id",
             "tag_table": masterclass_tag_table,
             "entity": Masterclass,
         },
         "partition": {
             "table": partition_table,
-            "object_id": "partition_id",
             "tag_table": partition_tag_table,
             "entity": Partition,
         },
         "subtitle": {
             "table": subtitle_table,
-            "object_id": "subtitle_id",
             "tag_table": subtitle_tag_table,
             "entity": Subtitle,
         },
         "user": {
             "table": user_table,
-            "object_id": "user_id",
             "tag_table": user_tag_table,
             "entity": User,
         },
         "video": {
             "table": video_table,
-            "object_id": "video_id",
             "tag_table": video_tag_table,
             "entity": Video,
         },
         "work_analysis": {
             "table": work_analysis_table,
-            "object_id": "work_analysis_id",
             "tag_table": work_analysis_tag_table,
             "entity": WorkAnalysis,
         },
@@ -92,15 +85,13 @@ def search_by_table(conn: Connection, search, tables):
     for table in tables:
         object_table = objects[table]["table"]
         object_tag_table = objects[table]["tag_table"]
-        object_id = objects[table]["object_id"]
         object_entity = objects[table]["entity"]
-
         cte_query = (
             sa.select(object_table, func.array_agg(tag_table.c.content).label("tags"))
             .select_from(
                 object_table.join(
                     object_tag_table,
-                    object_table.c.id == object_tag_table.c[object_id],
+                    object_table.c.id == object_tag_table.c["entity_id"],
                 ).join(tag_table, tag_table.c.id == object_tag_table.c.tag_id)
             )
             .group_by(object_table.c.id)
@@ -120,28 +111,8 @@ def search_by_table(conn: Connection, search, tables):
 
     return result
 
-    # def search_by_table(conn: Connection, search, tables):
 
-
-#     """
-#     Search for a Tag in a list of tables.
-
-#     Args:
-#         search (str): Search string.
-#         tables (List[str]): List of tables to search in.
-
-#     Returns:
-#         List[Search]: List of Search objects.
-#     """
-#     query = sa.select(tag_table).where(
-#         tag_table.c.content.ilike(f"{search}%") & tag_table.c.tag_type.in_(tables)
-#     )
-
-#     result = conn.execute(query).fetchall()
-#     return [_parse_row(row) for row in result]
-
-
-def search_object_by_tag(conn: Connection, tag: Tag):
+def get_object_by_tag(conn: Connection, tag: Tag):
     """
     Search for an object with a Tag.
 
@@ -161,7 +132,7 @@ def search_object_by_tag(conn: Connection, tag: Tag):
     return None
 
 
-def search_tags_by_object(conn: Connection, object_id, object_table, object_tag_table):
+def get_tags_by_object(conn: Connection, object_id, object_table, object_tag_table):
     """
     Search for Tags linked to an object.
 

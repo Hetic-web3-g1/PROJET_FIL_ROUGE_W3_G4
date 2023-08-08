@@ -16,21 +16,21 @@ router = APIRouter(
 
 
 @router.get("/search/{search}")
-def search_by_table(
+def get_all_tags_by_table(
     search: str,
     tables: List[str] = Body(...),
     user: User = Depends(CustomSecurity()),
 ):
     with engine.begin() as conn:
-        response = search_service.search_by_table(conn, search, tables)
+        response = search_service.get_all_tags_by_table(conn, search, tables)
         return response
 
 
-@router.get("/search_object_by_tag")
-def search_object_by_tag(
+@router.get("/get_object_by_tag")
+def get_object_by_tag(
     tag: Tag,
     user: User = Depends(CustomSecurity()),
 ):
     with engine.begin() as conn:
-        response = search_service.search_object_by_tag(conn, tag)
+        response = search_service.get_object_by_tag(conn, tag)
         return response
