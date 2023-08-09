@@ -69,7 +69,7 @@ def create_comment(conn: Connection, comment: CommentCreate, user: User) -> Comm
 
     Args:
         comment (CommentCreate): CommentCreate object.
-        user_id (UUID): The id of the user creating the comment.
+        user (UUID): The user creating the comment.
 
     Returns:
         Comment: The created Comment object.
@@ -89,7 +89,7 @@ def create_link_table(conn: Connection, entity, entity_table):
         entity_table (Table): Table of entity.
 
     Returns:
-        Entity: The created Entity object.
+        The created link table.
     """
     result = db_service.create_object(conn, entity_table, entity.dict())
     return result
@@ -97,7 +97,7 @@ def create_link_table(conn: Connection, entity, entity_table):
 
 def create_comment_and_link_table(
     conn: Connection,
-    comment,
+    comment: CommentCreate,
     object,
     object_comment_table,
     object_id,
@@ -112,8 +112,6 @@ def create_comment_and_link_table(
         object_tag_table (Table): Table of object_comment.
         object_id (int): Id of object.
     """
-    comment = CommentCreate(content=comment.content)
-
     created_comment = create_comment(conn, comment, user)
 
     entity_comment = object_comment_table(
