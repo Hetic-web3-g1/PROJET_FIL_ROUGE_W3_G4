@@ -15,3 +15,8 @@ class Annotation(AnnotationCreate):
     created_at: datetime
     updated_at: datetime | None
     updated_by: UUID | None
+
+
+class PartitionAnnotation(BaseModel):
+    partition_id: UUID
+    annotation_id: int

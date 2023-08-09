@@ -6,6 +6,7 @@ from src.database.db_engine import engine
 
 from ..authentification.dependencies import CustomSecurity
 from ..users.schemas import User
+from . import exceptions as comment_exceptions
 from . import service as comment_service
 from .schemas import CommentCreate
 
@@ -40,7 +41,7 @@ def update_comment(
         with engine.begin() as conn:
             comment_service.update_comment(conn, comment_id, comment, user)
 
-    except comment_service.CommentNotFound:
+    except comment_exceptions.CommentNotFound:
         raise HTTPException(
             status_code=404,
             detail="Comment not found",
@@ -56,7 +57,7 @@ def delete_comment(
         with engine.begin() as conn:
             comment_service.delete_comment(conn, comment_id)
 
-    except comment_service.CommentNotFound:
+    except comment_exceptions.CommentNotFound:
         raise HTTPException(
             status_code=404,
             detail="Comment not found",

@@ -5,6 +5,7 @@ from fastapi import UploadFile
 from sqlalchemy.engine import Connection
 from src.database import service as db_service
 
+from ..annotations import service as annotation_service
 from ..comments import service as comment_service
 from ..comments.schemas import PartitionComment
 from ..s3_objects import service as s3_service
@@ -163,6 +164,7 @@ def delete_partition(conn: Connection, partition_id: UUID) -> None:
     if check is None:
         raise PartitionNotFound
 
+    annotation_service.delete_annotations_by_partition_id(conn, partition_id)
     tag_service.delete_tags_by_object_id(
         conn, partition_id, partition_table, partition_tag_table
     )
