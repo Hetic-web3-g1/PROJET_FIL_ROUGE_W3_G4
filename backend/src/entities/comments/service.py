@@ -169,3 +169,21 @@ def delete_comment(conn: Connection, comment_id: int) -> None:
         raise CommentNotFound
 
     db_service.delete_object(conn, comment_table, comment_id)
+
+
+def delete_comments_by_object_id(
+    conn: Connection, object_id, object_table, object_comment_table
+):
+    """
+    Delete comments by object id.
+
+    Args:
+        object_id (int): Id of object.
+        object_table (Table): Table of object.
+        object_tag_table (Table): Table linking tag to object.
+    """
+    result = get_comment_by_object_id(
+        conn, object_id, object_table, object_comment_table
+    )
+    comment_ids = [comment.id for comment in result]
+    db_service.delete_objects(conn, comment_table, comment_ids)

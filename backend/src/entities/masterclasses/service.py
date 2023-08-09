@@ -188,6 +188,9 @@ def delete_masterclass(conn: Connection, masterclass_id: UUID) -> None:
     tag_service.delete_tags_by_object_id(
         conn, masterclass_id, masterclass_table, masterclass_tag_table
     )
+    comment_service.delete_comments_by_object_id(
+        conn, masterclass_id, masterclass_table, masterclass_comment_table
+    )
     db_service.delete_object(conn, masterclass_table, masterclass_id)
 
 

@@ -158,6 +158,9 @@ def delete_biography(conn: Connection, biography_id: UUID) -> None:
     tag_service.delete_tags_by_object_id(
         conn, biography_id, biography_table, biography_tag_table
     )
+    comment_service.delete_comments_by_object_id(
+        conn, biography_id, biography_table, biography_comment_table
+    )
     db_service.delete_object(conn, biography_table, biography_id)
 
 

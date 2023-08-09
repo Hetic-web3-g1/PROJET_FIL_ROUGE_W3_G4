@@ -7,6 +7,7 @@ from ..comments import service as comment_service
 from ..comments.schemas import VideoComment
 from ..s3_objects import service as s3_service
 from ..users.schemas import User
+from .exceptions import VideoNotFound
 from .models import video_table, video_comment_table
 from .schemas import Video, VideoCreate
 
@@ -48,6 +49,28 @@ def create_video(
 
     result = db_service.create_object(conn, video_table, video.dict(), user_id=user.id)
     return _parse_row(result)
+
+
+def delete_video(conn: Connection, video_id: str):
+    """
+    Delete a video.
+
+    Args:
+        video_id (str): The id of the video.
+
+    Raises:
+        VideoNotFound: If the video does not exist.
+    """
+    check = conn.execute(
+        sa.select(video_table).where(video_table.c.id == video_id)
+    ).first()
+    if check is None:
+        raise VideoNotFound
+
+    comment_service.delete_comments_by_object_id(
+        conn, video_id, video_table, video_comment_table
+    )
+    db_service.delete_object(conn, video_table, video_id)
 
 
 # ---------------------------------------------------------------------------------------------------- #

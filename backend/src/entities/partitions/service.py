@@ -166,6 +166,9 @@ def delete_partition(conn: Connection, partition_id: UUID) -> None:
     tag_service.delete_tags_by_object_id(
         conn, partition_id, partition_table, partition_tag_table
     )
+    comment_service.delete_comments_by_object_id(
+        conn, partition_id, partition_table, partition_comment_table
+    )
     db_service.delete_object(conn, partition_table, partition_id)
 
 

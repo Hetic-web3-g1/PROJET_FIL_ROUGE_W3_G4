@@ -169,6 +169,9 @@ def delete_work_analysis(conn: Connection, work_analysis_id: UUID) -> None:
     tag_service.delete_tags_by_object_id(
         conn, work_analysis_id, work_analysis_table, work_analysis_tag_table
     )
+    comment_service.delete_comments_by_object_id(
+        conn, work_analysis_id, work_analysis_table, work_analysis_comment_table
+    )
     db_service.delete_object(conn, work_analysis_table, work_analysis_id)
 
 
