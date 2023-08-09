@@ -46,7 +46,7 @@ def create_video(
         s3_object_id=object.id,
     )
 
-    result = db_service.create_object(conn, video_table, video, user_id=user.id)
+    result = db_service.create_object(conn, video_table, video.dict(), user_id=user.id)
     return _parse_row(result)
 
 
