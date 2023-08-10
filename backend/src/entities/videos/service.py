@@ -1,10 +1,12 @@
+from uuid import UUID
+
 import sqlalchemy as sa
 from fastapi import UploadFile
 from sqlalchemy.engine import Connection
 from src.database import service as db_service
 
 from ..comments import service as comment_service
-from ..comments.schemas import VideoComment
+from ..comments.schemas import CommentCreate, VideoComment
 from ..s3_objects import service as s3_service
 from ..users.schemas import User
 from .exceptions import VideoNotFound
@@ -76,9 +78,11 @@ def delete_video(conn: Connection, video_id: str):
 # ---------------------------------------------------------------------------------------------------- #
 
 
-def create_video_comment(conn: Connection, comment, video_id, user: User):
+def create_video_comment(
+    conn: Connection, comment: CommentCreate, video_id: UUID, user: User
+):
     """
-    Create a comment for a video.
+    Create a comment and link it to a video.
 
     Args:
         comment (CommentCreate): The comment to create.

@@ -5,7 +5,7 @@ from sqlalchemy.engine import Connection
 from src.database import service as db_service
 
 from ..comments import service as comment_service
-from ..comments.schemas import WorkAnalysisComment
+from ..comments.schemas import CommentCreate, WorkAnalysisComment
 from ..tags import service as tag_service
 from ..tags.schemas import WorkAnalysisTag
 from ..users.schemas import User
@@ -179,14 +179,14 @@ def delete_work_analysis(conn: Connection, work_analysis_id: UUID) -> None:
 
 
 def create_work_analysis_comment(
-    conn: Connection, comment, work_analysis_id, user: User
+    conn: Connection, comment: CommentCreate, work_analysis_id: UUID, user: User
 ):
     """
-    Create a comment for a work_analysis
+    Create a comment and link it to a work_analysis.
 
     Args:
-        comment (str): Comment Object.
-        work_analysis_id (int): Id of work_analysis.
+        comment (CommentCreate): CommentCreate object.
+        work_analysis_id (UUID): Id of work_analysis.
         user (User): The user creating the comment.
     """
     comment_service.create_comment_and_link_table(

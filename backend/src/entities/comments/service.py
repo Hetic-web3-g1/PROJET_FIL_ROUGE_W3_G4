@@ -1,3 +1,5 @@
+from uuid import UUID
+
 import sqlalchemy as sa
 from sqlalchemy.engine import Connection
 from src.database import service as db_service
@@ -100,17 +102,17 @@ def create_comment_and_link_table(
     comment: CommentCreate,
     object,
     object_comment_table,
-    object_id,
-    user,
+    object_id: UUID,
+    user: User,
 ):
     """
     Create a comment and link it to an object.
 
     Args:
-        content (str): Comment object.
+        content (CommentCreate): CommentCreate object.
         object (str): Object.
         object_tag_table (Table): Table of object_comment.
-        object_id (int): Id of object.
+        object_id (UUID): Id of object.
     """
     created_comment = create_comment(conn, comment, user)
 
