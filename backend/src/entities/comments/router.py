@@ -22,7 +22,6 @@ def get_comments_by_object_id(
     object_id: UUID,
     user: User = Depends(CustomSecurity()),
 ):
-    print("hello")
     with engine.begin() as conn:
         comments = comment_service.get_comment_by_object_id(
             conn, object_id, video_table, video_comment_table

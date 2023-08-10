@@ -6,7 +6,7 @@ from sqlalchemy.engine import Connection
 from src.database import service as db_service
 
 from ..comments import service as comment_service
-from ..comments.schemas import BiographyComment
+from ..comments.schemas import CommentCreate, BiographyComment
 from ..tags import service as tag_service
 from ..tags.schemas import BiographyTag
 from ..users.schemas import User
@@ -167,13 +167,15 @@ def delete_biography(conn: Connection, biography_id: UUID) -> None:
 # ---------------------------------------------------------------------------------------------------- #
 
 
-def create_biography_comment(conn: Connection, comment, biography_id, user: User):
+def create_biography_comment(
+    conn: Connection, comment: CommentCreate, biography_id: UUID, user: User
+):
     """
     Create a comment and link it to a biography.
 
     Args:
-        comment (str): Comment Object.
-        biography_id (int): Id of biography.
+        comment (CommentCreate): CommentCreate object.
+        biography_id (UUID): Id of biography.
         user (User): The user creating the comment.
     """
     comment_service.create_comment_and_link_table(

@@ -6,7 +6,7 @@ from src.database import service as db_service
 
 
 from ..comments import service as comment_service
-from ..comments.schemas import MasterclassComment
+from ..comments.schemas import CommentCreate, MasterclassComment
 from ..tags import service as tag_service
 from ..tags.schemas import MasterclassTag
 from ..users.schemas import User
@@ -197,9 +197,16 @@ def delete_masterclass(conn: Connection, masterclass_id: UUID) -> None:
 # ---------------------------------------------------------------------------------------------------- #
 
 
-def create_masterclass_comment(conn: Connection, comment, masterclass_id, user: User):
+def create_masterclass_comment(
+    conn: Connection, comment: CommentCreate, masterclass_id: UUID, user: User
+):
     """
-    Create a comment for a masterclass.
+    Create a comment and link it to a masterclass.
+
+    Args:
+        comment (CommentCreate): CommentCreate object.
+        masterclass_id (UUID): Id of masterclass.
+        user (User): The user creating the comment.
 
     """
     comment_service.create_comment_and_link_table(

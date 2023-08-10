@@ -6,7 +6,7 @@ from sqlalchemy.engine import Connection
 from src.database import service as db_service
 
 from ..comments import service as comment_service
-from ..comments.schemas import PartitionComment
+from ..comments.schemas import CommentCreate, PartitionComment
 from ..s3_objects import service as s3_service
 from ..tags import service as tag_service
 from ..tags.schemas import PartitionTag
@@ -175,13 +175,15 @@ def delete_partition(conn: Connection, partition_id: UUID) -> None:
 # ---------------------------------------------------------------------------------------------------- #
 
 
-def create_partition_comment(conn: Connection, comment, partition_id, user: User):
+def create_partition_comment(
+    conn: Connection, comment: CommentCreate, partition_id: UUID, user: User
+):
     """
     Create a comment and link it to a partition.
 
     Args:
-        comment (str): Comment Object.
-        partition_id (int): Id of partition.
+        comment (CommentCreate): CommentCreate object.
+        partition_id (UUID): Id of partition.
         user (User): The user creating the comment.
     """
     comment_service.create_comment_and_link_table(
