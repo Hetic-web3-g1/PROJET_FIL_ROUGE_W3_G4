@@ -6,10 +6,9 @@ from sqlalchemy.engine import Connection
 from src.database import service as db_service
 
 from ..users.schemas import User
-from ..partitions.models import partition_table, partition_annotation_table
 from .models import annotation_table
 from .exceptions import AnnotationNotFound
-from .schemas import Annotation, AnnotationCreate, PartitionAnnotation
+from .schemas import Annotation, AnnotationCreate
 
 
 def _parse_row(row: sa.Row):
@@ -48,18 +47,8 @@ def get_annotations_by_partition_id(conn: Connection, partition_id) -> list[Anno
     Returns:
         A list of Annotation objects.
     """
-    query = (
-        sa.select(annotation_table)
-        .select_from(
-            annotation_table.join(
-                partition_annotation_table,
-                annotation_table.c.id == partition_annotation_table.c.annotation_id,
-            ).join(
-                partition_table,
-                partition_table.c.id == partition_annotation_table.c.partition_id,
-            )
-        )
-        .where(partition_table.c.id == partition_id)
+    query = sa.select(annotation_table).where(
+        annotation_table.c.partition_id == partition_id
     )
 
     result = conn.execute(query).fetchall()
@@ -83,44 +72,6 @@ def create_annotation(
         conn, annotation_table, annotation.dict(), user_id=user.id
     )
     return _parse_row(created_annotation)
-
-
-def create_link_table(conn: Connection, link_table):
-    """
-    Link Annotation to Partition.
-
-    Args:
-        link_table (Table): Table of link.
-
-    Returns:
-        The created link table.
-    """
-    result = db_service.create_object(
-        conn, partition_annotation_table, link_table.dict()
-    )
-    return result
-
-
-def create_annotation_and_link_table(
-    conn: Connection,
-    annotation: AnnotationCreate,
-    partition_id,
-    user,
-):
-    """
-    Create a annotation and link it to a partition.
-
-    Args:
-        annotation (AnnotationCreate): AnnotationCreate object.
-        partition_id (int): Id of partition.
-        user (User): The user creating the annotation.
-    """
-    created_annotation = create_annotation(conn, annotation, user)
-
-    entity_annotation = PartitionAnnotation(
-        partition_id=partition_id, annotation_id=created_annotation.id
-    )
-    create_link_table(conn, entity_annotation)
 
 
 def update_annotation(
@@ -168,15 +119,3 @@ def delete_annotation(conn: Connection, annotation_id: int):
         raise AnnotationNotFound
 
     db_service.delete_object(conn, annotation_table, annotation_id)
-
-
-def delete_annotations_by_partition_id(conn: Connection, partition_id: UUID):
-    """
-    Delete annotations by partition id.
-
-    Args:
-        partition_id (int): Id of partition.
-    """
-    result = get_annotations_by_partition_id(conn, partition_id)
-    annotations_ids = [annotation.id for annotation in result]
-    db_service.delete_objects(conn, annotation_table, annotations_ids)

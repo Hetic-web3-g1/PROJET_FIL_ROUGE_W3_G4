@@ -24,22 +24,6 @@ partition_table = Table(
     Column("updated_by", UUID(as_uuid=True), ForeignKey("user.id"), nullable=True),
 )
 
-partition_annotation_table = Table(
-    "partition_annotation",
-    metadata,
-    Column(
-        "partition_id",
-        UUID(as_uuid=True),
-        ForeignKey("partition.id", ondelete="CASCADE"),
-        nullable=False,
-    ),
-    Column(
-        "annotation_id",
-        Integer,
-        ForeignKey("annotation.id", ondelete="CASCADE"),
-        nullable=False,
-    ),
-)
 
 partition_comment_table = Table(
     "partition_comment",

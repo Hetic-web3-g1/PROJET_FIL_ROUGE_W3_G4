@@ -28,16 +28,13 @@ def get_annotations_by_partition_id(
         return annotations
 
 
-@router.post("/annotation/{partition_id}")
+@router.post("/annotation")
 def create_annotation(
-    partition_id: UUID,
     annotation: AnnotationCreate,
     user: User = Depends(CustomSecurity()),
 ):
     with engine.begin() as conn:
-        annotation_service.create_annotation_and_link_table(
-            conn, annotation, partition_id, user
-        )
+        annotation_service.create_annotation(conn, annotation, user)
 
 
 @router.put("/annotation/{annotation_id}")

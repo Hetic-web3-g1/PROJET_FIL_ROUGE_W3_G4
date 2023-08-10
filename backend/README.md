@@ -79,6 +79,12 @@ alembic revision --autogenerate -m "<MESSAGE>"
 alembic upgrade head
 ```
 
+If needed to downgrade
+
+```shell
+alembic downgrade -1
+```
+
 ## Amazon S3
 
 Amazon S3 (Simple Storage Service) is a cloud-based object storage service provided by AWS. In our implementation, we use a third-party service called [Scality](https://www.scality.com/) hosted on docker.
