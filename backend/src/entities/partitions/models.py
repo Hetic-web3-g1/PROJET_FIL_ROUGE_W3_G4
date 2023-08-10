@@ -37,9 +37,17 @@ partition_comment_table = Table(
     "partition_comment",
     metadata,
     Column(
-        "partition_id", UUID(as_uuid=True), ForeignKey("partition.id"), nullable=False
+        "entity_id",
+        UUID(as_uuid=True),
+        ForeignKey("partition.id", ondelete="CASCADE"),
+        nullable=False,
     ),
-    Column("comment_id", Integer, ForeignKey("comment.id"), nullable=False),
+    Column(
+        "comment_id",
+        Integer,
+        ForeignKey("comment.id", ondelete="CASCADE"),
+        nullable=False,
+    ),
 )
 
 partition_tag_table = Table(

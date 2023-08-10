@@ -1,16 +1,18 @@
 from uuid import UUID
 
 import sqlalchemy as sa
-from fastapi import File, UploadFile
+from fastapi import UploadFile
 from sqlalchemy.engine import Connection
 from src.database import service as db_service
 
+from ..comments import service as comment_service
+from ..comments.schemas import CommentCreate, PartitionComment
 from ..s3_objects import service as s3_service
 from ..tags import service as tag_service
 from ..tags.schemas import PartitionTag
 from ..users.schemas import User
 from .exceptions import PartitionNotFound
-from .models import partition_table, partition_tag_table
+from .models import partition_table, partition_tag_table, partition_comment_table
 from .schemas import Partition, PartitionCreate
 
 
@@ -77,7 +79,7 @@ def create_partition(
     conn: Connection,
     user: User,
     public: bool,
-    file: UploadFile = File(...),
+    file: UploadFile,
 ) -> Partition:
     """
     Create a partition.
@@ -164,4 +166,31 @@ def delete_partition(conn: Connection, partition_id: UUID) -> None:
     tag_service.delete_tags_by_object_id(
         conn, partition_id, partition_table, partition_tag_table
     )
+    comment_service.delete_comments_by_object_id(
+        conn, partition_id, partition_table, partition_comment_table
+    )
     db_service.delete_object(conn, partition_table, partition_id)
+
+
+# ---------------------------------------------------------------------------------------------------- #
+
+
+def create_partition_comment(
+    conn: Connection, comment: CommentCreate, partition_id: UUID, user: User
+):
+    """
+    Create a comment and link it to a partition.
+
+    Args:
+        comment (CommentCreate): CommentCreate object.
+        partition_id (UUID): Id of partition.
+        user (User): The user creating the comment.
+    """
+    comment_service.create_comment_and_link_table(
+        conn,
+        comment,
+        partition_comment_table,
+        PartitionComment,
+        partition_id,
+        user,
+    )

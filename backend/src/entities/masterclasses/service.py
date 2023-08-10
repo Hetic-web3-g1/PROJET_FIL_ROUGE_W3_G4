@@ -4,11 +4,19 @@ import sqlalchemy as sa
 from sqlalchemy.engine import Connection
 from src.database import service as db_service
 
+
+from ..comments import service as comment_service
+from ..comments.schemas import CommentCreate, MasterclassComment
 from ..tags import service as tag_service
 from ..tags.schemas import MasterclassTag
 from ..users.schemas import User
 from .exceptions import MasterclassNotFound, MasterclassUserNotFound
-from .models import masterclass_table, masterclass_tag_table, masterclass_user_table
+from .models import (
+    masterclass_comment_table,
+    masterclass_table,
+    masterclass_tag_table,
+    masterclass_user_table,
+)
 from .schemas import (
     Masterclass,
     MasterclassCreate,
@@ -180,7 +188,35 @@ def delete_masterclass(conn: Connection, masterclass_id: UUID) -> None:
     tag_service.delete_tags_by_object_id(
         conn, masterclass_id, masterclass_table, masterclass_tag_table
     )
+    comment_service.delete_comments_by_object_id(
+        conn, masterclass_id, masterclass_table, masterclass_comment_table
+    )
     db_service.delete_object(conn, masterclass_table, masterclass_id)
+
+
+# ---------------------------------------------------------------------------------------------------- #
+
+
+def create_masterclass_comment(
+    conn: Connection, comment: CommentCreate, masterclass_id: UUID, user: User
+):
+    """
+    Create a comment and link it to a masterclass.
+
+    Args:
+        comment (CommentCreate): CommentCreate object.
+        masterclass_id (UUID): Id of masterclass.
+        user (User): The user creating the comment.
+
+    """
+    comment_service.create_comment_and_link_table(
+        conn,
+        comment,
+        masterclass_comment_table,
+        MasterclassComment,
+        masterclass_id,
+        user,
+    )
 
 
 # ---------------------------------------------------------------------------------------------------- #

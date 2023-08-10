@@ -4,11 +4,17 @@ import sqlalchemy as sa
 from sqlalchemy.engine import Connection
 from src.database import service as db_service
 
+from ..comments import service as comment_service
+from ..comments.schemas import CommentCreate, WorkAnalysisComment
 from ..tags import service as tag_service
 from ..tags.schemas import WorkAnalysisTag
 from ..users.schemas import User
 from .exceptions import WorkAnalysisNotFound
-from .models import work_analysis_table, work_analysis_tag_table
+from .models import (
+    work_analysis_table,
+    work_analysis_tag_table,
+    work_analysis_comment_table,
+)
 from .schemas import WorkAnalysis, WorkAnalysisCreate
 
 
@@ -163,4 +169,31 @@ def delete_work_analysis(conn: Connection, work_analysis_id: UUID) -> None:
     tag_service.delete_tags_by_object_id(
         conn, work_analysis_id, work_analysis_table, work_analysis_tag_table
     )
+    comment_service.delete_comments_by_object_id(
+        conn, work_analysis_id, work_analysis_table, work_analysis_comment_table
+    )
     db_service.delete_object(conn, work_analysis_table, work_analysis_id)
+
+
+# ---------------------------------------------------------------------------------------------------- #
+
+
+def create_work_analysis_comment(
+    conn: Connection, comment: CommentCreate, work_analysis_id: UUID, user: User
+):
+    """
+    Create a comment and link it to a work_analysis.
+
+    Args:
+        comment (CommentCreate): CommentCreate object.
+        work_analysis_id (UUID): Id of work_analysis.
+        user (User): The user creating the comment.
+    """
+    comment_service.create_comment_and_link_table(
+        conn,
+        comment,
+        work_analysis_comment_table,
+        WorkAnalysisComment,
+        work_analysis_id,
+        user,
+    )

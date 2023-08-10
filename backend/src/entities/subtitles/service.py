@@ -5,13 +5,15 @@ from fastapi import File, UploadFile
 from sqlalchemy.engine import Connection
 from src.database import service as db_service
 
+from ..comments import service as comment_service
+from ..comments.schemas import CommentCreate, SubtitleComment
 from ..s3_objects import service as s3_service
 from ..users.schemas import User
-from .models import subtitle_table
+from .models import subtitle_table, subtitle_comment_table
 from .schemas import Subtitle, SubtitleCreate
 
 
-def _parse_row(row: sa.Row): 
+def _parse_row(row: sa.Row):
     return Subtitle(**row._asdict())
 
 
@@ -50,3 +52,27 @@ def create_subtitle(
         conn, subtitle_table, subtitle.dict(), user_id=user.id
     )
     return _parse_row(result)
+
+
+# ---------------------------------------------------------------------------------------------------- #
+
+
+def create_subtitle_comment(
+    conn: Connection, comment: CommentCreate, subtitle_id: UUID, user: User
+):
+    """
+    Create a comment and link it to a subtitle.
+
+    Args:
+        comment (CommentCreate): CommentCreate object.
+        subtitle_id (UUID): Id of subtitle.
+        user (User): The user creating the comment.
+    """
+    comment_service.create_comment_and_link_table(
+        conn,
+        comment,
+        subtitle_comment_table,
+        SubtitleComment,
+        subtitle_id,
+        user,
+    )

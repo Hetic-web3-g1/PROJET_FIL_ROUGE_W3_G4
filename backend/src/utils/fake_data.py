@@ -214,11 +214,7 @@ def create_work_analyse_fake():
 
 def create_comment_fake():
     with engine.begin() as conn:
-        comment = CommentCreate(
-            **{
-                "content": random.choice(comments),
-            }
-        )
+        comment = CommentCreate(**{"content": random.choice(comments)})
         create_comment(conn, comment, user)
 
 

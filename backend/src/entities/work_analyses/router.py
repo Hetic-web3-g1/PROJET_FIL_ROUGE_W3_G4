@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from src.database.db_engine import engine
 
 from ..authentification.dependencies import CustomSecurity
+from ..comments.schemas import CommentCreate
 from ..users.schemas import User
 from . import exceptions as work_analysis_exceptions
 from . import service as work_analysis_service
@@ -76,4 +77,17 @@ def delete_work_analysis(
         raise HTTPException(
             status_code=404,
             detail="Work Analysis not found",
+        )
+
+
+# ---------------------------------------------------------------------------------------------------- #
+
+
+@router.post("/work_analysis/comment/{work_analysis_id}")
+def create_work_analysis_comment(
+    comment: CommentCreate, work_analysis_id, user: User = Depends(CustomSecurity())
+):
+    with engine.begin() as conn:
+        work_analysis_service.create_work_analysis_comment(
+            conn, comment, work_analysis_id, user
         )

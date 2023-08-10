@@ -46,12 +46,17 @@ work_analysis_comment_table = Table(
     "work_analysis_comment",
     metadata,
     Column(
-        "work_analysis_id",
+        "entity_id",
         UUID(as_uuid=True),
-        ForeignKey("work_analysis.id"),
+        ForeignKey("work_analysis.id", ondelete="CASCADE"),
         nullable=False,
     ),
-    Column("comment_id", Integer, ForeignKey("comment.id"), nullable=False),
+    Column(
+        "comment_id",
+        Integer,
+        ForeignKey("comment.id", ondelete="CASCADE"),
+        nullable=False,
+    ),
 )
 
 work_analysis_tag_table = Table(

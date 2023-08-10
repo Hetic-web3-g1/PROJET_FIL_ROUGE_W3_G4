@@ -9,8 +9,23 @@ from .models import image_table
 from .schemas import Image, ImageCreate
 
 
-def _parse_row(row: sa.Row): 
+def _parse_row(row: sa.Row):
     return Image(**row._asdict())
+
+
+def get_all_images(conn: Connection):
+    """
+    Get all images.
+
+    Args:
+        conn (Connection): The database connection.
+
+    Returns:
+        list[Image]: The list of images.
+    """
+    result = conn.execute(sa.select(image_table)).fetchall()
+    for row in result:
+        yield _parse_row(row)
 
 
 def create_image(

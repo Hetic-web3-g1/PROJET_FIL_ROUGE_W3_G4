@@ -78,12 +78,17 @@ masterclass_comment_table = Table(
     "masterclass_comment",
     metadata,
     Column(
-        "masterclass_id",
+        "entity_id",
         UUID(as_uuid=True),
-        ForeignKey("masterclass.id"),
+        ForeignKey("masterclass.id", ondelete="CASCADE"),
         nullable=False,
     ),
-    Column("comment_id", Integer, ForeignKey("comment.id"), nullable=False),
+    Column(
+        "comment_id",
+        Integer,
+        ForeignKey("comment.id", ondelete="CASCADE"),
+        nullable=False,
+    ),
 )
 
 masterclass_tag_table = Table(

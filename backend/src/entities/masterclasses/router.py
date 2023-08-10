@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from src.database.db_engine import engine
 
 from ..authentification.dependencies import CustomSecurity
+from ..comments.schemas import CommentCreate
 from ..users import exceptions as user_exceptions
 from ..users.schemas import User
 from . import exceptions as masterclass_exceptions
@@ -86,6 +87,19 @@ def delete_masterclass(
         raise HTTPException(
             status_code=404,
             detail="Masterclass not found",
+        )
+
+
+# ---------------------------------------------------------------------------------------------------- #
+
+
+@router.post("/masterclass/comment/{masterclass_id}")
+def create_masterclass_comment(
+    comment: CommentCreate, masterclass_id, user: User = Depends(CustomSecurity())
+):
+    with engine.begin() as conn:
+        masterclass_service.create_masterclass_comment(
+            conn, comment, masterclass_id, user
         )
 
 

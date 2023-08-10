@@ -30,9 +30,17 @@ subtitle_comment_table = Table(
     "subtitle_comment",
     metadata,
     Column(
-        "subtitle_id", UUID(as_uuid=True), ForeignKey("subtitle.id"), nullable=False
+        "entity_id",
+        UUID(as_uuid=True),
+        ForeignKey("subtitle.id", ondelete="CASCADE"),
+        nullable=False,
     ),
-    Column("comment_id", Integer, ForeignKey("comment.id"), nullable=False),
+    Column(
+        "comment_id",
+        Integer,
+        ForeignKey("comment.id", ondelete="CASCADE"),
+        nullable=False,
+    ),
 )
 
 subtitle_tag_table = Table(
