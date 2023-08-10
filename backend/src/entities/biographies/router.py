@@ -7,7 +7,7 @@ from src.database.db_engine import engine
 from ..authentification.dependencies import CustomSecurity
 from ..comments.schemas import CommentCreate
 from ..users.schemas import User
-from . import exceptions as biography_exceptions
+from .exceptions import BiographyNotFound
 from . import service as biography_service
 from .schemas import BiographyCreate
 
@@ -56,7 +56,7 @@ def update_biography(
                 conn, biography_id, biography, user
             )
 
-    except biography_exceptions.BiographyNotFound:
+    except BiographyNotFound:
         raise HTTPException(
             status_code=404,
             detail="Biography not found",
@@ -72,7 +72,7 @@ def delete_biography(
         with engine.begin() as conn:
             biography_service.delete_biography(conn, biography_id)
 
-    except biography_exceptions.BiographyNotFound:
+    except BiographyNotFound:
         raise HTTPException(
             status_code=404,
             detail="Biography not found",

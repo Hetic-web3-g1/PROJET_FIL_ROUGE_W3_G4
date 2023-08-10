@@ -1,9 +1,10 @@
-from fastapi import APIRouter, Depends, File, Body, UploadFile
+from fastapi import APIRouter, Depends, File, Body, UploadFile, HTTPException
 
 from src.database.db_engine import engine
 
 from ..authentification.dependencies import CustomSecurity
 from ..users.schemas import User
+from .exceptions import ImageNotFound
 from . import service as image_service
 
 router = APIRouter(
@@ -20,3 +21,16 @@ def create_image(
 ):
     with engine.begin() as conn:
         return image_service.create_image(conn, user, public, file)
+
+
+@router.delete("/image/{image_id}")
+def delete_image(image_id: str, user: User = Depends(CustomSecurity())):
+    try:
+        with engine.begin() as conn:
+            image_service.delete_image(conn, image_id)
+
+    except ImageNotFound:
+        raise HTTPException(
+            status_code=404,
+            detail="Image not found",
+        )

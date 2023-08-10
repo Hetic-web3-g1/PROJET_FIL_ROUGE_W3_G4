@@ -101,6 +101,8 @@ def update_annotation(
         conn, annotation_table, annotation_id, annotation.dict(), user_id=user.id
     )
 
+    return _parse_row(result)
+
 
 def delete_annotation(conn: Connection, annotation_id: int):
     """
