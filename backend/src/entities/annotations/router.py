@@ -6,7 +6,7 @@ from src.database.db_engine import engine
 
 from ..authentification.dependencies import CustomSecurity
 from ..users.schemas import User
-from . import exceptions as annotation_exceptions
+from .exceptions import AnnotationNotFound
 from . import service as annotation_service
 from .schemas import AnnotationCreate
 
@@ -16,7 +16,7 @@ router = APIRouter(
 )
 
 
-@router.get("/annotation/{partition_id}")
+@router.get("/annotation/partition/{partition_id}")
 def get_annotations_by_partition_id(
     partition_id: UUID,
     user: User = Depends(CustomSecurity()),
@@ -47,7 +47,7 @@ def update_annotation(
         with engine.begin() as conn:
             annotation_service.update_annotation(conn, annotation_id, annotation, user)
 
-    except annotation_exceptions.AnnotationNotFound:
+    except AnnotationNotFound:
         raise HTTPException(
             status_code=404,
             detail="Comment not found",
@@ -63,7 +63,7 @@ def delete_annotation(
         with engine.begin() as conn:
             annotation_service.delete_annotation(conn, annotation_id)
 
-    except annotation_exceptions.AnnotationNotFound:
+    except AnnotationNotFound:
         raise HTTPException(
             status_code=404,
             detail="Comment not found",

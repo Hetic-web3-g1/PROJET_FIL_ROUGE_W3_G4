@@ -39,7 +39,7 @@ def create_video(
     Returns:
         Video: The created video.
     """
-    object = s3_service.upload(file, user, public)
+    object = s3_service.upload(file, user, public, "video")
 
     video = VideoCreate(
         filename=object.filename,
@@ -68,6 +68,9 @@ def delete_video(conn: Connection, video_id: str):
     ).first()
     if check is None:
         raise VideoNotFound
+
+    s3_object = s3_service.get_s3_object_by_id(conn, check.s3_object_id)  # type: ignore
+    s3_service.delete_object(s3_object.object_key)
 
     comment_service.delete_comments_by_object_id(
         conn, video_id, video_table, video_comment_table

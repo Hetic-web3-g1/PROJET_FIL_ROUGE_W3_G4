@@ -156,6 +156,7 @@ def upload(
     file: UploadFile,
     user: User,
     public: bool,
+    file_type: str,
     status: Optional[str] = None,
     version: Optional[float] = None,
     video_id: Optional[UUID] = None,
@@ -179,7 +180,7 @@ def upload(
     Returns:
         dict: The response from S3 and the created s3_object.
     """
-    type = s3_dependencies.file_validation(file)
+    type = s3_dependencies.file_validation(file, file_type)
 
     s3_object = S3ObjectCreate(
         object_key=str(uuid4()),
@@ -223,3 +224,13 @@ def upload(
         raise s3Error
 
     return result
+
+
+def delete_object(object_key: str):
+    """
+    Delete a file from S3.
+
+    Args:
+        object_key (str): The object_key of the file.
+    """
+    s3_client.delete_object(Bucket=settings.bucket_name, Key=object_key)

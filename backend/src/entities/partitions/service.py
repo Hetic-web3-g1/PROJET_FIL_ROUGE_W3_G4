@@ -92,7 +92,7 @@ def create_partition(
     Returns:
         Partition: The created Partition object.
     """
-    object = s3_service.upload(file, user, public)
+    object = s3_service.upload(file, user, public, "partition")
 
     partition = PartitionCreate(
         filename=object.filename,
@@ -102,43 +102,6 @@ def create_partition(
 
     result = db_service.create_object(
         conn, partition_table, partition.dict(), user_id=user.id
-    )
-
-    partition = _parse_row(result)
-    create_partition_tags(conn, partition)
-
-    return _parse_row(result)
-
-
-def update_partition(
-    conn: Connection, partition_id: UUID, partition: PartitionCreate, user: User
-) -> Partition:
-    """
-    Update a partition.
-
-    Args:
-        partition_id (UUID): The id of the partition to update.
-        partition (PartitionCreate): PartitionCreate object.
-        user (User): The user updating the partition.
-
-    Raises:
-        PartitionNotFound: If the partition does not exist.
-
-    Returns:
-        Partition: The updated Partition object.
-    """
-    check = conn.execute(
-        sa.select(partition_table).where(partition_table.c.id == partition_id)
-    ).first()
-    if check is None:
-        raise PartitionNotFound
-
-    result = db_service.update_object(
-        conn, partition_table, partition_id, partition.dict(), user_id=user.id
-    )
-
-    tag_service.delete_tags_by_object_id(
-        conn, partition_id, partition_table, partition_tag_table
     )
 
     partition = _parse_row(result)
@@ -162,6 +125,9 @@ def delete_partition(conn: Connection, partition_id: UUID) -> None:
     ).first()
     if check is None:
         raise PartitionNotFound
+
+    s3_object = s3_service.get_s3_object_by_id(conn, check.s3_object_id)  # type: ignore
+    s3_service.delete_object(s3_object.object_key)
 
     tag_service.delete_tags_by_object_id(
         conn, partition_id, partition_table, partition_tag_table

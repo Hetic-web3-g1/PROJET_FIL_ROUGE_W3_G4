@@ -5,12 +5,13 @@ from fastapi import HTTPException, UploadFile
 from src.database.s3_engine import s3_client
 
 
-def check_mimetype(file: UploadFile):
+def check_mimetype(file: UploadFile, file_type: str) -> tuple[str, str]:
     """
     Check if the mimetype is supported.
 
     Args:
         file (UploadFile): The file to upload.
+        file_type (str): The type of the file.
 
     Raises:
         HTTPException: No file type
@@ -42,6 +43,11 @@ def check_mimetype(file: UploadFile):
 
     major_type, minor_type = mime_type.split("/")
 
+    if major_type not in conversion_file_types[file_type]:
+        raise HTTPException(
+            status_code=400, detail="File type not supported for this specific file."
+        )
+
     if major_type not in supported_file_types:
         raise HTTPException(status_code=400, detail="File type not supported")
 
@@ -51,7 +57,7 @@ def check_mimetype(file: UploadFile):
     return major_type, minor_type
 
 
-def file_validation(file: UploadFile) -> tuple:
+def file_validation(file: UploadFile, file_type: str) -> tuple[str, str]:
     """
     Validate the file.
 
@@ -71,6 +77,12 @@ def file_validation(file: UploadFile) -> tuple:
     """
     KB = 1000
     MB = KB * KB
+
+    # if major_type not in supported_file_types:
+    # raise HTTPException(status_code=400, detail="File type not supported")
+
+    # if minor_type not in supported_file_types[major_type]:
+    #     raise HTTPException(status_code=400, detail="File type not supported")
 
     if not file:
         raise HTTPException(status_code=400, detail="No file provided")
@@ -96,7 +108,7 @@ def file_validation(file: UploadFile) -> tuple:
             detail=f"File too large, max size is 10MB, this file weight {size} bytes",
         )
 
-    type = check_mimetype(file)
+    type = check_mimetype(file, file_type)
     return type
 
 

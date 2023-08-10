@@ -7,7 +7,7 @@ from src.database.db_engine import engine
 from ..authentification.dependencies import CustomSecurity
 from ..comments.schemas import CommentCreate
 from ..users.schemas import User
-from . import exceptions as work_analysis_exceptions
+from .exceptions import WorkAnalysisNotFound
 from . import service as work_analysis_service
 from .schemas import WorkAnalysisCreate
 
@@ -58,7 +58,7 @@ def update_work_analysis(
                 conn, work_analysis_id, work_analysis, user
             )
 
-    except work_analysis_exceptions.WorkAnalysisNotFound:
+    except WorkAnalysisNotFound:
         raise HTTPException(
             status_code=404,
             detail="Work Analysis not found",
@@ -73,7 +73,7 @@ def delete_work_analysis(
         with engine.begin() as conn:
             work_analysis_service.delete_work_analysis(conn, work_analysis_id)
 
-    except work_analysis_exceptions.WorkAnalysisNotFound:
+    except WorkAnalysisNotFound:
         raise HTTPException(
             status_code=404,
             detail="Work Analysis not found",
