@@ -5,6 +5,7 @@ from pydantic import BaseModel
 
 
 class AnnotationCreate(BaseModel):
+    partition_id: UUID
     measure: int
     content: str
 

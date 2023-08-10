@@ -32,6 +32,7 @@ app.add_middleware(
 
 
 from src.entities.academies.router import router as academy_router
+from src.entities.annotations.router import router as annotation_router
 from src.entities.authentification.router import router as auth_router
 from src.entities.biographies.router import router as biography_router
 from src.entities.comments.router import router as comment_router
@@ -47,6 +48,7 @@ from src.entities.videos.router import router as video_router
 from src.entities.work_analyses.router import router as work_analysis_router
 
 app.include_router(academy_router)
+app.include_router(annotation_router)
 app.include_router(auth_router)
 app.include_router(biography_router)
 app.include_router(comment_router)

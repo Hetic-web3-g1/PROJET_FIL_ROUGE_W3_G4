@@ -9,6 +9,12 @@ annotation_table = Table(
     "annotation",
     metadata,
     Column("id", Integer, primary_key=True, unique=True, nullable=False),
+    Column(
+        "partition_id",
+        UUID(as_uuid=True),
+        ForeignKey("partition.id", ondelete="CASCADE"),
+        nullable=False,
+    ),
     Column("measure", Integer, nullable=False),
     Column("content", Text(), nullable=False),
     Column("created_at", DateTime(), default=datetime.utcnow, nullable=False),
