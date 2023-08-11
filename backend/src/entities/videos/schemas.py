@@ -5,6 +5,7 @@ from pydantic import BaseModel
 
 
 class VideoCreate(BaseModel):
+    masterclass_id: UUID
     filename: str
     duration: float
     status: str
