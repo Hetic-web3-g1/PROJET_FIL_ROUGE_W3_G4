@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, Body
 
 from src.database.db_engine import engine
 
@@ -34,6 +34,16 @@ def get_partition_by_id(
     with engine.begin() as conn:
         partition = partition_service.get_partition_by_id(conn, partition_id)
         return partition
+
+
+@router.post("/partition")
+def create_partition(
+    public: bool = Body(...),
+    file: UploadFile = File(...),
+    user: User = Depends(CustomSecurity()),
+):
+    with engine.begin() as conn:
+        partition_service.create_partition(conn, user, public, file)
 
 
 @router.delete("/partition/{partition_id}")
