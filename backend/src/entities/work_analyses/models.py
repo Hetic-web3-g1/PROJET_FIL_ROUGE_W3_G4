@@ -28,10 +28,11 @@ work_analysis_translation_table = Table(
     Column(
         "work_analysis_id",
         UUID(as_uuid=True),
-        ForeignKey("work_analysis.id"),
+        ForeignKey("work_analysis.id", ondelete="CASCADE"),
         nullable=False,
     ),
     Column("language", String(), nullable=False),
+    Column("title", String(), nullable=False),
     Column("about", Text(), nullable=True),
     Column("learning", ARRAY(String(), dimensions=1), nullable=True),
     Column("content", Text(), nullable=False),

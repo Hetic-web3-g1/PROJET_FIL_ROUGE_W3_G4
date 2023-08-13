@@ -10,13 +10,31 @@ from ..comments.schemas import CommentCreate, BiographyComment
 from ..tags import service as tag_service
 from ..tags.schemas import BiographyTag
 from ..users.schemas import User
-from .exceptions import BiographyNotFound
-from .models import biography_table, biography_tag_table, biography_comment_table
-from .schemas import Biography, BiographyCreate
+from .exceptions import (
+    BiographyNotFound,
+    BiographyTranslationNotFound,
+    BiographyTranslationAlreadyExist,
+)
+from .models import (
+    biography_table,
+    biography_translation_table,
+    biography_tag_table,
+    biography_comment_table,
+)
+from .schemas import (
+    Biography,
+    BiographyCreate,
+    BiographyTranslationCreate,
+    BiographyTranslation,
+)
 
 
 def _parse_row(row: sa.Row):
     return Biography(**row._asdict())
+
+
+def _parse_translation_row(row: sa.Row):
+    return BiographyTranslation(**row._asdict())
 
 
 def get_all_biographies(conn: Connection):
@@ -162,6 +180,153 @@ def delete_biography(conn: Connection, biography_id: UUID) -> None:
         conn, biography_id, biography_table, biography_comment_table
     )
     db_service.delete_object(conn, biography_table, biography_id)
+
+
+# ---------------------------------------------------------------------------------------------------- #
+
+
+def get_biography_translation_by_id(
+    conn: Connection, biography_translation_id: int
+) -> BiographyTranslation:
+    """
+    Get a biography translation by the given id.
+
+    Args:
+        biography_translation_id (int): The id of the biography translation.
+
+    Raises:
+        BiographyTranslationNotFound: If the biography translation does not exist.
+
+    Returns: The BiographyTranslation object.
+    """
+    result = conn.execute(
+        sa.select(biography_translation_table).where(
+            biography_translation_table.c.id == biography_translation_id
+        )
+    ).first()
+    if result is None:
+        raise BiographyTranslationNotFound
+
+    return _parse_translation_row(result)
+
+
+def get_biography_translation_by_biography(
+    conn: Connection, biography_id: UUID
+) -> BiographyTranslation | None:
+    """
+    Get a biography translation by the given biography id.
+
+    Args:
+        biography_id (UUID): The id of the biography.
+
+    Returns:
+        The BiographyTranslation object.
+    """
+    query = sa.select(biography_translation_table).where(
+        biography_translation_table.c.biography_id == biography_id
+    )
+
+    result = conn.execute(query).first()
+    if result is None:
+        return None
+
+    return _parse_translation_row(result)
+
+
+def create_biography_translation(
+    conn: Connection, biography_translation: BiographyTranslationCreate, user: User
+) -> BiographyTranslation:
+    """
+    Create a biography translation.
+
+    Args:
+        biography_translation (BiographyTranslationCreate): BiographyTranslationCreate object.
+        user (User): The user creating the biography translation.
+
+    Raises:
+        BiographyTranslationAlreadyExist: If the biography translation already exists.
+
+    Returns:
+        BiographyTranslation: The created BiographyTranslation object.
+    """
+    check = get_biography_translation_by_biography(
+        conn, biography_translation.biography_id
+    )
+    if check is not None:
+        raise BiographyTranslationAlreadyExist
+
+    result = db_service.create_object(
+        conn,
+        biography_translation_table,
+        biography_translation.dict(),
+        user_id=user.id,
+    )
+
+    return _parse_translation_row(result)
+
+
+def update_biography_translation(
+    conn: Connection,
+    biography_translation_id: int,
+    biography_translation: BiographyTranslationCreate,
+    user: User,
+) -> BiographyTranslation:
+    """
+    Update a biography translation.
+
+    Args:
+        biography_translation_id (int): The id of the biography translation.
+        biography_translation (BiographyTranslationCreate): The BiographyTranslationCreate object.
+        user (User): The user updating the biography translation.
+
+    Raises:
+        BiographyTranslationNotFound: If the biography translation does not exist.
+
+    Returns:
+        BiographyTranslation: The updated BiographyTranslation object.
+    """
+    check = conn.execute(
+        sa.select(biography_translation_table).where(
+            biography_translation_table.c.id == biography_translation_id
+        )
+    ).first()
+    if check is None:
+        raise BiographyTranslationNotFound
+
+    result = db_service.update_object(
+        conn,
+        biography_translation_table,
+        biography_translation_id,
+        biography_translation.dict(),
+        user_id=user.id,
+    )
+
+    return _parse_translation_row(result)
+
+
+def delete_biography_translation(
+    conn: Connection, biography_translation_id: int
+) -> None:
+    """
+    Delete a biography translation.
+
+    Args:
+        biography_translation_id (int): The id of the biography translation.
+
+    Raises:
+        BiographyTranslationNotFound: If the biography translation does not exist.
+    """
+    check = conn.execute(
+        sa.select(biography_translation_table).where(
+            biography_translation_table.c.id == biography_translation_id
+        )
+    ).first()
+    if check is None:
+        raise BiographyTranslationNotFound
+
+    db_service.delete_object(
+        conn, biography_translation_table, biography_translation_id
+    )
 
 
 # ---------------------------------------------------------------------------------------------------- #

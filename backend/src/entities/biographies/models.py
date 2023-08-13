@@ -31,7 +31,10 @@ biography_translation_table = Table(
     metadata,
     Column("id", Integer, primary_key=True, unique=True, nullable=False),
     Column(
-        "biography_id", UUID(as_uuid=True), ForeignKey("biography.id"), nullable=False
+        "biography_id",
+        UUID(as_uuid=True),
+        ForeignKey("biography.id", ondelete="CASCADE"),
+        nullable=False,
     ),
     Column("language", String(), nullable=False),
     Column("award", ARRAY(String(), dimensions=1), nullable=True),

@@ -19,3 +19,16 @@ class WorkAnalysis(WorkAnalysisCreate):
     created_at: datetime
     updated_at: datetime | None
     updated_by: UUID | None
+
+
+class WorkAnalysisTranslationCreate(WorkAnalysisCreate):
+    work_analysis_id: UUID
+    language: str
+
+
+class WorkAnalysisTranslation(WorkAnalysisTranslationCreate):
+    id: int
+    created_by: UUID
+    created_at: datetime
+    updated_at: datetime | None
+    updated_by: UUID | None
