@@ -7,8 +7,10 @@ from src.database.db_engine import engine
 from ..authentification.dependencies import CustomSecurity
 from ..comments.schemas import CommentCreate
 from ..users.schemas import User
-from .exceptions import VideoNotFound
+from .exceptions import VideoNotFound, VideoMetaNotFound, VideoMetaKeyAlreadyExist
 from . import service as video_service
+from .schemas import VideoMeta, VideoMetaCreate
+
 
 router = APIRouter(
     prefix="/videos",
@@ -66,3 +68,70 @@ def create_video_comment(
 ):
     with engine.begin() as conn:
         video_service.create_video_comment(conn, comment, video_id, user)
+
+
+# ---------------------------------------------------------------------------------------------------- #
+
+
+@router.get("/video/meta/{meta_id}")
+def get_video_meta_by_id(
+    meta_id: int,
+    user: User = Depends(CustomSecurity()),
+):
+    try:
+        with engine.begin() as conn:
+            meta = video_service.get_video_meta_by_id(conn, meta_id)
+            return meta
+
+    except VideoMetaNotFound:
+        raise HTTPException(status_code=404, detail="Video not found")
+
+
+@router.get("/video/meta/video/{video_id}")
+def get_video_meta_by_video_id(
+    video_id: UUID,
+    user: User = Depends(CustomSecurity()),
+):
+    with engine.begin() as conn:
+        meta = video_service.get_video_meta_by_video_id(conn, video_id)
+        return meta
+
+
+@router.post("/video/meta")
+def create_video_meta(
+    meta: VideoMetaCreate,
+    user: User = Depends(CustomSecurity()),
+):
+    try:
+        with engine.begin() as conn:
+            video_service.create_video_meta(conn, meta)
+
+    except VideoMetaKeyAlreadyExist:
+        raise HTTPException(status_code=409, detail="Key already exist")
+
+
+@router.put("/video/meta/{meta_id}")
+def update_video_meta(
+    meta_id: int,
+    meta: VideoMetaCreate,
+    user: User = Depends(CustomSecurity()),
+):
+    try:
+        with engine.begin() as conn:
+            video_service.update_video_meta(conn, meta_id, meta)
+
+    except VideoMetaNotFound:
+        raise HTTPException(status_code=404, detail="Video not found")
+
+
+@router.delete("/video/meta/{meta_id}")
+def delete_video_meta(
+    meta_id: int,
+    user: User = Depends(CustomSecurity()),
+):
+    try:
+        with engine.begin() as conn:
+            video_service.delete_video_meta(conn, meta_id)
+
+    except VideoMetaNotFound:
+        raise HTTPException(status_code=404, detail="Video not found")

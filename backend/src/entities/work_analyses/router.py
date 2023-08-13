@@ -7,9 +7,13 @@ from src.database.db_engine import engine
 from ..authentification.dependencies import CustomSecurity
 from ..comments.schemas import CommentCreate
 from ..users.schemas import User
-from .exceptions import WorkAnalysisNotFound
+from .exceptions import (
+    WorkAnalysisNotFound,
+    WorkAnalysisMetaNotFound,
+    WorkAnalysisMetaKeyAlreadyExist,
+)
 from . import service as work_analysis_service
-from .schemas import WorkAnalysisCreate
+from .schemas import WorkAnalysisCreate, WorkAnalysisMetaCreate
 
 router = APIRouter(
     prefix="/work_analyzes",
@@ -90,4 +94,85 @@ def create_work_analysis_comment(
     with engine.begin() as conn:
         work_analysis_service.create_work_analysis_comment(
             conn, comment, work_analysis_id, user
+        )
+
+
+# ---------------------------------------------------------------------------------------------------- #
+
+
+@router.get("/work_analysis/meta/{meta_id}")
+def get_work_analysis_meta_by_id(
+    meta_id: int,
+    user: User = Depends(CustomSecurity()),
+):
+    try:
+        with engine.begin() as conn:
+            meta = work_analysis_service.get_work_analysis_meta_by_id(conn, meta_id)
+            return meta
+
+    except WorkAnalysisMetaNotFound:
+        raise HTTPException(
+            status_code=404,
+            detail="Work Analysis not found",
+        )
+
+
+@router.get("/work_analysis/meta/work_analysis/{work_analysis_id}")
+def get_work_analysis_meta_by_work_analysis_id(
+    work_analysis_id: UUID,
+    user: User = Depends(CustomSecurity()),
+):
+    with engine.begin() as conn:
+        meta = work_analysis_service.get_work_analysis_meta_by_work_analysis_id(
+            conn, work_analysis_id
+        )
+        return meta
+
+
+@router.post("/work_analysis/meta")
+def create_work_analysis_meta(
+    meta: WorkAnalysisMetaCreate,
+    user: User = Depends(CustomSecurity()),
+):
+    try:
+        with engine.begin() as conn:
+            work_analysis_service.create_work_analysis_meta(conn, meta)
+
+    except WorkAnalysisMetaKeyAlreadyExist:
+        raise HTTPException(
+            status_code=400,
+            detail="Meta key already exist",
+        )
+
+
+@router.put("/work_analysis/meta/{meta_id}")
+def update_work_analysis_meta(
+    meta_id: int,
+    meta: WorkAnalysisMetaCreate,
+    user: User = Depends(CustomSecurity()),
+):
+    try:
+        with engine.begin() as conn:
+            work_analysis_service.update_work_analysis_meta(conn, meta_id, meta)
+
+    except WorkAnalysisMetaNotFound:
+        raise HTTPException(
+            status_code=404,
+            detail="Work Analysis not found",
+        )
+
+
+@router.delete("/work_analysis/meta/{meta_id}")
+def delete_work_analysis_meta(
+    meta_id: int,
+    user: User = Depends(CustomSecurity()),
+):
+    try:
+        with engine.begin() as conn:
+            work_analysis_service.delete_work_analysis_meta(conn, meta_id)
+
+    except WorkAnalysisMetaNotFound:
+        raise HTTPException(
+            status_code=404,
+            detail="Work Analysis not found",
         )

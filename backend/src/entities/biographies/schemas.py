@@ -24,3 +24,13 @@ class Biography(BiographyCreate):
     created_at: datetime
     updated_at: datetime | None
     updated_by: UUID | None
+
+
+class BiographyMetaCreate(BaseModel):
+    biography_id: UUID
+    meta_key: str
+    meta_value: str
+
+
+class BiographyMeta(BiographyMetaCreate):
+    id: int
