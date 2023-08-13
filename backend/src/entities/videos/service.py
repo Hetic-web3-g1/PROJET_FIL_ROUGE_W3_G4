@@ -18,9 +18,50 @@ def _parse_row(row: sa.Row):
     return Video(**row._asdict())
 
 
+def get_video_by_id(conn: Connection, video_id: UUID) -> Video:
+    """
+    Get a video by its id.
+
+    Args:
+        video_id (UUID): The id of the video.
+
+    Raises:
+        VideoNotFound: If the video does not exist.
+
+    Returns:
+        Video: The video.
+    """
+    result = conn.execute(
+        sa.select(video_table).where(video_table.c.id == video_id)
+    ).first()
+    if result is None:
+        raise VideoNotFound
+
+    return _parse_row(result)
+
+
+def get_videos_by_masterclass_id(conn: Connection, masterclass_id: UUID) -> list[Video]:
+    """
+    Get all videos of a masterclass.
+
+    Args:
+        masterclass_id (UUID): The id of the masterclass.
+
+    Returns:
+        list[Video]: The videos.
+    """
+    result = conn.execute(
+        sa.select(video_table)
+        .where(video_table.c.masterclass_id == masterclass_id)
+        .order_by(video_table.c.version)
+    ).fetchall()
+    return [_parse_row(row) for row in result]
+
+
 def create_video(
     conn: Connection,
     user: User,
+    masterclass_id: UUID,
     duration: int,
     version: float,
     public: bool,
@@ -43,6 +84,7 @@ def create_video(
 
     video = VideoCreate(
         filename=object.filename,
+        masterclass_id=masterclass_id,
         duration=duration,
         status="uploaded",
         version=version,
@@ -53,12 +95,12 @@ def create_video(
     return _parse_row(result)
 
 
-def delete_video(conn: Connection, video_id: str):
+def delete_video(conn: Connection, video_id: UUID):
     """
     Delete a video.
 
     Args:
-        video_id (str): The id of the video.
+        video_id (UUID): The id of the video.
 
     Raises:
         VideoNotFound: If the video does not exist.

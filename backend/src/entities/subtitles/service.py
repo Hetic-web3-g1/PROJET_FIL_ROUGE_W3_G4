@@ -40,8 +40,12 @@ def get_subtitle_by_id(conn: Connection, subtitle_id: UUID) -> Subtitle:
     return _parse_row(result)
 
 
-def get_subtitles_by_video_id(conn: Connection, video_id: UUID) -> list[Subtitle]:
-    query = sa.select(subtitle_table).where(subtitle_table.c.video_id == video_id)
+def get_subtitles_by_masterclass_id(
+    conn: Connection, masterclass_id: UUID
+) -> list[Subtitle]:
+    query = sa.select(subtitle_table).where(
+        subtitle_table.c.masterclass_id == masterclass_id
+    )
 
     result = conn.execute(query).fetchall()
     return [_parse_row(result) for result in result]
@@ -51,7 +55,7 @@ def create_subtitle(
     conn: Connection,
     user: User,
     language: str,
-    video_id: UUID,
+    masterclass_id: UUID,
     public: bool,
     file: UploadFile = File(...),
 ) -> Subtitle:
@@ -61,7 +65,7 @@ def create_subtitle(
     Args:
         user (User): The user creating the partition.
         language (str): The language of the subtitle.
-        video_id (UUID): The video id.
+        masterclass_id (UUID): The video id.
         public (bool): Whether the partition file should be public or not.
         file (UploadFile): The file to upload.
 
@@ -74,7 +78,7 @@ def create_subtitle(
         filename=object.filename,
         language=language,
         status="uploaded",
-        video_id=video_id,
+        masterclass_id=masterclass_id,
         s3_object_id=object.id,
     )
 

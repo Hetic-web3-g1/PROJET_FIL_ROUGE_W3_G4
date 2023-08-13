@@ -23,23 +23,29 @@ def get_subtitle_by_id(subtitle_id: UUID, user: User = Depends(CustomSecurity())
         return subtitles
 
 
-@router.get("/subtitle/video/{video_id}")
-def get_subtitles_by_video_id(video_id: UUID, user: User = Depends(CustomSecurity())):
+@router.get("/subtitle/masterclass/{masterclass_id}")
+def get_subtitles_by_masterclass_id(
+    masterclass_id: UUID, user: User = Depends(CustomSecurity())
+):
     with engine.begin() as conn:
-        subtitles = subtitle_service.get_subtitles_by_video_id(conn, video_id)
+        subtitles = subtitle_service.get_subtitles_by_masterclass_id(
+            conn, masterclass_id
+        )
         return subtitles
 
 
 @router.post("/subtitle")
 def create_subtitle(
     language: str = Body(...),
-    video_id: UUID = Body(...),
+    masterclass_id: UUID = Body(...),
     file: UploadFile = File(...),
     public: bool = True,
     user: User = Depends(CustomSecurity()),
 ):
     with engine.begin() as conn:
-        subtitle_service.create_subtitle(conn, user, language, video_id, public, file)
+        subtitle_service.create_subtitle(
+            conn, user, language, masterclass_id, public, file
+        )
 
 
 @router.delete("/subtitle/{subtitle_id}")
