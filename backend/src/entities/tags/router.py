@@ -15,12 +15,13 @@ router = APIRouter(
 )
 
 
-@router.get("/search/{search}")
+@router.get("/search/{search}&{tables}")
 def get_all_tags_by_table(
     search: str,
-    tables: List[str] = Body(...),
+    tables: str,
     user: User = Depends(CustomSecurity()),
 ):
+    tables = tables.split(",")    
     with engine.begin() as conn:
         response = search_service.get_all_tags_by_table(conn, search, tables)
         return response
