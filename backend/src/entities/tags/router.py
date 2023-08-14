@@ -27,11 +27,14 @@ def get_all_tags_by_table(
         return response
 
 
-@router.get("/get_object_by_tag")
+@router.get("/get_object_by_tag/{id}&{content}&{tag_type}")
 def get_object_by_tag(
-    tag: Tag,
+    id: int,
+    content: str,
+    tag_type: str,
     user: User = Depends(CustomSecurity()),
 ):
+    tag = Tag(id=id, content=content, tag_type=tag_type)
     with engine.begin() as conn:
         response = search_service.get_object_by_tag(conn, tag)
         return response
