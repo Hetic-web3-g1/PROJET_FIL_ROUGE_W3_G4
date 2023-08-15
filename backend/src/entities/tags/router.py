@@ -1,6 +1,6 @@
-from typing import List
+from typing import Annotated
 
-from fastapi import APIRouter, Body, Depends
+from fastapi import APIRouter, Body, Depends, Query
 
 from src.database.db_engine import engine
 
@@ -15,19 +15,18 @@ router = APIRouter(
 )
 
 
-@router.get("/search/{search}&{tables}")
+@router.get("/search/{search}")
 def get_all_tags_by_table(
     search: str,
-    tables: str,
+    tables: Annotated[list[str] | None, Query()] = None,
     user: User = Depends(CustomSecurity()),
 ):
-    tables = tables.split(",")    
     with engine.begin() as conn:
         response = search_service.get_all_tags_by_table(conn, search, tables)
         return response
 
 
-@router.get("/get_object_by_tag/{id}&{content}&{tag_type}")
+@router.get("/get_object_by_tag")
 def get_object_by_tag(
     id: int,
     content: str,
