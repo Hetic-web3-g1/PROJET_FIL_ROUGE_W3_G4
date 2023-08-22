@@ -8,7 +8,7 @@ class SubtitleCreate(BaseModel):
     filename: str | None
     language: str
     status: str | None
-    video_id: UUID | None
+    masterclass_id: UUID | None
     s3_object_id: UUID
 
 

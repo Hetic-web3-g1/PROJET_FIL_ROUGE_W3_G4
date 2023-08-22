@@ -1,7 +1,6 @@
-from typing import List
+from typing import Annotated
 
-from fastapi import APIRouter, Body, Depends
-
+from fastapi import APIRouter, Depends, Query
 from src.database.db_engine import engine
 
 from ..authentification.dependencies import CustomSecurity
@@ -18,7 +17,7 @@ router = APIRouter(
 @router.get("/search/{search}")
 def get_all_tags_by_table(
     search: str,
-    tables: List[str] = Body(...),
+    tables: Annotated[list[str], Query()] = [],
     user: User = Depends(CustomSecurity()),
 ):
     with engine.begin() as conn:
@@ -28,9 +27,12 @@ def get_all_tags_by_table(
 
 @router.get("/get_object_by_tag")
 def get_object_by_tag(
-    tag: Tag,
+    id: int,
+    content: str,
+    tag_type: str,
     user: User = Depends(CustomSecurity()),
 ):
+    tag = Tag(id=id, content=content, tag_type=tag_type)
     with engine.begin() as conn:
         response = search_service.get_object_by_tag(conn, tag)
         return response

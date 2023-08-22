@@ -32,3 +32,14 @@ class WorkAnalysisTranslation(WorkAnalysisTranslationCreate):
     created_at: datetime
     updated_at: datetime | None
     updated_by: UUID | None
+
+      
+class WorkAnalysisMetaCreate(BaseModel):
+    work_analysis_id: UUID
+    meta_key: str
+    meta_value: str
+
+
+class WorkAnalysisMeta(WorkAnalysisMetaCreate):
+    id: int
+

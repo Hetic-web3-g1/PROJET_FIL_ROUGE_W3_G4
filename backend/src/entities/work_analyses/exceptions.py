@@ -8,3 +8,11 @@ class WorkAnalysisTranslationNotFound(Exception):
 
 class WorkAnalysisTranslationAlreadyExist(Exception):
     pass
+
+
+class WorkAnalysisMetaNotFound(Exception):
+    pass
+
+
+class WorkAnalysisMetaKeyAlreadyExist(Exception):
+    pass

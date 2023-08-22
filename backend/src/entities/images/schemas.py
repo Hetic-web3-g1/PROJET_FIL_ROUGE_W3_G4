@@ -15,3 +15,13 @@ class Image(ImageCreate):
     created_at: datetime
     updated_at: datetime | None
     updated_by: UUID | None
+
+
+class ImageMetaCreate(BaseModel):
+    image_id: UUID
+    meta_key: str
+    meta_value: str
+
+
+class ImageMeta(ImageMetaCreate):
+    id: int

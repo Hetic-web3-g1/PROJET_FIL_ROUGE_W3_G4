@@ -14,20 +14,24 @@ from .exceptions import (
     BiographyNotFound,
     BiographyTranslationNotFound,
     BiographyTranslationAlreadyExist,
+    BiographyMetaNotFound,
+    BiographyMetaKeyAlreadyExist,
 )
 from .models import (
     biography_table,
     biography_translation_table,
     biography_tag_table,
     biography_comment_table,
+    biography_meta_table,
 )
 from .schemas import (
     Biography,
     BiographyCreate,
     BiographyTranslationCreate,
     BiographyTranslation,
+    BiographyMeta,
+    BiographyMetaCreate,
 )
-
 
 def _parse_row(row: sa.Row):
     return Biography(**row._asdict())
@@ -35,7 +39,11 @@ def _parse_row(row: sa.Row):
 
 def _parse_translation_row(row: sa.Row):
     return BiographyTranslation(**row._asdict())
-
+  
+  
+def _parse_meta_row(row: sa.Row):
+    return BiographyMeta(**row._asdict())
+  
 
 def get_all_biographies(conn: Connection):
     """
@@ -351,3 +359,130 @@ def create_biography_comment(
         biography_id,
         user,
     )
+
+
+# ---------------------------------------------------------------------------------------------------- #
+
+
+def get_biography_meta_by_id(conn: Connection, meta_id: int) -> BiographyMeta:
+    """
+    Get a meta entry by the given id.
+
+    Args:
+        meta_id (int): The id of the meta entry.
+
+    Raises:
+        BiographyMetaNotFound: If the meta entry does not exist.
+
+    Returns:
+        BiographyMeta: The BiographyMeta object.
+    """
+    result = conn.execute(
+        sa.select(biography_meta_table).where(biography_meta_table.c.id == meta_id)
+    ).first()
+    if result is None:
+        raise BiographyMetaNotFound
+
+    return _parse_meta_row(result)
+
+
+def get_biography_meta_by_biography_id(
+    conn: Connection, biography_id: UUID
+) -> list[BiographyMeta]:
+    """
+    Get all meta entries for a biography.
+
+    Args:
+        biography_id (UUID): The id of the biography.
+
+    Returns:
+        list[BiographyMeta]: List of BiographyMeta objects.
+    """
+    result = conn.execute(
+        sa.select(biography_meta_table).where(
+            biography_meta_table.c.biography_id == biography_id
+        )
+    ).fetchall()
+
+    return [_parse_meta_row(row) for row in result]
+
+
+def create_biography_meta(conn: Connection, meta: BiographyMetaCreate) -> BiographyMeta:
+    """
+    Create a meta entry for a biography.
+
+    Args:
+        meta (BiographyMetaCreate): BiographyMetaCreate object.
+
+    Raises:
+        BiographyMetaKeyAlreadyExist: If the meta entry already exists.
+
+    Returns:
+        BiographyMeta: The created BiographyMeta object.
+    """
+    check = conn.execute(
+        sa.select(biography_meta_table).where(
+            biography_meta_table.c.meta_key == meta.meta_key,
+        )
+    ).first()
+    if check is not None:
+        raise BiographyMetaKeyAlreadyExist
+
+    result = db_service.create_object(
+        conn,
+        biography_meta_table,
+        meta.dict(),
+    )
+
+    return _parse_meta_row(result)
+
+
+def update_biography_meta(
+    conn: Connection, meta_id: int, meta: BiographyMetaCreate
+) -> BiographyMeta:
+    """
+    Update a meta entry.
+
+    Args:
+        meta_id (int): The id of the meta entry.
+        meta (BiographyMetaCreate): The BiographyMetaCreate object.
+
+    Raises:
+        BiographyMetaNotFound: If the meta entry does not exist.
+
+    Returns:
+        BiographyMeta: The updated BiographyMeta object.
+    """
+    check = conn.execute(
+        sa.select(biography_meta_table).where(biography_meta_table.c.id == meta_id)
+    ).first()
+    if check is None:
+        raise BiographyMetaNotFound
+
+    result = db_service.update_object(
+        conn,
+        biography_meta_table,
+        meta_id,
+        meta.dict(),
+    )
+
+    return _parse_meta_row(result)
+
+
+def delete_biography_meta(conn: Connection, meta_id: int) -> None:
+    """
+    Delete a meta entry.
+
+    Args:
+        meta_id (int): The id of the meta entry.
+
+    Raises:
+        BiographyMetaNotFound: If the meta entry does not exist.
+    """
+    check = conn.execute(
+        sa.select(biography_meta_table).where(biography_meta_table.c.id == meta_id)
+    ).first()
+    if check is None:
+        raise BiographyMetaNotFound
+
+    db_service.delete_object(conn, biography_meta_table, meta_id)

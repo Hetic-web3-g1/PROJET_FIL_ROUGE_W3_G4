@@ -13,20 +13,24 @@ from .exceptions import (
     WorkAnalysisNotFound,
     WorkAnalysisTranslationNotFound,
     WorkAnalysisTranslationAlreadyExist,
+    WorkAnalysisMetaNotFound,
+    WorkAnalysisMetaKeyAlreadyExist,
 )
 from .models import (
     work_analysis_table,
     work_analysis_translation_table,
     work_analysis_tag_table,
     work_analysis_comment_table,
+    work_analysis_meta_table,
 )
 from .schemas import (
     WorkAnalysis,
     WorkAnalysisCreate,
     WorkAnalysisTranslation,
     WorkAnalysisTranslationCreate,
+    WorkAnalysisMeta,
+    WorkAnalysisMetaCreate,
 )
-
 
 def _parse_row(row: sa.Row):
     return WorkAnalysis(**row._asdict())
@@ -34,6 +38,10 @@ def _parse_row(row: sa.Row):
 
 def _parse_row_translation(row: sa.Row):
     return WorkAnalysisTranslation(**row._asdict())
+
+  
+def _parse_meta_row(row: sa.Row):
+    return WorkAnalysisMeta(**row._asdict())
 
 
 def get_all_work_analyzes(conn: Connection):
@@ -362,3 +370,131 @@ def create_work_analysis_comment(
         work_analysis_id,
         user,
     )
+
+
+# ---------------------------------------------------------------------------------------------------- #
+
+
+def get_work_analysis_meta_by_id(conn: Connection, meta_id: int) -> WorkAnalysisMeta:
+    """
+    Get a work_analysis_meta by the given id.
+
+    Args:
+        meta_id (int): The id of the work_analysis_meta.
+
+    Raises:
+        WorkAnalysisMetaNotFound: If the work_analysis_meta does not exist.
+
+    Returns:
+        WorkAnalysisMeta: The WorkAnalysisMeta object.
+    """
+    result = conn.execute(
+        sa.select(work_analysis_meta_table).where(
+            work_analysis_meta_table.c.id == meta_id
+        )
+    ).first()
+    if result is None:
+        raise WorkAnalysisMetaNotFound
+
+    return _parse_meta_row(result)
+
+
+def get_work_analysis_meta_by_work_analysis_id(
+    conn: Connection, work_analysis_id: UUID
+) -> list[WorkAnalysisMeta]:
+    """
+    Get all work_analysis_meta for a work_analysis.
+
+    Args:
+        work_analysis_id (UUID): The id of the work_analysis.
+
+    Returns:
+        list[WorkAnalysisMeta]: List of WorkAnalysisMeta objects.
+    """
+    result = conn.execute(
+        sa.select(work_analysis_meta_table).where(
+            work_analysis_meta_table.c.work_analysis_id == work_analysis_id
+        )
+    ).fetchall()
+
+    return [_parse_meta_row(row) for row in result]
+
+
+def create_work_analysis_meta(
+    conn: Connection, meta: WorkAnalysisMetaCreate
+) -> WorkAnalysisMeta:
+    """
+    Create a work_analysis_meta for a work_analysis.
+
+    Args:
+        meta (WorkAnalysisMetaCreate): WorkAnalysisMetaCreate object.
+
+    Returns:
+        WorkAnalysisMeta: The created WorkAnalysisMeta object.
+
+    Raises:
+        WorkAnalysisMetaKeyAlreadyExist: If the key already exists.
+    """
+    check = conn.execute(
+        sa.select(work_analysis_meta_table).where(
+            work_analysis_meta_table.c.meta_key == meta.meta_key,
+        )
+    ).first()
+    if check is not None:
+        raise WorkAnalysisMetaKeyAlreadyExist
+
+    result = db_service.create_object(conn, work_analysis_meta_table, meta.dict())
+
+    return _parse_meta_row(result)
+
+
+def update_work_analysis_meta(
+    conn: Connection, meta_id: int, meta: WorkAnalysisMetaCreate
+) -> WorkAnalysisMeta:
+    """
+    Update a work_analysis_meta.
+
+    Args:
+        meta_id (int): The id of the work_analysis_meta.
+        meta (WorkAnalysisMetaCreate): WorkAnalysisMetaCreate object.
+
+    Returns:
+        WorkAnalysisMeta: The updated WorkAnalysisMeta object.
+
+    Raises:
+        WorkAnalysisMetaNotFound: If the work_analysis_meta does not exist.
+    """
+    check = conn.execute(
+        sa.select(work_analysis_meta_table).where(
+            work_analysis_meta_table.c.id == meta_id
+        )
+    ).first()
+    if check is None:
+        raise WorkAnalysisMetaNotFound
+
+    result = db_service.update_object(
+        conn, work_analysis_meta_table, meta_id, meta.dict()
+    )
+
+    return _parse_meta_row(result)
+
+
+def delete_work_analysis_meta(conn: Connection, meta_id: int) -> None:
+    """
+    Delete a work_analysis_meta.
+
+    Args:
+        meta_id (int): The id of the work_analysis_meta.
+
+    Raises:
+        WorkAnalysisMetaNotFound: If the work_analysis_meta does not exist.
+    """
+    check = conn.execute(
+        sa.select(work_analysis_meta_table).where(
+            work_analysis_meta_table.c.id == meta_id
+        )
+    ).first()
+    if check is None:
+        raise WorkAnalysisMetaNotFound
+
+    db_service.delete_object(conn, work_analysis_meta_table, meta_id)

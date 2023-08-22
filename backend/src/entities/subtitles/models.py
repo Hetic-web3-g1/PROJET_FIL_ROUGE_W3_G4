@@ -13,7 +13,12 @@ subtitle_table = Table(
     Column("filename", String(), nullable=False),
     Column("language", String(), nullable=False),
     Column("status", String(), nullable=False, default="created"),
-    Column("video_id", UUID(as_uuid=True), ForeignKey("video.id"), nullable=False),
+    Column(
+        "masterclass_id",
+        UUID(as_uuid=True),
+        ForeignKey("masterclass.id", ondelete="CASCADE"),
+        nullable=False,
+    ),
     Column(
         "s3_object_id",
         UUID(as_uuid=True),

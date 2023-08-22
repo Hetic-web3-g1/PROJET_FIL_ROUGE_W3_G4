@@ -16,3 +16,13 @@ class Partition(PartitionCreate):
     created_at: datetime
     updated_at: datetime | None
     updated_by: UUID | None
+
+
+class PartitionMetaCreate(BaseModel):
+    partition_id: UUID
+    meta_key: str
+    meta_value: str
+
+
+class PartitionMeta(PartitionMetaCreate):
+    id: int
