@@ -1,8 +1,8 @@
-"""Alembic merge heads
+"""empty message
 
-Revision ID: cac9879d97b5
-Revises: 199f771aaa97
-Create Date: 2023-08-22 15:12:57.424065
+Revision ID: 65c17f8a6aca
+Revises: 2f7ca43e3bca, 199f771aaa97
+Create Date: 2023-08-22 19:43:31.725941
 
 """
 from alembic import op
@@ -10,8 +10,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = "cac9879d97b5"
-down_revision = "199f771aaa97"
+revision = '65c17f8a6aca'
+down_revision = ('2f7ca43e3bca', '199f771aaa97')
 branch_labels = None
 depends_on = None
 
