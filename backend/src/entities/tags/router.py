@@ -1,5 +1,3 @@
-from typing import Annotated
-
 from fastapi import APIRouter, Depends, Query
 
 from src.database.db_engine import engine
@@ -18,7 +16,7 @@ router = APIRouter(
 @router.get("/search/{search}")
 def get_all_tags_by_table(
     search: str,
-    tables: Annotated[list[str] | None, Query()] = None,
+    tables: list[str] = Query([]),
     user: User = Depends(CustomSecurity()),
 ):
     with engine.begin() as conn:
