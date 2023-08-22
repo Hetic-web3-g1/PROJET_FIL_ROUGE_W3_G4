@@ -9,11 +9,13 @@ from ..comments.schemas import CommentCreate
 from ..users.schemas import User
 from .exceptions import (
     BiographyNotFound,
+    BiographyTranslationNotFound,
+    BiographyTranslationAlreadyExist,
     BiographyMetaNotFound,
     BiographyMetaKeyAlreadyExist,
 )
 from . import service as biography_service
-from .schemas import BiographyCreate, BiographyMetaCreate
+from .schemas import BiographyCreate, BiographyTranslationCreate, BiographyMetaCreate
 
 router = APIRouter(
     prefix="/biographies",
@@ -80,6 +82,87 @@ def delete_biography(
         raise HTTPException(
             status_code=404,
             detail="Biography not found",
+        )
+
+
+# ---------------------------------------------------------------------------------------------------- #
+
+
+@router.get("/biography/translation/{biography_translation_id}")
+def get_biography_translation_by_id(
+    biography_translation_id: int,
+    user: User = Depends(CustomSecurity()),
+):
+    with engine.begin() as conn:
+        biography_translation = biography_service.get_biography_translation_by_id(
+            conn, biography_translation_id
+        )
+        return biography_translation
+
+
+@router.get("/biography/translation/biography/{biography_id}")
+def get_biography_translation_biography(
+    biography_id: UUID, user: User = Depends(CustomSecurity())
+):
+    with engine.begin() as conn:
+        biography_translation = (
+            biography_service.get_biography_translation_by_biography(conn, biography_id)
+        )
+        return biography_translation
+
+
+@router.post("/biography/translation")
+def create_biography_translation(
+    biography_translation: BiographyTranslationCreate,
+    user: User = Depends(CustomSecurity()),
+):
+    try:
+        with engine.begin() as conn:
+            return biography_service.create_biography_translation(
+                conn, biography_translation, user
+            )
+
+    except BiographyTranslationAlreadyExist:
+        raise HTTPException(
+            status_code=409,
+            detail="Biography translation already exist",
+        )
+
+
+@router.put("/biography/translation/{biography_translation_id}")
+def update_biography_translation(
+    biography_translation_id: int,
+    biography_translation: BiographyTranslationCreate,
+    user: User = Depends(CustomSecurity()),
+):
+    try:
+        with engine.begin() as conn:
+            return biography_service.update_biography_translation(
+                conn, biography_translation_id, biography_translation, user
+            )
+
+    except BiographyTranslationNotFound:
+        raise HTTPException(
+            status_code=404,
+            detail="Biography translation not found",
+        )
+
+
+@router.delete("/biography/translation/{biography_translation_id}")
+def delete_biography_translation(
+    biography_translation_id: int,
+    user: User = Depends(CustomSecurity()),
+):
+    try:
+        with engine.begin() as conn:
+            biography_service.delete_biography_translation(
+                conn, biography_translation_id
+            )
+
+    except BiographyTranslationNotFound:
+        raise HTTPException(
+            status_code=404,
+            detail="Biography translation not found",
         )
 
 

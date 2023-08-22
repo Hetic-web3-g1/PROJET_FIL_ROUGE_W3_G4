@@ -26,6 +26,22 @@ class Biography(BiographyCreate):
     updated_by: UUID | None
 
 
+class BiographyTranslationCreate(BaseModel):
+    biography_id: UUID
+    language: str
+    award: List[str] | None
+    content: str | None
+    status: str = "created"
+
+
+class BiographyTranslation(BiographyTranslationCreate):
+    id: int
+    created_by: UUID
+    created_at: datetime
+    updated_at: datetime | None
+    updated_by: UUID | None
+
+      
 class BiographyMetaCreate(BaseModel):
     biography_id: UUID
     meta_key: str
