@@ -19,3 +19,13 @@ class Video(VideoCreate):
     created_at: datetime
     updated_at: datetime | None
     updated_by: UUID | None
+
+
+class VideoMetaCreate(BaseModel):
+    video_id: UUID
+    meta_key: str
+    meta_value: str
+
+
+class VideoMeta(VideoMetaCreate):
+    id: int

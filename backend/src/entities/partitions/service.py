@@ -11,13 +11,26 @@ from ..s3_objects import service as s3_service
 from ..tags import service as tag_service
 from ..tags.schemas import PartitionTag
 from ..users.schemas import User
-from .exceptions import PartitionNotFound
-from .models import partition_table, partition_tag_table, partition_comment_table
-from .schemas import Partition, PartitionCreate
+from .exceptions import (
+    PartitionNotFound,
+    PartitionMetaNotFound,
+    PartitionMetaKeyAlreadyExist,
+)
+from .models import (
+    partition_table,
+    partition_tag_table,
+    partition_comment_table,
+    partition_meta_table,
+)
+from .schemas import Partition, PartitionCreate, PartitionMeta, PartitionMetaCreate
 
 
 def _parse_row(row: sa.Row):
     return Partition(**row._asdict())
+
+
+def _parse_meta_row(row: sa.Row):
+    return PartitionMeta(**row._asdict())
 
 
 def get_all_partitions(conn: Connection):
@@ -160,3 +173,135 @@ def create_partition_comment(
         partition_id,
         user,
     )
+
+
+# ---------------------------------------------------------------------------------------------------- #
+
+
+def get_partition_meta_by_id(conn: Connection, meta_id: int) -> PartitionMeta:
+    """
+    Get a partition meta by the given id.
+
+    Args:
+        meta_id (int): The id of the partition meta.
+
+    Raises:
+        PartitionMetaNotFound: If the partition meta does not exist.
+
+    Returns:
+        PartitionMeta: The PartitionMeta object.
+    """
+    result = conn.execute(
+        sa.select(partition_meta_table).where(partition_meta_table.c.id == meta_id)
+    ).first()
+    if result is None:
+        raise PartitionMetaNotFound
+
+    return _parse_meta_row(result)
+
+
+def get_partition_meta_by_partition_id(
+    conn: Connection, partition_id: UUID
+) -> list[PartitionMeta]:
+    """
+    Get all meta entries for a partition.
+
+    Args:
+        partition_id (UUID): The id of the partition.
+
+    Returns:
+        list[PartitionMeta]: List of PartitionMeta objects.
+    """
+    result = conn.execute(
+        sa.select(partition_meta_table).where(
+            partition_meta_table.c.partition_id == partition_id
+        )
+    ).fetchall()
+
+    return [_parse_meta_row(row) for row in result]
+
+
+def create_partition_meta(
+    conn: Connection,
+    meta: PartitionMetaCreate,
+) -> PartitionMeta:
+    """
+    Create a meta entry for a partition.
+
+    Args:
+        meta (PartitionMetaCreate): PartitionMetaCreate object.
+
+    Raises:
+        PartitionMetaKeyAlreadyExist: If the meta key already exists.
+
+    Returns:
+        PartitionMeta: The created PartitionMeta object.
+    """
+    check = conn.execute(
+        sa.select(partition_meta_table).where(
+            partition_meta_table.c.meta_key == meta.meta_key,
+        )
+    ).first()
+    if check is not None:
+        raise PartitionMetaKeyAlreadyExist
+
+    result = db_service.create_object(
+        conn,
+        partition_meta_table,
+        meta.dict(),
+    )
+
+    return _parse_meta_row(result)
+
+
+def update_partition_meta(
+    conn: Connection,
+    meta_id: int,
+    meta: PartitionMetaCreate,
+) -> PartitionMeta:
+    """
+    Update a meta entry.
+
+    Args:
+        meta_id (int): The id of the meta entry.
+        meta (PartitionMetaCreate): The PartitionMetaCreate object.
+
+    Raises:
+        PartitionMetaNotFound: If the meta entry does not exist.
+
+    Returns:
+        PartitionMeta: The updated PartitionMeta object.
+    """
+    check = conn.execute(
+        sa.select(partition_meta_table).where(partition_meta_table.c.id == meta_id)
+    ).first()
+    if check is None:
+        raise PartitionMetaNotFound
+
+    result = db_service.update_object(
+        conn,
+        partition_meta_table,
+        meta_id,
+        meta.dict(),
+    )
+
+    return _parse_meta_row(result)
+
+
+def delete_partition_meta(conn: Connection, meta_id: int) -> None:
+    """
+    Delete a meta entry.
+
+    Args:
+        meta_id (int): The id of the meta entry.
+
+    Raises:
+        PartitionMetaNotFound: If the meta entry does not exist.
+    """
+    check = conn.execute(
+        sa.select(partition_meta_table).where(partition_meta_table.c.id == meta_id)
+    ).first()
+    if check is None:
+        raise PartitionMetaNotFound
+
+    db_service.delete_object(conn, partition_meta_table, meta_id)
