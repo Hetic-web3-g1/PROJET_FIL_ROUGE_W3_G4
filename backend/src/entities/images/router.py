@@ -9,7 +9,7 @@ from . import service as image_service
 
 router = APIRouter(
     prefix="/images",
-    tags=["images"],
+    tags=["Images"],
 )
 
 
