@@ -1,7 +1,7 @@
 """update work analysis translation
 
 Revision ID: 199f771aaa97
-Revises: e00d13d99399
+Revises: 2f7ca43e3bca
 Create Date: 2023-08-12 08:27:54.716436
 
 """
@@ -11,7 +11,7 @@ import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 revision = "199f771aaa97"
-down_revision = "e00d13d99399"
+down_revision = "2f7ca43e3bca"
 branch_labels = None
 depends_on = None
 
