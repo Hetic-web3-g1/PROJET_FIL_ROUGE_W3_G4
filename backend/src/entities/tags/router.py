@@ -1,5 +1,6 @@
-from fastapi import APIRouter, Depends, Query
+from typing import Annotated
 
+from fastapi import APIRouter, Depends, Query
 from src.database.db_engine import engine
 
 from ..authentification.dependencies import CustomSecurity
@@ -16,7 +17,7 @@ router = APIRouter(
 @router.get("/search/{search}")
 def get_all_tags_by_table(
     search: str,
-    tables: list[str] = Query([]),
+    tables: Annotated[list[str], Query()] = [],
     user: User = Depends(CustomSecurity()),
 ):
     with engine.begin() as conn:
