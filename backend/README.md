@@ -115,3 +115,21 @@ An object represents a file stored in a bucket. Objects in Scality are stored wi
 Interacting with objects can be accomplished through various methods. To retrieve an object, a presigned URL is usually generated if the object is private, or a URL is constructed using the bucket name and object key. Object information (headers) can be obtained by querying the object key.
 
 To upload an object, you need to provide the file and additional information such as the generated object key, the bucket, privacy settings (is_public), content type, metadata, etc.
+
+### Run the project
+
+```shell
+ENVIRONMENT=development docker compose -p projet_fil_rouge_dev up -d --build
+ENVIRONMENT=production docker compose -p projet_fil_rouge_prod up -d --build
+```
+
+### Run the tests
+
+```bash
+ENVIRONMENT=test docker compose -p projet_fil_rouge_test up -d --build && \
+docker exec -it backend-api-test bash
+# Then
+python -m pytest
+```
+
+Dont forget to stop other instance of the project

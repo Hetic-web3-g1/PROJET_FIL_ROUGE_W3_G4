@@ -51,3 +51,7 @@ COPY --from=builder /app/dist /usr/share/nginx/html
 
 # Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
+
+# # ------------------------------------------------------------------------
+# Dummy stage for testing
+FROM alpine:3 AS test

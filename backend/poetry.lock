@@ -647,7 +647,7 @@ dev = ["atomicwrites (==1.2.1)", "attrs (==19.2.0)", "coverage (==6.5.0)", "hatc
 name = "ruff"
 version = "0.0.282"
 description = "An extremely fast Python linter, written in Rust."
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -887,3 +887,4 @@ standard = ["colorama (>=0.4)", "httptools (>=0.5.0)", "python-dotenv (>=0.13)",
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
+content-hash = "d3e6367b220b083b3a736d9b925fe9d183e96d990172f2f79ddc32b3cc620082"
