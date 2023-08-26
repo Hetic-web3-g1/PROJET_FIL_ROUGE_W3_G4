@@ -22,5 +22,8 @@ export default defineConfig(({command, mode}) => {
     define: {
       __APP_ENV__: JSON.stringify(env.APP_ENV),
     },
+    build: {
+      target: 'esnext' //browsers can handle the latest ES features
+    },
   }
 })
