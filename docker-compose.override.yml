@@ -67,6 +67,10 @@ services:
     networks:
       - app-network
 
+volumes:
+  s3-data:
+  s3-metadata:
+    
 networks:
   app-network:
   back-network:

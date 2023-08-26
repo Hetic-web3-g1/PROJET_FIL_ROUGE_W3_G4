@@ -16,7 +16,7 @@ import Login from "./pages/login/Login";
 import ErrorPage from "./pages/errorPage";
 import ResetPasswordEmail from "./pages/auth/reset/ResetPasswordEmail";
 import ResetPassword from "./pages/auth/reset/ResetPassword";
-import Profile from "./pages/profile/profile";
+import Profile from "./pages/profile/Profile";
 
 
 //Store

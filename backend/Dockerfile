@@ -41,13 +41,29 @@ FROM python:3.11 AS production
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the requirements file to the container
-COPY requirement.txt .
+RUN apt-get update
+
+# Installation poetry
+ENV POETRY_HOME="/opt/poetry" \
+    POETRY_VIRTUALENVS_CREATE=false \
+    POETRY_VIRTUALENVS_IN_PROJECT=false \
+    POETRY_NO_INTERACTION=1
+ENV PATH="$PATH:$POETRY_HOME/bin"
+RUN curl -sSL https://install.python-poetry.org | python3 -
+
+# Copy the pyproject.toml file to the container
+COPY pyproject.toml poetry.lock ./
 
 # Install dependencies
-RUN pip install --no-cache-dir -r requirement.txt
+RUN poetry install --no-root --no-interaction
+
+COPY . .
 
 # Set environment variables
+# Keeps Python from generating .pyc files in the container
+ENV PYTHONDONTWRITEBYTECODE=1
+# Turns off buffering for easier container logging
+ENV PYTHONUNBUFFERED=1
 # Declare the environment as development
 ENV CONFIG_NAME=production
 

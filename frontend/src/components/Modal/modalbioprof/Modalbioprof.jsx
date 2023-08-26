@@ -5,7 +5,7 @@ import propTypes from 'prop-types'
 import Modal from '../Modal'
 import CardInstrument from '../../cardInstrument/CardInstrument'
 
-import './modalbioprof.css'
+import './ModalBioProf.css'
 import Instruments from '../../../constants/instruments'
 import Field from '../../field/Field'
 import Uploadcard from '../../upload/UploadCard'
