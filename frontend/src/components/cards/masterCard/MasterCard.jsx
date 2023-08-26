@@ -1,12 +1,12 @@
 import React, {useState, useEffect, useMemo} from 'react';
 import PropTypes from 'prop-types';
 
-import { Label } from '../label/Label'
+import { Label } from '../../label/Label'
 
 import './masterCard.css';
 
-import placeholderImg from '../../assets/cardPlaceholder.png';
-import partitionPlaceholder from '../../assets/partitionPlaceholder.png';
+import placeholderImg from '../../../assets/cardPlaceholder.png';
+import partitionPlaceholder from '../../../assets/partitionPlaceholder.png';
 
 export const MasterCard = ({type, content, token, ...props }) => {
 
