@@ -2,7 +2,7 @@ import Checkbox from '../checkbox/Checkbox'
 import Dropdown from '../dropdown/Dropdown'
 import { useDispatch, ReactReduxContext } from 'react-redux';
 import React, { useContext, useEffect, useState } from 'react';
-import './sidebar.css';
+import './Sidebar.css';
 import { FiltersActions } from '../../features/actions/filters';
 
 export const Sidebar = () => {

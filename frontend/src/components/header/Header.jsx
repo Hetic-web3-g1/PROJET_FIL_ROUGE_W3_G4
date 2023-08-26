@@ -4,7 +4,7 @@ import Avatar from '../avatar/Avatar';
 import Field from '../field/Field';
 import Divider from '../divider/Divider';
 import { ModalMasterClass } from '../Modal/modalMasterclass/ModalMasterclass';
-import { ModalBioProf } from '../Modal/modalbioprof/Modalbioprof.jsx';
+import { ModalBioProf } from '../Modal/modalbioprof/ModalBioProf.jsx';
 import { ModalWorkAnalysis } from '../Modal/modalworkanalysis/ModalWorkanalysis';
 import { ReactReduxContext } from 'react-redux'
 import { ProfileActions } from '../../features/actions/profile';
@@ -13,7 +13,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-import './header.css';
+import './Header.css';
 
 export const Header = () => {
     const [createModal, setCreateModal] = useState(false);

@@ -4,7 +4,7 @@ import propTypes from 'prop-types'
 import Button from '../button/Button'
 import Divider from '../divider/Divider'
 
-import './modal.css'
+import './Modal.css'
 
 export const Modal = ({ title, content, size, handleClose, handleSave }) => {
     return (

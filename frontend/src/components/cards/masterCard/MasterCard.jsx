@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Label } from '../../label/Label'
 
-import './masterCard.css';
+import './MasterCard.css';
 
 import placeholderImg from '../../../assets/cardPlaceholder.png';
 import partitionPlaceholder from '../../../assets/partitionPlaceholder.png';
