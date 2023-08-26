@@ -61,7 +61,7 @@ services:
       REMOTE_MANAGEMENT_DISABLE: 1
       LISTEN_ADDR: 0.0.0.0
     env_file:
-      - ./backend/development.env
+      - ./backend/production.env
     restart: unless-stopped
     command: /bin/sh -c "cp -R ./config.docker config.json && yarn start"
     networks:
