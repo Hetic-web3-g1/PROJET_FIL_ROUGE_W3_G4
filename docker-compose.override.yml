@@ -39,7 +39,7 @@ services:
     container_name: db-postgres
     image: postgres:latest
     env_file:
-      - ./backend/development.env
+      - ./backend/production.env
     restart: unless-stopped
     ports:
       - 5432:5432
