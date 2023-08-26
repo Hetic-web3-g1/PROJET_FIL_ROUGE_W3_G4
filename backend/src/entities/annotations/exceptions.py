@@ -1,0 +1,2 @@
+class AnnotationNotFound(Exception):
+    pass

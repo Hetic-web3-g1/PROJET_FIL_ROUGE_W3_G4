@@ -1,12 +1,14 @@
-from fastapi import APIRouter, HTTPException, Depends
 from uuid import UUID
 
-from .schemas import User, UserCreate
-from . import exceptions as user_exceptions
-from . import service as user_service
+from fastapi import APIRouter, Depends, HTTPException
+
 from src.database.db_engine import engine
+
 from ..authentification import service as auth_service
 from ..authentification.dependencies import CustomSecurity
+from .exceptions import UserNotFound, EmailAlreadyExist
+from . import service as user_service
+from .schemas import User, UserCreate
 
 router = APIRouter(
     prefix="/users",
@@ -55,7 +57,6 @@ def get_user_by_id(
 def create_academy_user(
     academy_id: str, new_user: UserCreate, user: User = Depends(CustomSecurity())
 ):
-    print(new_user)
     try:
         with engine.begin() as conn:
             new_user = user_service.create_user(conn, new_user, user)
@@ -63,7 +64,7 @@ def create_academy_user(
             auth_service.send_reset_password_email(new_user.email, token)
             return new_user
 
-    except user_exceptions.EmailAlreadyExist:
+    except EmailAlreadyExist:
         raise HTTPException(
             status_code=400,
             detail="Email already exist",
@@ -78,7 +79,7 @@ def update_academy_user(
         with engine.begin() as conn:
             return user_service.update_user(conn, UUID(user_id), new_user, user)
 
-    except user_exceptions.UserNotFound:
+    except UserNotFound:
         raise HTTPException(
             status_code=400,
             detail="User not found",

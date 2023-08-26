@@ -1,7 +1,8 @@
-from sqlalchemy import Table, Column, ForeignKey, Integer, String, Float, Text, DateTime
-from sqlalchemy.dialects.postgresql import UUID
-from uuid import uuid4
 from datetime import datetime
+from uuid import uuid4
+
+from sqlalchemy import Column, DateTime, Float, ForeignKey, Integer, String, Table
+from sqlalchemy.dialects.postgresql import UUID
 
 from src.database.db_engine import metadata
 
@@ -9,7 +10,8 @@ video_table = Table(
     "video",
     metadata,
     Column("id", UUID(as_uuid=True), primary_key=True, unique=True, default=uuid4),
-    Column("name", String(), nullable=False),
+    Column("masterclass_id", UUID(as_uuid=True), ForeignKey("masterclass.id")),
+    Column("filename", String(), nullable=False),
     Column("duration", Float(), nullable=True),
     Column("status", String(), nullable=False, default="created"),
     Column("version", Float(), nullable=False, default=1.0),
@@ -28,15 +30,30 @@ video_table = Table(
 video_comment_table = Table(
     "video_comment",
     metadata,
-    Column("video_id", UUID(as_uuid=True), ForeignKey("video.id"), nullable=False),
-    Column("comment_id", Integer, ForeignKey("comment.id"), nullable=False),
+    Column(
+        "entity_id",
+        UUID(as_uuid=True),
+        ForeignKey("video.id", ondelete="CASCADE"),
+        nullable=False,
+    ),
+    Column(
+        "comment_id",
+        Integer,
+        ForeignKey("comment.id", ondelete="CASCADE"),
+        nullable=False,
+    ),
 )
 
 video_tag_table = Table(
     "video_tag",
     metadata,
-    Column("video_id", UUID(as_uuid=True), ForeignKey("video.id"), nullable=False),
-    Column("tag_id", Integer, ForeignKey("tag.id"), nullable=False),
+    Column(
+        "entity_id",
+        UUID(as_uuid=True),
+        ForeignKey("video.id", ondelete="CASCADE"),
+        nullable=False,
+    ),
+    Column("tag_id", Integer, ForeignKey("tag.id", ondelete="CASCADE"), nullable=False),
 )
 
 video_meta_table = Table(

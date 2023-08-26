@@ -183,3 +183,6 @@ grafana.db
 
 # S3 env
 s3-config/credentials
+
+# Test env file
+!backend/test.env

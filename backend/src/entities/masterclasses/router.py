@@ -1,13 +1,16 @@
-from fastapi import APIRouter, HTTPException, Depends
 from uuid import UUID
 
-from .schemas import MasterclassCreate, MasterclassUserCreate
-from ..users.schemas import User
-from . import exceptions as masterclass_exceptions
-from ..users import exceptions as user_exceptions
-from . import service as masterclass_service
+from fastapi import APIRouter, Depends, HTTPException
+
 from src.database.db_engine import engine
+
 from ..authentification.dependencies import CustomSecurity
+from ..comments.schemas import CommentCreate
+from ..users import exceptions as user_exceptions
+from ..users.schemas import User
+from .exceptions import MasterclassNotFound
+from . import service as masterclass_service
+from .schemas import MasterclassCreate, MasterclassUserCreate
 
 router = APIRouter(
     prefix="/masterclasses",
@@ -64,7 +67,7 @@ def update_masterclass(
                 conn, masterclass_id, masterclass, user
             )
 
-    except masterclass_exceptions.MasterclassNotFound:
+    except MasterclassNotFound:
         raise HTTPException(
             status_code=404,
             detail="Masterclass not found",
@@ -80,10 +83,23 @@ def delete_masterclass(
         with engine.begin() as conn:
             masterclass_service.delete_masterclass(conn, masterclass_id)
 
-    except masterclass_exceptions.MasterclassNotFound:
+    except MasterclassNotFound:
         raise HTTPException(
             status_code=404,
             detail="Masterclass not found",
+        )
+
+
+# ---------------------------------------------------------------------------------------------------- #
+
+
+@router.post("/masterclass/comment/{masterclass_id}")
+def create_masterclass_comment(
+    comment: CommentCreate, masterclass_id, user: User = Depends(CustomSecurity())
+):
+    with engine.begin() as conn:
+        masterclass_service.create_masterclass_comment(
+            conn, comment, masterclass_id, user
         )
 
 

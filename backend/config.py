@@ -9,7 +9,7 @@ from sqlalchemy.engine.url import URL
 
 
 class Settings(BaseSettings):
-    environment: Literal["development", "production"] = os.getenv("CONFIG_NAME")  # type: ignore
+    environment: Literal["development", "production", "test"] = os.getenv("CONFIG_NAME")  # type: ignore
     postgres_user: str
     postgres_password: str
     postgres_hostname: str
@@ -28,21 +28,19 @@ class Settings(BaseSettings):
     bucket_name: str
 
     # external keys
-    meilisearch_masterkey: str | None = None
     sendgrid_api_key: str
 
     @property
     def postgres_url(self) -> URL:
         return URL.create(
-        drivername="postgresql+psycopg2",
-        username=self.postgres_user,
-        password=self.postgres_password,
-        host=self.postgres_hostname,
-        port=self.postgres_port,
-        database=self.postgres_db,
+            drivername="postgresql+psycopg2",
+            username=self.postgres_user,
+            password=self.postgres_password,
+            host=self.postgres_hostname,
+            port=self.postgres_port,
+            database=self.postgres_db,
         )
 
-        
     class Config:
         config = os.getenv("CONFIG_NAME")
         env_file = f"./{config}.env"

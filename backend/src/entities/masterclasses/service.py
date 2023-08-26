@@ -2,19 +2,26 @@ from uuid import UUID
 
 import sqlalchemy as sa
 from sqlalchemy.engine import Connection
-
 from src.database import service as db_service
+
+
+from ..comments import service as comment_service
+from ..comments.schemas import CommentCreate, MasterclassComment
+from ..tags import service as tag_service
+from ..tags.schemas import MasterclassTag
+from ..users.schemas import User
+from .exceptions import MasterclassNotFound, MasterclassUserNotFound
+from .models import (
+    masterclass_comment_table,
+    masterclass_table,
+    masterclass_tag_table,
+    masterclass_user_table,
+)
 from .schemas import (
     Masterclass,
     MasterclassCreate,
-    MasterclassUserCreate,
     MasterclassUser,
-)
-from ..users.schemas import User
-from .models import masterclass_table, masterclass_user_table
-from .exceptions import (
-    MasterclassNotFound,
-    MasterclassUserNotFound,
+    MasterclassUserCreate,
 )
 
 
@@ -22,7 +29,7 @@ def _parse_row(row: sa.Row):
     return Masterclass(**row._asdict())
 
 
-def _parse_row_masterclass_user(row: sa.Row):
+def _parse_row_masterclass_user(row: sa.Row):  # type: ignore
     return MasterclassUser(**row._asdict())
 
 
@@ -79,6 +86,29 @@ def get_masterclasses_by_user(conn: Connection, user_id: UUID):
         yield _parse_row(row)
 
 
+def create_masterclass_tags(conn: Connection, masterclass: Masterclass) -> None:
+    """
+    Create tags for a masterclass.
+
+    Args:
+        masterclass (MasterclassCreate): MasterclassCreate object.
+        result (sa.Row): Result of masterclass creation.
+    """
+    tags = [masterclass.title]
+    if masterclass.instrument:
+        tags.extend(masterclass.instrument)
+
+    for content in tags:
+        tag_service.create_tag_and_link_table(
+            conn,
+            content,
+            masterclass_table,
+            masterclass_tag_table,
+            MasterclassTag,
+            masterclass.id,
+        )
+
+
 def create_masterclass(
     conn: Connection, masterclass: MasterclassCreate, user: User
 ) -> Masterclass:
@@ -95,6 +125,10 @@ def create_masterclass(
     result = db_service.create_object(
         conn, masterclass_table, masterclass.dict(), user_id=user.id
     )
+
+    masterclass = _parse_row(result)
+    create_masterclass_tags(conn, masterclass)
+
     return _parse_row(result)
 
 
@@ -124,6 +158,14 @@ def update_masterclass(
     result = db_service.update_object(
         conn, masterclass_table, masterclass_id, masterclass.dict(), user_id=user.id
     )
+
+    tag_service.delete_tags_by_object_id(
+        conn, masterclass_id, masterclass_table, masterclass_tag_table
+    )
+
+    masterclass = _parse_row(result)
+    create_masterclass_tags(conn, masterclass)
+
     return _parse_row(result)
 
 
@@ -143,7 +185,38 @@ def delete_masterclass(conn: Connection, masterclass_id: UUID) -> None:
     if check is None:
         raise MasterclassNotFound
 
+    tag_service.delete_tags_by_object_id(
+        conn, masterclass_id, masterclass_table, masterclass_tag_table
+    )
+    comment_service.delete_comments_by_object_id(
+        conn, masterclass_id, masterclass_table, masterclass_comment_table
+    )
     db_service.delete_object(conn, masterclass_table, masterclass_id)
+
+
+# ---------------------------------------------------------------------------------------------------- #
+
+
+def create_masterclass_comment(
+    conn: Connection, comment: CommentCreate, masterclass_id: UUID, user: User
+):
+    """
+    Create a comment and link it to a masterclass.
+
+    Args:
+        comment (CommentCreate): CommentCreate object.
+        masterclass_id (UUID): Id of masterclass.
+        user (User): The user creating the comment.
+
+    """
+    comment_service.create_comment_and_link_table(
+        conn,
+        comment,
+        masterclass_comment_table,
+        MasterclassComment,
+        masterclass_id,
+        user,
+    )
 
 
 # ---------------------------------------------------------------------------------------------------- #

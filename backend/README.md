@@ -16,7 +16,7 @@ If the version of python (via `python -V`) is the the same of the version select
 .env
 
 ```TOML
-# Databese
+# Database
 POSTGRES_USER = ""
 POSTGRES_PASSWORD = ""
 POSTGRES_HOSTNAME = ""
@@ -36,7 +36,6 @@ JWT_PRIVATE_KEY=""
 
 # External keys
 SENDGRID_API_KEY=""
-# MEILISEARCH_MASTERKEY =""
 ```
 
 s3-config/credentials
@@ -54,7 +53,7 @@ pyenv install
 poetry install
 ```
 
-This will install the pythoin version for the project and create a python virtual environment and install all the dependencies.
+This will install the python version for the project and create a python virtual environment and install all the dependencies.
 
 ## Run
 
@@ -78,6 +77,12 @@ Run with VSCode debugger bu the running the configuration `Python: Saline Backen
 ```shell
 alembic revision --autogenerate -m "<MESSAGE>"
 alembic upgrade head
+```
+
+If needed to downgrade
+
+```shell
+alembic downgrade -1
 ```
 
 ## Amazon S3

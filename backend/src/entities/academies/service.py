@@ -2,15 +2,14 @@ from uuid import UUID
 
 import sqlalchemy as sa
 from sqlalchemy.engine import Connection
-
 from src.database import service as db_service
-from src.database.db_engine import engine
-from .schemas import Academy, AcademyCreate
-from .models import academy_table
+
 from .exceptions import AcademyNotFound
+from .models import academy_table
+from .schemas import Academy, AcademyCreate
 
 
-def _parse_row(row):
+def _parse_row(row: sa.Row):
     return Academy(**row._asdict())
 
 

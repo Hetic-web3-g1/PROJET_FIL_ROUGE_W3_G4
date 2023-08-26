@@ -1,17 +1,17 @@
 import magic
-from fastapi import HTTPException, UploadFile
 from botocore.exceptions import ClientError
+from fastapi import HTTPException, UploadFile
 
 from src.database.s3_engine import s3_client
 
 
-# TODO give the url for a true validation of the file
-def check_mimetype(file: UploadFile, file_type: str):
+def check_mimetype(file: UploadFile, file_type: str) -> tuple[str, str]:
     """
     Check if the mimetype is supported.
 
     Args:
         file (UploadFile): The file to upload.
+        file_type (str): The type of the file.
 
     Raises:
         HTTPException: No file type
@@ -43,10 +43,12 @@ def check_mimetype(file: UploadFile, file_type: str):
 
     major_type, minor_type = mime_type.split("/")
 
-    if major_type not in supported_file_types:
-        raise HTTPException(status_code=400, detail="File type not supported")
+    if major_type not in conversion_file_types[file_type]:
+        raise HTTPException(
+            status_code=400, detail="File type not supported for this specific file."
+        )
 
-    if conversion_file_types[file_type] != major_type:
+    if major_type not in supported_file_types:
         raise HTTPException(status_code=400, detail="File type not supported")
 
     if minor_type not in supported_file_types[major_type]:
@@ -55,7 +57,7 @@ def check_mimetype(file: UploadFile, file_type: str):
     return major_type, minor_type
 
 
-def file_validation(file: UploadFile, file_type: str) -> tuple:
+def file_validation(file: UploadFile, file_type: str) -> tuple[str, str]:
     """
     Validate the file.
 
@@ -75,6 +77,12 @@ def file_validation(file: UploadFile, file_type: str) -> tuple:
     """
     KB = 1000
     MB = KB * KB
+
+    # if major_type not in supported_file_types:
+    # raise HTTPException(status_code=400, detail="File type not supported")
+
+    # if minor_type not in supported_file_types[major_type]:
+    #     raise HTTPException(status_code=400, detail="File type not supported")
 
     if not file:
         raise HTTPException(status_code=400, detail="No file provided")
