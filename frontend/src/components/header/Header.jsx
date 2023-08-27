@@ -38,7 +38,7 @@ export const Header = () => {
                 method: 'GET',
                 headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}` },
             };
-            fetch(`http://localhost:4000/users/user/me`, userOptions).then((response) => response.json()).then(data => {
+            fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/users/user/me`, userOptions).then((response) => response.json()).then(data => {
                 dispatch(ProfileActions.updateProfile(data));
             });
         }
@@ -50,7 +50,7 @@ export const Header = () => {
                 method: 'GET',
                 headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}` },
             };
-            fetch(`http://localhost:4000/academies/${store.getState().user.profile.academy_id}`, userOptions).then((response) => response.json()).then(data => {
+            fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/academies/${store.getState().user.profile.academy_id}`, userOptions).then((response) => response.json()).then(data => {
                 dispatch(AcademyActions.setAcademy(data));
             });
         }

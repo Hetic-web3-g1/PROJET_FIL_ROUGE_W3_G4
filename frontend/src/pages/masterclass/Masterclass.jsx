@@ -24,7 +24,7 @@ export const Masterclass = () => {
       method: 'GET',
       headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}`},
     };
-    fetch(`http://localhost:4000/masterclasses/${masterclassId}`, Options).then((response) => response.json()).then(data => {
+    fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/masterclasses/${masterclassId}`, Options).then((response) => response.json()).then(data => {
       setMasterclassData(data)
     });
   },[])

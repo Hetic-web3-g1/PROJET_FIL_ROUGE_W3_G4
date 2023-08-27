@@ -50,7 +50,7 @@ export const ModalBioProf = ({ handleClose, store }) => {
                 created_by: createdBy,
             }),
         };
-        fetch('http://localhost:4000/biographies/biography', bioOptions).then((response) => response.json()).then(data => {
+        fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/biographies/biography`, bioOptions).then((response) => response.json()).then(data => {
           if (data?.detail[0].msg != "field required") {
             handleClose();
           } else {
