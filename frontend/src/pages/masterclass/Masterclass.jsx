@@ -11,7 +11,7 @@ import DashboardVideo from "../../components/dashboard/video/DashboardVideo";
 //import DashboardPartition from "../../components/dashboard/DashboardPartition";
 //import DashboardWorkAnalysis from "../../components/dashboard/DashboardWorkAnalysis";
 import DashboardProfessor from "../../components/dashboard/professor/DashboardProfessor";
-//import DashboardCompositor from "../../components/dashboard/DashboardCompositor";
+import DashboardTeam from "../../components/dashboard/team/DashboardTeam";
 
 import MasterClassData from '../../mocks/masterClassMocks'
 
@@ -101,7 +101,7 @@ export const Masterclass = () => {
         break;
 
       case 'Team':
-        setComponent(<></>);
+        setComponent(<DashboardTeam/>);
         break;
 
       case 'Video':
