@@ -39,7 +39,7 @@ export const Profile = () => {
                 academy_id: profile.academy_id,
             }),
         }
-        fetch(`http://localhost:4000/users/user/${profile.id}`, userOptions).then((response) => response.json()).then(data => {
+        fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/users/user/${profile.id}`, userOptions).then((response) => response.json()).then(data => {
             dispatch(ProfileActions.updateProfile({                
                 first_name: firstName,
                 last_name: lastName,
@@ -61,7 +61,7 @@ export const Profile = () => {
                 primary_role: user_primaryRole,
             }),
         }
-        fetch(`http://localhost:4000/users/academy/${profile.academy_id}/user`, userOptions).then((response) => response.json()).then(data => {
+        fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/users/academy/${profile.academy_id}/user`, userOptions).then((response) => response.json()).then(data => {
             console.log(data)
         });
     }

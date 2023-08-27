@@ -23,7 +23,7 @@ export const ResetPassword = ({ }) => {
         headers: { 'Content-Type': 'application/json', 'accept': 'application/json' },
         body: JSON.stringify({password, token }),
       };
-      fetch('http://localhost:4000/auth/reset-password', resetOptions).then((response) => response.json()).then(data => {
+      fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/auth/reset-password`, resetOptions).then((response) => response.json()).then(data => {
         if (data?.detail != "Invalid Credentials" && data?.detail != "Expired Token") {
           navigate("/login");
         } else {
