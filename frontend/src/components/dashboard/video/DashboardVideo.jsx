@@ -2,14 +2,14 @@ import React from 'react'
 import propTypes from 'prop-types'
 
 import './dashboardvideo.css'
-import './../textstyle/textstyles.css'
+import './../../textstyle/textstyles.css'
 
-import Countries from '../../constants/countries'
-import VideoPlayer  from '../../components/videoPlayer/VideoPlayer.jsx'
-import peppapig from '../../assets/peppa pig wow.mp4'
-import Button from '../button/Button'
-import Label from '../label/Label'
-import Logs from '../../mocks/logMocks.js'
+import Countries from '../../../constants/countries'
+import VideoPlayer  from '../../videoPlayer/VideoPlayer.jsx'
+import peppapig from '../../../assets/peppa pig wow.mp4'
+import Button from '../../button/Button'
+import Label from '../../label/Label'
+import Logs from '../../../mocks/logMocks.js'
 
 export const DashboardVideo = ({}) => {
     return ( 
