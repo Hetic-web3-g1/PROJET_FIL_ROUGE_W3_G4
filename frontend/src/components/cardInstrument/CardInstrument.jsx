@@ -18,7 +18,7 @@ export const CardInstrument = ({ name, size, legend, onClick }) => {
 
   return (
     <div>
-        <img key={name} className={`img-card-instrument ${style ? 'highlight' : 'highlight-close'}`} height={size} id="first" src={`src/assets/cardInstrument/${mode}${name}.svg`} onClick={clickEvent}/>
+        <img key={name} className={`img-card-instrument ${style ? 'highlight' : 'highlight-close'}`} height={size} id="first" src={`../src/assets/cardInstrument/${mode}${name}.svg`} onClick={clickEvent}/>
     </div>
   );
 };

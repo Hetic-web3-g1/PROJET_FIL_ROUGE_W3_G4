@@ -22,6 +22,7 @@ export const Masterclass = () => {
   const [component, setComponent] = useState('');
   const [tabName, setTabName] = useState('');
   const [masterclassData, setMasterclassData] = useState();
+  const [professorData, setProfessorData] = useState();
   const masterclassId = window.location.href.split('/')[4];
   
   useEffect(() => {
@@ -33,6 +34,18 @@ export const Masterclass = () => {
       setMasterclassData(data)
     });
   },[]);
+
+  useEffect(() => {
+    if (masterclassData) {
+      const Options = {
+        method: 'GET',
+        headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}`},
+      };
+      fetch(`http://localhost:4000/biographies/biography/${masterclassData.teacher_bio_id}`, Options).then((response) => response.json()).then(data => {
+        setProfessorData(data)
+      });
+    }
+  },[masterclassData]);
 
   const handleSave = (e, newMasterclassData) => {
     e.preventDefault();
@@ -65,8 +78,6 @@ export const Masterclass = () => {
    * @param childData Data from tabs component
    */
 
-  console.log(masterclassData)
-
   function handleCallback(childData) {
     setTabName(childData);
     switch (childData) {
@@ -91,7 +102,7 @@ export const Masterclass = () => {
         break;
 
       case 'Professor':
-        setComponent(<DashboardProfessor masterclassData={masterclassData} handleSave={handleSave}/>);
+        setComponent(<DashboardProfessor masterclassData={masterclassData} handleSave={handleSave} professorData={professorData}/>);
         break;
 
       case 'Compositor':

@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import propTypes from 'prop-types'
 
-
 import Modal from '../Modal'
 import CardInstrument from '../../cardInstrument/CardInstrument'
 
