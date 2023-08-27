@@ -1,13 +1,12 @@
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException
-
 from src.database.db_engine import engine
 
 from ..authentification import service as auth_service
 from ..authentification.dependencies import CustomSecurity
-from .exceptions import UserNotFound, EmailAlreadyExist
 from . import service as user_service
+from .exceptions import EmailAlreadyExist, UserNotFound
 from .schemas import User, UserCreate
 
 router = APIRouter(
@@ -59,7 +58,7 @@ def create_academy_user(
 ):
     try:
         with engine.begin() as conn:
-            new_user = user_service.create_user(conn, new_user, user)
+            new_user = user_service.create_user(conn, new_user, None, user)
             token = auth_service.create_reset_token(conn, new_user.id)
             auth_service.send_reset_password_email(new_user.email, token)
             return new_user

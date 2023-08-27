@@ -1,34 +1,33 @@
-import random
 import datetime
+import random
 from uuid import UUID
 
 from faker import Faker
 from sqlalchemy import func, select
 
+from ..database import service as db_service
+from ..database.db_engine import engine
 from ..entities.academies.models import academy_table
 from ..entities.academies.schemas import AcademyCreate
 from ..entities.academies.service import create_academy
-from ..entities.comments.models import comment_table
-from ..entities.comments.schemas import CommentCreate
-from ..entities.comments.service import create_comment
 from ..entities.biographies.models import biography_table
 from ..entities.biographies.schemas import BiographyCreate
 from ..entities.biographies.service import create_biography
+from ..entities.comments.models import comment_table
+from ..entities.comments.schemas import CommentCreate
+from ..entities.comments.service import create_comment
 from ..entities.masterclasses.models import masterclass_table, masterclass_user_table
 from ..entities.masterclasses.schemas import MasterclassCreate, MasterclassUserCreate
 from ..entities.masterclasses.service import (
-    create_masterclass,
     assign_user_to_masterclass,
+    create_masterclass,
 )
 from ..entities.users.models import user_table
-from ..entities.users.schemas import UserCreate, User
+from ..entities.users.schemas import User, UserCreate
 from ..entities.users.service import create_user
 from ..entities.work_analyses.models import work_analysis_table
 from ..entities.work_analyses.schemas import WorkAnalysisCreate
 from ..entities.work_analyses.service import create_work_analysis
-from ..database import service as db_service
-from ..database.db_engine import engine
-
 
 status = ["created", "in-progress", "completed", "archived", "in-review", "rejected"]
 primary_role = ["user", "admin"]
@@ -152,7 +151,7 @@ def create_user_fake():
                 "academy_id": UUID("12345648-1234-1234-1234-123456789123"),
             }
         )
-        create_user(conn, new_user, user)
+        create_user(conn, new_user, "password", user)
 
 
 def create_masterclass_fake():
