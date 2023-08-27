@@ -9,11 +9,9 @@ import CardInstrument from '../../cardInstrument/CardInstrument'
 
 import Instruments from '../../../constants/instruments'
 
-export const DashboardProfessor = ({masterclassData, handleSave, professorData}) => {
+export const DashboardProfessor = ({masterclassData, handleSave, professorData, type}) => {
 
     const { store } = useContext(ReactReduxContext)
-
-    console.log(professorData)
 
     const [instrument, setInstrument] = React.useState(professorData?.instrument);
     const [firstName, setFirstName] = React.useState(professorData?.first_name);
@@ -26,10 +24,18 @@ export const DashboardProfessor = ({masterclassData, handleSave, professorData})
 
     const [searchProfessorData, setSearchProfessorData] = useState([])
     const [masterclass, setMasterclass] = useState([])
+    const [tmpProf, setTmpProf] = useState('')
 
-    const setProfessor = (id) => {
+    const setProfessor = (professor) => {
         var newMasterclassData = masterclassData
-        newMasterclassData.teacher_bio_id = id
+        console.log(professor)
+        setTmpProf(professor.first_name + ' ' + professor.last_name)
+        setSearchProfessorData([])
+        if (type == 'Professor') {
+            newMasterclassData.teacher_bio_id = professor.id
+        } else {
+            newMasterclassData.composer_bio_id = professor.id
+        }
         newMasterclassData.updated_by = store?.getState().user.user_id
         newMasterclassData.updated_at = new Date()
         setMasterclass(newMasterclassData)
@@ -51,22 +57,26 @@ export const DashboardProfessor = ({masterclassData, handleSave, professorData})
 
     return (
         <div className='professor'>
-            <div className='professor-search'>
-                <div className="professor-searchbar">
-                    <Field type={"search"} placeholder={"Search for a professor"} onChange={e => handleSearch(e)}/>
+            {!professorData.id ? (
+            <>
+                <div className='professor-search'>
+                    <div className="professor-searchbar">
+                        <Field type={"search"} placeholder={`Search for a ${type}`} value={tmpProf} onChange={e => handleSearch(e)}/>
+                    </div>
+                    <ul className="professor-list">
+                        {searchProfessorData[0]?.map((professor) => {
+                            return (
+                                <li className="li-custom font professor-list-content" onClick={() => (setProfessor(professor))}>
+                                    {professor.first_name} {professor.last_name}
+                                </li>
+                            )
+                        })}
+                    </ul>
+                    <button onClick={e => handleSave(e, masterclass)}>Save</button>
                 </div>
-                <ul className="professor-list">
-                    {searchProfessorData[0]?.map((professor) => {
-                        return (
-                            <li className="li-custom font" onClick={() => (setProfessor(professor.id))}>
-                                {professor.first_name} {professor.last_name}
-                            </li>
-                        )
-                    })}
-                </ul>
-                <button onClick={e => handleSave(e, masterclass)}>Save</button>
-            </div>
-            <hr/>
+                <hr/>
+            </>
+            ) :  null }
             <div className="dashboard-prof-content">
                 <div className="dashboard-prof-infos">
                     <div className="dashboard-prof-infos-1">
@@ -89,7 +99,7 @@ export const DashboardProfessor = ({masterclassData, handleSave, professorData})
                 <div className="dashboard-prof-instrument-wrapper">
                     Instruments
                     <div className="dashboard-prof-instrument">
-                        {Instruments.map((instrument, index) => {
+                        {Instruments?.map((instrument, index) => {
                             return (
                                 <div className="instrument-card">
                                     <CardInstrument key={`modal-instrument-card-${index}`} name={instrument} legend={true} onClick={handleInstrument}/>
@@ -112,7 +122,7 @@ export const DashboardProfessor = ({masterclassData, handleSave, professorData})
                     <div className='dashboard-prof-infos-field full-width'>
                         <span>Awards</span>
                         {
-                            awards.map((award, index) => {
+                            awards?.map((award, index) => {
                                 return(
                                     <div className='dashboard-prof-award-field'>
                                         <Field placeholder="Award" value={award} onChange={(e) => 

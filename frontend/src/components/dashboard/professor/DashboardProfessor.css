@@ -2,6 +2,23 @@
     margin-bottom: 20px;
 }
 
+.professor-searchbar {
+    margin-bottom: 1vh;
+}
+
+.professor-list {
+    background-color: white;
+    color: #020A33;
+    border-radius: 3px;
+    width: 830px;
+    padding: 0;
+    margin: 0;
+    position: fixed;
+    max-height: 400px;
+    overflow: auto;
+    z-index: 1;
+}
+
 .dashboard-prof-content {
     font-family: 'Montserrat', sans-serif;
     font-weight: normal;

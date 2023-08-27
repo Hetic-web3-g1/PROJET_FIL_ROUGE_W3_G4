@@ -22,6 +22,7 @@ export const Masterclass = () => {
   const [component, setComponent] = useState('');
   const [tabName, setTabName] = useState('');
   const [masterclassData, setMasterclassData] = useState();
+  const [composerData, setComposerData] = useState();
   const [professorData, setProfessorData] = useState();
   const masterclassId = window.location.href.split('/')[4];
   
@@ -46,6 +47,20 @@ export const Masterclass = () => {
       });
     }
   },[masterclassData]);
+
+  useEffect(() => {
+    if (masterclassData) {
+      const Options = {
+        method: 'GET',
+        headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}`},
+      };
+      fetch(`http://localhost:4000/biographies/biography/${masterclassData.composer_bio_id}`, Options).then((response) => response.json()).then(data => {
+        setComposerData(data)
+      });
+    }
+  },[masterclassData]);
+
+  console.log(masterclassData)
 
   const handleSave = (e, newMasterclassData) => {
     e.preventDefault();
@@ -102,11 +117,11 @@ export const Masterclass = () => {
         break;
 
       case 'Professor':
-        setComponent(<DashboardProfessor masterclassData={masterclassData} handleSave={handleSave} professorData={professorData}/>);
+        setComponent(<DashboardProfessor masterclassData={masterclassData} handleSave={handleSave} professorData={professorData} type={"professor"} key={"professor"}/>);
         break;
 
       case 'Compositor':
-        setComponent(<></>);
+        setComponent(<DashboardProfessor masterclassData={masterclassData} handleSave={handleSave} professorData={composerData} type={"composer"} key={"composer"}/>);
         break;
 
       default:
