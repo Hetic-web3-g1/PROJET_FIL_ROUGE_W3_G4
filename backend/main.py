@@ -4,23 +4,22 @@ from fastapi.middleware.cors import CORSMiddleware
 from config import settings
 from src.utils.fake_data import generate_data
 
-origins = []
-
 if settings.environment in {"development"}:
     origins = ["*"]
 else:
-    pass
-    # Todo: production, add dns of the frontend
+    origins = [
+        "http://localhost",
+        "http://frontend-app",
+        "http://groupe4.hetic-projects.arcplex.tech",
+    ]
+    # origins = ["*"]
 
-app = FastAPI(
-    # root_path="/api"
-)
 
-api = FastAPI(
-    # root_path="/api"
-)
+app = FastAPI(root_path="/api")
 
-app.mount("/api", app=api)
+api = FastAPI(root_path="/api-public")
+
+app.mount("/api-public", app=api)
 
 app.add_middleware(
     CORSMiddleware,
