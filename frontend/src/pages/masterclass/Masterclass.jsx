@@ -113,7 +113,7 @@ export const Masterclass = () => {
         break;
 
       case 'Team':
-        setComponent(<DashboardTeam users={userList}/>);
+        setComponent(<DashboardTeam users={userList} masterclassData={masterclassData}/>);
         break;
 
       case 'Video':
