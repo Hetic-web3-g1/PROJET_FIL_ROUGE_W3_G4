@@ -14,7 +14,7 @@ export const ResetPasswordEmail = ({ }) => {
         method: 'GET',
         headers: { 'Content-Type': 'application/json', 'accept': 'application/json' },
       };
-      fetch(`http://localhost:4000/auth/forgot-password?email=${email}`, emailOptions).then((response) => response.json()).then(data => {
+      fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/auth/forgot-password?email=${email}`, emailOptions).then((response) => response.json()).then(data => {
         if (data.detail != "Invalid Credentials") {
           navigate(`/reset-password/${data.token}`);
         } else {

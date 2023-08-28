@@ -20,7 +20,7 @@ export const MasterCard = ({type, content, token, ...props }) => {
             method: 'GET',
             headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${token}` },
         };
-        fetch(`http://localhost:4000/users/${content.created_by}`, userOptions).then((response) => response.json()).then(data => {
+        fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/users/${content.created_by}`, userOptions).then((response) => response.json()).then(data => {
             setCreatedBy(data.first_name + ' ' + data.last_name);
         });
     },[])            
