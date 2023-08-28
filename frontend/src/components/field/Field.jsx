@@ -1,33 +1,28 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import propTypes from 'prop-types';
 
-import { useSelector, ReactReduxContext } from 'react-redux';
+import { ReactReduxContext } from 'react-redux';
 
 import './field.css';
-
-const searchIcon = '../../assets/search/search.svg';
 
 export const Field = ({ type, placeholder, onChange, id, value }) => {
     const { store } = useContext(ReactReduxContext);
     const [searchData, setSearchData] = useState([]);
-    const navigate = useNavigate();
-
+    const [noResult, setNoResult] = useState();
     const [noText, setNoText] = useState(true);
-
+    const navigate = useNavigate();
   
-function HideAndShowPassword () {
-    var x = document.getElementById(id);
-    if (x.type === "password") {
-        x.type = "text";
-    } else {
-        x.type = "password";
-    }}
+    function HideAndShowPassword() {
+        var x = document.getElementById(id);
+        (x.type === "password") ? x.type = "text" : x.type = "password";
+    }
 
     const userOptions = {
         method: 'GET',
         headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}` },
     };
+
     function onSearchChange(event) {
         event.target.value === '' ? setNoText(true) : setNoText(false);
         fetch(`http://localhost:4000/tags/search/${event.target.value}?tables=masterclass&tables=biography&tables=partition&tables=work_analysis`, userOptions)
@@ -37,8 +32,11 @@ function HideAndShowPassword () {
         })
         .catch((err) => {
             console.log('ERROR', err.message);
-        })
-        console.log(searchData);
+        });
+
+        (searchData[0].length === 0 && searchData[1].length === 0 && searchData[2].length === 0 && searchData[3].length === 0) ? 
+        setNoResult(true) : 
+        setNoResult(false); 
     }
 
     return (
@@ -58,38 +56,41 @@ function HideAndShowPassword () {
                     onClick={HideAndShowPassword}/>
             </div>
             <div style={{display: 'flex', justifyContent: 'center'}}>
-                <ul style={noText ? {display: 'none'} : null} className='results-block-searchable'>
+                
+                {!noResult &&                
+                    <ul style={noText ? {display: 'none'} : null} className='results-block-searchable'>
 
-                    <div>
-                        <h2 className='title-search-category'>Masterclass</h2>
-                        {searchData[0]?.length > 0 ? searchData[0].map((el) => {return (<li onClick={() => (navigate(`/Masterclass/${el.id}`))} className='li-custom font'>{el.title}</li>)}) : <div style={{textAlign: 'center', fontStyle: 'italic'}}>No results</div>}
-                        <hr className='custom-search-hr' />
-                    </div>
+                        <div style={searchData[0]?.length === 0 ? {display: 'none'} : undefined}>
+                            <h2 className='title-search-category'>Masterclass</h2>
+                            {searchData[0]?.map((el) => {return (<li onClick={() => (navigate(`/Masterclass/${el.id}`))} className='li-custom font'>{el.title}</li>)})}
+                            <hr className='custom-search-hr' />
+                        </div>
 
-                    <div>
-                        <h2 className='title-search-category'>Biography</h2>
-                        {searchData[1]?.length > 0 ? searchData[1].map((el) => {return (<li className='li-custom font'>{el.first_name}</li>)}) : <div style={{textAlign: 'center', fontStyle: 'italic'}}>No results</div>}
-                        <hr className='custom-search-hr' />
-                    </div>
+                        <div style={searchData[1]?.length === 0 ? {display: 'none'} : undefined}>
+                            <h2 className='title-search-category'>Biography</h2>
+                            {searchData[1]?.map((el) => {return (<li className='li-custom font'>{el.first_name}</li>)})}
+                            <hr className='custom-search-hr' />
+                        </div>
 
-                    <div>
-                        <h2 className='title-search-category'>Partition</h2>
-                        {searchData[2]?.length > 0 ? searchData[2].map((el) => {return (<li className='li-custom font'></li>)}) : <div style={{textAlign: 'center', fontStyle: 'italic'}}>No results</div>}
-                        <hr className='custom-search-hr' />
-                    </div>
+                        <div style={searchData[2]?.length === 0 ? {display: 'none'} : undefined}>
+                            <h2 className='title-search-category'>Partition</h2>
+                            {searchData[2]?.map((el) => {return (<li className='li-custom font'></li>)})}
+                            <hr className='custom-search-hr' />
+                        </div>
 
-                    <div>
-                        <h2 className='title-search-category'>Work Analysis</h2>
-                        {searchData[3]?.length > 0 ? searchData[3].map((el) => {return (<li className='li-custom font'>{el.title}</li>)}) : <div style={{textAlign: 'center', fontStyle: 'italic'}}>No results</div>}
-                        <hr className='custom-search-hr' />
-                    </div>
+                        <div style={searchData[3]?.length === 0 ? {display: 'none'} : undefined}>
+                            <h2 className='title-search-category'>Work Analysis</h2>
+                            {searchData[3]?.map((el) => {return (<li className='li-custom font'>{el.title}</li>)})}
+                            <hr className='custom-search-hr'/>
+                        </div>
+                    </ul>
+                }
 
-
-                </ul>
             </div>
         </>
     );
 }
+
 Field.propTypes = {
     type: propTypes.string,
     placeholder: propTypes.string.isRequired,
