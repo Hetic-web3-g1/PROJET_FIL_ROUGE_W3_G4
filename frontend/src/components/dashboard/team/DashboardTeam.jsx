@@ -1,7 +1,7 @@
 import React from 'react';
-
-import Dropdown from '../../dropdown/Dropdown';
 import './DashboardTeam.css';
+
+import Select from 'react-select';
 
 const DashboardTeam = (users) => {
 
@@ -13,6 +13,12 @@ const DashboardTeam = (users) => {
         'Traductor'     : 'Traductor can do everything except delete users',
         'Professor'     : 'Professor can do everything except delete users',
     };
+
+    var userList = [];
+
+    for (var i = 0; i < users.users.length; i++) {
+        userList.push({value: users.users[i].id, label: users.users[i].first_name + " " + users.users[i].last_name});
+    }
 
     return(
         <div className="dashboard-team">
@@ -39,7 +45,11 @@ const DashboardTeam = (users) => {
                             {roles[role]}
                         </div>
                         <div className="dashboard-team-role-user">
-                            <Dropdown />
+                        <Select
+                            closeMenuOnSelect={false}
+                            isMulti
+                            options={userList}
+                        />
                         </div>
                     </div>
                 ))}

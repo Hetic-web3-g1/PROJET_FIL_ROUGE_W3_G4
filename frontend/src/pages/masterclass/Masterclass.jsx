@@ -24,6 +24,7 @@ export const Masterclass = () => {
   const [masterclassData, setMasterclassData] = useState();
   const [composerData, setComposerData] = useState();
   const [professorData, setProfessorData] = useState();
+  const [userList, setUserList] = useState();
   const masterclassId = window.location.href.split('/')[4];
   
   useEffect(() => {
@@ -31,7 +32,7 @@ export const Masterclass = () => {
       method: 'GET',
       headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}`},
     };
-    fetch(`http://localhost:4000/masterclasses/masterclass/${masterclassId}`, Options).then((response) => response.json()).then(data => {
+    fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/masterclasses/masterclass/${masterclassId}`, Options).then((response) => response.json()).then(data => {
       setMasterclassData(data)
     });
   },[]);
@@ -42,7 +43,7 @@ export const Masterclass = () => {
         method: 'GET',
         headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}`},
       };
-      fetch(`http://localhost:4000/biographies/biography/${masterclassData.teacher_bio_id}`, Options).then((response) => response.json()).then(data => {
+      fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/biographies/biography/${masterclassData.teacher_bio_id}`, Options).then((response) => response.json()).then(data => {
         setProfessorData(data)
       });
     }
@@ -54,13 +55,24 @@ export const Masterclass = () => {
         method: 'GET',
         headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}`},
       };
-      fetch(`http://localhost:4000/biographies/biography/${masterclassData.composer_bio_id}`, Options).then((response) => response.json()).then(data => {
+      fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/biographies/biography/${masterclassData.composer_bio_id}`, Options).then((response) => response.json()).then(data => {
         setComposerData(data)
       });
     }
   },[masterclassData]);
 
-  console.log(masterclassData)
+
+  useEffect(() => {
+    if (masterclassData) {
+      const Options = {
+        method: 'GET',
+        headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}`},
+      };
+      fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/users/academy/${masterclassData?.academy_id}`, Options).then((response) => response.json()).then(data => {
+        setUserList(data)
+      });
+    }
+  },[masterclassData]);  
 
   const handleSave = (e, newMasterclassData) => {
     e.preventDefault();
@@ -101,7 +113,7 @@ export const Masterclass = () => {
         break;
 
       case 'Team':
-        setComponent(<DashboardTeam/>);
+        setComponent(<DashboardTeam users={userList}/>);
         break;
 
       case 'Video':
