@@ -12,14 +12,13 @@ else:
         "http://frontend-app",
         "http://groupe4.hetic-projects.arcplex.tech",
     ]
-    # origins = ["*"]
 
+app = FastAPI()
+api = FastAPI(root_path="/api")
+api_public = FastAPI(root_path="/api_public")
 
-app = FastAPI(root_path="/api")
-
-api = FastAPI(root_path="/api-public")
-
-app.mount("/api-public", app=api)
+app.mount("/api", app=api)
+app.mount("/api_public", app=api_public)
 
 app.add_middleware(
     CORSMiddleware,
@@ -46,22 +45,22 @@ from src.entities.users.router import router as user_router
 from src.entities.videos.router import router as video_router
 from src.entities.work_analyses.router import router as work_analysis_router
 
-app.include_router(academy_router)
-app.include_router(annotation_router)
-app.include_router(auth_router)
-app.include_router(biography_router)
-app.include_router(comment_router)
-app.include_router(masterclass_router)
-app.include_router(image_router)
-app.include_router(partition_router)
-app.include_router(s3_object_router)
-app.include_router(subtitle_router)
-app.include_router(user_router)
-app.include_router(tag_router)
-app.include_router(video_router)
-app.include_router(work_analysis_router)
+api.include_router(academy_router)
+api.include_router(annotation_router)
+api.include_router(auth_router)
+api.include_router(biography_router)
+api.include_router(comment_router)
+api.include_router(masterclass_router)
+api.include_router(image_router)
+api.include_router(partition_router)
+api.include_router(s3_object_router)
+api.include_router(subtitle_router)
+api.include_router(user_router)
+api.include_router(tag_router)
+api.include_router(video_router)
+api.include_router(work_analysis_router)
 
-api.include_router(public_router)
+api_public.include_router(public_router)
 
 
 # Todo: remove when have clean data
