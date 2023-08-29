@@ -4,14 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from config import settings
 from src.utils.fake_data import generate_data
 
-if settings.environment in {"development"}:
-    origins = ["*"]
-else:
-    origins = [
-        "http://localhost",
-        "http://frontend-app",
-        "http://groupe4.hetic-projects.arcplex.tech",
-    ]
+origins = ["*"]
 
 app = FastAPI()
 api = FastAPI(root_path="/api")
@@ -26,6 +19,7 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    max_age=3600,
 )
 
 
