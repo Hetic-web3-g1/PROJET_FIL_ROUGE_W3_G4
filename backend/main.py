@@ -7,18 +7,14 @@ from src.utils.fake_data import generate_data
 if settings.environment in {"development"}:
     origins = ["*"]
 else:
-    origins = [
-        "http://localhost",
-        "http://frontend-app",
-        "http://groupe4.hetic-projects.arcplex.tech",
-    ]
+    origins = ["groupe4.hetic-projects.arcplex.tech:80"]
 
 app = FastAPI()
 api = FastAPI(root_path="/api")
-api_public = FastAPI(root_path="/api_public")
+api_public = FastAPI(root_path="/api-public")
 
 app.mount("/api", app=api)
-app.mount("/api_public", app=api_public)
+app.mount("/api-public", app=api_public)
 
 app.add_middleware(
     CORSMiddleware,
@@ -26,6 +22,7 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    max_age=3600,
 )
 
 
