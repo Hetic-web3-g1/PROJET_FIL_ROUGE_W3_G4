@@ -70,3 +70,19 @@
 .versionning{
     margin-top: 1%;
 }
+
+.dashboard-video-missing{
+    height: 70vh;
+}
+
+.dashboard-video-missing {
+    text-align: center;
+    margin-top: 5vh;
+}
+
+.dashboard-video-missing-upload-card {
+    margin-top: 5vh;
+    margin-bottom: 20px;
+    width: 80vw;
+}
+

@@ -3,15 +3,18 @@ import { Document, Page } from 'react-pdf';
 
 import './uploadCard.css'
 import Divider from '../divider/Divider'
+import VideoPlayer from '../videoPlayer/VideoPlayer';
+
 const pdfjs = await import('pdfjs-dist/build/pdf');
 const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry');
 
 pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
-export const UploadCard = ({  }) => {
+export const UploadCard = ({ setUploadFile }) => {
     const [drag, setDrag] = useState(false);
     const [image, setImage] = useState(null);
     const [file, setFile] = useState(null);
+    const [video, setVideo] = useState(null);
 
     const [numPages, setNumPages] = useState(null);
     const [pageNumber, setPageNumber] = useState(1); //setting 1 to show fisrt page
@@ -81,7 +84,20 @@ export const UploadCard = ({  }) => {
      * @param event Button event
      */
     function handleChange(event) {
-        event.target.files[0].type === "application/pdf" ? setFile(URL.createObjectURL(event.target.files[0])) : setImage(URL.createObjectURL(event.target.files[0]));
+        setUploadFile(URL.createObjectURL(event.target.files[0]))
+        switch (event.target.files[0].type) { 
+            case "application/pdf":
+                setFile(URL.createObjectURL(event.target.files[0]))
+                break;
+            case "image/jpeg" && "image/png":
+                setImage(URL.createObjectURL(event.target.files[0]))
+                break;
+            case "video/mp4":
+                setVideo(URL.createObjectURL(event.target.files[0]))
+                break;
+            default:
+                break;
+        }
     }
 
     /**
@@ -90,13 +106,13 @@ export const UploadCard = ({  }) => {
     function handleFileDelete() {
         setImage(null);
         setFile(null);
+        setVideo(null);
     }
 
     return (
         <div className="upload-card" onDragEnter={handleDrag}>
             <div style={image || file ? {alignItems: 'center'} : null} className="upload-card-content">
-
-                {!image && !file ? 
+                {!image && !file && !video ? 
                 <div>
                     <div className="upload-card-drop">
                         Drop Here
@@ -145,8 +161,17 @@ export const UploadCard = ({  }) => {
                 </>
                 : null}
 
+                {video ?
+                    <div className='upload-file-container' style={{padding: "2vh"}}>
+                        <button type="button" className='btn' onClick={handleFileDelete} style={{position: "unset", transform: "unset", marginBottom: "10px"}}>
+                            Delete the video
+                        </button>
+                        <VideoPlayer video={video}/>
+                    </div> 
+                : null}
+
                 { drag ? 
-                <div className="upload-card-drag-file-overlay" onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop}></div> 
+                    <div className="upload-card-drag-file-overlay" onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop}></div> 
                 : null}
 
             </div>

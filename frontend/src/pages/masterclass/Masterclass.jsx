@@ -117,7 +117,7 @@ export const Masterclass = () => {
         break;
 
       case 'Video':
-      setComponent(<DashboardVideo/>);
+      setComponent(<DashboardVideo masterclassData={masterclassData}/>);
       break;
 
       case 'Partition':
