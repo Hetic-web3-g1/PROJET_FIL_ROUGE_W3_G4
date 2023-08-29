@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import propTypes from 'prop-types'
 import { ReactReduxContext } from 'react-redux'
 
@@ -20,16 +20,17 @@ export const DashboardVideo = ({videoData, masterclassData}) => {
 
     const handleVideoUpload = (e) => {
         e.preventDefault();
+        const fileBlob = new Blob([uploadVideo], {type: 'video/mp4'});
+        var formData = new FormData();
+        formData.append('masterclass_id', masterclassData.id);
+        formData.append('duration', 1);
+        formData.append('version', 1);
+        formData.append('public', true);
+        formData.append('file', fileBlob, "video.mp4");
         const uploadOptions = {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}` },
-            body: JSON.stringify({
-                masterclass_id: masterclassData.id,
-                duration: 1,
-                version: 1,
-                public: true,
-                file: uploadVideo,
-            }),
+            headers: { 'authorization': `${store.getState().user.user_token}` },
+            body: formData,
         };
         fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/videos/video`, uploadOptions).then((response) => response.json()).then(data => {
             console.log(data);
