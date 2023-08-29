@@ -4,7 +4,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from config import settings
 from src.utils.fake_data import generate_data
 
-origins = ["*"]
+if settings.environment in {"development"}:
+    origins = ["*"]
+else:
+    origins = ["groupe4.hetic-projects.arcplex.tech:80"]
 
 app = FastAPI()
 api = FastAPI(root_path="/api")
