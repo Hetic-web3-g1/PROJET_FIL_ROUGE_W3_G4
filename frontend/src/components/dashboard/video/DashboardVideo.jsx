@@ -17,7 +17,6 @@ export const DashboardVideo = ({videoData, masterclassData}) => {
 
     const { store } = useContext(ReactReduxContext)
     const [uploadVideo, setUploadVideo] = useState(null)
-
     const handleVideoUpload = (e) => {
         e.preventDefault();
         const fileBlob = new Blob([uploadVideo], {type: 'video/mp4'});

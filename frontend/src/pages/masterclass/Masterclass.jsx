@@ -8,7 +8,7 @@ import { Tabs } from "../../components/tabs/Tabs";
 import { UploadCard } from "../../components/upload/UploadCard";
 
 import DashboardVideo from "../../components/dashboard/video/DashboardVideo";
-//import DashboardPartition from "../../components/dashboard/DashboardPartition";
+import DashboardPartition from "../../components/dashboard/partition/DashboardPartition";
 import DashboardWorkAnalysis from "../../components/dashboard/work analysis/DashboardWorkAnalysis";
 import DashboardProfessor from "../../components/dashboard/professor/DashboardProfessor";
 import DashboardTeam from "../../components/dashboard/team/DashboardTeam";
@@ -121,7 +121,7 @@ export const Masterclass = () => {
       break;
 
       case 'Partition':
-        setComponent(<></>);
+        setComponent(<DashboardPartition masterclassData={masterclassData}/>);
         break;
       
       case 'Work analysis':
