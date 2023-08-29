@@ -8,10 +8,10 @@ origins = ["*"]
 
 app = FastAPI()
 api = FastAPI(root_path="/api")
-api_public = FastAPI(root_path="/api_public")
+api_public = FastAPI(root_path="/api-public")
 
 app.mount("/api", app=api)
-app.mount("/api_public", app=api_public)
+app.mount("/api-public", app=api_public)
 
 app.add_middleware(
     CORSMiddleware,

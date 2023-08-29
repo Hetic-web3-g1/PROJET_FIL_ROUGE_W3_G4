@@ -10,7 +10,7 @@ export default defineConfig(({command, mode}) => {
   const env = loadEnv(mode, process.cwd(), '');
 
   return {
-    server: { https: true },
+    // server: { https: true },
     plugins: [react()],
     server: {
       watch: {
