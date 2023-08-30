@@ -1,16 +1,18 @@
-import React, { useContext, useState } from 'react';
-import { useNavigate } from "react-router-dom";
+import React, { useContext, useEffect, useState } from 'react';
 import propTypes from 'prop-types';
+import { useNavigate } from "react-router-dom";
 
 import { ReactReduxContext } from 'react-redux';
 
 import './field.css';
+import OutsideAlerter from '../../utils/clickOutside';
 
 export const Field = ({ type, placeholder, onChange, id, value }) => {
     const { store } = useContext(ReactReduxContext);
     const [searchData, setSearchData] = useState([]);
     const [noResult, setNoResult] = useState();
     const [noText, setNoText] = useState(true);
+    const [timer, setTimer] = useState(null);
     const navigate = useNavigate();
   
     function HideAndShowPassword() {
@@ -23,21 +25,42 @@ export const Field = ({ type, placeholder, onChange, id, value }) => {
         headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}` },
     };
 
-    function onSearchChange(event) {
-        event.target.value === '' ? setNoText(true) : setNoText(false);
-        fetch(`http://localhost:4000/tags/search/${event.target.value}?tables=masterclass&tables=biography&tables=partition&tables=work_analysis`, userOptions)
-            .then((response) => response.json())
-            .then(data => {
-                setSearchData(data);
-        })
-        .catch((err) => {
-            console.log('ERROR', err.message);
-        });
-
-        (searchData[0].length === 0 && searchData[1].length === 0 && searchData[2].length === 0 && searchData[3].length === 0) ? 
-        setNoResult(true) : 
-        setNoResult(false); 
+    /**
+     * Get value from click outside component and affect it to the noResult variable
+     * @param {boolean} blockDisplayed Value to know if the HTML should be displayed
+     */
+    function handleDisplay(blockDisplayed) {
+        setNoResult(blockDisplayed);
     }
+
+    /**
+     * On keyup make an API call to get the corresponding results
+     * @param {string} currentSearch Current Search of the user
+     */
+    function onSearchChange(currentSearch) {
+        setSearchData([]);
+        clearTimeout(timer);
+        currentSearch.target.value === '' ? setNoText(true) : setNoText(false);
+        
+        const requestSearch = setTimeout(() => 
+        {
+            currentSearch.target.value.length > 0 ? fetch(`http://localhost:4000/tags/search/${currentSearch.target.value}?tables=masterclass&tables=biography&tables=partition&tables=work_analysis`, userOptions)
+                .then((response) => response.json())
+                .then(data => {
+                    setSearchData(data);
+            })
+            .catch((err) => {
+                console.log('ERROR', err.message);
+            }) : undefined
+        }, 500)
+        setTimer(requestSearch);
+    }
+
+    useEffect(() => {
+        (searchData[0]?.length === 0 && searchData[1]?.length === 0 && searchData[2]?.length === 0 && searchData[3]?.length === 0) ? 
+        setNoResult(true) : 
+        setNoResult(false);
+    }, [searchData]);
 
     return (
         <>
@@ -55,38 +78,40 @@ export const Field = ({ type, placeholder, onChange, id, value }) => {
                     className={['field-icon', `field-icon-${type}`].join(' ')}
                     onClick={HideAndShowPassword}/>
             </div>
-            <div style={{display: 'flex', justifyContent: 'center'}}>
-                
-                {!noResult &&                
-                    <ul style={noText ? {display: 'none'} : null} className='results-block-searchable'>
+            <OutsideAlerter callback={handleDisplay}>
+                <div style={{display: 'flex', justifyContent: 'center'}}>
+                    
+                    {!noResult &&                
+                        <ul style={noText ? {display: 'none'} : null} className='results-block-searchable'>
 
-                        <div style={searchData[0]?.length === 0 ? {display: 'none'} : undefined}>
-                            <h2 className='title-search-category'>Masterclass</h2>
-                            {searchData[0]?.map((el) => {return (<li onClick={() => (navigate(`/Masterclass/${el.id}`))} className='li-custom font'>{el.title}</li>)})}
-                            <hr className='custom-search-hr' />
-                        </div>
+                            <div style={searchData[0]?.length === 0 ? {display: 'none'} : undefined}>
+                                <h2 className='title-search-category'>Masterclass</h2>
+                                {searchData[0]?.map((el, index) => {return (<li onClick={() => (navigate(`/Masterclass/${el.id}`))} key={index} className='li-custom font'>{el.title}</li>)})}
+                                <hr className='custom-search-hr' />
+                            </div>
 
-                        <div style={searchData[1]?.length === 0 ? {display: 'none'} : undefined}>
-                            <h2 className='title-search-category'>Biography</h2>
-                            {searchData[1]?.map((el) => {return (<li className='li-custom font'>{el.first_name}</li>)})}
-                            <hr className='custom-search-hr' />
-                        </div>
+                            <div style={searchData[1]?.length === 0 ? {display: 'none'} : undefined}>
+                                <h2 className='title-search-category'>Biography</h2>
+                                {searchData[1]?.map((el, index) => {return (<li key={index} className='li-custom font'>{el.first_name}</li>)})}
+                                <hr className='custom-search-hr' />
+                            </div>
 
-                        <div style={searchData[2]?.length === 0 ? {display: 'none'} : undefined}>
-                            <h2 className='title-search-category'>Partition</h2>
-                            {searchData[2]?.map((el) => {return (<li className='li-custom font'></li>)})}
-                            <hr className='custom-search-hr' />
-                        </div>
+                            <div style={searchData[2]?.length === 0 ? {display: 'none'} : undefined}>
+                                <h2 className='title-search-category'>Partition</h2>
+                                {searchData[2]?.map((el, index) => {return (<li key={index} className='li-custom font'></li>)})}
+                                <hr className='custom-search-hr' />
+                            </div>
 
-                        <div style={searchData[3]?.length === 0 ? {display: 'none'} : undefined}>
-                            <h2 className='title-search-category'>Work Analysis</h2>
-                            {searchData[3]?.map((el) => {return (<li className='li-custom font'>{el.title}</li>)})}
-                            <hr className='custom-search-hr'/>
-                        </div>
-                    </ul>
-                }
+                            <div style={searchData[3]?.length === 0 ? {display: 'none'} : undefined}>
+                                <h2 className='title-search-category'>Work Analysis</h2>
+                                {searchData[3]?.map((el, index) => {return (<li key={index} className='li-custom font'>{el.title}</li>)})}
+                                <hr className='custom-search-hr'/>
+                            </div>
+                        </ul>
+                    }
 
-            </div>
+                </div>
+            </OutsideAlerter>
         </>
     );
 }
