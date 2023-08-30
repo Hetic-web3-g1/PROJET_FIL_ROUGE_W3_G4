@@ -15,7 +15,11 @@ from .exceptions import (
     WorkAnalysisMetaKeyAlreadyExist,
 )
 from . import service as work_analysis_service
-from .schemas import WorkAnalysisCreate, WorkAnalysisTranslationCreate, WorkAnalysisMetaCreate
+from .schemas import (
+    WorkAnalysisCreate,
+    WorkAnalysisTranslationCreate,
+    WorkAnalysisMetaCreate,
+)
 
 router = APIRouter(
     prefix="/work_analyzes",
@@ -49,7 +53,10 @@ def create_work_analysis(
     new_work_analysis: WorkAnalysisCreate, user: User = Depends(CustomSecurity())
 ):
     with engine.begin() as conn:
-        return work_analysis_service.create_work_analysis(conn, new_work_analysis, user)
+        work_analysis = work_analysis_service.create_work_analysis(
+            conn, new_work_analysis, user
+        )
+        return work_analysis.id
 
 
 @router.put("/work_analysis/{work_analysis_id}")
