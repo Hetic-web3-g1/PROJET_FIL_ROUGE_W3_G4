@@ -49,7 +49,7 @@ services:
       - back-network
 
   s3:
-    image: zenko/cloudserver:8.1-latest-arm64v8
+    image: zenko/cloudserver:latest-7.10.19
     container_name: s3-${ENVIRONMENT:-development}
     ports:
       - "8000:8000"
