@@ -44,7 +44,7 @@ export const Field = ({ type, placeholder, onChange, id, value }) => {
         
         const requestSearch = setTimeout(() => 
         {
-            currentSearch.target.value.length > 0 ? fetch(`http://localhost:4000/tags/search/${currentSearch.target.value}?tables=masterclass&tables=biography&tables=partition&tables=work_analysis`, userOptions)
+            currentSearch.target.value.length > 0 ? fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/tags/search/${currentSearch.target.value}?tables=masterclass&tables=biography&tables=partition&tables=work_analysis`, userOptions)
                 .then((response) => response.json())
                 .then(data => {
                     setSearchData(data);
