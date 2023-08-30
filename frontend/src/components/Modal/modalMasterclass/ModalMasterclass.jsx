@@ -4,7 +4,7 @@ import propTypes from 'prop-types'
 import Modal from '../Modal'
 import CardInstrument from '../../cardInstrument/CardInstrument'
 
-import './modalMasterclass.css'
+import './ModalMasterclass.css'
 import Instruments from '../../../constants/instruments'
 import Field from '../../field/Field'
 import Uploadcard from '../../upload/UploadCard'
@@ -40,7 +40,7 @@ export const ModalMasterClass = ({ handleClose, store }) => {
                 created_by: createdBy,
             }),
         };
-        fetch(`http://localhost:4000/masterclasses/masterclass`, masterclassOptions).then((response) => response.json()).then(data => {
+        fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/masterclasses/masterclass`, masterclassOptions).then((response) => response.json()).then(data => {
             if (data?.detail[0].msg != "field required") {
                 handleClose();
             } else {

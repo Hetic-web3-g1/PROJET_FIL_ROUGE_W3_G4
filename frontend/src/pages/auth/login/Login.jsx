@@ -28,7 +28,7 @@ export const Login = ({ }) => {
       headers: { 'Content-Type': 'application/json', 'accept': 'application/json' },
       body: JSON.stringify({email, password }),
     };
-    fetch('http://localhost:4000/auth/login', loginOptions).then((response) => response.json()).then(data => {
+    fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/auth/login`, loginOptions).then((response) => response.json()).then(data => {
       if (data.detail != "Invalid Credentials") {
         dispatch(ProfileActions.login(data));
         navigate("/home");

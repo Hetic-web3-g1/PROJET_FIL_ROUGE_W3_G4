@@ -36,7 +36,7 @@ RUN npm install
 COPY . .
 
 # Set environment variables
-ENV FRONTEND_PORT=3000
+ENV FRONTEND_PORT=80
 
 # Build the React app
 RUN npm run build

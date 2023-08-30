@@ -4,7 +4,7 @@ import Avatar from '../avatar/Avatar';
 import Field from '../field/Field';
 import Divider from '../divider/Divider';
 import { ModalMasterClass } from '../Modal/modalMasterclass/ModalMasterclass';
-import { ModalBioProf } from '../Modal/modalbioprof/Modalbioprof.jsx';
+import { ModalBioProf } from '../Modal/modalbioprof/ModalBioProf.jsx';
 import { ModalWorkAnalysis } from '../Modal/modalworkanalysis/ModalWorkanalysis';
 import { ReactReduxContext } from 'react-redux'
 import { ProfileActions } from '../../features/actions/profile';
@@ -13,7 +13,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-import './header.css';
+import './Header.css';
 
 export const Header = () => {
     const [createModal, setCreateModal] = useState(false);
@@ -38,7 +38,7 @@ export const Header = () => {
                 method: 'GET',
                 headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}` },
             };
-            fetch(`http://localhost:4000/users/user/me`, userOptions).then((response) => response.json()).then(data => {
+            fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/users/user/me`, userOptions).then((response) => response.json()).then(data => {
                 dispatch(ProfileActions.updateProfile(data));
             });
         }
@@ -50,7 +50,7 @@ export const Header = () => {
                 method: 'GET',
                 headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}` },
             };
-            fetch(`http://localhost:4000/academies/${store.getState().user.profile.academy_id}`, userOptions).then((response) => response.json()).then(data => {
+            fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/academies/${store.getState().user.profile.academy_id}`, userOptions).then((response) => response.json()).then(data => {
                 dispatch(AcademyActions.setAcademy(data));
             });
         }

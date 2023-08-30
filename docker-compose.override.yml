@@ -30,16 +30,33 @@ services:
     container_name: frontend-app
     ports:
       - '80:80'
+      - '443:443'
+    volumes:
+      - ./nginx/conf/:/etc/nginx/conf.d/:ro
+      # - ./certbot/conf:/etc/letsencrypt
+      # - ./certbot/www:/var/www/certbot
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+
     networks: 
       - app-network
     depends_on:
       - builder
 
+  # certbot:
+  #   container_name: certbot
+  #   image: certbot/certbot:latest
+  #   volumes:
+  #     - ./certbot/conf:/etc/letsencrypt
+  #     - ./certbot/www:/var/www/certbot
+  #   # command: certonly --webroot -w /var/www/certbot --force-renewal --email martin@sionfamily.com -d groupe4.hetic-projects.arcplex.tech --agree-tos
+  #   entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+
+
   db:
     container_name: db-postgres
     image: postgres:latest
     env_file:
-      - ./backend/development.env
+      - ./backend/production.env
     restart: unless-stopped
     ports:
       - 5432:5432
@@ -61,12 +78,16 @@ services:
       REMOTE_MANAGEMENT_DISABLE: 1
       LISTEN_ADDR: 0.0.0.0
     env_file:
-      - ./backend/development.env
+      - ./backend/production.env
     restart: unless-stopped
     command: /bin/sh -c "cp -R ./config.docker config.json && yarn start"
     networks:
       - app-network
 
+volumes:
+  s3-data:
+  s3-metadata:
+    
 networks:
   app-network:
   back-network:

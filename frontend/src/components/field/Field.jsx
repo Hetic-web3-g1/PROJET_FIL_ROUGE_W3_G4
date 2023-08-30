@@ -115,6 +115,7 @@ export const Field = ({ type, placeholder, onChange, id, value }) => {
         </>
     );
 }
+
 Field.propTypes = {
     type: propTypes.string,
     placeholder: propTypes.string.isRequired,

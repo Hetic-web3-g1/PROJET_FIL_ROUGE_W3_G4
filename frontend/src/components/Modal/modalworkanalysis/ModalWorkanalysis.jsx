@@ -4,7 +4,7 @@ import propTypes from 'prop-types'
 import Modal from '../Modal'
 
 import '../../professorfields/Professorfields.css'
-import '../modalbioprof/ModalBioprof.css'
+import '../modalbioprof/ModalBioProf.css'
 import './ModalWorkanalysis.css'
 import Field from '../../field/Field'
 import Button from '../../button/Button'
