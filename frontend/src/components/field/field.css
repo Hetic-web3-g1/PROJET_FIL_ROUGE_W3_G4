@@ -43,6 +43,7 @@
     align-items: center;
     justify-content: flex-start;
 }
+
 .input-wrap-checkbox{
     width: 15%;
 }
@@ -52,6 +53,30 @@
     padding: 0;
     max-height: max-content;
 }
+
 .input-wrap-bio{
     display: block;
+}
+
+.results-block-searchable {
+    background-color: white;
+    color: #020A33;
+    border-radius: 3px;
+    width: 830px;
+    border: 1px solid #DFE1E6;
+    padding: 0;
+    margin: 0;
+    position: fixed;
+    max-height: 400px;
+    overflow: auto;
+}
+
+.title-search-category {
+    font-size: 20px;
+    text-align: center;
+}
+
+.custom-search-hr {
+    width: 90%;
+    color: #eaeaea;
 }

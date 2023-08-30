@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useNavigate } from "react-router-dom";
 import propTypes from 'prop-types';
+import { useNavigate } from "react-router-dom";
+
+import { ReactReduxContext } from 'react-redux';
+
 import './field.css';
 import OutsideAlerter from '../../utils/clickOutside';
-
-const searchIcon = '../../assets/search/search.svg';
 
 export const Field = ({ type, placeholder, onChange, id, value }) => {
     const { store } = useContext(ReactReduxContext);
