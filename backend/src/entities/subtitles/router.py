@@ -43,9 +43,10 @@ def create_subtitle(
     user: User = Depends(CustomSecurity()),
 ):
     with engine.begin() as conn:
-        subtitle_service.create_subtitle(
+        subtitle = subtitle_service.create_subtitle(
             conn, user, language, masterclass_id, public, file
         )
+        return subtitle.id
 
 
 @router.delete("/subtitle/{subtitle_id}")

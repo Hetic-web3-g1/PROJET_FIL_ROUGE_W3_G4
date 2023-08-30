@@ -112,7 +112,7 @@ export const DashboardVideo = ({videoData, masterclassData}) => {
                         <UploadCard setUploadFile={setUploadVideo}/>
                     </div>
                     <div>
-                        <Button label={"Upload"} onClick={(e) => handleVideoUpload(e)}/>
+                        <Button label={"Save"} onClick={(e) => handleVideoUpload(e)}/>
                     </div>
                 </div>
             )}

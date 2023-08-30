@@ -34,9 +34,7 @@ def check_mimetype(file: UploadFile, file_type: str) -> tuple[str, str]:
         "application": ["pdf", "x-subrip"],
     }
 
-    # Use python-magic to detect the file's actual MIME type based on its content
-    mime_type = magic.from_buffer(file.file.read(1024), mime=True)
-    file.file.seek(0)
+    mime_type = file.content_type
 
     if mime_type is None:
         raise HTTPException(status_code=400, detail="No file type not supported")
