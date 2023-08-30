@@ -30,10 +30,27 @@ services:
     container_name: frontend-app
     ports:
       - '80:80'
+      - '443:443'
+    volumes:
+      - ./nginx/conf/:/etc/nginx/conf.d/:ro
+      # - ./certbot/conf:/etc/letsencrypt
+      # - ./certbot/www:/var/www/certbot
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+
     networks: 
       - app-network
     depends_on:
       - builder
+
+  # certbot:
+  #   container_name: certbot
+  #   image: certbot/certbot:latest
+  #   volumes:
+  #     - ./certbot/conf:/etc/letsencrypt
+  #     - ./certbot/www:/var/www/certbot
+  #   # command: certonly --webroot -w /var/www/certbot --force-renewal --email martin@sionfamily.com -d groupe4.hetic-projects.arcplex.tech --agree-tos
+  #   entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+
 
   db:
     container_name: db-postgres
