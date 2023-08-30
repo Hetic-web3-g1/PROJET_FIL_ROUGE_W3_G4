@@ -47,7 +47,8 @@ def create_biography(
     biography: BiographyCreate, user: User = Depends(CustomSecurity())
 ):
     with engine.begin() as conn:
-        biography_service.create_biography(conn, biography, user)
+        biography = biography_service.create_biography(conn, biography, user)
+        return biography.id
 
 
 @router.put("/biography/{biography_id}")
