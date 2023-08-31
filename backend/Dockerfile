@@ -1,5 +1,4 @@
-# Development stage
-FROM python:3.11 AS development
+FROM python:3.11 AS test
 
 # Set the working directory in the container
 WORKDIR /app
@@ -26,10 +25,12 @@ ENV PYTHONDONTWRITEBYTECODE=1
 # Turns off buffering for easier container logging
 ENV PYTHONUNBUFFERED=1
 # Declare the environment as development
-ENV CONFIG_NAME=development
 
 WORKDIR /app
 
+# # ------------------------------------------------------------------------
+
+FROM test AS development
 # Start the FastAPI app with auto-reload
 CMD poetry run alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 4000 --reload
 
@@ -64,8 +65,6 @@ COPY . .
 ENV PYTHONDONTWRITEBYTECODE=1
 # Turns off buffering for easier container logging
 ENV PYTHONUNBUFFERED=1
-# Declare the environment as development
-ENV CONFIG_NAME=production
 
 WORKDIR /app
 

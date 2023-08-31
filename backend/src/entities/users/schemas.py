@@ -5,13 +5,13 @@ from pydantic import BaseModel
 
 
 class UserCreate(BaseModel):
+    academy_id: UUID
     first_name: str
     last_name: str
     email: str
     primary_role: str = "User"
-    secondary_role: list[str] | None
-    academy_id: UUID
-    image_id: UUID | None
+    secondary_role: list[str] | None = None
+    image_id: UUID | None = None
 
 
 class User(UserCreate):

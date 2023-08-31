@@ -2,7 +2,6 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from config import settings
-from src.utils.fake_data import generate_data
 
 if settings.environment in {"development"}:
     origins = ["*"]
@@ -31,8 +30,8 @@ from src.entities.annotations.router import router as annotation_router
 from src.entities.authentification.router import router as auth_router
 from src.entities.biographies.router import router as biography_router
 from src.entities.comments.router import router as comment_router
-from src.entities.masterclasses.router import router as masterclass_router
 from src.entities.images.router import router as image_router
+from src.entities.masterclasses.router import router as masterclass_router
 from src.entities.partitions.router import router as partition_router
 from src.entities.public.router import router as public_router
 from src.entities.s3_objects.router import router as s3_object_router
@@ -61,4 +60,4 @@ api_public.include_router(public_router)
 
 
 # Todo: remove when have clean data
-generate_data()
+# generate_data()

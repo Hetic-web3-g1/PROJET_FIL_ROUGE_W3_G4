@@ -4,13 +4,14 @@ import sqlalchemy as sa
 from sqlalchemy.engine import Connection
 from src.database import service as db_service
 
+from ..authentification import service as auth_service
 from ..masterclasses.models import masterclass_user_table
 from .exceptions import EmailAlreadyExist, UserNotFound
 from .models import user_table
 from .schemas import User, UserCreate
 
 
-def _parse_row(row: sa.Row): 
+def _parse_row(row: sa.Row):
     return User(**row._asdict())
 
 
@@ -102,7 +103,12 @@ def get_user_by_email(conn: Connection, email: str) -> User:
     return _parse_row(result)
 
 
-def create_user(conn: Connection, new_user: UserCreate, user: User) -> User:
+def create_user(
+    conn: Connection,
+    new_user: UserCreate,
+    password: str | None = None,
+    referrer_user: User | None = None,
+) -> User:
     """
     Create a user.
 
@@ -123,9 +129,16 @@ def create_user(conn: Connection, new_user: UserCreate, user: User) -> User:
         raise EmailAlreadyExist
 
     result = db_service.create_object(
-        conn, user_table, new_user.dict(), user_id=user.id
+        conn,
+        user_table,
+        new_user.dict(),
+        user_id=referrer_user.id if referrer_user else None,
     )
-    return _parse_row(result)
+    created_user = _parse_row(result)
+    if password is not None:
+        auth_service.reset_password(conn, created_user.id, password)
+
+    return created_user
 
 
 def update_user(
@@ -151,7 +164,7 @@ def update_user(
     if check is None:
         raise UserNotFound
 
-    result = db_srv.update_object(
+    result = db_service.update_object(
         conn, user_table, user_id, new_user.dict(), user_id=user.id
     )
     return _parse_row(result)
