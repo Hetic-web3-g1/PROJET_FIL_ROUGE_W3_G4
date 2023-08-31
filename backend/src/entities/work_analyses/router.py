@@ -208,7 +208,7 @@ def get_work_analysis_meta_by_id(
     except WorkAnalysisMetaNotFound:
         raise HTTPException(
             status_code=404,
-            detail="Work Analysis not found",
+            detail="Work Analysis meta not found",
         )
 
 
@@ -253,7 +253,7 @@ def update_work_analysis_meta(
     except WorkAnalysisMetaNotFound:
         raise HTTPException(
             status_code=404,
-            detail="Work Analysis not found",
+            detail="Work Analysis meta not found",
         )
 
 
@@ -269,5 +269,5 @@ def delete_work_analysis_meta(
     except WorkAnalysisMetaNotFound:
         raise HTTPException(
             status_code=404,
-            detail="Work Analysis not found",
+            detail="Work Analysis meta not found",
         )

@@ -33,7 +33,6 @@ from src.entities.comments.router import router as comment_router
 from src.entities.images.router import router as image_router
 from src.entities.masterclasses.router import router as masterclass_router
 from src.entities.partitions.router import router as partition_router
-from src.entities.public.router import router as public_router
 from src.entities.s3_objects.router import router as s3_object_router
 from src.entities.subtitles.router import router as subtitle_router
 from src.entities.tags.router import router as tag_router
@@ -56,8 +55,30 @@ api.include_router(tag_router)
 api.include_router(video_router)
 api.include_router(work_analysis_router)
 
-api_public.include_router(public_router)
+from src.entities.annotations.router_public import router as annotation_router_public
+from src.entities.biographies.router_public import router as biography_router_public
+from src.entities.images.router_public import router as image_router_public
+from src.entities.masterclasses.router_public import (
+    router as masterclass_router_public,
+)
+from src.entities.partitions.router_public import router as partition_router_public
+from src.entities.s3_objects.router_public import router as s3_object_router_public
+from src.entities.subtitles.router_public import router as subtitle_router_public
+from src.entities.tags.router_public import router as tag_router_public
+from src.entities.videos.router_public import router as video_router_public
+from src.entities.work_analyses.router_public import (
+    router as work_analysis_router_public,
+)
 
+api_public.include_router(annotation_router_public)
+api_public.include_router(biography_router_public)
+api_public.include_router(image_router_public)
+api_public.include_router(masterclass_router_public)
+api_public.include_router(partition_router_public)
+api_public.include_router(s3_object_router_public)
+api_public.include_router(subtitle_router_public)
+api_public.include_router(tag_router_public)
+api_public.include_router(video_router_public)
+api_public.include_router(work_analysis_router_public)
 
-# Todo: remove when have clean data
 # generate_data()
