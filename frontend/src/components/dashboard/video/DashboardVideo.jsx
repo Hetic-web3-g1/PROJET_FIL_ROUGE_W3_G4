@@ -7,19 +7,51 @@ import './../../textstyle/textstyles.css'
 
 import Countries from '../../../constants/countries'
 import VideoPlayer  from '../../videoPlayer/VideoPlayer.jsx'
-import peppapig from '../../../assets/peppa pig wow.mp4'
 import Button from '../../button/Button'
 import Label from '../../label/Label'
 import UploadCard from '../../upload/UploadCard'
 import Logs from '../../../mocks/logMocks.js'
 
-export const DashboardVideo = ({videoData, masterclassData}) => {
+export const DashboardVideo = ({masterclassData}) => {
 
     const { store } = useContext(ReactReduxContext)
-    const [uploadVideo, setUploadVideo] = useState(null)
+    const [uploadVideo, setUploadVideo] = useState(null);
+    const [masterclassVideo, setMasterclassVideo] = useState([]);
+    const [video, setVideo] = useState(null);
+
+    useEffect(() => {
+        const Options = {
+          method: 'GET',
+          headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}`},
+        };
+        fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/videos/video/masterclass/${masterclassData.id}`, Options).then((response) => response.json()).then(data => {
+            setMasterclassVideo(data)
+        });
+    },[]);
+
+    useEffect(() => {
+        const Options = {
+          method: 'GET',
+          headers:  { 'Content-Type': 'video/mp4', 'accept': 'video/mp4', 'authorization': `${store.getState().user.user_token}`},
+        };
+        fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/s3_objects/url_and_object_info/${masterclassVideo[0]?.s3_object_id}`, Options).then((response) => response.json()).then(data => {
+            console.log(data)
+            setVideo(data)
+        });
+    },[masterclassVideo]);
+
+    // Video upload -> will be removed later to use only one upload function for all types of files
+
     const handleVideoUpload = (e) => {
         e.preventDefault();
         const fileBlob = new Blob([uploadVideo], {type: 'video/mp4'});
+
+        // var myReader = new FileReader();
+        // myReader.onload = function(event){
+        //     console.log(JSON.stringify(myReader.result));
+        // };
+        // myReader.readAsText(fileBlob);
+
         var formData = new FormData();
         formData.append('masterclass_id', masterclassData.id);
         formData.append('duration', 1);
@@ -38,11 +70,11 @@ export const DashboardVideo = ({videoData, masterclassData}) => {
 
     return ( 
         <div>
-            {videoData ? (
+            {masterclassVideo.length > 0 ? (
             <div className='dashboard-video'>
                 <div className='display-main'>
                     <div className='main-video'>
-                        <VideoPlayer video={peppapig}/>
+                        <VideoPlayer video={video.url}/>
                     </div>
                     <div className='right-side-wrapper'>
                         <div className='country-wrapper'>

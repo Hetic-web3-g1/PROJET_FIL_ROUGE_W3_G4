@@ -12,6 +12,7 @@ import fullScreenButton from "../../assets/videoPlayer/FullScreen/FullScreen.svg
 import volumeButton from "../../assets/videoPlayer/Volume/Volume.svg";
 
 const VideoPlayer = ({ video }) => {
+
     const videoElement = React.useRef(null);
     const {
         playerState,
@@ -55,11 +56,12 @@ const VideoPlayer = ({ video }) => {
         <div className="video-wrapper">
             <video
                 ref={videoElement}
-                src={video}
                 className="video-player"
+                src={video}
                 onTimeUpdate={handleProgress}
                 onClick={handleVideoClick}
-            ></video>
+            >
+            </video>
             <div className="video-player-controls">
                 <div className="video-player-progress-wrapper">
                     <input
