@@ -43,7 +43,7 @@ export const Login = ({ }) => {
     <div className="login-wrap">
       <img
         className='login-logo'
-        srcSet={`src/assets/Logo.svg`} >
+        srcSet={`../src/assets/Logo.svg`} >
       </img>
       <form className="login-form">
           <label for="email" className='login-field'>Email</label>

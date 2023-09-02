@@ -47,7 +47,8 @@ def create_partition(
     user: User = Depends(CustomSecurity()),
 ):
     with engine.begin() as conn:
-        partition_service.create_partition(conn, user, public, file)
+        partition = partition_service.create_partition(conn, user, public, file)
+        return partition.id
 
 
 @router.delete("/partition/{partition_id}")

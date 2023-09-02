@@ -7,8 +7,13 @@ import { Header } from "../../components/header/Header";
 import { Tabs } from "../../components/tabs/Tabs";
 import { UploadCard } from "../../components/upload/UploadCard";
 
+import DashboardVideo from "../../components/dashboard/video/DashboardVideo";
+import DashboardPartition from "../../components/dashboard/partition/DashboardPartition";
+import DashboardWorkAnalysis from "../../components/dashboard/work analysis/DashboardWorkAnalysis";
+import DashboardProfessor from "../../components/dashboard/professor/DashboardProfessor";
+import DashboardTeam from "../../components/dashboard/team/DashboardTeam";
+
 import MasterClassData from '../../mocks/masterClassMocks'
-import DashboardVideo from "../../components/dashboard/DashboardVideo";
 
 export const Masterclass = () => {
 
@@ -17,6 +22,9 @@ export const Masterclass = () => {
   const [component, setComponent] = useState('');
   const [tabName, setTabName] = useState('');
   const [masterclassData, setMasterclassData] = useState();
+  const [composerData, setComposerData] = useState();
+  const [professorData, setProfessorData] = useState();
+  const [userList, setUserList] = useState();
   const masterclassId = window.location.href.split('/')[4];
   
   useEffect(() => {
@@ -24,15 +32,79 @@ export const Masterclass = () => {
       method: 'GET',
       headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}`},
     };
-    fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/masterclasses/${masterclassId}`, Options).then((response) => response.json()).then(data => {
+    fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/masterclasses/masterclass/${masterclassId}`, Options).then((response) => response.json()).then(data => {
       setMasterclassData(data)
     });
-  },[])
+  },[]);
+
+  useEffect(() => {
+    if (masterclassData) {
+      const Options = {
+        method: 'GET',
+        headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}`},
+      };
+      fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/biographies/biography/${masterclassData.teacher_bio_id}`, Options).then((response) => response.json()).then(data => {
+        setProfessorData(data)
+      });
+    }
+  },[masterclassData]);
+
+  useEffect(() => {
+    if (masterclassData) {
+      const Options = {
+        method: 'GET',
+        headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}`},
+      };
+      fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/biographies/biography/${masterclassData.composer_bio_id}`, Options).then((response) => response.json()).then(data => {
+        setComposerData(data)
+      });
+    }
+  },[masterclassData]);
+
+
+  useEffect(() => {
+    if (masterclassData) {
+      const Options = {
+        method: 'GET',
+        headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}`},
+      };
+      fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/users/academy/${masterclassData?.academy_id}`, Options).then((response) => response.json()).then(data => {
+        setUserList(data)
+      });
+    }
+  },[masterclassData]);  
+
+  const handleSave = (e, newMasterclassData) => {
+    e.preventDefault();
+    const userOptions = {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}` },
+        body: JSON.stringify({
+          academy_id: newMasterclassData.academy_id,
+          composer_bio_id: newMasterclassData.composer_bio_id,
+          created_at: newMasterclassData.created_at,
+          description: newMasterclassData.description,
+          id: newMasterclassData.id,
+          instrument: newMasterclassData.instrument,
+          partition_id: newMasterclassData.partition_id,
+          status: newMasterclassData.status,
+          teacher_bio_id: newMasterclassData.teacher_bio_id,
+          title: newMasterclassData.title,
+          updated_at: newMasterclassData.updated_at,
+          updated_by: newMasterclassData.updated_by,
+          work_analysis_id: newMasterclassData.work_analysis_id,
+        }),
+    }
+    fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/masterclasses/masterclass/${masterclassData.id}`, userOptions).then((response) => response.json()).then(data => {
+        console.log(data);
+    });
+  }
 
   /**
    * Get data from tabs component and depending of the value set the corresponding component in the HTML.
    * @param childData Data from tabs component
    */
+
   function handleCallback(childData) {
     setTabName(childData);
     switch (childData) {
@@ -41,27 +113,27 @@ export const Masterclass = () => {
         break;
 
       case 'Team':
-        setComponent(<></>);
+        setComponent(<DashboardTeam users={userList} masterclassData={masterclassData}/>);
         break;
 
       case 'Video':
-      setComponent(<DashboardVideo/>);
+      setComponent(<DashboardVideo masterclassData={masterclassData}/>);
       break;
 
       case 'Partition':
-        setComponent(<></>);
+        setComponent(<DashboardPartition masterclassData={masterclassData}/>);
         break;
       
       case 'Work analysis':
-        setComponent(<></>);
+        setComponent(<DashboardWorkAnalysis/>);
         break;
 
       case 'Professor':
-        setComponent(<></>);
+        setComponent(<DashboardProfessor masterclassData={masterclassData} handleSave={handleSave} professorData={professorData} type={"professor"} key={"professor"}/>);
         break;
 
       case 'Compositor':
-        setComponent(<></>);
+        setComponent(<DashboardProfessor masterclassData={masterclassData} handleSave={handleSave} professorData={composerData} type={"composer"} key={"composer"}/>);
         break;
 
       default:
@@ -80,7 +152,7 @@ export const Masterclass = () => {
 
         <div className="masterclass-overview" >
           
-          <h1 >{MasterClassData.title}</h1>
+          <h1 >{masterclassData?.title}</h1>
           <div style={tabName !== 'Masterclass' ? {display: 'none'} : null}>
             
           
@@ -97,7 +169,7 @@ export const Masterclass = () => {
               </section>
               <section className="masterclass-section">
                 <span className="masterclass-span">Instruments</span>
-                <span>{MasterClassData.instruments}</span>
+                <span>{masterclassData?.instrument[0]}</span>
               </section>
               <section className="masterclass-section">
                 <span className="masterclass-span">Producer</span>
