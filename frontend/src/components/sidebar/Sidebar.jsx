@@ -1,11 +1,12 @@
 import Checkbox from '../checkbox/Checkbox'
 import Dropdown from '../dropdown/Dropdown'
 import { useDispatch, ReactReduxContext } from 'react-redux';
+import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState } from 'react';
 import './Sidebar.css';
 import { FiltersActions } from '../../features/actions/filters';
 
-export const Sidebar = () => {
+export const Sidebar = ({categories}) => {
   const [open, setOpen] = useState(false);
   const customFilters = ['Created at', 'Last update'];
   const dispatch = useDispatch();
@@ -23,27 +24,20 @@ export const Sidebar = () => {
           <label className='sidebar-font'>Sort by:</label>
           <Dropdown callback={handleCallback} options={customFilters} defaultValue={store.getState().filters.filters.sort_by}/>
 
-          <div className="sidebar-filter">
-            <h1 className='sidebar-font'>Filters subtitle</h1>
-            <Checkbox label='Filter' primary={false}/>
-            <Checkbox label='Filter' primary={false}/>
-            <Checkbox label='Filter' primary={false}/>
-          </div>
-
-          <div className="sidebar-filter">
-            <h1 className='sidebar-font'>Filters subtitle</h1>
-            <Checkbox label='Filter' primary={false}/>
-            <Checkbox label='Filter' primary={false}/>
-            <Checkbox label='Filter' primary={false}/>
-            <Checkbox label='Filter' primary={false}/>
-          </div>
-
-          <div className="sidebar-filter">
-            <h1 className='sidebar-font'>Filters subtitle</h1>
-            <Checkbox label='Filter' primary={false}/>
-            <Checkbox label='Filter' primary={false}/>
-            <Checkbox label='Filter' primary={false}/>
-          </div>
+          {
+            Object.keys(categories).map((categoryTitle) => {
+              { 
+                return(
+                  <div className="sidebar-filter">
+                    <h1 className='sidebar-font'>{categoryTitle}</h1>
+                    {
+                      categories[categoryTitle].map(filterTitle => { return(<Checkbox label={filterTitle} primary={false}/>) })
+                    }
+                  </div>
+                )
+              }
+            })
+          }
 
         </div>
 
@@ -59,6 +53,14 @@ export const Sidebar = () => {
       </div>
     </div>
   );
+};
+
+Sidebar.propTypes = {
+  options: PropTypes.objectOf(PropTypes.array).isRequired
+};
+
+Sidebar.defaultProps = {
+  options: {Title1: ['Cat1Filter1', 'Cat1Filter2', 'Cat1Filter3'], Title2: ['Cat2Filter1', 'Cat2Filter2', 'Cat2Filter3'], Title3: ['Cat3Filter1', 'Cat3Filter2', 'Cat3Filter3']},
 };
 
 export default Sidebar;

@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next';
 
 export const Home = () => {
 
-    const userStateRedux = useSelector((state) => state.filters.filters.sort_by);
+    const userStateRedux = [useSelector((state) => state.filters.filters.sort_by), useSelector((state) => state.filters.filters.sort_by_status)];
     const [mastercardComponent, setMastercardComponent] = useState([]);
     const [mastercardData, setMastercardData] = useState();
     const [biographyData, setBiographyData] = useState();
@@ -26,7 +26,7 @@ export const Home = () => {
 
     const sortData = () => {
         setMastercardComponent([]);
-        switch (userStateRedux) {
+        switch (userStateRedux[0]) {
             case 'Created at':
                 const sortedDataByCreation = mastercardData?.sort((a, b) => {
                     return new Date(b.created_at) - new Date(a.created_at);
@@ -43,6 +43,7 @@ export const Home = () => {
         }
     }
 
+    // console.log('salut');
     useEffect(() => {
             const userOptions = {
                 method: 'GET',
@@ -74,7 +75,7 @@ export const Home = () => {
             </div>
             <div className="home-body">
                 <div className="home-sidebar">
-                    <Sidebar/>
+                    {/* <Sidebar categories={{Status: ['Completed', 'Created', 'In-review', 'Archived'], Title2: ['Cat2Filter1', 'Cat2Filter2', 'Cat2Filter3'], Title3: ['Cat3Filter1', 'Cat3Filter2', 'Cat3Filter3']}}/> */}
                 </div>
                 {
                 mastercardData ? 
