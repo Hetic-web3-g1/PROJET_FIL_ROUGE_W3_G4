@@ -43,15 +43,9 @@ export const DashboardVideo = ({masterclassData}) => {
     // Video upload -> will be removed later to use only one upload function for all types of files
 
     const handleVideoUpload = (e) => {
+
         e.preventDefault();
         const fileBlob = new Blob([uploadVideo], {type: 'video/mp4'});
-
-        // var myReader = new FileReader();
-        // myReader.onload = function(event){
-        //     console.log(JSON.stringify(myReader.result));
-        // };
-        // myReader.readAsText(fileBlob);
-
         var formData = new FormData();
         formData.append('masterclass_id', masterclassData.id);
         formData.append('duration', 1);
