@@ -43,11 +43,11 @@ class Settings(BaseSettings):
 
     class Config:
         config = os.getenv("CONFIG_NAME")
-        env_file = f"./{config}.env"
+        env_file = f"./.env.{config}"
         if config is None:
             raise ValueError("No 'CONFIG_NAME' env variable set")
         elif os.path.isfile(env_file) is False:
-            raise ValueError(f"No {config}.env file found")
+            raise ValueError(f"No .env.{config} file found")
 
 
 settings = Settings()  # type: ignore
