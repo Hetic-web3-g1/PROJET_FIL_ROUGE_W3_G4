@@ -40,7 +40,7 @@ export const Masterclass = () => {
   },[]);
 
   useEffect(() => {
-    if (masterclassData) {
+    if (masterclassData && masterclassData.teacher_bio_id) {
       const Options = {
         method: 'GET',
         headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}`},
@@ -52,7 +52,7 @@ export const Masterclass = () => {
   },[masterclassData]);
 
   useEffect(() => {
-    if (masterclassData) {
+    if (masterclassData && masterclassData.composer_bio_id) {
       const Options = {
         method: 'GET',
         headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}`},
@@ -212,7 +212,7 @@ export const Masterclass = () => {
           <h2>Status</h2>
           <section className="masterclass-section-status">
             <span>Team</span>
-            <img src="..\src\assets\status\done.svg" alt="done" />
+            {userList?.length > 0 ? <img src="..\src\assets\status\done.svg" alt="done" /> : <img src="..\src\assets\status\incomplete.svg" alt="incomplete" />}
           </section>
           <section className="masterclass-section-status">
             <span>Video</span>
@@ -220,19 +220,19 @@ export const Masterclass = () => {
           </section>
           <section className="masterclass-section-status">
             <span>Partition</span>
-            <img src="..\src\assets\status\incomplete.svg" alt="incomplete" />
+            {masterclassData?.partition_id ? <img src="..\src\assets\status\done.svg" alt="done" /> : <img src="..\src\assets\status\incomplete.svg" alt="incomplete" />}
           </section>
           <section className="masterclass-section-status">
             <span>Biographie P.</span>
-            <img src="..\src\assets\status\done.svg" alt="done" />
+            {masterclassData?.teacher_bio_id ? <img src="..\src\assets\status\done.svg" alt="done" /> : <img src="..\src\assets\status\incomplete.svg" alt="incomplete" />}
           </section>
           <section className="masterclass-section-status">
             <span>Biographie C.</span>
-            <img src="..\src\assets\status\incomplete.svg" alt="incomplete" />
+            {masterclassData?.composer_bio_id ? <img src="..\src\assets\status\done.svg" alt="done" /> : <img src="..\src\assets\status\incomplete.svg" alt="incomplete" />}
           </section>
           <section className="masterclass-section-status">
             <span>Work Analysis</span>
-            <img src="..\src\assets\status\done.svg" alt="done" />
+            {masterclassData?.work_analysis_id ? <img src="..\src\assets\status\done.svg" alt="done" /> : <img src="..\src\assets\status\incomplete.svg" alt="incomplete" />}
           </section>
         </div>
 

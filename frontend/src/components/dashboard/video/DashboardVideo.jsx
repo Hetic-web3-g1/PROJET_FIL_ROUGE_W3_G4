@@ -70,7 +70,7 @@ export const DashboardVideo = ({masterclassData}) => {
 
     return ( 
         <div>
-            {masterclassVideo.length > 0 ? (
+            {masterclassVideo?.length > 0 ? (
             <div className='dashboard-video'>
                 <div className='display-main'>
                     <div className='main-video'>
