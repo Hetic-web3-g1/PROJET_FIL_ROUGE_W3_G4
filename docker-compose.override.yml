@@ -90,4 +90,4 @@ networks:
   app-network:
   back-network:
 
-# docker compose -f docker-compose.override.yml up -d --build
+# ENVIRONMENT=production docker compose -f docker-compose.override.yml -p projet_fil_rouge_prod up -d --build
