@@ -2,6 +2,7 @@ import React, {useContext, useState} from 'react';
 import { ReactReduxContext } from 'react-redux'
 import { useDispatch } from "react-redux";
 import { ProfileActions } from '../../features/actions/profile';
+import { useToast } from '../../utils/toast';
 
 import './Profile.css';
 import {Field} from '../../components/field/Field';
@@ -14,6 +15,7 @@ export const Profile = () => {
     const dispatch = useDispatch();
     const { store } = useContext(ReactReduxContext)
     const profile = store.getState().user.profile
+    const toast = useToast();
 
     //Profile update states
     const [firstName, setFirstName] = useState(profile?.first_name)
@@ -115,6 +117,14 @@ export const Profile = () => {
                             <Button label="Create User" onClick={(e) => {handleCreateUser(e)}}/>
                         </div>
                     </form>
+                    <div className="profile-admin-title">
+                        Toast Panel
+                    </div>
+                    <div className="profile-admin-toast-test">
+                        <Button label="Test failure Toast" onClick={() => {toast.open({ type: 'failure', message: 'Failure test' })}}/>
+                        <Button label="Test success Toast" onClick={() => {toast.open({ type: 'success', message: 'Success test' })}}/>
+                        <Button label="Test warning Toast" onClick={() => {toast.open({ type: 'warning', message: 'Warning test' })}}/>
+                    </div>
                 </div>
                 : null
             }

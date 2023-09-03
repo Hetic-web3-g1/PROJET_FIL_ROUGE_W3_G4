@@ -13,22 +13,18 @@ import { useSelector, ReactReduxContext } from 'react-redux';
 import MasterCardData from '../../mocks/masterCardMocks'
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
-import { useToast } from "../../utils/toast";
 
 export const Home = () => {
 
     const userStateRedux = useSelector((state) => state.filters.filters.sort_by);
     const navigate = useNavigate();
     const { t, i18n } = useTranslation();
-    const toast = useToast();
 
     const [mastercardComponent, setMastercardComponent] = useState([]);
     const [mastercardData, setMastercardData] = useState();
     const [biographyData, setBiographyData] = useState();
 
     const { store } = useContext(ReactReduxContext)
-
-    toast.open({ type: 'failure', message: 'Welcome to the home page' })
 
     const sortData = () => {
         setMastercardComponent([]);

@@ -24,9 +24,9 @@ export const ToastProvider = (props) => {
             ...currentToasts,
             { id: id, message: content.message, type: content.type },
         ]);
-        // setTimeout(() => {
-        //     close(id);
-        // }, 5000);
+        setTimeout(() => {
+            close(id);
+        }, 5000);
     };
 
     const close = (id) => {
