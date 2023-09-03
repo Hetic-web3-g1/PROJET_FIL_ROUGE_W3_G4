@@ -175,9 +175,6 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-# Backend env file
-backend/**.env
-
 # Grafana
 grafana.db
 
@@ -185,7 +182,7 @@ grafana.db
 s3-config/credentials
 
 # Test env file
-!backend/test.env
+!backend/.env.test
 
 # Certbots file
 certbot/

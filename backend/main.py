@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from config import settings
+from src.utils.fake_data import generate_data
 
 if settings.environment in {"development"}:
     origins = ["*"]
