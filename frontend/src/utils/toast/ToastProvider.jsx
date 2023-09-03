@@ -18,7 +18,6 @@ export const ToastProvider = (props) => {
     const [toasts, setToasts] = useState([]);
   
     const open = (content) => {
-        console.log(content);
         const id = generateUEID();
         setToasts((currentToasts) => [
             ...currentToasts,

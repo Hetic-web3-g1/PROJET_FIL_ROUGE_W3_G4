@@ -46,6 +46,7 @@ export const Home = () => {
     }
 
     useEffect(() => {
+        if(store.getState().user.user_token) {
             const userOptions = {
                 method: 'GET',
                 headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}` },
@@ -53,9 +54,11 @@ export const Home = () => {
             fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/masterclasses`, userOptions).then((response) => response.json()).then(data => {
                 setMastercardData(data)
             });
+        }
     },[])
 
     useEffect(() => {
+        if(store.getState().user.user_token) {
             const userOptions = {
                 method: 'GET',
                 headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}` },
@@ -63,6 +66,7 @@ export const Home = () => {
             fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/biographies`, userOptions).then((response) => response.json()).then(data => {
                 setBiographyData(data)
             });
+        }
     },[])
 
     useEffect(() => {

@@ -8,6 +8,7 @@ import { ProfileActions } from '../../features/actions/profile';
 import { useNavigate } from "react-router-dom";
 import { ReactReduxContext } from 'react-redux'
 import { Link } from "react-router-dom";
+import { useToast } from '../../utils/toast';
 
 export const Login = ({ }) => {
   const [email, setEmail] = useState('');
@@ -15,6 +16,7 @@ export const Login = ({ }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { store } = useContext(ReactReduxContext)
+  const toast = useToast();
       
   useEffect(() => {
     if(store.getState().user.user_token) {
@@ -30,11 +32,11 @@ export const Login = ({ }) => {
       body: JSON.stringify({email, password }),
     };
     fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/auth/login`, loginOptions).then((response) => response.json()).then(data => {
-      if (data.detail != "Invalid Credentials") {
+      if (data && data.detail != "Invalid Credentials") {
         dispatch(ProfileActions.login(data));
         navigate("/home");
       } else {
-        alert('Invalid user');
+        toast.open({message: 'Invalid Credentials', type: 'failure'});
       }
     });
   };
@@ -46,9 +48,9 @@ export const Login = ({ }) => {
         srcSet={`../src/assets/Logo.svg`} >
       </img>
       <form className="login-form">
-          <label for="email" className='login-field'>Email</label>
+          <label htmlFor="email" className='login-field'>Email</label>
           <Field type="email" placeholder="Enter your mail" onChange={(e) => {setEmail(e.target.value)}}/>
-          <label for="password" className='login-field' >Password</label>
+          <label htmlFor="password" className='login-field' >Password</label>
           <Field type="password" placeholder="Enter your password" onChange={(e) => {setPassword(e.target.value)}}/>
           <Button label="Login" className="button button-secondary padded" onClick={loginForm}/>
           <div className='reset-password-link'>Forgot your password ? <Link to="/reset-password">Reset Password</Link></div>

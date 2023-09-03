@@ -47,6 +47,7 @@ export const Profile = () => {
                 last_name: lastName,
                 email: email,
             }))
+            toast.open({message: "Profile updated successfully", type: "success"})
         });
     }
 
@@ -64,7 +65,7 @@ export const Profile = () => {
             }),
         }
         fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/users/academy/${profile.academy_id}/user`, userOptions).then((response) => response.json()).then(data => {
-            console.log(data)
+            toast.open({message: "User created successfully", type: "success"})
         });
     }
 
@@ -73,61 +74,63 @@ export const Profile = () => {
             <div className="profile-header">
                 <Header/>
             </div>
-            <form className="profile-wrap">
-                <div className="profile-field">
-                    First Name
-                    <Field label="First name" type="text" placeholder="First name" value={`${firstName}`} onChange={(e) => setFirstName(e.target.value)}/>
-                </div>
-                <div className="profile-field">
-                    Last Name
-                    <Field label="Last name" type="text" placeholder="Last name" value={`${lastName}`} onChange={(e) => setLastName(e.target.value)}/>
-                </div>
-                <div className="profile-field">
-                    Email
-                    <Field label="Email" type="email" placeholder="Email" value={`${email}`} onChange={(e) => setEmail(e.target.value)}/>
-                </div>
-                <div className="profile-save">
-                    <Button label="Save" onClick={(e) => {handleSaveProfile(e)}}/>
-                </div>
-            </form>
-            {
-                isAdmin ?
-                <div className="profile-admin">
-                    <div className="profile-admin-title">
-                        Admin Panel
+            <div className='profile-wrapper'>
+                <form className="profile-wrap">
+                    <div className="profile-field">
+                        First Name
+                        <Field label="First name" type="text" placeholder="First name" value={`${firstName}`} onChange={(e) => setFirstName(e.target.value)}/>
                     </div>
-                    <form className="profile-wrap">
-                        <div className="profile-field">
-                            First Name
-                            <Field label="First name" type="text" placeholder="First name" onChange={(e) => setUserFirstName(e.target.value)}/>
-                        </div>
-                        <div className="profile-field">
-                            Last Name
-                            <Field label="Last name" type="text" placeholder="Last name" onChange={(e) => setUserLastName(e.target.value)}/>
-                        </div>
-                        <div className="profile-field">
-                            Email
-                            <Field label="Email" type="email" placeholder="Email" onChange={(e) => setUserEmail(e.target.value)}/>
-                        </div>
-                        <div className="profile-field">
-                            Role
-                            <Dropdown callback={(e) => setUserPrimaryRole(e)} options={['user', 'admin']} defaultValue="user"/>
-                        </div>
-                        <div className="profile-user-create">
-                            <Button label="Create User" onClick={(e) => {handleCreateUser(e)}}/>
-                        </div>
-                    </form>
-                    <div className="profile-admin-title">
-                        Toast Panel
+                    <div className="profile-field">
+                        Last Name
+                        <Field label="Last name" type="text" placeholder="Last name" value={`${lastName}`} onChange={(e) => setLastName(e.target.value)}/>
                     </div>
-                    <div className="profile-admin-toast-test">
-                        <Button label="Test failure Toast" onClick={() => {toast.open({ type: 'failure', message: 'Failure test' })}}/>
-                        <Button label="Test success Toast" onClick={() => {toast.open({ type: 'success', message: 'Success test' })}}/>
-                        <Button label="Test warning Toast" onClick={() => {toast.open({ type: 'warning', message: 'Warning test' })}}/>
+                    <div className="profile-field">
+                        Email
+                        <Field label="Email" type="email" placeholder="Email" value={`${email}`} onChange={(e) => setEmail(e.target.value)}/>
                     </div>
-                </div>
-                : null
-            }
+                    <div className="profile-save">
+                        <Button label="Save" onClick={(e) => {handleSaveProfile(e)}}/>
+                    </div>
+                </form>
+                {
+                    isAdmin ?
+                    <div className="profile-admin">
+                        <div className="profile-admin-title">
+                            Admin Panel
+                        </div>
+                        <form className="profile-wrap">
+                            <div className="profile-field">
+                                First Name
+                                <Field label="First name" type="text" placeholder="First name" onChange={(e) => setUserFirstName(e.target.value)}/>
+                            </div>
+                            <div className="profile-field">
+                                Last Name
+                                <Field label="Last name" type="text" placeholder="Last name" onChange={(e) => setUserLastName(e.target.value)}/>
+                            </div>
+                            <div className="profile-field">
+                                Email
+                                <Field label="Email" type="email" placeholder="Email" onChange={(e) => setUserEmail(e.target.value)}/>
+                            </div>
+                            <div className="profile-field">
+                                Role
+                                <Dropdown callback={(e) => setUserPrimaryRole(e)} options={['user', 'admin']} defaultValue="user"/>
+                            </div>
+                            <div className="profile-user-create">
+                                <Button label="Create User" onClick={(e) => {handleCreateUser(e)}}/>
+                            </div>
+                        </form>
+                        <div className="profile-admin-title">
+                            Toast Panel
+                        </div>
+                        <div className="profile-admin-toast-test">
+                            <Button label="Test failure Toast" onClick={() => {toast.open({ type: 'failure', message: 'Failure test' })}}/>
+                            <Button label="Test success Toast" onClick={() => {toast.open({ type: 'success', message: 'Success test' })}}/>
+                            <Button label="Test warning Toast" onClick={() => {toast.open({ type: 'warning', message: 'Warning test' })}}/>
+                        </div>
+                    </div>
+                    : null
+                }
+            </div>
         </div>
     );
 }

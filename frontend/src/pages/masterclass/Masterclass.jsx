@@ -14,10 +14,12 @@ import DashboardProfessor from "../../components/dashboard/professor/DashboardPr
 import DashboardTeam from "../../components/dashboard/team/DashboardTeam";
 
 import MasterClassData from '../../mocks/masterClassMocks'
+import { useToast } from "../../utils/toast";
 
 export const Masterclass = () => {
 
   const { store } = useContext(ReactReduxContext)
+  const toast = useToast();
 
   const [component, setComponent] = useState('');
   const [tabName, setTabName] = useState('');
@@ -96,7 +98,7 @@ export const Masterclass = () => {
         }),
     }
     fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/masterclasses/masterclass/${masterclassData.id}`, userOptions).then((response) => response.json()).then(data => {
-        console.log(data);
+        toast.open({ message: 'Masterclass updated successfully', type: 'success'})
     });
   }
 

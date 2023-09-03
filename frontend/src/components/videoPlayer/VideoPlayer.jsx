@@ -45,7 +45,6 @@ const VideoPlayer = ({ video }) => {
                 handleFullscreen();
                 break;
             default:
-                console.log('No need to spam mon con');
                 break;
         }
     };
