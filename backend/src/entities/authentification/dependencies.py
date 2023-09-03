@@ -1,15 +1,13 @@
 from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import APIKeyHeader
 
-from ..users.schemas import User
+from ..roles.schemas import ServicesRights
 from . import service as auth_service
-from .schemas import ServicesRights
 
 
 class CustomSecurity:
-    def __init__(self, service_rights: ServicesRights = {}, is_admin: bool = False):
+    def __init__(self, service_rights: ServicesRights = {}):
         self.service_rights = service_rights
-        self.user_is_admin = is_admin
 
     def __call__(
         self,
@@ -32,25 +30,5 @@ class CustomSecurity:
                 headers={"WWW-Authenticate": "Bearer"},
             )
 
-        if self.user_is_admin and not self.is_admin(user):
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="Insufficient privileges",
-            )
-
         return user
 
-    @staticmethod
-    def is_admin(user: User):
-        """
-        Check if the user is an admin.
-
-        Args:
-            user (User, optional): The user to check.
-
-        Returns:
-            bool: True if the user is an admin, False otherwise.
-        """
-        if user.primary_role != "admin":
-            return False
-        return True

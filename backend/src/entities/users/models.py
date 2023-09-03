@@ -2,19 +2,17 @@ from datetime import datetime
 from uuid import uuid4
 
 from sqlalchemy import (
-    Table,
     Column,
+    DateTime,
     ForeignKey,
     Integer,
-    String,
-    DateTime,
     LargeBinary,
-    ARRAY,
+    String,
+    Table,
 )
 from sqlalchemy.types import UUID
 
 from src.database.db_engine import metadata
-
 
 user_table = Table(
     "user",
@@ -25,8 +23,7 @@ user_table = Table(
     Column("email", String(), unique=True, nullable=False),
     Column("password_hash", LargeBinary(), nullable=True),
     Column("salt", LargeBinary(), nullable=True),
-    Column("primary_role", String(), nullable=False),
-    Column("secondary_role", ARRAY(String()), nullable=True),
+    Column("role_id", Integer(), ForeignKey("role.id"), nullable=False),
     Column("academy_id", UUID(as_uuid=True), ForeignKey("academy.id"), nullable=False),
     Column("image_id", UUID(as_uuid=True), nullable=True),
     Column("created_at", DateTime(), default=datetime.utcnow, nullable=False),
