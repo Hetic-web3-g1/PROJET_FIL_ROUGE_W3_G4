@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import './divider.css'
+import './Divider.css'
 
 export const Divider = ({text}) => {
     return (

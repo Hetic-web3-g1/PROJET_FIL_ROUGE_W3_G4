@@ -1,12 +1,11 @@
-from fastapi import APIRouter, HTTPException, Body
+from fastapi import APIRouter, Body, HTTPException
 
-from . import exceptions as user_exceptions
-from . import service as auth_service
-from . import exceptions as auth_exceptions
+from src.database.db_engine import engine
 
 from ..users import exceptions as user_exceptions
 from ..users import service as user_service
-from src.database.db_engine import engine
+from .exceptions import InvalidToken, ExpiredToken, InvalidCredentials
+from . import service as auth_service
 
 router = APIRouter(
     prefix="/auth",
@@ -37,12 +36,12 @@ def reset_password(
         with engine.begin() as conn:
             user_id = auth_service.verify_reset_token(conn, token)
             auth_service.reset_password(conn, user_id, password)
-    except auth_exceptions.InvalidToken:
+    except InvalidToken:
         raise HTTPException(
             status_code=403,
             detail="Invalid token",
         )
-    except auth_exceptions.ExpiredToken:
+    except ExpiredToken:
         raise HTTPException(
             status_code=403,
             detail="Expired token",
@@ -58,12 +57,12 @@ def login(
         with engine.begin() as conn:
             password_hash, salt = auth_service.get_user_password_hash(conn, email)
             if not auth_service.verify_password(password_hash, salt, password):
-                raise auth_exceptions.InvalidCredentials
+                raise InvalidCredentials
 
             user = user_service.get_user_by_email(conn, email)
             return auth_service.generate_jwt_token(user)
 
-    except auth_exceptions.InvalidCredentials:
+    except InvalidCredentials:
         raise HTTPException(
             status_code=403,
             detail="Invalid Credentials",

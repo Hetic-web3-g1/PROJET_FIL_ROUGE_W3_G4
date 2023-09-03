@@ -1,0 +1,14 @@
+.dashboard-partition-missing{
+    height: 70vh;
+}
+
+.dashboard-partition-missing {
+    text-align: center;
+    margin-top: 5vh;
+}
+
+.dashboard-partition-missing-upload-card {
+    margin-top: 5vh;
+    margin-bottom: 20px;
+    width: 80vw;
+}

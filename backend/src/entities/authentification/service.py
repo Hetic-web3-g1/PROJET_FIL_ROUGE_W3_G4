@@ -1,22 +1,23 @@
-from uuid import UUID
-from hashlib import scrypt
-from datetime import datetime, timedelta
-import os
 import base64
 import hmac
+import os
+from datetime import datetime, timedelta
+from hashlib import scrypt
+from uuid import UUID
 
-import sqlalchemy as sa
-from sqlalchemy.engine import Connection
-from fastapi.encoders import jsonable_encoder
-import sendgrid
 import jwt
+import sendgrid
+import sqlalchemy as sa
+from fastapi.encoders import jsonable_encoder
+from sqlalchemy.engine import Connection
 
-from .schemas import ResetToken
-from .models import reset_token
+from config import settings
+
 from ..users.models import user_table
 from ..users.schemas import User
-from config import settings
-from .exceptions import InvalidToken, ExpiredToken, InvalidCredentials
+from .exceptions import ExpiredToken, InvalidCredentials, InvalidToken
+from .models import reset_token
+from .schemas import ResetToken
 
 
 def create_reset_token(
@@ -55,7 +56,7 @@ def verify_reset_token(conn: Connection, token: str) -> UUID:
 
     hash = scrypt(
         base64.urlsafe_b64decode(token),
-        salt="test".encode("utf-8"),
+        salt=settings.reset_token_key.encode("utf-8"),
         n=2**14,
         r=8,
         p=1,

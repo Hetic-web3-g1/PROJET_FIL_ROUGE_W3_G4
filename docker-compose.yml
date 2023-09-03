@@ -2,96 +2,82 @@
 version: "3.8"
 services:
   backend-api:
+    container_name: backend-api-${ENVIRONMENT:-development}
     build:
       context: ./backend
-      target: development
+    environment:
+      CONFIG_NAME: ${ENVIRONMENT:-development}
+
     restart: unless-stopped
-    container_name: backend-api
     ports:
       - "4000:4000"
     volumes:
       - ./backend:/app
     networks:
       - app-network
-      - db-network
+      - back-network
     depends_on:
       - db
-    environment:
-      - DEBUG=1
+      - s3
 
-  # frontend-app:
-  #   build:
-  #     context: ./frontend
-  #     target: development
-  #   command: sh -c "npm i && npm run dev"
-  #   restart: unless-stopped
-  #   container_name: frontend-app
-  #   volumes:
-  #     - ./frontend:/app
-  #   ports:
-  #     - "3000:3000"
-  #   networks:
-  #     - app-network
+  frontend-app:
+    container_name: frontend-app-${ENVIRONMENT:-development}
+    build:
+      context: ./frontend
+      target: ${ENVIRONMENT:-development}
+
+    command: sh -c "npm i && npm run dev"
+    restart: unless-stopped
+
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
 
   db:
-    container_name: db-postgres
+    container_name: db-postgres-${ENVIRONMENT:-development}
     image: postgres:15.3
-    environment:
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=root
-      - POSTGRES_DB=db_saline_royale
-      - DATABASE_HOST=postgres
+    env_file:
+      - ./backend/${ENVIRONMENT:-development}.env
+
     restart: unless-stopped
     ports:
       - 5432:5432
     networks:
-      - db-network
+      - back-network
 
-  # meilisearch:
-  #   container_name: meilisearch
-  #   image: getmeili/meilisearch:latest
-  #   ports:
-  #     - 7700:7700
-  #   depends_on:
-  #     - db
-  #   networks:
-  #     - db-network
-
-  # grafana:
-  #     container_name: grafana
-  #     image: grafana/grafana:latest
-  #     restart: unless-stopped
-  #     ports:
-  #       - 3001:3000
-  #     volumes:
-  #       - ./grafana:/var/lib/grafana
-  #     networks:
-  #       - db-network
-  #     depends_on:
-  #       - db
-
-  adminer:
-    container_name: db-adminer
-    image: adminer
-    environment:
-      ADMINER_DB: db
-      ADMINER_DRIVER: pgsql
-      ADMINER_USERNAME: root
-      ADMINER_PASSWORD: root
-      ADMINER_SERVER: postgres
-      ADMINER_AUTOLOGIN: 1
-      ADMINER_NAME: Sample DB
-      ADMINER_DESIGN: pepa-linha-dark
-    restart: unless-stopped
+  s3:
+    image: zenko/cloudserver:latest-7.10.19
+    container_name: s3-${ENVIRONMENT:-development}
     ports:
-      - 8080:8080
-    depends_on:
-      - db
+      - "8000:8000"
+    volumes:
+      - ./s3-config/config.json:/usr/src/app/config.docker
+      - ./s3-config/credentials:/root/.aws/credentials
+      - s3-data:/usr/src/app/localData
+      - s3-metadata:/usr/src/app/localMetadata
+    environment:
+      S3DATA: multiple
+      REMOTE_MANAGEMENT_DISABLE: 1
+      LISTEN_ADDR: 0.0.0.0
+      # These variables specify authentication credentials for an account named "CustomAccount"
+      # SCALITY_ACCESS_KEY_ID: ${SCALITY_ACCESS_KEY_ID}
+      # SCALITY_SECRET_ACCESS_KEY: ${SCALITY_SECRET_ACCESS_KEY}
+    env_file:
+      - ./backend/${ENVIRONMENT:-development}.env
+
+    restart: unless-stopped
+    command: /bin/sh -c "cp -R ./config.docker config.json && yarn start"
     networks:
-      - db-network
+      - app-network
+
+volumes:
+  s3-data:
+  s3-metadata:
 
 networks:
   app-network:
-  db-network:
-
-# docker-compose -f docker-compose.yml up -d --build
+  back-network:
+# docker compose -f docker-compose.yml up -d --build

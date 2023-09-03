@@ -4,18 +4,23 @@ import './home.css'
 
 import { Header } from "../../components/header/Header";
 import { Sidebar } from "../../components/sidebar/Sidebar";
-import { MasterCard } from "../../components/masterCard/MasterCard";
+import { MasterCard } from "../../components/cards/masterCard/MasterCard";
+import { BiographyCard } from "../../components/cards/biographyCard/BIographyCard";
+import { Spinner } from "../../components/spinner/Spinner";
 import { useSelector, ReactReduxContext } from 'react-redux';
 
 import MasterCardData from '../../mocks/masterCardMocks'
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 
 export const Home = () => {
 
     const userStateRedux = useSelector((state) => state.filters.filters.sort_by);
     const [mastercardComponent, setMastercardComponent] = useState([]);
     const [mastercardData, setMastercardData] = useState();
+    const [biographyData, setBiographyData] = useState();
     const navigate = useNavigate();
+    const { t, i18n } = useTranslation();
 
     const { store } = useContext(ReactReduxContext)
 
@@ -43,10 +48,20 @@ export const Home = () => {
                 method: 'GET',
                 headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}` },
             };
-            fetch(`http://localhost:4000/masterclasses`, userOptions).then((response) => response.json()).then(data => {
+            fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/masterclasses`, userOptions).then((response) => response.json()).then(data => {
                 setMastercardData(data)
             });
-        },[])
+    },[])
+
+    useEffect(() => {
+            const userOptions = {
+                method: 'GET',
+                headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}` },
+            };
+            fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/biographies`, userOptions).then((response) => response.json()).then(data => {
+                setBiographyData(data)
+            });
+    },[])
 
     useEffect(() => {
         sortData();
@@ -61,11 +76,25 @@ export const Home = () => {
                 <div className="home-sidebar">
                     <Sidebar/>
                 </div>
-                <div className="home-content">
-                    {
-                        mastercardComponent.map(mastercard => { return mastercard })
-                    }
+                {
+                mastercardData ? 
+                    <div className="home-content">
+                        {
+                            mastercardComponent.map(mastercard => { return mastercard })
+                        }
+                        {
+                            biographyData?.map((bio, index) => {
+                                return(
+                                    <BiographyCard content={bio} key={`biography-${index}`}></BiographyCard>
+                                )
+                            })
+                        }
+                    </div>
+                : 
+                <div className="home-spin-wrap">
+                    <Spinner />
                 </div>
+                } 
             </div>
         </div>
     );

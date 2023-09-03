@@ -1,0 +1,2 @@
+class SubtitleNotFound(Exception):
+    pass

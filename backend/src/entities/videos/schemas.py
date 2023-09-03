@@ -1,14 +1,17 @@
-from pydantic import BaseModel
-from uuid import UUID
 from datetime import datetime
+from uuid import UUID
+
+from pydantic import BaseModel
+
 
 class VideoCreate(BaseModel):
-    version: float
-    title: str
+    masterclass_id: UUID
+    filename: str
     duration: float
     status: str
-    file_name: str
-    created_by: UUID
+    version: float
+    s3_object_id: UUID
+
 
 class Video(VideoCreate):
     id: UUID
@@ -16,3 +19,13 @@ class Video(VideoCreate):
     created_at: datetime
     updated_at: datetime | None
     updated_by: UUID | None
+
+
+class VideoMetaCreate(BaseModel):
+    video_id: UUID
+    meta_key: str
+    meta_value: str
+
+
+class VideoMeta(VideoMetaCreate):
+    id: int

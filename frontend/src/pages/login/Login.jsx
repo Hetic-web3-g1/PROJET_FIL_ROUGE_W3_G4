@@ -29,7 +29,7 @@ export const Login = ({ }) => {
       headers: { 'Content-Type': 'application/json', 'accept': 'application/json' },
       body: JSON.stringify({email, password }),
     };
-    fetch('http://localhost:4000/auth/login', loginOptions).then((response) => response.json()).then(data => {
+    fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/auth/login`, loginOptions).then((response) => response.json()).then(data => {
       if (data.detail != "Invalid Credentials") {
         dispatch(ProfileActions.login(data));
         navigate("/home");
@@ -43,7 +43,7 @@ export const Login = ({ }) => {
     <div className="login-wrap">
       <img
         className='login-logo'
-        srcSet={`src/assets/Logo.svg`} >
+        srcSet={`../src/assets/Logo.svg`} >
       </img>
       <form className="login-form">
           <label for="email" className='login-field'>Email</label>

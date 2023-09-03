@@ -1,7 +1,9 @@
-from pydantic import BaseModel
+from datetime import datetime
 from typing import List
 from uuid import UUID
-from datetime import datetime
+
+from pydantic import BaseModel
+
 
 class MasterclassCreate(BaseModel):
     academy_id: UUID
@@ -13,7 +15,7 @@ class MasterclassCreate(BaseModel):
     partition_id: UUID | None
     instrument: List[str] | None
     status: str = "created"
-    created_by: UUID
+
 
 class Masterclass(MasterclassCreate):
     id: UUID
@@ -22,10 +24,12 @@ class Masterclass(MasterclassCreate):
     updated_at: datetime | None
     updated_by: UUID | None
 
+
 class MasterclassUserCreate(BaseModel):
     user_id: UUID
     masterclass_id: UUID
     masterclass_role: str
+
 
 class MasterclassUser(MasterclassUserCreate):
     id: int

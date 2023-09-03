@@ -1,5 +1,7 @@
-from pydantic import BaseModel
 from uuid import UUID
+
+from pydantic import BaseModel
+
 
 class TimecodeCreate(BaseModel):
     video_id: UUID
@@ -7,6 +9,7 @@ class TimecodeCreate(BaseModel):
     minute: int
     second: int
     frame: int
+
 
 class Timecode(BaseModel):
     id: int

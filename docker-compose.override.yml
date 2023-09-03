@@ -11,7 +11,7 @@ services:
       - '4000:4000'
     networks: 
       - app-network
-      - db-network
+      - back-network
     depends_on:
       - db
 
@@ -30,27 +30,64 @@ services:
     container_name: frontend-app
     ports:
       - '80:80'
+      - '443:443'
+    volumes:
+      - ./nginx/conf/:/etc/nginx/conf.d/:ro
+      # - ./certbot/conf:/etc/letsencrypt
+      # - ./certbot/www:/var/www/certbot
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
     networks: 
       - app-network
     depends_on:
       - builder
 
+  # certbot:
+  #   container_name: certbot
+  #   image: certbot/certbot:latest
+  #   volumes:
+  #     - ./certbot/conf:/etc/letsencrypt
+  #     - ./certbot/www:/var/www/certbot
+  #   # command: certonly --webroot -w /var/www/certbot --force-renewal --email martin@sionfamily.com -d groupe4.hetic-projects.arcplex.tech --agree-tos
+  #   entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+
   db:
     container_name: db-postgres
     image: postgres:latest
-    environment:
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=root
-      - POSTGRES_DB=db_saline_royale
-      - DATABASE_HOST=postgres
+    env_file:
+      - ./backend/production.env
     restart: unless-stopped
     ports:
       - 5432:5432
     networks:
-      - db-network
+      - back-network
 
+  s3:
+    image: zenko/cloudserver
+    container_name: s3
+    ports:
+      - "1235:8000"
+    volumes:
+      - ./s3-config/config.json:/usr/src/app/config.docker
+      - ./s3-config/credentials:/root/.aws/credentials
+      - s3-data:/usr/src/app/localData
+      - s3-metadata:/usr/src/app/localMetadata
+    environment:
+      S3DATA: multiple
+      REMOTE_MANAGEMENT_DISABLE: 1
+      LISTEN_ADDR: 0.0.0.0
+    env_file:
+      - ./backend/production.env
+    restart: unless-stopped
+    command: /bin/sh -c "cp -R ./config.docker config.json && yarn start"
+    networks:
+      - app-network
+
+volumes:
+  s3-data:
+  s3-metadata:
+    
 networks:
   app-network:
-  db-network:
+  back-network:
 
 # docker compose -f docker-compose.override.yml up -d --build

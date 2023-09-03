@@ -2,20 +2,36 @@ from uuid import UUID
 
 import sqlalchemy as sa
 from sqlalchemy.engine import Connection
+from src.database import service as db_service
 
-from src.database import db_srv
-from src.database.db_engine import engine
-from .schemas import Masterclass, MasterclassCreate, MasterclassUserCreate, MasterclassUser
-from .models import masterclass_table, masterclass_user_table
-from ..users.models import user_table
-from .exceptions import MasterclassNotFound
+
+from ..comments import service as comment_service
+from ..comments.schemas import CommentCreate, MasterclassComment
+from ..tags import service as tag_service
+from ..tags.schemas import MasterclassTag
+from ..users.schemas import User
+from .exceptions import MasterclassNotFound, MasterclassUserNotFound
+from .models import (
+    masterclass_comment_table,
+    masterclass_table,
+    masterclass_tag_table,
+    masterclass_user_table,
+)
+from .schemas import (
+    Masterclass,
+    MasterclassCreate,
+    MasterclassUser,
+    MasterclassUserCreate,
+)
 
 
 def _parse_row(row: sa.Row):
     return Masterclass(**row._asdict())
 
-def _parse_row_masterclass_user(row: sa.Row):
+
+def _parse_row_masterclass_user(row: sa.Row):  # type: ignore
     return MasterclassUser(**row._asdict())
+
 
 def get_all_masterclasses(conn: Connection):
     """
@@ -25,7 +41,8 @@ def get_all_masterclasses(conn: Connection):
         Masterclasses: Dict of Masterclass objects.
     """
     result = conn.execute(sa.select(masterclass_table)).fetchall()
-    return [_parse_row(row) for row in result]
+    for row in result:
+        yield _parse_row(row)
 
 
 def get_masterclass_by_id(conn: Connection, masterclass_id: UUID) -> Masterclass:
@@ -65,30 +82,66 @@ def get_masterclasses_by_user(conn: Connection, user_id: UUID):
         .where(masterclass_table.c.created_by == user_id)
         .order_by(masterclass_table.c.created_at)
     ).fetchall()
-    return [_parse_row(row) for row in result]
+    for row in result:
+        yield _parse_row(row)
 
 
-def create_masterclass(conn: Connection, masterclass: MasterclassCreate) -> Masterclass:
+def create_masterclass_tags(conn: Connection, masterclass: Masterclass) -> None:
+    """
+    Create tags for a masterclass.
+
+    Args:
+        masterclass (MasterclassCreate): MasterclassCreate object.
+        result (sa.Row): Result of masterclass creation.
+    """
+    tags = [masterclass.title]
+    if masterclass.instrument:
+        tags.extend(masterclass.instrument)
+
+    for content in tags:
+        tag_service.create_tag_and_link_table(
+            conn,
+            content,
+            masterclass_table,
+            masterclass_tag_table,
+            MasterclassTag,
+            masterclass.id,
+        )
+
+
+def create_masterclass(
+    conn: Connection, masterclass: MasterclassCreate, user: User
+) -> Masterclass:
     """
     Create a masterclass.
 
     Args:
         masterclass (MasterclassCreate): MasterclassCreate object.
+        user (User): The user who created the masterclass.
 
     Returns:
         Masterclass: The created Masterclass object.
     """
-    result = db_srv.create_object(conn, masterclass_table, masterclass.dict())
+    result = db_service.create_object(
+        conn, masterclass_table, masterclass.dict(), user_id=user.id
+    )
+
+    masterclass = _parse_row(result)
+    create_masterclass_tags(conn, masterclass)
+
     return _parse_row(result)
 
 
-def update_masterclass(conn: Connection, masterclass_id: UUID, masterclass: MasterclassCreate) -> Masterclass:
+def update_masterclass(
+    conn: Connection, masterclass_id: UUID, masterclass: MasterclassCreate, user: User
+) -> Masterclass:
     """
     Update a masterclass.
 
     Args:
         masterclass_id (UUID): The id of the masterclass.
         masterclass (MasterclassCreate): MasterclassCreate object.
+        user (User): The user who updated the masterclass.
 
     Raises:
         MasterclassNotFound: If the masterclass does not exist.
@@ -96,17 +149,126 @@ def update_masterclass(conn: Connection, masterclass_id: UUID, masterclass: Mast
     Returns:
         Masterclass: The updated Masterclass object.
     """
-    result = conn.execute(
+    check = conn.execute(
         sa.select(masterclass_table).where(masterclass_table.c.id == masterclass_id)
     ).first()
-    if result is None:
+    if check is None:
         raise MasterclassNotFound
-    
-    updated_masterclass = db_srv.update_object(conn, masterclass_table, masterclass_id, masterclass.dict())
-    return updated_masterclass
+
+    result = db_service.update_object(
+        conn, masterclass_table, masterclass_id, masterclass.dict(), user_id=user.id
+    )
+
+    tag_service.delete_tags_by_object_id(
+        conn, masterclass_id, masterclass_table, masterclass_tag_table
+    )
+
+    masterclass = _parse_row(result)
+    create_masterclass_tags(conn, masterclass)
+
+    return _parse_row(result)
 
 
-def attribute_user_to_masterclass(conn: Connection, masterclass_user: MasterclassUserCreate):
+def delete_masterclass(conn: Connection, masterclass_id: UUID) -> None:
+    """
+    Delete a masterclass.
+
+    Args:
+        masterclass_id (UUID): The id of the masterclass.
+
+    Raises:
+        MasterclassNotFound: If the masterclass does not exist.
+    """
+    check = conn.execute(
+        sa.select(masterclass_table).where(masterclass_table.c.id == masterclass_id)
+    ).first()
+    if check is None:
+        raise MasterclassNotFound
+
+    tag_service.delete_tags_by_object_id(
+        conn, masterclass_id, masterclass_table, masterclass_tag_table
+    )
+    comment_service.delete_comments_by_object_id(
+        conn, masterclass_id, masterclass_table, masterclass_comment_table
+    )
+    db_service.delete_object(conn, masterclass_table, masterclass_id)
+
+
+# ---------------------------------------------------------------------------------------------------- #
+
+
+def create_masterclass_comment(
+    conn: Connection, comment: CommentCreate, masterclass_id: UUID, user: User
+):
+    """
+    Create a comment and link it to a masterclass.
+
+    Args:
+        comment (CommentCreate): CommentCreate object.
+        masterclass_id (UUID): Id of masterclass.
+        user (User): The user creating the comment.
+
+    """
+    comment_service.create_comment_and_link_table(
+        conn,
+        comment,
+        masterclass_comment_table,
+        MasterclassComment,
+        masterclass_id,
+        user,
+    )
+
+
+# ---------------------------------------------------------------------------------------------------- #
+
+
+def get_user_by_id_and_masterclass_id_from_masterclass_user(
+    conn: Connection, masterclass_user: MasterclassUserCreate
+) -> MasterclassUser | None:
+    """
+    Get a user by the given id and masterclass id.
+
+    Args:
+        masterclass_user (MasterclassUserCreate): MasterclassUserCreate object.
+
+    Returns:
+        MasterclassUser: The MasterclassUser object. | None
+    """
+    query = sa.select(masterclass_user_table).where(
+        (masterclass_user_table.c.user_id == masterclass_user.user_id)
+        & (masterclass_user_table.c.masterclass_id == masterclass_user.masterclass_id)
+    )
+
+    result = conn.execute(query).first()
+    if result is None:
+        return None
+    return _parse_row_masterclass_user(result)
+
+
+def update_user_masterclass(conn: Connection, masterclass_user: MasterclassUser):
+    """
+    Update a user masterclass.
+
+    Args:
+        masterclass_user (MasterclassUserCreate): MasterclassUserCreate object.
+
+    Returns:
+        MasterclassUser: The updated MasterclassUser object.
+    """
+    check = get_user_by_id_and_masterclass_id_from_masterclass_user(
+        conn, masterclass_user
+    )
+    if check is None:
+        raise MasterclassUserNotFound
+
+    db_service.update_object(
+        conn, masterclass_user_table, masterclass_user.id, masterclass_user.dict()
+    )
+
+
+def assign_user_to_masterclass(
+    conn: Connection, masterclass_user: MasterclassUserCreate
+):
     """
     Attribute a user to a masterclass.
 
@@ -116,5 +278,41 @@ def attribute_user_to_masterclass(conn: Connection, masterclass_user: Masterclas
     Returns:
         MasterclassUser: The created MasterclassUser object.
     """
-    result = db_srv.create_object(conn, masterclass_user_table, masterclass_user.dict())
-    return _parse_row_masterclass_user(result)
+    check = get_user_by_id_and_masterclass_id_from_masterclass_user(
+        conn, masterclass_user
+    )
+    if check:
+        new_masterclass_user = MasterclassUser(
+            user_id=check.user_id,
+            masterclass_id=check.masterclass_id,
+            masterclass_role=masterclass_user.masterclass_role,
+            id=check.id,
+        )
+        result = update_user_masterclass(conn, new_masterclass_user)
+        return result
+    else:
+        result = db_service.create_object(
+            conn, masterclass_user_table, masterclass_user.dict()
+        )
+        return _parse_row_masterclass_user(result)
+
+
+def unassign_user_from_masterclass(
+    conn: Connection, masterclass_user: MasterclassUserCreate
+):
+    """
+    Delete a user from a masterclass.
+
+    Args:
+        masterclass_user (MasterclassUserCreate): MasterclassUserCreate object.
+
+    Returns:
+        MasterclassUser: The deleted MasterclassUser object.
+    """
+    check = get_user_by_id_and_masterclass_id_from_masterclass_user(
+        conn, masterclass_user
+    )
+    if check is None:
+        raise MasterclassUserNotFound
+
+    db_service.delete_object(conn, masterclass_user_table, check.id)

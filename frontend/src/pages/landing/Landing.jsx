@@ -20,7 +20,7 @@ export const Landing = ({ }) => {
     <div className="landing-wrap">
       <img
         className='landing-logo'
-        srcSet={`src/assets/Logo.svg`} >
+        srcSet={`../src/assets/Logo.svg`} >
       </img>
       <Link to="/login">
         <Button label="Enter" className="button button-primary padded"/>

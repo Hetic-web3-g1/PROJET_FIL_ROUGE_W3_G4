@@ -1,10 +1,14 @@
 import React from "react";
+import "./index.css";
+
+// React Router
 import ReactDOM from "react-dom/client";
 import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import "./index.css";
+
+//Pages
 import App from "./App";
 import Home from "./pages/home/Home";
 import Masterclass from "./pages/masterclass/Masterclass";
@@ -12,14 +16,20 @@ import Login from "./pages/login/Login";
 import ErrorPage from "./pages/errorPage";
 import ResetPasswordEmail from "./pages/auth/reset/ResetPasswordEmail";
 import ResetPassword from "./pages/auth/reset/ResetPassword";
-import Profile from "./pages/profile/profile";
+import Profile from "./pages/profile/Profile";
 
+
+//Store
 import { Provider } from 'react-redux'
 
 import configureStore from './features/store/store';
 
 import { persistStore } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react';
+
+//i18n
+import i18n from './i18n';
+import { I18nextProvider } from 'react-i18next';
 
 const store = configureStore;
 let persistor = persistStore(store);
@@ -66,7 +76,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-        <RouterProvider router={router} />
+        <I18nextProvider i18n={i18n} defaultNS={'translation'}>
+          <RouterProvider router={router} />
+        </I18nextProvider>
       </PersistGate>
     </Provider>
   </React.StrictMode>

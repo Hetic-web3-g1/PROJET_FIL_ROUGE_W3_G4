@@ -4,6 +4,7 @@ import sqlalchemy as sa
 
 from ..masterclasses.models import masterclass_user_table
 
+
 # TODO move to CustomSecurity
 def has_masterclass_role(conn, role_to_check: str, user_id: UUID, masterclass_id: UUID):
     """

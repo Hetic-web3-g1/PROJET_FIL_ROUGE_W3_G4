@@ -1,12 +1,13 @@
-from fastapi import APIRouter, HTTPException, Depends
 from uuid import UUID
 
-from .schemas import User, UserCreate
-from . import exceptions as user_exceptions
-from . import service as user_service
+from fastapi import APIRouter, Depends, HTTPException
 from src.database.db_engine import engine
+
 from ..authentification import service as auth_service
 from ..authentification.dependencies import CustomSecurity
+from . import service as user_service
+from .exceptions import EmailAlreadyExist, UserNotFound
+from .schemas import User, UserCreate
 
 router = APIRouter(
     prefix="/users",
@@ -14,14 +15,33 @@ router = APIRouter(
 )
 
 
-@router.get("/user/me")
-def get_user_by_token(
+@router.get("/academy/{academy_id}")
+def get_all_users_by_academy(
+    academy_id: UUID,
     user: User = Depends(CustomSecurity()),
 ):
-    return user
-    
+    with engine.begin() as conn:
+        users = user_service.get_all_users_by_academy(conn, academy_id)
+        return list(users)
 
-# Get user by id
+
+@router.get("/masterclass/{masterclass_id}")
+def get_all_users_by_masterclass(
+    masterclass_id: UUID,
+    user: User = Depends(CustomSecurity()),
+):
+    with engine.begin() as conn:
+        users = user_service.get_all_users_by_masterclass(conn, masterclass_id)
+        return list(users)
+
+
+@router.get("/user/me")
+def get_user_by_token(
+    response: User = Depends(CustomSecurity()),
+):
+    return response
+
+
 @router.get("/{user_id}")
 def get_user_by_id(
     user_id: UUID,
@@ -38,16 +58,17 @@ def create_academy_user(
 ):
     try:
         with engine.begin() as conn:
-            new_user = user_service.create_user(conn, new_user)
+            new_user = user_service.create_user(conn, new_user, None, user)
             token = auth_service.create_reset_token(conn, new_user.id)
             auth_service.send_reset_password_email(new_user.email, token)
+            return new_user
 
-    except user_exceptions.EmailAlreadyExist:
+    except EmailAlreadyExist:
         raise HTTPException(
             status_code=400,
             detail="Email already exist",
         )
-    
+
 
 @router.put("/user/{user_id}")
 def update_academy_user(
@@ -55,24 +76,9 @@ def update_academy_user(
 ):
     try:
         with engine.begin() as conn:
-            user_service.update_user(conn, UUID(user_id), new_user)
+            return user_service.update_user(conn, UUID(user_id), new_user, user)
 
-    except user_exceptions.UserNotFound:
-        raise HTTPException(
-            status_code=400,
-            detail="User not found",
-        )
-
-
-@router.delete("/user/{user_id}")
-def delete_academy_user(
-    user_id: str, user: User = Depends(CustomSecurity())
-):
-    try:
-        with engine.begin() as conn:
-            user_service.delete_user(conn, UUID(user_id))
-
-    except user_exceptions.UserNotFound:
+    except UserNotFound:
         raise HTTPException(
             status_code=400,
             detail="User not found",

@@ -36,7 +36,7 @@ RUN npm install
 COPY . .
 
 # Set environment variables
-ENV FRONTEND_PORT=3000
+ENV FRONTEND_PORT=80
 
 # Build the React app
 RUN npm run build
@@ -51,3 +51,7 @@ COPY --from=builder /app/dist /usr/share/nginx/html
 
 # Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
+
+# # ------------------------------------------------------------------------
+# Dummy stage for testing
+FROM alpine:3 AS test

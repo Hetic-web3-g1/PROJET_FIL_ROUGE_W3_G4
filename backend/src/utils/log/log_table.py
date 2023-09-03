@@ -1,7 +1,8 @@
-from sqlalchemy import Table, Column, Integer, String, DateTime
 from datetime import datetime
 
-from src.database.db_engine import metadata
+from sqlalchemy import Table, Column, Integer, String, DateTime
+
+from ...database.db_engine import metadata
 
 log_table = Table(
     "log",
@@ -10,5 +11,5 @@ log_table = Table(
     Column("level", String(), nullable=False),
     Column("message", String(), nullable=False),
     Column("time", DateTime(), default=datetime.utcnow, nullable=False),
-    schema="logging"
+    schema="logging",
 )
