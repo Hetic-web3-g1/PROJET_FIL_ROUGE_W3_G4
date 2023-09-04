@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from config import settings
+from src.middleware.log_error import LogErrorMiddleware
 from src.utils.fake_data import generate_data
 
 if settings.environment in {"development"}:
@@ -25,6 +26,7 @@ app.add_middleware(
     max_age=3600,
 )
 
+app.add_middleware(LogErrorMiddleware)
 
 from src.entities.academies.router import router as academy_router
 from src.entities.annotations.router import router as annotation_router
@@ -55,6 +57,7 @@ api.include_router(user_router)
 api.include_router(tag_router)
 api.include_router(video_router)
 api.include_router(work_analysis_router)
+
 
 from src.entities.annotations.router_public import router as annotation_router_public
 from src.entities.biographies.router_public import router as biography_router_public
