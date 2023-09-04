@@ -61,7 +61,7 @@ export const DashboardPartition = ({partitionData, masterclassData, handleSave})
     }
 
     useEffect(() => {
-        if(partitionData.s3_object_id !== undefined) {
+        if(partitionData?.s3_object_id !== undefined) {
             const Options = {
             method: 'GET',
             headers:  { 'Content-Type': 'video/mp4', 'accept': 'video/mp4', 'authorization': `${store.getState().user.user_token}`},
@@ -74,7 +74,7 @@ export const DashboardPartition = ({partitionData, masterclassData, handleSave})
 
     return(
         <div>
-            {partitionData.status ? (
+            {partitionData?.status ? (
                 <div className='dashboard-partition'>
                     <div className='upload-file-pdf' style={{maxWidth: '300px'}}>
                         <p style={{textAlign: 'center'}}>

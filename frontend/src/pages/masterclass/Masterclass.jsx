@@ -27,6 +27,7 @@ export const Masterclass = () => {
   const [composerData, setComposerData] = useState();
   const [professorData, setProfessorData] = useState();
   const [partitionData, setPartitionData] = useState();
+  const [workAnalysisData, setWorkAnalysisData] = useState();
   const [userList, setUserList] = useState();
   const [academy, setAcademy] = useState();
   const masterclassId = window.location.href.split('/')[4];
@@ -66,9 +67,14 @@ export const Masterclass = () => {
         setAcademy(data)
       });
     }
-    if (masterclassData) {
+    if (masterclassData && masterclassData?.partition_id !== null) {
       fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/partitions/partition/${masterclassData?.partition_id}`, Options).then((response) => response.json()).then(data => {
         setPartitionData(data)
+      });
+    }
+    if (masterclassData && masterclassData?.work_analysis_id !== null) {
+      fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/work_analyzes/work_analysis/${masterclassData?.work_analysis_id}`, Options).then((response) => response.json()).then(data => {
+        setWorkAnalysisData(data)
       });
     }
   },[masterclassData]); 
@@ -123,7 +129,7 @@ export const Masterclass = () => {
         break;
       
       case 'Work analysis':
-        setComponent(<DashboardWorkAnalysis/>);
+        setComponent(<DashboardWorkAnalysis masterclassData={masterclassData} workAnalysisData={workAnalysisData} handleSave={handleSave}/>);
         break;
 
       case 'Professor':

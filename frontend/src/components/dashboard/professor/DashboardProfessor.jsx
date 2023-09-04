@@ -61,7 +61,7 @@ export const DashboardProfessor = ({masterclassData, handleSave, professorData, 
             <>
                 <div className='professor-search'>
                     <div className="professor-searchbar">
-                        <Field placeholder={`Search for a ${type}`} value={tmpProf} onChangeCallback={handleSearch}/>
+                        <Field placeholder={`Search for a ${type}`} value={tmpProf} onChange={handleSearch}/>
                     </div>
                     <ul className="professor-list">
                         {searchProfessorData[0]?.map((professor) => {
@@ -82,11 +82,11 @@ export const DashboardProfessor = ({masterclassData, handleSave, professorData, 
                     <div className="dashboard-prof-infos-1">
                         <div className="dashboard-prof-infos-field marg-right">
                             First Name
-                            <Field placeholder="First Name"  value={firstName} onChangeCallback={(e) => setFirstName(e.target.value)}/>
+                            <Field placeholder="First Name"  value={firstName} onChange={(e) => setFirstName(e.target.value)}/>
                         </div>
                         <div className="dashboard-prof-infos-field marg-right">
                             Last Name
-                            <Field placeholder="Last Name" value={lastName} onChangeCallback={(e) => setLastName(e.target.value)}/>
+                            <Field placeholder="Last Name" value={lastName} onChange={(e) => setLastName(e.target.value)}/>
                         </div>
                         {/* <div className="dashboard-prof-background-wrapper">
                             <span>Avatar</span>
@@ -142,7 +142,7 @@ export const DashboardProfessor = ({masterclassData, handleSave, professorData, 
                         </div>
                     </div>
                 </div> 
-                <div style={{ display: 'flex','flex-direction': 'column'}}>
+                <div style={{ display: 'flex','flexDirection': 'column'}}>
                     <span>Biography</span>
                     <textarea className="dashboard-prof-textarea"  value={bio} placeholder="..." row='20' onChange={(e) => setBio(e.target.value)}/>
                 </div>
