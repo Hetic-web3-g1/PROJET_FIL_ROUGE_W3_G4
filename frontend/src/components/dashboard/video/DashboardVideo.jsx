@@ -30,14 +30,16 @@ export const DashboardVideo = ({masterclassData}) => {
     },[]);
 
     useEffect(() => {
-        const Options = {
-          method: 'GET',
-          headers:  { 'Content-Type': 'video/mp4', 'accept': 'video/mp4', 'authorization': `${store.getState().user.user_token}`},
-        };
-        fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/s3_objects/url_and_object_info/${masterclassVideo[0]?.s3_object_id}`, Options).then((response) => response.json()).then(data => {
-            console.log(data)
-            setVideo(data)
-        });
+        if(masterclassVideo.length > 0) {
+            const Options = {
+            method: 'GET',
+            headers:  { 'Content-Type': 'video/mp4', 'accept': 'video/mp4', 'authorization': `${store.getState().user.user_token}`},
+            };
+            fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/s3_objects/url_and_object_info/${masterclassVideo[0]?.s3_object_id}`, Options).then((response) => response.json()).then(data => {
+                console.log(data)
+                setVideo(data)
+            });
+        }
     },[masterclassVideo]);
 
     const handleVideoUpload = (e) => {

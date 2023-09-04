@@ -45,18 +45,22 @@ export const DashboardPartition = ({partitionData, masterclassData, handleSave})
     }
 
     useEffect(() => {
-        const Options = {
-          method: 'GET',
-          headers:  { 'Content-Type': 'video/mp4', 'accept': 'video/mp4', 'authorization': `${store.getState().user.user_token}`},
-        };
-        fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/s3_objects/url_and_object_info/${partitionData.s3_object_id}`, Options).then((response) => response.json()).then(data => {
-            setPartition(data)
-        });
+        if(partitionData.s3_object_id !== undefined) {
+            const Options = {
+            method: 'GET',
+            headers:  { 'Content-Type': 'video/mp4', 'accept': 'video/mp4', 'authorization': `${store.getState().user.user_token}`},
+            };
+            fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/s3_objects/url_and_object_info/${partitionData.s3_object_id}`, Options).then((response) => response.json()).then(data => {
+                setPartition(data)
+            });
+        }
     },[]);
+
+    console.log("zouz", partitionData)
 
     return(
         <div>
-            {partitionData ? (
+            {partitionData.status ? (
                 <div className='dashboard-partition'>
                     <Document className="pdf-container" file={{url:`${partition?.url}`}} onLoadError={console.error} onLoadSuccess={onDocumentLoadSuccess} >
                         <Page pageNumber={pageNumber} renderTextLayer={false} renderAnnotationLayer={false}/>
