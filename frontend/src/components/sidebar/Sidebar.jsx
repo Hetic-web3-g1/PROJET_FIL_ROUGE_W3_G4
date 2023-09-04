@@ -8,33 +8,35 @@ import { FiltersActions } from '../../features/actions/filters';
 
 export const Sidebar = ({categories}) => {
   const [open, setOpen] = useState(false);
-  const [checkboxList, setCheckboxList] = useState([]);
+  const sortByStatusState = useSelector((state) => state.filters.filters.sort_by_status);
+  const [checkboxList, setCheckboxList] = useState(sortByStatusState || []);
+  const [observable, setObservable] = useState(1);
   const customFilters = ['Created at', 'Last update'];
   const dispatch = useDispatch();
   const {store} = useContext(ReactReduxContext);
-  // const sortByStatusState = useSelector((state) => state.filters.filters.sort_by_status);
-
 
   function handleValueDropdown(childData) {
     dispatch(FiltersActions.sortBy(childData));
   }
 
   function handleCheckboxTrue(event) {
-    setCheckboxList(values => [...values, event]);
+    const tmp = checkboxList;
+    tmp.push(event);
+    setCheckboxList(tmp);
+    setObservable(observable + 1);
   }
 
   function handleCheckboxFalse(event) {
     const index = checkboxList.findIndex(e => e[0] === event[0]);
     var tmp = checkboxList;
-    console.log('before', tmp);
     tmp.splice(index, 1);
-    console.log('after', tmp);
     setCheckboxList(tmp);
+    setObservable(observable - 1);
   }
 
   useEffect(() => {
-    dispatch(FiltersActions.sortByStatus(checkboxList));
-  }, [checkboxList])
+    dispatch(FiltersActions.sortByStatus([...checkboxList]));
+  }, [observable])
 
   return (
     <div>
@@ -45,13 +47,13 @@ export const Sidebar = ({categories}) => {
           <Dropdown returnValues={handleValueDropdown} options={customFilters} defaultValue={store.getState().filters.filters.sort_by}/>
 
           {
-            Object.keys(categories).map((categoryTitle) => {
+            Object.keys(categories)?.map((categoryTitle) => {
               { 
                 return(
                   <div className="sidebar-filter">
                     <h1 className='sidebar-font'>{categoryTitle}</h1>
                     {
-                      categories[categoryTitle].map(filterTitle => { return(<Checkbox returnValues={(e) => e[1] === true ? handleCheckboxTrue(e) : handleCheckboxFalse(e)} value={filterTitle} label={filterTitle} primary={false}/>) })
+                      categories[categoryTitle]?.map(filterTitle => { return(<Checkbox returnValues={(e) => e[1] === true ? handleCheckboxTrue(e) : handleCheckboxFalse(e)} value={filterTitle} label={filterTitle} primary={false}/>) })
                     }
                   </div>
                 )

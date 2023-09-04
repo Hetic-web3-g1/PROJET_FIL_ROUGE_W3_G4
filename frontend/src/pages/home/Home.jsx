@@ -20,6 +20,8 @@ export const Home = () => {
     const navigate = useNavigate();
     const { t, i18n } = useTranslation();
 
+    const sortByState = useSelector((state) => state.filters.filters.sort_by);
+    const sortByStatusState = useSelector((state) => state.filters.filters.sort_by_status);
     const [mastercardComponent, setMastercardComponent] = useState([]);
     const [mastercardData, setMastercardData] = useState();
     const [biographyData, setBiographyData] = useState();
@@ -28,21 +30,22 @@ export const Home = () => {
 
     const sortData = () => {
         setMastercardComponent([]);
-        switch (sortByState) {
-            case 'Created at':
-                const sortedDataByCreation = mastercardData?.sort((a, b) => {
-                    return new Date(b.created_at) - new Date(a.created_at);
-                });
-                sortedDataByCreation?.map(e => setMastercardComponent(component => [...component, <MasterCard content={e} key={e.id} token={store.getState().user.user_token} onClick={() => (navigate(`/Masterclass/${e.id}`))}/>]));
-                break;
+        switch (sortByState) 
+            {
+                case 'Created at':
+                    const sortedDataByCreation = mastercardData?.sort((a, b) => {
+                        return new Date(b.created_at) - new Date(a.created_at);
+                    });
+                    sortedDataByCreation?.map(e => setMastercardComponent(component => [...component, <MasterCard content={e} key={e.id} token={store.getState().user.user_token} onClick={() => (navigate(`/Masterclass/${e.id}`))}/>]));
+                    break;
 
-            case 'Last update':
-                const sortedDataByUpdate = mastercardData?.sort((a, b) => {
-                    return new Date(b.updated_at) - new Date(a.updated_at);
-                });
-                sortedDataByUpdate?.map(e => setMastercardComponent(component => [...component, <MasterCard content={e} key={e.id} token={store.getState().user.user_token} onClick={() => (navigate(`/Masterclass/${e.id}`))}/>]));
-                break;
-        }
+                case 'Last update':
+                    const sortedDataByUpdate = mastercardData?.sort((a, b) => {
+                        return new Date(b.updated_at) - new Date(a.updated_at);
+                    });
+                    sortedDataByUpdate?.map(e => setMastercardComponent(component => [...component, <MasterCard content={e} key={e.id} token={store.getState().user.user_token} onClick={() => (navigate(`/Masterclass/${e.id}`))}/>]));
+                    break;
+            }
 
         // console.log('coucou', mastercardData);
         // const sortedDataByStatus = mastercardData?.filter(e => e.status === sortByStatusState[0].toLowerCase() && sortByStatusState[1] === true);
