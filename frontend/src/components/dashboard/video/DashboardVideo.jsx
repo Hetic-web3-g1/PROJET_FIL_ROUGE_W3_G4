@@ -40,10 +40,7 @@ export const DashboardVideo = ({masterclassData}) => {
         });
     },[masterclassVideo]);
 
-    // Video upload -> will be removed later to use only one upload function for all types of files
-
     const handleVideoUpload = (e) => {
-
         e.preventDefault();
         const fileBlob = new Blob([uploadVideo], {type: 'video/mp4'});
         var formData = new FormData();

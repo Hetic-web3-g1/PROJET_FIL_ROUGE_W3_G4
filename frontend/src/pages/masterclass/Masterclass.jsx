@@ -24,6 +24,7 @@ export const Masterclass = () => {
   const [masterclassData, setMasterclassData] = useState();
   const [composerData, setComposerData] = useState();
   const [professorData, setProfessorData] = useState();
+  const [partitionData, setPartitionData] = useState();
   const [userList, setUserList] = useState();
   const masterclassId = window.location.href.split('/')[4];
   
@@ -72,10 +73,21 @@ export const Masterclass = () => {
         setUserList(data)
       });
     }
-  },[masterclassData]);  
+  },[masterclassData]);
+  
+  useEffect(() => {
+    if (masterclassData) {
+      const Options = {
+        method: 'GET',
+        headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}`},
+      };
+      fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/partitions/partition/${masterclassData?.partition_id}`, Options).then((response) => response.json()).then(data => {
+        setPartitionData(data)
+      });
+    }
+  },[masterclassData]);
 
-  const handleSave = (e, newMasterclassData) => {
-    e.preventDefault();
+  const handleSave = (newMasterclassData) => {
     const userOptions = {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}` },
@@ -121,7 +133,7 @@ export const Masterclass = () => {
       break;
 
       case 'Partition':
-        setComponent(<DashboardPartition masterclassData={masterclassData}/>);
+        setComponent(<DashboardPartition masterclassData={masterclassData} partitionData={partitionData} handleSave={handleSave}/>);
         break;
       
       case 'Work analysis':

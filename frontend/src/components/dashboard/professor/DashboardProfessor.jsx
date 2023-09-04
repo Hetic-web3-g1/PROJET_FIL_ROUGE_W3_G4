@@ -28,7 +28,6 @@ export const DashboardProfessor = ({masterclassData, handleSave, professorData, 
 
     const setProfessor = (professor) => {
         var newMasterclassData = masterclassData
-        console.log(professor)
         setTmpProf(professor.first_name + ' ' + professor.last_name)
         setSearchProfessorData([])
         if (type == 'Professor') {
@@ -72,7 +71,7 @@ export const DashboardProfessor = ({masterclassData, handleSave, professorData, 
                             )
                         })}
                     </ul>
-                    <button onClick={e => handleSave(e, masterclass)}>Save</button>
+                    <button onClick={e => {e.preventDefault; handleSave(masterclass)}}>Save</button>
                 </div>
                 <hr/>
             </>
