@@ -35,6 +35,28 @@ def get_all_images(conn: Connection):
         yield _parse_row(row)
 
 
+def get_image_by_id(conn: Connection, image_id: UUID) -> Image:
+    """
+    Get an image by the given id.
+
+    Args:
+        image_id (UUID): The id of the image.
+
+    Raises:
+        ImageNotFound: If the image does not exist.
+
+    Returns:
+        Image: The image object.
+    """
+    result = conn.execute(
+        sa.select(image_table).where(image_table.c.id == image_id)
+    ).first()
+    if result is None:
+        raise ImageNotFound
+
+    return _parse_row(result)
+
+
 def create_image(
     conn: Connection,
     user: User,

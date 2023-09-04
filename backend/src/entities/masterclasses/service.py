@@ -10,18 +10,26 @@ from ..comments.schemas import CommentCreate, MasterclassComment
 from ..tags import service as tag_service
 from ..tags.schemas import MasterclassTag
 from ..users.schemas import User
-from .exceptions import MasterclassNotFound, MasterclassUserNotFound
+from .exceptions import (
+    MasterclassNotFound,
+    MasterclassUserNotFound,
+    MasterclassMetaNotFound,
+    MasterclassMetaKeyAlreadyExist,
+)
 from .models import (
-    masterclass_comment_table,
     masterclass_table,
-    masterclass_tag_table,
     masterclass_user_table,
+    masterclass_comment_table,
+    masterclass_tag_table,
+    masterclass_meta_table,
 )
 from .schemas import (
     Masterclass,
     MasterclassCreate,
     MasterclassUser,
     MasterclassUserCreate,
+    MasterclassMeta,
+    MasterclassMetaCreate,
 )
 
 
@@ -31,6 +39,10 @@ def _parse_row(row: sa.Row):
 
 def _parse_row_masterclass_user(row: sa.Row):  # type: ignore
     return MasterclassUser(**row._asdict())
+
+
+def _parse_meta_row(row: sa.Row):
+    return MasterclassMeta(**row._asdict())
 
 
 def get_all_masterclasses(conn: Connection):
@@ -217,6 +229,131 @@ def create_masterclass_comment(
         masterclass_id,
         user,
     )
+
+
+# ---------------------------------------------------------------------------------------------------- #
+
+
+def get_masterclass_meta_by_id(conn: Connection, meta_id: int) -> MasterclassMeta:
+    """
+    Get a masterclass meta by the given id.
+
+    Args:
+        meta_id (int): The id of the masterclass meta.
+
+    Raises:
+        MasterclassMetaNotFound: If the masterclass meta does not exist.
+
+    Returns:
+        MasterclassMeta: The MasterclassMeta object.
+    """
+    result = conn.execute(
+        sa.select(masterclass_meta_table).where(masterclass_meta_table.c.id == meta_id)
+    ).first()
+    if result is None:
+        raise MasterclassMetaNotFound
+
+    return _parse_meta_row(result)
+
+
+def get_masterclass_meta_by_masterclass_id(
+    conn: Connection, masterclass_id: UUID
+) -> list[MasterclassMeta]:
+    """
+    Get all meta entries for a masterclass.
+
+    Args:
+        masterclass_id (UUID): The id of the masterclass.
+
+    Returns:
+        list[MasterclassMeta]: List of MasterclassMeta objects.
+    """
+    result = conn.execute(
+        sa.select(masterclass_meta_table).where(
+            masterclass_meta_table.c.masterclass_id == masterclass_id
+        )
+    ).fetchall()
+
+    return [_parse_meta_row(row) for row in result]
+
+
+def create_masterclass_meta(
+    conn: Connection,
+    meta: MasterclassMetaCreate,
+) -> MasterclassMeta:
+    """
+    Create a masterclass meta.
+
+    Args:
+        meta (MasterclassMetaCreate): MasterclassMetaCreate object.
+
+    Raises:
+        MasterclassMetaKeyAlreadyExist: If the masterclass meta key already exists.
+
+    Returns:
+        MasterclassMeta: The created MasterclassMeta object.
+    """
+    check = conn.execute(
+        sa.select(masterclass_meta_table).where(
+            masterclass_meta_table.c.meta_key == meta.meta_key,
+        )
+    ).first()
+    if check is not None:
+        raise MasterclassMetaKeyAlreadyExist
+
+    result = db_service.create_object(conn, masterclass_meta_table, meta.dict())
+
+    return _parse_meta_row(result)
+
+
+def update_masterclass_meta(
+    conn: Connection,
+    meta_id: int,
+    meta: MasterclassMetaCreate,
+) -> MasterclassMeta:
+    """
+    Update a meta entry.
+
+    Args:
+        meta_id (int): The id of the meta entity.
+        meta (MasterclassMetaCreate): MasterclassMetaCreate object.
+
+    Raises:
+        MasterclassMetaNotFound: If the masterclass meta does not exist.
+
+    Returns:
+        MasterclassMeta: The updated MasterclassMeta object.
+    """
+    check = conn.execute(
+        sa.select(masterclass_meta_table).where(masterclass_meta_table.c.id == meta_id)
+    ).first()
+    if check is None:
+        raise MasterclassMetaNotFound
+
+    result = db_service.update_object(
+        conn, masterclass_meta_table, meta_id, meta.dict()
+    )
+
+    return _parse_meta_row(result)
+
+
+def delete_masterclass_meta(conn: Connection, meta_id: int) -> None:
+    """
+    Delete a meta entry.
+
+    Args:
+        meta_id (int): The id of the meta entity.
+
+    Raises:
+        MasterclassMetaNotFound: If the masterclass meta does not exist.
+    """
+    check = conn.execute(
+        sa.select(masterclass_meta_table).where(masterclass_meta_table.c.id == meta_id)
+    ).first()
+    if check is None:
+        raise MasterclassMetaNotFound
+
+    db_service.delete_object(conn, masterclass_meta_table, meta_id)
 
 
 # ---------------------------------------------------------------------------------------------------- #
