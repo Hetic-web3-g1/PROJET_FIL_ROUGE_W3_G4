@@ -33,3 +33,13 @@ class MasterclassUserCreate(BaseModel):
 
 class MasterclassUser(MasterclassUserCreate):
     id: int
+
+
+class MasterclassMetaCreate(BaseModel):
+    masterclass_id: UUID
+    meta_key: str
+    meta_value: str
+
+
+class MasterclassMeta(MasterclassMetaCreate):
+    id: int

@@ -194,7 +194,7 @@ def get_biography_meta_by_id(
     except BiographyMetaNotFound:
         raise HTTPException(
             status_code=404,
-            detail="Biography not found",
+            detail="Biography meta not found",
         )
 
 
@@ -237,7 +237,7 @@ def update_biography_meta(
     except BiographyMetaNotFound:
         raise HTTPException(
             status_code=404,
-            detail="Biography not found",
+            detail="Biography meta not found",
         )
 
 
@@ -253,5 +253,5 @@ def delete_biography_meta(
     except BiographyMetaNotFound:
         raise HTTPException(
             status_code=404,
-            detail="Biography not found",
+            detail="Biography meta not found",
         )
