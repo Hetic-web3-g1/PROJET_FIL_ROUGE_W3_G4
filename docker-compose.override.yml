@@ -34,7 +34,7 @@ services:
       - '80:80'
       # - '443:443'
     volumes:
-      - ./nginx/conf/:/etc/nginx/conf.d/:ro
+      - ./data/nginx/conf/:/etc/nginx/conf.d/:ro
       # - ./certbot/conf:/etc/letsencrypt
       # - ./certbot/www:/var/www/certbot
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
@@ -69,8 +69,8 @@ services:
     ports:
       - "1235:8000"
     volumes:
-      - ./s3-config/config.json:/usr/src/app/config.docker
-      - ./s3-config/credentials:/root/.aws/credentials
+      - ./data/s3-config/config.json:/usr/src/app/config.docker
+      - ./data/s3-config/credentials:/root/.aws/credentials
       - s3-data:/usr/src/app/localData
       - s3-metadata:/usr/src/app/localMetadata
     environment:
@@ -84,18 +84,19 @@ services:
     networks:
       - app-network
 
-  grafana:
-    container_name: grafana
-    image: grafana/grafana:latest
-    restart: unless-stopped
-    ports:
-      - 3001:3000
-    volumes:
-      - ./grafana:/var/lib/grafana
-    networks:
-      - back-network
-    depends_on:
-      - db
+  # grafana:
+  #   container_name: grafana
+  #   image: grafana/grafana:latest
+  #   restart: unless-stopped
+  #   ports:
+  #     - 3001:3000
+  #   volumes:
+  #     - ./data/grafana:/var/lib/grafana
+  #   user: '0'
+  #   networks:
+  #     - back-network
+  #   depends_on:
+  #     - db
 
 volumes:
   s3-data:
