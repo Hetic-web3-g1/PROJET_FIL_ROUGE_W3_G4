@@ -16,6 +16,13 @@ router = APIRouter(
 )
 
 
+@router.get("/image/{image_id}")
+def get_image_by_id(image_id: UUID, user: User = Depends(CustomSecurity())):
+    with engine.begin() as conn:
+        image = image_service.get_image_by_id(conn, image_id)
+        return image
+
+
 @router.post("/image")
 def create_image(
     public: bool = Body(...),
@@ -23,7 +30,8 @@ def create_image(
     user: User = Depends(CustomSecurity()),
 ):
     with engine.begin() as conn:
-        return image_service.create_image(conn, user, public, file)
+        image = image_service.create_image(conn, user, public, file)
+        return image.id
 
 
 @router.delete("/image/{image_id}")

@@ -2,11 +2,13 @@
 version: '3.8'
 services:
   backend-api:
+    container_name: backend-api-${ENVIRONMENT:-production}
     build:
       context: ./backend
       target: production
+    environment:
+      CONFIG_NAME: ${ENVIRONMENT:-production}
     restart: unless-stopped
-    container_name: backend-api
     ports:
       - '4000:4000'
     networks: 
@@ -23,11 +25,11 @@ services:
     container_name: builder
 
   frontend-app:
+    container_name: frontend-app-${ENVIRONMENT:-production}
     build:
       context: ./frontend
       target: production
     restart: unless-stopped
-    container_name: frontend-app
     ports:
       - '80:80'
       - '443:443'
@@ -51,10 +53,10 @@ services:
   #   entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
   db:
-    container_name: db-postgres
+    container_name: db-postgres-${ENVIRONMENT:-production}
     image: postgres:latest
     env_file:
-      - ./backend/production.env
+      - ./backend/.env.production
     restart: unless-stopped
     ports:
       - 5432:5432
@@ -62,8 +64,8 @@ services:
       - back-network
 
   s3:
-    image: zenko/cloudserver
-    container_name: s3
+    container_name: s3-${ENVIRONMENT:-production}
+    image: zenko/cloudserver:latest-7.10.19
     ports:
       - "1235:8000"
     volumes:
@@ -76,7 +78,7 @@ services:
       REMOTE_MANAGEMENT_DISABLE: 1
       LISTEN_ADDR: 0.0.0.0
     env_file:
-      - ./backend/production.env
+      - ./backend/.env.production
     restart: unless-stopped
     command: /bin/sh -c "cp -R ./config.docker config.json && yarn start"
     networks:
@@ -90,4 +92,4 @@ networks:
   app-network:
   back-network:
 
-# docker compose -f docker-compose.override.yml up -d --build
+# ENVIRONMENT=production docker compose -f docker-compose.override.yml -p projet_fil_rouge_prod up -d --build

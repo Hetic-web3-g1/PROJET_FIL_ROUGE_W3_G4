@@ -1,0 +1,53 @@
+
+.toast {
+    padding: 0.5em;
+    border-radius: 0.5em;
+    position: fixed;
+    opacity: 1;
+    bottom: 10%;
+    min-width: 200px;
+    animation: toast-coming-in 0.5s ease-out;
+}
+
+.toast-message {
+    display: flex;
+}
+
+.toast-success {
+    color: white;
+    background-color: green;
+}
+  
+.toast-failure {
+    color: white;
+    background-color: red;
+}
+  
+.toast-warning {
+    color: white;
+    background-color: orange;
+}
+
+.icon {
+    width: 1em;
+    height: 1em;
+    fill: currentColor;
+    margin-top: 1em;
+    margin-right: 0.5em;
+}
+
+@keyframes toast-coming-in {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+}
+
+/* Provider class */
+
+.toasts-wrapper {
+    display: flex;
+    justify-content: center;
+}

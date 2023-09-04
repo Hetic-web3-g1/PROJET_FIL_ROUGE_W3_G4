@@ -102,3 +102,17 @@ masterclass_tag_table = Table(
     ),
     Column("tag_id", Integer, ForeignKey("tag.id", ondelete="CASCADE"), nullable=False),
 )
+
+masterclass_meta_table = Table(
+    "masterclass_meta",
+    metadata,
+    Column("id", Integer, primary_key=True, unique=True, nullable=False),
+    Column(
+        "masterclass_id",
+        UUID(as_uuid=True),
+        ForeignKey("masterclass.id"),
+        nullable=False,
+    ),
+    Column("meta_key", String(), nullable=False),
+    Column("meta_value", String(), nullable=False),
+)

@@ -8,3 +8,11 @@ class MasterclassUserAlreadyExist(Exception):
 
 class MasterclassUserNotFound(Exception):
     pass
+
+
+class MasterclassMetaNotFound(Exception):
+    pass
+
+
+class MasterclassMetaKeyAlreadyExist(Exception):
+    pass

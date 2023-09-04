@@ -1,22 +1,59 @@
-# Saline Academy Backend
+# Backend
 
-## Prerequisites
+## Run project
+
+### Run the tests
+
+```bash
+ENVIRONMENT=test docker compose -f docker-compose.yml -p projet_fil_rouge_test up -d --build && \
+docker exec -it backend-api-test bash
+# Then
+python -m pytest
+```
+
+Dont forget to stop other instance of the project
+
+### If not using docker:
 
 - `git clone` the repo using SSH
 - install `pyenv`
 - install `poetry`, see instructions [here](https://python-poetry.org/docs/#installation)
-- create `development.env` file in the root of the project (More info further down)
+- create `.env.development` file in the root of the project (More info further down)
 
-### Pyenv debug
+#### Install
+
+`shell pyenv install poetry install`
+
+This will install the python version for the project and create a python virtual environment and install all the dependencies.
+
+#### Run db
+
+Run the database with docker
+
+```shell
+docker run -d \
+     --name saline-postgres \
+     -e POSTGRES_PASSWORD=pgpassword \
+     -e POSTGRES_USER=pguser \
+     -e POSTGRES_DB=pgdb \
+     -v saline-db:/var/lib/postgresql/data \
+     -p 5432:5432 \
+     postgres:15.3
+```
+
+Run with VSCode debugger bu the running the configuration `Python: Saline Backend`, check that the python virtual environment is selected in the bottom right corner of VSCode.
+
+#### Pyenv debug
 
 If the version of python (via `python -V`) is the the same of the version selected with pyenv (via `pyenv local`), check that the path of your python runtime is set to pyenv's shims directory (via `which python`).
 
-### Env file Structure
+## Env file Structure
 
-.env
+***.env.development***
 
 ```TOML
 # Database
+DATABASE_HOST = ""
 POSTGRES_USER = ""
 POSTGRES_PASSWORD = ""
 POSTGRES_HOSTNAME = ""
@@ -46,33 +83,7 @@ aws_access_key_id=
 aws_secret_access_key=
 ```
 
-## Install
-
-```shell
-pyenv install
-poetry install
-```
-
-This will install the python version for the project and create a python virtual environment and install all the dependencies.
-
-## Run
-
-Run the database with docker
-
-```shell
-docker run -d \
-     --name saline-postgres \
-     -e POSTGRES_PASSWORD=pgpassword \
-     -e POSTGRES_USER=pguser \
-     -e POSTGRES_DB=pgdb \
-     -v saline-db:/var/lib/postgresql/data \
-     -p 5432:5432 \
-     postgres:15.3
-```
-
-Run with VSCode debugger bu the running the configuration `Python: Saline Backend`, check that the python virtual environment is selected in the bottom right corner of VSCode.
-
-## Migrations
+## Migrations alembic
 
 ```shell
 alembic revision --autogenerate -m "<MESSAGE>"
@@ -116,20 +127,4 @@ Interacting with objects can be accomplished through various methods. To retriev
 
 To upload an object, you need to provide the file and additional information such as the generated object key, the bucket, privacy settings (is_public), content type, metadata, etc.
 
-### Run the project
-
-```shell
-ENVIRONMENT=development docker compose -p projet_fil_rouge_dev up -d --build
-ENVIRONMENT=production docker compose -p projet_fil_rouge_prod up -d --build
-```
-
-### Run the tests
-
-```bash
-ENVIRONMENT=test docker compose -p projet_fil_rouge_test up -d --build && \
-docker exec -it backend-api-test bash
-# Then
-python -m pytest
-```
-
-Dont forget to stop other instance of the project
+Back to [README.md](../README.md).

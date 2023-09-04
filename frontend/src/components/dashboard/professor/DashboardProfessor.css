@@ -1,0 +1,103 @@
+.professor-search {
+    margin-bottom: 20px;
+}
+
+.professor-searchbar {
+    margin-bottom: 1vh;
+}
+
+.professor-list {
+    background-color: white;
+    color: #020A33;
+    border-radius: 3px;
+    width: 830px;
+    padding: 0;
+    margin: 0;
+    position: fixed;
+    max-height: 400px;
+    overflow: auto;
+    z-index: 1;
+}
+
+.dashboard-prof-content {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: normal;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0 1rem;
+    line-height: 2;
+}
+
+.dashboard-prof-infos {
+    /* display: flex; */
+    flex-direction: row;
+    height: 100%;
+    margin-bottom: 3vh;
+    justify-content: space-around;
+}
+
+.dashboard-prof-infos-1 {
+    width: 100%;
+    display: flex;
+}
+
+.dashboard-prof-infos-2 {
+    width: 50%;
+    margin-left: 1vw;
+}
+
+
+.dashboard-prof-instrument {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 100%;
+    margin-bottom: 1vh;
+    overflow-x: auto;
+    white-space: nowrap;
+    width: 75vw;
+}
+
+.dashboard-prof-instrument::-webkit-scrollbar{
+    display: none;
+}
+
+.dashboard-prof-background-upload {
+    width:auto
+}
+
+.dashboard-prof-infos-element{
+    display: flex;
+    align-content: center;
+    align-items: center;
+    flex-direction: row;
+}
+
+.dashboard-prof-infos-checkbox{
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+.dashboard-prof-background-wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.dashboard-prof-textarea{
+    min-height: 240px;  
+
+}
+
+.dashboard-prof-infos-field-add {
+    display: flex;
+    margin-top: 1vh;
+}
+
+.dashboard-prof-award-field {
+    margin-bottom: 1vh;
+}

@@ -22,7 +22,7 @@ export const Dropdown = ({ options, returnValues, disabled, defaultValue }) => {
     <div>
       <div style={disabled ? {pointerEvents: 'none', backgroundColor: '#F7F7F7'} : null} onClick={() => setOpen(!open)} className='no-select div-dropdown font'>
         <span className={mode}>{selectedItem}</span>
-        <img className={`${mode} ${isOpen}`} src="src\assets\dropdown\Chevron.svg" alt="chevron" />
+        <img className={`${mode} ${isOpen}`} src="../src\assets\dropdown\Chevron.svg" alt="chevron" />
       </div>
 
       {open && <ul className='no-select ul-custom'>

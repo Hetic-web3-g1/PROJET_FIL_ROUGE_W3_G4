@@ -33,14 +33,16 @@ export const Header = () => {
       }, [store.getState().user.user_token])
     
     useEffect(() => {
-        if(!store.getState().user.profile?.id) {
-            const userOptions = {
-                method: 'GET',
-                headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}` },
-            };
-            fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/users/user/me`, userOptions).then((response) => response.json()).then(data => {
-                dispatch(ProfileActions.updateProfile(data));
-            });
+        if(store.getState().user.user_token) {
+            if(!store.getState().user.profile?.id) {
+                const userOptions = {
+                    method: 'GET',
+                    headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}` },
+                };
+                fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/users/user/me`, userOptions).then((response) => response.json()).then(data => {
+                    dispatch(ProfileActions.updateProfile(data));
+                });
+            }
         }
     },)
 
@@ -74,7 +76,7 @@ export const Header = () => {
 
     const handleDisconnect = () => {
         dispatch(ProfileActions.disconnect());
-        window.location.reload();
+        navigate("/");
     }
 
     return (

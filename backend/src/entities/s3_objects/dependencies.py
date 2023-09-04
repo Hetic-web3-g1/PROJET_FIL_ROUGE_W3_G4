@@ -34,9 +34,7 @@ def check_mimetype(file: UploadFile, file_type: str) -> tuple[str, str]:
         "application": ["pdf", "x-subrip"],
     }
 
-    # Use python-magic to detect the file's actual MIME type based on its content
-    mime_type = magic.from_buffer(file.file.read(1024), mime=True)
-    file.file.seek(0)
+    mime_type = file.content_type
 
     if mime_type is None:
         raise HTTPException(status_code=400, detail="No file type not supported")
@@ -96,8 +94,10 @@ def file_validation(file: UploadFile, file_type: str) -> tuple[str, str]:
             detail="File cursor position must be at the start of the file",
         )
 
-    size = file.file.seek(0, 2)  # Get the size of the file using seek()
-    file.file.seek(0)  # Reset the file cursor to the start of the file
+    size = file.size
+
+    if size is None:
+        raise HTTPException(status_code=400, detail="File size is not available")
 
     if size == 0:
         raise HTTPException(status_code=400, detail="File is empty")

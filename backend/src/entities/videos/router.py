@@ -44,9 +44,10 @@ def create_video(
     user: User = Depends(CustomSecurity()),
 ):
     with engine.begin() as conn:
-        video_service.create_video(
+        video = video_service.create_video(
             conn, user, masterclass_id, duration, version, public, file
         )
+        return video.id
 
 
 @router.delete("/video/{video_id}")

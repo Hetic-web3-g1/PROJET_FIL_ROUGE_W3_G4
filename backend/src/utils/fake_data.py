@@ -226,6 +226,7 @@ def has_data(conn, table):
 
 
 def generate_data():
+    print("Generating fake data...")
     tables = {
         academy_table: create_academy_fake,
         user_table: create_user_fake,

@@ -47,7 +47,8 @@ def create_partition(
     user: User = Depends(CustomSecurity()),
 ):
     with engine.begin() as conn:
-        partition_service.create_partition(conn, user, public, file)
+        partition = partition_service.create_partition(conn, user, public, file)
+        return partition.id
 
 
 @router.delete("/partition/{partition_id}")
@@ -90,7 +91,7 @@ def get_partition_meta_by_id(
     except PartitionMetaNotFound:
         raise HTTPException(
             status_code=404,
-            detail="Partition not found",
+            detail="Partition meta not found",
         )
 
 

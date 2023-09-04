@@ -5,9 +5,9 @@ services:
     container_name: backend-api-${ENVIRONMENT:-development}
     build:
       context: ./backend
+      target: ${ENVIRONMENT:-development}
     environment:
       CONFIG_NAME: ${ENVIRONMENT:-development}
-
     restart: unless-stopped
     ports:
       - "4000:4000"
@@ -25,10 +25,8 @@ services:
     build:
       context: ./frontend
       target: ${ENVIRONMENT:-development}
-
     command: sh -c "npm i && npm run dev"
     restart: unless-stopped
-
     volumes:
       - ./frontend:/app
     ports:
@@ -40,8 +38,7 @@ services:
     container_name: db-postgres-${ENVIRONMENT:-development}
     image: postgres:15.3
     env_file:
-      - ./backend/${ENVIRONMENT:-development}.env
-
+      - ./backend/.env.${ENVIRONMENT:-development}
     restart: unless-stopped
     ports:
       - 5432:5432
@@ -49,8 +46,8 @@ services:
       - back-network
 
   s3:
-    image: zenko/cloudserver:latest-7.10.19
     container_name: s3-${ENVIRONMENT:-development}
+    image: zenko/cloudserver:latest-7.10.19
     ports:
       - "8000:8000"
     volumes:
@@ -66,8 +63,7 @@ services:
       # SCALITY_ACCESS_KEY_ID: ${SCALITY_ACCESS_KEY_ID}
       # SCALITY_SECRET_ACCESS_KEY: ${SCALITY_SECRET_ACCESS_KEY}
     env_file:
-      - ./backend/${ENVIRONMENT:-development}.env
-
+      - ./backend/.env.${ENVIRONMENT:-development}
     restart: unless-stopped
     command: /bin/sh -c "cp -R ./config.docker config.json && yarn start"
     networks:
@@ -80,4 +76,5 @@ volumes:
 networks:
   app-network:
   back-network:
-# docker compose -f docker-compose.yml up -d --build
+
+# ENVIRONMENT=development docker compose -f docker-compose.yml -p projet_fil_rouge_dev up -d --build
