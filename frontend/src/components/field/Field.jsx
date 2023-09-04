@@ -7,7 +7,7 @@ import { ReactReduxContext } from 'react-redux';
 import './field.css';
 import OutsideAlerter from '../../utils/clickOutside';
 
-export const Field = ({ type, placeholder, onChange, id, value }) => {
+export const Field = ({ type, placeholder, onChangeCallback, id, value }) => {
     const { store } = useContext(ReactReduxContext);
     const [searchData, setSearchData] = useState([]);
     const [noResult, setNoResult] = useState();
@@ -69,7 +69,7 @@ export const Field = ({ type, placeholder, onChange, id, value }) => {
                     className={['field-input', `field-input-${type}`].join(' ')}
                     type={type}
                     placeholder={placeholder}
-                    onChange={type === 'search' ? onSearchChange : onChange}
+                    onChange={type === 'search' ? onSearchChange : (e) => onChangeCallback(e)}
                     id={id}
                     defaultChecked={false}
                     value={value}

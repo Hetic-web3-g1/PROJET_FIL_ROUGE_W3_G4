@@ -30,10 +30,10 @@ export const DashboardProfessor = ({masterclassData, handleSave, professorData, 
         var newMasterclassData = masterclassData
         setTmpProf(professor.first_name + ' ' + professor.last_name)
         setSearchProfessorData([])
-        if (type == 'Professor') {
-            newMasterclassData.teacher_bio_id = professor.id
+        if (type == 'professor') {
+            newMasterclassData.teacher_bio_id = professor?.id
         } else {
-            newMasterclassData.composer_bio_id = professor.id
+            newMasterclassData.composer_bio_id = professor?.id
         }
         newMasterclassData.updated_by = store?.getState().user.user_id
         newMasterclassData.updated_at = new Date()
@@ -41,6 +41,7 @@ export const DashboardProfessor = ({masterclassData, handleSave, professorData, 
     }
 
     const handleSearch = (e) => {
+        setTmpProf(e.target.value)
         const Options = {
             method: 'GET',
             headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}`},
@@ -56,11 +57,11 @@ export const DashboardProfessor = ({masterclassData, handleSave, professorData, 
 
     return (
         <div className='professor'>
-            {!professorData.id ? (
+            {!professorData?.id ? (
             <>
                 <div className='professor-search'>
                     <div className="professor-searchbar">
-                        <Field type={"search"} placeholder={`Search for a ${type}`} value={tmpProf} onChange={e => handleSearch(e)}/>
+                        <Field placeholder={`Search for a ${type}`} value={tmpProf} onChangeCallback={handleSearch}/>
                     </div>
                     <ul className="professor-list">
                         {searchProfessorData[0]?.map((professor) => {
@@ -81,11 +82,11 @@ export const DashboardProfessor = ({masterclassData, handleSave, professorData, 
                     <div className="dashboard-prof-infos-1">
                         <div className="dashboard-prof-infos-field marg-right">
                             First Name
-                            <Field placeholder="First Name"  value={firstName} onChange={(e) => setFirstName(e.target.value)}/>
+                            <Field placeholder="First Name"  value={firstName} onChangeCallback={(e) => setFirstName(e.target.value)}/>
                         </div>
                         <div className="dashboard-prof-infos-field marg-right">
                             Last Name
-                            <Field placeholder="Last Name" value={lastName} onChange={(e) => setLastName(e.target.value)}/>
+                            <Field placeholder="Last Name" value={lastName} onChangeCallback={(e) => setLastName(e.target.value)}/>
                         </div>
                         {/* <div className="dashboard-prof-background-wrapper">
                             <span>Avatar</span>

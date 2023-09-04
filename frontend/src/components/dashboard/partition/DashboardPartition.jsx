@@ -44,6 +44,22 @@ export const DashboardPartition = ({partitionData, masterclassData, handleSave})
         setNumPages(numPages);
     }
 
+    function changePage(offset) {
+        setPageNumber(prevPageNumber => prevPageNumber + offset);
+    }
+
+    function previousPage() {
+        changePage(-1);
+    }
+    
+    function nextPage() {
+        changePage(1);
+    }
+
+    const handleFileDelete = () => {
+        console.log('delete tmp')
+    }
+
     useEffect(() => {
         if(partitionData.s3_object_id !== undefined) {
             const Options = {
@@ -56,12 +72,27 @@ export const DashboardPartition = ({partitionData, masterclassData, handleSave})
         }
     },[]);
 
-    console.log("zouz", partitionData)
-
     return(
         <div>
             {partitionData.status ? (
                 <div className='dashboard-partition'>
+                    <div className='upload-file-pdf' style={{maxWidth: '300px'}}>
+                        <p style={{textAlign: 'center'}}>
+                            Page {pageNumber} of {numPages}
+                        </p>
+
+                        <button style={{marginRight: '10px'}} type="button" className='btn' disabled={pageNumber <= 1} onClick={previousPage}>
+                            Previous
+                        </button>
+
+                        <button style={{marginRight: '10px'}} type="button" className='btn' disabled={pageNumber >= numPages} onClick={nextPage}>
+                            Next
+                        </button>
+
+                        <button type="button" className='btn' onClick={handleFileDelete}>
+                            Delete
+                        </button>
+                    </div>
                     <Document className="pdf-container" file={{url:`${partition?.url}`}} onLoadError={console.error} onLoadSuccess={onDocumentLoadSuccess} >
                         <Page pageNumber={pageNumber} renderTextLayer={false} renderAnnotationLayer={false}/>
                     </Document>

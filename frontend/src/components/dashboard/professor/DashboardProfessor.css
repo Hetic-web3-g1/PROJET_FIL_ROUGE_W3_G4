@@ -13,7 +13,7 @@
     width: 830px;
     padding: 0;
     margin: 0;
-    position: fixed;
+    position: absolute;
     max-height: 400px;
     overflow: auto;
     z-index: 1;

@@ -46,12 +46,12 @@ export const Masterclass = () => {
       method: 'GET',
       headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}`},
     };
-    if (masterclassData && masterclassData.teacher_bio_id) {
+    if (masterclassData && masterclassData?.teacher_bio_id !== null) {
       fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/biographies/biography/${masterclassData.teacher_bio_id}`, Options).then((response) => response.json()).then(data => {
         setProfessorData(data)
       });
     }
-    if (masterclassData && masterclassData.composer_bio_id) {
+    if (masterclassData && masterclassData?.composer_bio_id !== null) {
       fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/biographies/biography/${masterclassData.composer_bio_id}`, Options).then((response) => response.json()).then(data => {
         setComposerData(data)
       });
@@ -146,63 +146,56 @@ export const Masterclass = () => {
   return (
     <div className="masterclass-page">
       <Header/>
-
       <div  className="masterclass-page-container">
-
         <div className="masterclass-overview" >
-          
           <h1 >{masterclassData?.title}</h1>
           <div style={tabName !== 'Masterclass' ? {display: 'none'} : null}>
-            
-          
-          <div className="masterclass-information" >
-
-            <div className="masterclass-information-col">
-              <section>
-                <span className="masterclass-span">Composer</span>
-                <span>{composerData ? composerData.first_name+" "+composerData.last_name : 'Not assigned'}</span>
-              </section>
-              <section className="masterclass-section">
-                <span className="masterclass-span">Professor</span>
-                <span>{professorData ? professorData.first_name+" "+professorData.last_name : 'Not assigned'}</span>
-              </section>
-              <section className="masterclass-section">
-                <span className="masterclass-span">Instruments</span>
-                <span>{masterclassData?.instrument ? masterclassData?.instrument.map(function(instrument, i) {return(instrument+' ')}) : 'No instrument assigned'}</span>
-              </section>
-              <section className="masterclass-section">
-                <span className="masterclass-span">Producer</span>
-                <span>{academy?.name}</span>
-              </section>
-              <section className="masterclass-section">
-                <span className="masterclass-span">Spoken Language</span>
-                <span>{MasterClassData.spoken_language}</span>
-              </section>
+            <div className="masterclass-information" >
+              <div className="masterclass-information-col">
+                <section>
+                  <span className="masterclass-span">Composer</span>
+                  <span>{composerData ? composerData.first_name+" "+composerData.last_name : 'Not assigned'}</span>
+                </section>
+                <section className="masterclass-section">
+                  <span className="masterclass-span">Professor</span>
+                  <span>{professorData ? professorData.first_name+" "+professorData.last_name : 'Not assigned'}</span>
+                </section>
+                <section className="masterclass-section">
+                  <span className="masterclass-span">Instruments</span>
+                  <span>{masterclassData?.instrument ? masterclassData?.instrument.map(function(instrument, i) {return(instrument+' ')}) : 'No instrument assigned'}</span>
+                </section>
+                <section className="masterclass-section">
+                  <span className="masterclass-span">Producer</span>
+                  <span>{academy?.name}</span>
+                </section>
+                <section className="masterclass-section">
+                  <span className="masterclass-span">Spoken Language</span>
+                  <span>{MasterClassData.spoken_language}</span>
+                </section>
+              </div>
+              <div className="masterclass-information-col" >
+                <section>
+                  <span className="masterclass-span">Piece</span>
+                  <span>{MasterClassData.piece}</span>
+                </section>
+                <section className="masterclass-section">
+                  <span className="masterclass-span">Student</span>
+                  <span>{MasterClassData.student}</span>
+                </section>
+                <section className="masterclass-section">
+                  <span className="masterclass-span">Date</span>
+                  <span>{MasterClassData.date}</span>
+                </section>
+                <section className="masterclass-section">
+                  <span className="masterclass-span">Duration</span>
+                  <span>{MasterClassData.duration}</span>
+                </section>
+                <section className="masterclass-section">
+                  <span className="masterclass-span">Subtitle Languages</span>
+                  <span>{MasterClassData.subtitle_languages}</span>
+                </section>
+              </div>
             </div>
-
-            <div className="masterclass-information-col" >
-              <section>
-                <span className="masterclass-span">Piece</span>
-                <span>{MasterClassData.piece}</span>
-              </section>
-              <section className="masterclass-section">
-                <span className="masterclass-span">Student</span>
-                <span>{MasterClassData.student}</span>
-              </section>
-              <section className="masterclass-section">
-                <span className="masterclass-span">Date</span>
-                <span>{MasterClassData.date}</span>
-              </section>
-              <section className="masterclass-section">
-                <span className="masterclass-span">Duration</span>
-                <span>{MasterClassData.duration}</span>
-              </section>
-              <section className="masterclass-section">
-                <span className="masterclass-span">Subtitle Languages</span>
-                <span>{MasterClassData.subtitle_languages}</span>
-              </section>
-            </div>
-          </div>
           </div>
         </div>
         <div className="masterclass-status" style={tabName !== 'Masterclass' ? {display: 'none'} : null} >
@@ -232,19 +225,13 @@ export const Masterclass = () => {
             {masterclassData?.work_analysis_id ? <img src="..\src\assets\status\done.svg" alt="done" /> : <img src="..\src\assets\status\incomplete.svg" alt="incomplete" />}
           </section>
         </div>
-
-      </div>
-      
-
+      </div>  
       <Tabs callback={handleCallback}/>
-
       <div className="masterclass-component-render">
         {component}
       </div>
-
     </div>
-
-    );
+  );
 }
 
 export default Masterclass;
