@@ -11,3 +11,10 @@
     margin-top: 1vh;
     text-align: center;
 }
+
+.profile-admin-toast-test {
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+    display: flex;
+    justify-content: space-evenly;
+}

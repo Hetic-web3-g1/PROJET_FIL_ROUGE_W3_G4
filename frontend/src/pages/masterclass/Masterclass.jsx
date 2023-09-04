@@ -14,10 +14,12 @@ import DashboardProfessor from "../../components/dashboard/professor/DashboardPr
 import DashboardTeam from "../../components/dashboard/team/DashboardTeam";
 
 import MasterClassData from '../../mocks/masterClassMocks'
+import { useToast } from "../../utils/toast";
 
 export const Masterclass = () => {
 
   const { store } = useContext(ReactReduxContext)
+  const toast = useToast();
 
   const [component, setComponent] = useState('');
   const [tabName, setTabName] = useState('');
@@ -25,6 +27,7 @@ export const Masterclass = () => {
   const [composerData, setComposerData] = useState();
   const [professorData, setProfessorData] = useState();
   const [userList, setUserList] = useState();
+  const [academy, setAcademy] = useState();
   const masterclassId = window.location.href.split('/')[4];
   
   useEffect(() => {
@@ -38,41 +41,31 @@ export const Masterclass = () => {
   },[]);
 
   useEffect(() => {
-    if (masterclassData) {
-      const Options = {
-        method: 'GET',
-        headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}`},
-      };
+    const Options = {
+      method: 'GET',
+      headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}`},
+    };
+    if (masterclassData && masterclassData.teacher_bio_id) {
       fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/biographies/biography/${masterclassData.teacher_bio_id}`, Options).then((response) => response.json()).then(data => {
         setProfessorData(data)
       });
     }
-  },[masterclassData]);
-
-  useEffect(() => {
-    if (masterclassData) {
-      const Options = {
-        method: 'GET',
-        headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}`},
-      };
+    if (masterclassData && masterclassData.composer_bio_id) {
       fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/biographies/biography/${masterclassData.composer_bio_id}`, Options).then((response) => response.json()).then(data => {
         setComposerData(data)
       });
     }
-  },[masterclassData]);
-
-
-  useEffect(() => {
     if (masterclassData) {
-      const Options = {
-        method: 'GET',
-        headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}`},
-      };
       fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/users/academy/${masterclassData?.academy_id}`, Options).then((response) => response.json()).then(data => {
         setUserList(data)
       });
     }
-  },[masterclassData]);  
+    if (masterclassData) {
+      fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/academies/${masterclassData?.academy_id}`, Options).then((response) => response.json()).then(data => {
+        setAcademy(data)
+      });
+    }
+  },[masterclassData]); 
 
   const handleSave = (e, newMasterclassData) => {
     e.preventDefault();
@@ -96,7 +89,7 @@ export const Masterclass = () => {
         }),
     }
     fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/masterclasses/masterclass/${masterclassData.id}`, userOptions).then((response) => response.json()).then(data => {
-        console.log(data);
+        toast.open({ message: 'Masterclass updated successfully', type: 'success'})
     });
   }
 
@@ -117,8 +110,8 @@ export const Masterclass = () => {
         break;
 
       case 'Video':
-      setComponent(<DashboardVideo masterclassData={masterclassData}/>);
-      break;
+        setComponent(<DashboardVideo masterclassData={masterclassData}/>);
+        break;
 
       case 'Partition':
         setComponent(<DashboardPartition masterclassData={masterclassData}/>);
@@ -139,7 +132,8 @@ export const Masterclass = () => {
       default:
         break;
     }
-}
+  }
+
   useEffect(() => {
     handleCallback('Masterclass');
   }, []);
@@ -161,19 +155,19 @@ export const Masterclass = () => {
             <div className="masterclass-information-col">
               <section>
                 <span className="masterclass-span">Composer</span>
-                <span>{MasterClassData.composer}</span>
+                <span>{composerData ? composerData.first_name+" "+composerData.last_name : 'Not assigned'}</span>
               </section>
               <section className="masterclass-section">
                 <span className="masterclass-span">Professor</span>
-                <span>{MasterClassData.professor}</span>
+                <span>{professorData ? professorData.first_name+" "+professorData.last_name : 'Not assigned'}</span>
               </section>
               <section className="masterclass-section">
                 <span className="masterclass-span">Instruments</span>
-                <span>{masterclassData?.instrument[0]}</span>
+                <span>{masterclassData?.instrument ? masterclassData?.instrument.map(function(instrument, i) {return(instrument+' ')}) : 'No instrument assigned'}</span>
               </section>
               <section className="masterclass-section">
                 <span className="masterclass-span">Producer</span>
-                <span>{MasterClassData.producer}</span>
+                <span>{academy?.name}</span>
               </section>
               <section className="masterclass-section">
                 <span className="masterclass-span">Spoken Language</span>
@@ -210,7 +204,7 @@ export const Masterclass = () => {
           <h2>Status</h2>
           <section className="masterclass-section-status">
             <span>Team</span>
-            <img src="..\src\assets\status\done.svg" alt="done" />
+            {userList?.length > 0 ? <img src="..\src\assets\status\done.svg" alt="done" /> : <img src="..\src\assets\status\incomplete.svg" alt="incomplete" />}
           </section>
           <section className="masterclass-section-status">
             <span>Video</span>
@@ -218,19 +212,19 @@ export const Masterclass = () => {
           </section>
           <section className="masterclass-section-status">
             <span>Partition</span>
-            <img src="..\src\assets\status\incomplete.svg" alt="incomplete" />
+            {masterclassData?.partition_id ? <img src="..\src\assets\status\done.svg" alt="done" /> : <img src="..\src\assets\status\incomplete.svg" alt="incomplete" />}
           </section>
           <section className="masterclass-section-status">
             <span>Biographie P.</span>
-            <img src="..\src\assets\status\done.svg" alt="done" />
+            {masterclassData?.teacher_bio_id ? <img src="..\src\assets\status\done.svg" alt="done" /> : <img src="..\src\assets\status\incomplete.svg" alt="incomplete" />}
           </section>
           <section className="masterclass-section-status">
             <span>Biographie C.</span>
-            <img src="..\src\assets\status\incomplete.svg" alt="incomplete" />
+            {masterclassData?.composer_bio_id ? <img src="..\src\assets\status\done.svg" alt="done" /> : <img src="..\src\assets\status\incomplete.svg" alt="incomplete" />}
           </section>
           <section className="masterclass-section-status">
             <span>Work Analysis</span>
-            <img src="..\src\assets\status\done.svg" alt="done" />
+            {masterclassData?.work_analysis_id ? <img src="..\src\assets\status\done.svg" alt="done" /> : <img src="..\src\assets\status\incomplete.svg" alt="incomplete" />}
           </section>
         </div>
 
