@@ -109,7 +109,7 @@ export const Profile = () => {
                         </div>
                         <div className="profile-field">
                             Role
-                            <Dropdown callback={(e) => setUserPrimaryRole(e)} options={['user', 'admin']} defaultValue="user"/>
+                            <Dropdown returnValues={(e) => setUserPrimaryRole(e)} options={['user', 'admin']} defaultValue="user"/>
                         </div>
                         <div className="profile-user-create">
                             <Button label="Create User" onClick={(e) => {handleCreateUser(e)}}/>

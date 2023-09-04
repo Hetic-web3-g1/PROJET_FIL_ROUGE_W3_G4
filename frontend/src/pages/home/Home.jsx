@@ -44,9 +44,9 @@ export const Home = () => {
         }
 
         // console.log('coucou', mastercardData);
-        const sortedDataByStatus = mastercardData?.filter(e => e.status === sortByStatusState[0].toLowerCase() && sortByStatusState[1] === true);
+        // const sortedDataByStatus = mastercardData?.filter(e => e.status === sortByStatusState[0].toLowerCase() && sortByStatusState[1] === true);
         // console.log(mastercardData);
-        // console.log(sortByStatusState)
+        // console.log('STORAGE', sortByStatusState)
     }
 
     useEffect(() => {

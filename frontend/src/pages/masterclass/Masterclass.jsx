@@ -33,7 +33,7 @@ export const Masterclass = () => {
    * Get data from tabs component and depending of the value set the corresponding component in the HTML.
    * @param childData Data from tabs component
    */
-  function handleCallback(childData) {
+  function handleTabs(childData) {
     setTabName(childData);
     switch (childData) {
       case 'Masterclass':
@@ -69,7 +69,7 @@ export const Masterclass = () => {
     }
 }
   useEffect(() => {
-    handleCallback('Masterclass');
+    handleTabs('Masterclass');
   }, []);
 
   return (
@@ -163,9 +163,8 @@ export const Masterclass = () => {
         </div>
 
       </div>
-      
 
-      <Tabs callback={handleCallback}/>
+      <Tabs returnValues={handleTabs}/>
 
       <div className="masterclass-component-render">
         {component}

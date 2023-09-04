@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 
 
-export const OutsideAlerter = ({ callback, ...props }) => {
+export const OutsideAlerter = ({ returnValues, ...props }) => {
   const wrapperRef = useRef(null);
   useOutsideAlerter(wrapperRef);
 
@@ -21,7 +21,7 @@ export const OutsideAlerter = ({ callback, ...props }) => {
        */
       function handleClickOutside(elementToHide) {
         if (ref.current && !ref.current.contains(elementToHide.target)) {
-          callback(true);
+          returnValues(true);
         }
       }
       // Bind the event listener
@@ -37,7 +37,7 @@ export const OutsideAlerter = ({ callback, ...props }) => {
 
 OutsideAlerter.propTypes = {
   children: PropTypes.element.isRequired,
-  callback: PropTypes.func.isRequired, // Callback function needed in parent to hide the HTML element
+  returnValues: PropTypes.func.isRequired, // function needed in parent to hide the HTML element
 };
 
 export default OutsideAlerter;

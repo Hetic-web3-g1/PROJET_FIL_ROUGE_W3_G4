@@ -3,7 +3,7 @@ import { Types } from '../actions/type';
 const initialState = {
   filters: {
     sort_by: 'Created at',
-    sort_by_status: 'marseille bewbew',
+    sort_by_status: undefined,
   }
 }
 

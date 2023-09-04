@@ -1,6 +1,6 @@
 import Checkbox from '../checkbox/Checkbox'
 import Dropdown from '../dropdown/Dropdown'
-import { useDispatch, ReactReduxContext } from 'react-redux';
+import { useDispatch, ReactReduxContext, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState } from 'react';
 import './Sidebar.css';
@@ -8,18 +8,33 @@ import { FiltersActions } from '../../features/actions/filters';
 
 export const Sidebar = ({categories}) => {
   const [open, setOpen] = useState(false);
+  const [checkboxList, setCheckboxList] = useState([]);
   const customFilters = ['Created at', 'Last update'];
   const dispatch = useDispatch();
   const {store} = useContext(ReactReduxContext);
+  // const sortByStatusState = useSelector((state) => state.filters.filters.sort_by_status);
 
-  function handleCallbackDropdown(childData) {
+
+  function handleValueDropdown(childData) {
     dispatch(FiltersActions.sortBy(childData));
   }
 
-  function handleCheckbox(event) {
-    console.log(event);
-    dispatch(FiltersActions.sortByStatus(event));
+  function handleCheckboxTrue(event) {
+    setCheckboxList(values => [...values, event]);
   }
+
+  function handleCheckboxFalse(event) {
+    const index = checkboxList.findIndex(e => e[0] === event[0]);
+    var tmp = checkboxList;
+    console.log('before', tmp);
+    tmp.splice(index, 1);
+    console.log('after', tmp);
+    setCheckboxList(tmp);
+  }
+
+  useEffect(() => {
+    dispatch(FiltersActions.sortByStatus(checkboxList));
+  }, [checkboxList])
 
   return (
     <div>
@@ -27,7 +42,7 @@ export const Sidebar = ({categories}) => {
 
         <div className="sidebar-filters-container">
           <label className='sidebar-font'>Sort by:</label>
-          <Dropdown callback={handleCallbackDropdown} options={customFilters} defaultValue={store.getState().filters.filters.sort_by}/>
+          <Dropdown returnValues={handleValueDropdown} options={customFilters} defaultValue={store.getState().filters.filters.sort_by}/>
 
           {
             Object.keys(categories).map((categoryTitle) => {
@@ -36,7 +51,7 @@ export const Sidebar = ({categories}) => {
                   <div className="sidebar-filter">
                     <h1 className='sidebar-font'>{categoryTitle}</h1>
                     {
-                      categories[categoryTitle].map(filterTitle => { return(<Checkbox returnValues={handleCheckbox} value={filterTitle} label={filterTitle} primary={false}/>) })
+                      categories[categoryTitle].map(filterTitle => { return(<Checkbox returnValues={(e) => e[1] === true ? handleCheckboxTrue(e) : handleCheckboxFalse(e)} value={filterTitle} label={filterTitle} primary={false}/>) })
                     }
                   </div>
                 )

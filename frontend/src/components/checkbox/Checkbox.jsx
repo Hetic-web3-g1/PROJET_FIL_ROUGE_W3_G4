@@ -15,9 +15,12 @@ export const Checkbox = ({ checkedByDefault, label, disabled, primary, value, re
   }
 
   useEffect(() => {
-    if (sortByStatusState[0] === value && sortByStatusState[1] !== false) {
-      setChecked(true); // to change because dont work with multiple check by the user
-    }
+    sortByStatusState.map(e => {
+      if (e[0] === value && e[1] !== false) {
+        console.log('test', sortByStatusState);
+        setChecked(true);
+      }
+    });
   }, [])
 
   return (
@@ -34,7 +37,7 @@ Checkbox.propTypes = {
   label: PropTypes.string.isRequired,
   primary: PropTypes.bool,
   value: PropTypes.any,
-  returnValues: PropTypes.array
+  returnValues: PropTypes.func
 };
 
 Checkbox.defaultProps = {

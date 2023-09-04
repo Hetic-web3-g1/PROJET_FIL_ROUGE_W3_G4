@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './Tabs.css';
 
-export const Tabs = ({ callback, tabActiveByDefault }) => {
+export const Tabs = ({ returnValues, tabActiveByDefault }) => {
   const tabsName = [
     {name: 'Masterclass', isActive: false},
     {name: 'Team', isActive: false},
@@ -27,7 +27,7 @@ export const Tabs = ({ callback, tabActiveByDefault }) => {
   function handleTabs(selectedTabHTML, currentTab) {
     document.querySelectorAll("li").forEach(e => e.classList.remove('active'));
     selectedTabHTML.classList.add('active');
-    callback(currentTab);
+    returnValues(currentTab);
   }
 
   return (
@@ -42,7 +42,7 @@ export const Tabs = ({ callback, tabActiveByDefault }) => {
 };
 
 Tabs.propTypes = {
-  callback: PropTypes.func.isRequired, // Callback function needed in parent component to get the value of the Tabs
+  returnValues: PropTypes.func.isRequired, // function needed in parent component to get the value of the Tabs
   tabActiveByDefault: PropTypes.string
 };
 
