@@ -3,11 +3,13 @@ import './resetPassword.css';
 import Button from '../../../components/button/Button';
 import Field from '../../../components/field/Field';
 import { useNavigate } from "react-router-dom";
+import { useToast } from '../../../utils/toast';
 
 export const ResetPassword = ({ }) => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
+  const toast = useToast();
 
   const token = window.location.href.split('/')[4];
 
@@ -24,10 +26,10 @@ export const ResetPassword = ({ }) => {
         body: JSON.stringify({password, token }),
       };
       fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/auth/reset-password`, resetOptions).then((response) => response.json()).then(data => {
-        if (data?.detail != "Invalid Credentials" && data?.detail != "Expired Token") {
+        if (data.detail != "Invalid Credentials" || data.detail != "Expired Token") {
           navigate("/login");
         } else {
-          alert('Invalid Token');
+          toast.open({message: 'Invalid Credentials', type: 'failure'});
         }
       });
     }
@@ -36,9 +38,9 @@ export const ResetPassword = ({ }) => {
   return (
     <div className="reset-wrap">
       <form className="reset-form">
-          <label for="password" className='reset-field'>Password</label>
+          <label htmlFor="password" className='reset-field'>Password</label>
           <Field type="password" placeholder="Enter your password" onChange={(e) => {setPassword(e.target.value)}}/>
-          <label for="password" className='reset-field' >Confirm Password</label>
+          <label htmlFor="password" className='reset-field' >Confirm Password</label>
           <Field type="password" placeholder="Confirm your password" onChange={(e) => {setConfirmPassword(e.target.value)}}/>
           <Button label="reset" className="button button-secondary padded" onClick={resetForm}/>
       </form>

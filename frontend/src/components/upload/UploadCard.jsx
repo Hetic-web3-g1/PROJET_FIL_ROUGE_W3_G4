@@ -122,7 +122,7 @@ export const UploadCard = ({ setUploadFile }) => {
 
                     <div className='upload-card-upload-button'>
                         <input type='file' id='file' onChange={handleChange}  hidden/>
-                        <label for='file' className='upload-card-inputfile'>
+                        <label htmlFor='file' className='upload-card-inputfile'>
                             Upload
                         </label>
                     </div>

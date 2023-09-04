@@ -45,9 +45,9 @@ export const Login = ({ }) => {
         srcSet={`../src/assets/Logo.svg`} >
       </img>
       <form className="login-form">
-          <label for="email" className='login-field'>Email</label>
+          <label htmlFor="email" className='login-field'>Email</label>
           <Field type="email" placeholder="Enter your mail" onChange={(e) => {setEmail(e.target.value)}}/>
-          <label for="password" className='login-field' >Password</label>
+          <label htmlFor="password" className='login-field' >Password</label>
           <Field type="password" placeholder="Enter your password" onChange={(e) => {setPassword(e.target.value)}}/>
           <Button label="Login" className="button button-secondary padded" onClick={loginForm}/>
       </form>
