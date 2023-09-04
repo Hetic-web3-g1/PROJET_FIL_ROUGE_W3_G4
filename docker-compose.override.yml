@@ -54,7 +54,7 @@ services:
     container_name: db-postgres
     image: postgres:latest
     env_file:
-      - ./backend/production.env
+      - ./backend/.env.production
     restart: unless-stopped
     ports:
       - 5432:5432
@@ -76,7 +76,7 @@ services:
       REMOTE_MANAGEMENT_DISABLE: 1
       LISTEN_ADDR: 0.0.0.0
     env_file:
-      - ./backend/production.env
+      - ./backend/.env.production
     restart: unless-stopped
     command: /bin/sh -c "cp -R ./config.docker config.json && yarn start"
     networks:
@@ -90,4 +90,4 @@ networks:
   app-network:
   back-network:
 
-# docker compose -f docker-compose.override.yml up -d --build
+# ENVIRONMENT=production docker compose -f docker-compose.override.yml -p projet_fil_rouge_prod up -d --build
