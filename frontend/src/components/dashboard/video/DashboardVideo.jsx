@@ -36,7 +36,6 @@ export const DashboardVideo = ({masterclassData}) => {
             headers:  { 'Content-Type': 'video/mp4', 'accept': 'video/mp4', 'authorization': `${store.getState().user.user_token}`},
             };
             fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/s3_objects/url_and_object_info/${masterclassVideo[0]?.s3_object_id}`, Options).then((response) => response.json()).then(data => {
-                console.log(data)
                 setVideo(data)
             });
         }
@@ -50,7 +49,7 @@ export const DashboardVideo = ({masterclassData}) => {
         formData.append('duration', 1);
         formData.append('version', 1);
         formData.append('public', true);
-        formData.append('file', fileBlob, "video.mp4");
+        formData.append('file', fileBlob, uploadVideo.name);
         const uploadOptions = {
             method: 'POST',
             headers: { 'authorization': `${store.getState().user.user_token}` },
@@ -61,13 +60,15 @@ export const DashboardVideo = ({masterclassData}) => {
         })
     }
 
+    console.log(masterclassVideo)
+
     return ( 
         <div>
             {masterclassVideo?.length > 0 ? (
             <div className='dashboard-video'>
                 <div className='display-main'>
                     <div className='main-video'>
-                        <VideoPlayer video={video.url}/>
+                        <VideoPlayer video={video?.url}/>
                     </div>
                     <div className='right-side-wrapper'>
                         <div className='country-wrapper'>
@@ -87,29 +88,15 @@ export const DashboardVideo = ({masterclassData}) => {
                         <Button label='Upload Subtitle'/>
                     </div>
                 </div>
-                <div className='label-wrapper'>
-                    <div className='label-wrapper-header'>
-                        <span className='body1semibold bluetext'>Tags</span>
-                        <Label type='plus' label='+'/>
-                    </div>
-                    <Label type='tags' label='Compositor Name'/>
-                    <Label type='tags' label='Date'/>
-                    <Label type='tags' label='Student Name'/>
-                    <Label type='tags' label='Instrument'/>
-                    <Label type='tags' label='Teacher Name'/>
-                    <Label type='tags' label='Piece'/>
-                    <Label type='tags' label='Vues'/>
-                </div>
             </div>
             </div>
             <div className='versionning'>
                 <div className='versionning-header'>
                     <span className='subtitle2'>Current Version:</span>
                     <div className='version-border'>
-                        <span className='subtitle3'>3.0</span>
+                        <span className='subtitle3'>{masterclassVideo[0].version}</span>
                     </div>
-                    <span className='body1medium'>Video_name</span>
-                    <span className='body1medium'>File_name</span>
+                    <span className='body1medium'>{masterclassVideo[0].filename}</span>
                 </div>
                 <div className='log-list'>
                     {Logs.map((log, index) =>  {

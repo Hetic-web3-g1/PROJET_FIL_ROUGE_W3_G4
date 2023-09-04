@@ -76,7 +76,7 @@ export const DashboardPartition = ({partitionData, masterclassData, handleSave})
         <div>
             {partitionData?.status ? (
                 <div className='dashboard-partition'>
-                    <div className='upload-file-pdf' style={{maxWidth: '300px'}}>
+                    <div className='upload-file-pdf' style={{textAlign: 'center'}}>
                         <p style={{textAlign: 'center'}}>
                             Page {pageNumber} of {numPages}
                         </p>
