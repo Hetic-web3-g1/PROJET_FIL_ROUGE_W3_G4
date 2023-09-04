@@ -17,12 +17,7 @@ s3_client.create_bucket(Bucket=settings.bucket_name)
 # Set CORS policy for bucket
 cors_policy = {
     "CORSRules": [
-        {
-            "AllowedHeaders": ["*"],
-            "AllowedMethods": ["GET"],
-            "AllowedOrigins": ["*"],
-            "MaxAgeSeconds": 3600,
-        }
+        {"AllowedHeaders": ["*"], "AllowedMethods": ["GET"], "AllowedOrigins": ["*"]}
     ]
 }
 
