@@ -46,8 +46,8 @@ services:
       - back-network
 
   s3:
-    image: zenko/cloudserver:latest-7.10.19
     container_name: s3-${ENVIRONMENT:-development}
+    image: zenko/cloudserver:latest-7.10.19
     ports:
       - "8000:8000"
     volumes:
