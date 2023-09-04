@@ -15,7 +15,8 @@ import { useTranslation } from 'react-i18next';
 
 export const Home = () => {
 
-    const userStateRedux = [useSelector((state) => state.filters.filters.sort_by), useSelector((state) => state.filters.filters.sort_by_status)];
+    const sortByState = useSelector((state) => state.filters.filters.sort_by);
+    const sortByStatusState = useSelector((state) => state.filters.filters.sort_by_status);
     const [mastercardComponent, setMastercardComponent] = useState([]);
     const [mastercardData, setMastercardData] = useState();
     const [biographyData, setBiographyData] = useState();
@@ -26,7 +27,7 @@ export const Home = () => {
 
     const sortData = () => {
         setMastercardComponent([]);
-        switch (userStateRedux[0]) {
+        switch (sortByState) {
             case 'Created at':
                 const sortedDataByCreation = mastercardData?.sort((a, b) => {
                     return new Date(b.created_at) - new Date(a.created_at);
@@ -41,9 +42,13 @@ export const Home = () => {
                 sortedDataByUpdate?.map(e => setMastercardComponent(component => [...component, <MasterCard content={e} key={e.id} token={store.getState().user.user_token} onClick={() => (navigate(`/Masterclass/${e.id}`))}/>]));
                 break;
         }
+
+        // console.log('coucou', mastercardData);
+        const sortedDataByStatus = mastercardData?.filter(e => e.status === sortByStatusState[0].toLowerCase() && sortByStatusState[1] === true);
+        // console.log(mastercardData);
+        // console.log(sortByStatusState)
     }
 
-    // console.log('salut');
     useEffect(() => {
             const userOptions = {
                 method: 'GET',
@@ -66,7 +71,7 @@ export const Home = () => {
 
     useEffect(() => {
         sortData();
-    }, [userStateRedux ,mastercardData]);
+    }, [sortByState, sortByStatusState, mastercardData]);
   
     return (
         <div className="home">
@@ -75,7 +80,7 @@ export const Home = () => {
             </div>
             <div className="home-body">
                 <div className="home-sidebar">
-                    {/* <Sidebar categories={{Status: ['Completed', 'Created', 'In-review', 'Archived'], Title2: ['Cat2Filter1', 'Cat2Filter2', 'Cat2Filter3'], Title3: ['Cat3Filter1', 'Cat3Filter2', 'Cat3Filter3']}}/> */}
+                    <Sidebar categories={{Status: ['Completed', 'Created', 'In-review', 'Archived'], Title2: ['Cat2Filter1', 'Cat2Filter2', 'Cat2Filter3'], Title3: ['Cat3Filter1', 'Cat3Filter2', 'Cat3Filter3']}}/>
                 </div>
                 {
                 mastercardData ? 

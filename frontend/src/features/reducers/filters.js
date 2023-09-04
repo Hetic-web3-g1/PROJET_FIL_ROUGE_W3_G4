@@ -18,14 +18,14 @@ const reducer = (state = initialState, action) => {
         }, 
       }
     
-      case Types.SORT_BY_STATUS:
-        return {
-          ...state,
-          filters: {
-            ...state.filters,
-            sort_by_status: action.payload.filters,
-          }, 
-        }
+    case Types.SORT_BY_STATUS:
+      return {
+        ...state,
+        filters: {
+          ...state.filters,
+          sort_by_status: action.payload.filters,
+        }, 
+      }
 
     default:
       return state;

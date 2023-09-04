@@ -12,8 +12,13 @@ export const Sidebar = ({categories}) => {
   const dispatch = useDispatch();
   const {store} = useContext(ReactReduxContext);
 
-  function handleCallback(childData) {
+  function handleCallbackDropdown(childData) {
     dispatch(FiltersActions.sortBy(childData));
+  }
+
+  function handleCheckbox(event) {
+    console.log(event);
+    dispatch(FiltersActions.sortByStatus(event));
   }
 
   return (
@@ -22,7 +27,7 @@ export const Sidebar = ({categories}) => {
 
         <div className="sidebar-filters-container">
           <label className='sidebar-font'>Sort by:</label>
-          <Dropdown callback={handleCallback} options={customFilters} defaultValue={store.getState().filters.filters.sort_by}/>
+          <Dropdown callback={handleCallbackDropdown} options={customFilters} defaultValue={store.getState().filters.filters.sort_by}/>
 
           {
             Object.keys(categories).map((categoryTitle) => {
@@ -31,7 +36,7 @@ export const Sidebar = ({categories}) => {
                   <div className="sidebar-filter">
                     <h1 className='sidebar-font'>{categoryTitle}</h1>
                     {
-                      categories[categoryTitle].map(filterTitle => { return(<Checkbox label={filterTitle} primary={false}/>) })
+                      categories[categoryTitle].map(filterTitle => { return(<Checkbox returnValues={handleCheckbox} value={filterTitle} label={filterTitle} primary={false}/>) })
                     }
                   </div>
                 )
@@ -56,7 +61,7 @@ export const Sidebar = ({categories}) => {
 };
 
 Sidebar.propTypes = {
-  options: PropTypes.objectOf(PropTypes.array).isRequired
+  options: PropTypes.objectOf(PropTypes.array).isRequired,
 };
 
 Sidebar.defaultProps = {
