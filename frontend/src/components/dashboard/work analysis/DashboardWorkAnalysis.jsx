@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { ReactReduxContext } from 'react-redux'
+import { useToast } from '../../../utils/toast';
 
 import './DashboardWorkAnalysis.css'
 import Button from '../../button/Button';
@@ -7,7 +8,9 @@ import Field from '../../field/Field';
 
 export const DashboardWorkAnalysis = ({masterclassData, handleSave, workAnalysisData}) => {
 
+    const toast = useToast();
     const { store } = useContext(ReactReduxContext)
+
     const [Learnings, setLearnings] = useState(workAnalysisData?.learning ? workAnalysisData?.learning : []);
     const [tmpLearnings, setTmpLearnings] = useState('');
     const [About, setAbout] = useState(workAnalysisData?.about);
@@ -37,7 +40,7 @@ export const DashboardWorkAnalysis = ({masterclassData, handleSave, workAnalysis
             }),
         };
         fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/${route}`, options).then((response) => response.json()).then(data => {
-            WorkAnalysisJoin(data);
+            masterclassData?.work_analysis_id == null ? WorkAnalysisJoin(data) : toast.open({message: 'Work Analysis saved', type: 'success'});
         });
     }
 
