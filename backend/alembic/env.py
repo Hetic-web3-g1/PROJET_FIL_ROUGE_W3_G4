@@ -1,8 +1,9 @@
 from logging.config import fileConfig
 
+from sqlalchemy import engine_from_config, pool
+
 from alembic import context
 from config import settings
-from sqlalchemy import engine_from_config, pool
 from src.database.db_engine import metadata
 from src.entities.academies.models import *
 from src.entities.annotations.models import *
@@ -12,6 +13,7 @@ from src.entities.comments.models import *
 from src.entities.images.models import *
 from src.entities.masterclasses.models import *
 from src.entities.partitions.models import *
+from src.entities.roles.models import *
 from src.entities.s3_objects.models import *
 from src.entities.subtitles.models import *
 from src.entities.tags.models import *

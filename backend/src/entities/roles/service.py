@@ -1,7 +1,8 @@
 from uuid import UUID
 
-from entities.roles.exceptions import RoleNotFound
 from sqlalchemy.engine import Connection
+
+from src.entities.roles.exceptions import RoleNotFound
 
 from .models import role_table
 from .schemas import Role, RoleCreate
