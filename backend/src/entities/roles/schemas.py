@@ -9,12 +9,14 @@ class Service(str, Enum):
     MASTERCLASS = "masterclass"
     BIOGRAPHY = "biography"
 
-class Right(Enum):
+
+class Right(str, Enum):
     EDITOR = "EDITOR"
     VIEWER = "VIEWER"
 
 
 ServicesRights = dict[Service, Right | None]
+
 
 class RoleCreate(BaseModel):
     name: str
@@ -22,5 +24,6 @@ class RoleCreate(BaseModel):
     service_rights: ServicesRights
     academy_id: UUID
 
-class Role(BaseModel):
+
+class Role(RoleCreate):
     id: int

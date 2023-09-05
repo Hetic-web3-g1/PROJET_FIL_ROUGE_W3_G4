@@ -172,7 +172,7 @@ def generate_jwt_token(user: User) -> str:
 def verify_jwt_token(token: str) -> User:
     try:
         return User(**jwt.decode(token, settings.jwt_private_key, algorithms=["HS256"]))
-    except jwt.exceptions.InvalidSignatureError:
+    except (jwt.exceptions.InvalidSignatureError, jwt.exceptions.DecodeError):
         raise InvalidToken
 
 
@@ -185,4 +185,4 @@ def send_reset_password_email(email: str, token: ResetToken) -> None:
         token (ResetToken): The reset token to include in the email.
     """
     return
-    sg = sendgrid.SendGridAPIClient(api_key=settings.sendgrid_api_key)
+    sendgrid.SendGridAPIClient(api_key=settings.sendgrid_api_key)

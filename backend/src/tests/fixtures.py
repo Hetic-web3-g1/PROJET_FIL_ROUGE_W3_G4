@@ -1,26 +1,57 @@
-from uuid import UUID
+from typing import TypedDict
 
+from scripts.create_academy import DEFAULT_ACADEMY_ROLES
 from src.database.db_engine import engine
 from src.entities.academies import service as academy_service
-from src.entities.academies.schemas import AcademyCreate
-from src.entities.authentification import service as auth_service
+from src.entities.academies.schemas import Academy, AcademyCreate
+from src.entities.roles import service as role_service
+from src.entities.roles.schemas import Role, RoleCreate
 from src.entities.users import service as user_service
-from src.entities.users.schemas import UserCreate
+from src.entities.users.schemas import User, UserCreate
 
 
-def create_academy_fixture(name: str):
+class GeneratedRoles(TypedDict):
+    admin_role: Role
+    writer_role: Role
+    film_crew_role: Role
+
+
+def create_academy_with_admin_user_fixture(
+    academy_name: str, user_email: str = "test@gmail.com"
+) -> tuple[Academy, User, GeneratedRoles]:
     with engine.begin() as conn:
-        return academy_service.create_academy(conn, AcademyCreate(name=name))
+        academy = academy_service.create_academy(conn, AcademyCreate(name=academy_name))
 
-
-def create_admin_user_fixture(academy_id: UUID):
-    with engine.begin() as conn:
-        user = UserCreate(
-            academy_id=academy_id,
-            first_name="Admin User",
-            last_name="Admin User",
-            email="test@gmail.com",
+        admin_role = role_service.create_academy_role(
+            conn, RoleCreate(**DEFAULT_ACADEMY_ROLES["Admin"], academy_id=academy.id)
         )
-        created_user = user_service.create_user(conn, user, password="test_password")
+        writer_role = role_service.create_academy_role(
+            conn, RoleCreate(**DEFAULT_ACADEMY_ROLES["Writer"], academy_id=academy.id)
+        )
+        film_crew_role = role_service.create_academy_role(
+            conn,
+            RoleCreate(
+                **DEFAULT_ACADEMY_ROLES["Film crew member"], academy_id=academy.id
+            ),
+        )
 
-        return created_user, auth_service.generate_jwt_token(created_user)
+        user = user_service.create_user(
+            conn,
+            UserCreate(
+                academy_id=academy.id,
+                first_name="Admin User",
+                last_name="Admin User",
+                email=user_email,
+                role_id=admin_role.id,
+            ),
+        )
+
+        return (
+            academy,
+            user,
+            GeneratedRoles(
+                admin_role=admin_role,
+                writer_role=writer_role,
+                film_crew_role=film_crew_role,
+            ),
+        )

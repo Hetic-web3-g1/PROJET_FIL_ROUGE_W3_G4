@@ -7,8 +7,8 @@ from src.entities.roles.schemas import Right, RoleCreate, Service
 ORGANIZATION_NAME = "Saline academy"
 
 # Suggestions of roles for a new academy
-DEFAULT_ACADEMY_ROLES = [
-    {
+DEFAULT_ACADEMY_ROLES = {
+    "Admin": {
         "name": "Admin",
         "description": "Access to all services, including user management",
         "service_rights": {
@@ -17,7 +17,7 @@ DEFAULT_ACADEMY_ROLES = [
             Service.BIOGRAPHY: Right.EDITOR,
         },
     },
-    {
+    "Writer": {
         "name": "Writer",
         "description": "Can upload text documents",
         "service_rights": {
@@ -25,7 +25,7 @@ DEFAULT_ACADEMY_ROLES = [
             Service.BIOGRAPHY: Right.EDITOR,
         },
     },
-    {
+    "Film crew member": {
         "name": "Film crew member",
         "description": "Can be assigned to a masterclass to upload videos",
         "service_rights": {
@@ -33,13 +33,13 @@ DEFAULT_ACADEMY_ROLES = [
             Service.BIOGRAPHY: Right.VIEWER,
         },
     }
-]
+}
 
 def main():
     academy = AcademyCreate(name=ORGANIZATION_NAME)
     with engine.begin() as conn:
         academy = academy_service.create_academy(conn, academy)
-        for role in DEFAULT_ACADEMY_ROLES:
+        for role in DEFAULT_ACADEMY_ROLES.values():
             role_service.create_academy_role(conn, RoleCreate(**role, academy_id=academy.id))
 
 if __name__ == "__main__":
