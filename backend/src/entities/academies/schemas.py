@@ -6,6 +6,7 @@ from pydantic import BaseModel
 
 class AcademyCreate(BaseModel):
     name: str
+    image_id: UUID | None = None
 
 
 class Academy(AcademyCreate):
