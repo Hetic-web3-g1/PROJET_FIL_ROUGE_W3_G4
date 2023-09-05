@@ -33,3 +33,5 @@ Si vous avez des questions ou des préoccupations concernant ces Conditions, veu
 8. Loi Applicable
 
 Les présentes Conditions seront régies et interprétées conformément aux lois Française.
+
+Back to [README.md](../README.md).
