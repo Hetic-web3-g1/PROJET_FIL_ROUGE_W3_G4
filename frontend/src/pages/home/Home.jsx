@@ -31,7 +31,7 @@ export const Home = () => {
 
     const { store } = useContext(ReactReduxContext)
 
-    const sortDataByLabel = () => {
+    const sortDataByCheckbox = () => {
         var activeFilters = [];
         sortByStatusState.map(e => {
             e[1] === true ? activeFilters.push(e[0]) : undefined;
@@ -46,19 +46,19 @@ export const Home = () => {
     }
 
     const sortData = () => {
-        const machin = sortDataByLabel();
+        const sorDataByCheckboxConst = sortDataByCheckbox();
         setMastercardComponent([]);
         switch (sortByState) 
             {
                 case 'Created at':
-                    const sortedDataByCreation = machin?.sort((a, b) => {
+                    const sortedDataByCreation = sorDataByCheckboxConst?.sort((a, b) => {
                         return new Date(b.created_at) - new Date(a.created_at);
                     });
                     sortedDataByCreation?.map(e => setMastercardComponent(component => [...component, <MasterCard content={e} key={e.id} token={store.getState().user.user_token} onClick={() => (navigate(`/Masterclass/${e.id}`))}/>]));
                     break;
 
                 case 'Last update':
-                    const sortedDataByUpdate = machin?.sort((a, b) => {
+                    const sortedDataByUpdate = sorDataByCheckboxConst?.sort((a, b) => {
                         return new Date(b.updated_at) - new Date(a.updated_at);
                     });
                     sortedDataByUpdate?.map(e => setMastercardComponent(component => [...component, <MasterCard content={e} key={e.id} token={store.getState().user.user_token} onClick={() => (navigate(`/Masterclass/${e.id}`))}/>]));
