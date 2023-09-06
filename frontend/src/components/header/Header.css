@@ -30,14 +30,11 @@
     align-items: center;
 }
 
-.header-create-dropdown {
-    cursor: pointer;
-}
-
 .header-create-dropdown-content {
     background-color: #161C3D;
     position: absolute;
     border: 1px solid white;
+    margin-right: 1vw;
 }
 
 .header-user-dropdown {

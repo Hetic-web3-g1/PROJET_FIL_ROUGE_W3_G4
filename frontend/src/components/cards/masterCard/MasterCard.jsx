@@ -42,7 +42,16 @@ export const MasterCard = ({type, content, token, ...props }) => {
                 </div>
                 <div className='masterCard-content-details'>
                     <div>
-                        {content.instrument}
+                        {content.instrument.map((e, index) => {
+                            if(index === 0) {
+                                return (
+                                    e
+                                )
+                            }
+                            return (
+                                " / "+e
+                            )
+                        })}
                     </div>
                     <div className="masterCard-content-date-wrapper">
                         <div>

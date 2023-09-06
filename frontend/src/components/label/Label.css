@@ -58,6 +58,18 @@
     background-color: #dc3545;
 }
 
+.label-rejected {
+    background-color: #020A33;
+}
+
+.label-archived {
+    background-color: #00875A;
+}
+
+.label-in-review {
+    background-color: #ffa007;
+}
+
 input[type="search"]::-webkit-search-cancel-button {
     display: none;
 }
