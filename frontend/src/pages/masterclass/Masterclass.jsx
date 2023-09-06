@@ -108,7 +108,8 @@ export const Masterclass = () => {
    * Get data from tabs component and depending of the value set the corresponding component in the HTML.
    * @param childData Data from tabs component
    */
-  function handleTabs(childData) {
+
+  function handleCallback(childData) {
     setTabName(childData);
     switch (childData) {
       case 'Masterclass':
@@ -145,7 +146,7 @@ export const Masterclass = () => {
   }
 
   useEffect(() => {
-    handleTabs('Masterclass');
+    handleCallback('Masterclass');
   }, []);
 
   return (
@@ -230,7 +231,8 @@ export const Masterclass = () => {
             {masterclassData?.work_analysis_id ? <img src="..\src\assets\status\done.svg" alt="done" /> : <img src="..\src\assets\status\incomplete.svg" alt="incomplete" />}
           </section>
         </div>
-      <Tabs returnValues={handleTabs}/>
+      </div>  
+      <Tabs callback={handleCallback}/>
       <div className="masterclass-component-render">
         {component}
       </div>
