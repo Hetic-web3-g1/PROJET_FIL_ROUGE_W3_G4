@@ -235,7 +235,7 @@ export const Masterclass = () => {
         {component}
       </div>
     </div>
-  );
+  </div>);
 }
 
 export default Masterclass;
