@@ -235,6 +235,7 @@ export const Masterclass = () => {
         {component}
       </div>
     </div>
+  </div>
   );
 }
 
