@@ -28,6 +28,7 @@ masterclass_table = Table(
     Column(
         "partition_id", UUID(as_uuid=True), ForeignKey("partition.id"), nullable=True
     ),
+    Column("image_id", UUID(as_uuid=True), nullable=True),
     Column("instrument", ARRAY(String()), nullable=True),
     Column("status", String(), nullable=False, default="created"),
     Column("created_at", DateTime(), default=datetime.utcnow, nullable=False),
@@ -62,17 +63,6 @@ masterclass_video_table = Table(
     Column("video_id", UUID(as_uuid=True), ForeignKey("video.id"), nullable=False),
 )
 
-masterclass_image_table = Table(
-    "masterclass_image",
-    metadata,
-    Column(
-        "masterclass_id",
-        UUID(as_uuid=True),
-        ForeignKey("masterclass.id"),
-        nullable=False,
-    ),
-    Column("image_id", UUID(as_uuid=True), ForeignKey("image.id"), nullable=False),
-)
 
 masterclass_comment_table = Table(
     "masterclass_comment",

@@ -102,7 +102,7 @@ def file_validation(file: UploadFile, file_type: str) -> tuple[str, str]:
     if size == 0:
         raise HTTPException(status_code=400, detail="File is empty")
 
-    if size > 10 * MB:
+    if size > 10000 * MB:
         raise HTTPException(
             status_code=400,
             detail=f"File too large, max size is 10MB, this file weight {size} bytes",
