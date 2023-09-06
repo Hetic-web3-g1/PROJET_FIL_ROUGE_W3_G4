@@ -37,12 +37,12 @@ export const Home = () => {
             e[1] === true ? activeFilters.push(e[0]) : undefined;
         })
 
-        var nikzebi = [];
+        var sortedArray = [];
         activeFilters.map(filter => {
             var mscCopy = mastercardData;
-            nikzebi.push(mscCopy.filter(e => e.status === filter.toLowerCase()));
+            sortedArray.push(mscCopy.filter(e => e.status === filter.toLowerCase()));
         })
-        return nikzebi.flat();
+        return sortedArray.flat();
     }
 
     const sortData = () => {
