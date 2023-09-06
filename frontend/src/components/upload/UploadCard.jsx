@@ -84,7 +84,7 @@ export const UploadCard = ({ setUploadFile }) => {
      * @param event Button event
      */
     function handleChange(event) {
-        setUploadFile(event.target.files[0])
+        setUploadFile(event.target.files[0]);
         switch (event.target.files[0].type) { 
             case "application/pdf":
                 setFile(URL.createObjectURL(event.target.files[0]))

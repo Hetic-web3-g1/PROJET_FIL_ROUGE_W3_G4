@@ -12,19 +12,23 @@ import { AcademyActions } from '../../features/actions/academy';
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import OutsideAlerter from '../../utils/clickOutside';
 
 import './Header.css';
 
 export const Header = () => {
+
+    const { store } = useContext(ReactReduxContext)
+    const profile = store.getState().user.profile
+
     const [createModal, setCreateModal] = useState(false);
     const [createMasterClassModal, setCreateMasterClassModal] = useState(false);
     const [createBiographyModal, setCreateBiographyModal] = useState(false);
     const [createWorkAnalysisModal, setCreateWorkAnalysisModal] = useState(false);
     const [userModal, setUserModal] = useState(false);
+    const [avatar, setAvatar] = useState(null);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
-    const { store } = useContext(ReactReduxContext)
 
     useEffect(() => {
         if(!store.getState().user.user_token) {
@@ -58,6 +62,22 @@ export const Header = () => {
         }
     },)
 
+    useEffect(() => {        
+        if(store.getState().user.user_token) {
+            if(!avatar) {
+                const userOptions = {
+                    method: 'GET',
+                    headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}` },
+                };
+                fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/images/image/${profile?.image_id}`, userOptions).then((response) => response.json()).then(data => {
+                    fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/s3_objects/url_and_object_info/${data?.s3_object_id}`, userOptions).then((response) => response.json()).then(data2 => {
+                        setAvatar(data2);
+                    });
+                });
+            }
+        }
+    },)
+
     const handleCreateModal = () => {
         setCreateModal(!createModal);
     }
@@ -79,6 +99,10 @@ export const Header = () => {
         navigate("/");
     }
 
+    function handleDisplay(target) {
+        target === 'modal' ? setCreateModal(false) : setUserModal(false);
+    }
+
     return (
         <>
             {
@@ -94,7 +118,7 @@ export const Header = () => {
                 <div className='header-group'>
                     <div className="header-logo">
                         <Link to="/home">
-                            <Avatar />
+                            <Avatar/>
                         </Link>
                     </div>
                     <div className="header-title">
@@ -106,27 +130,27 @@ export const Header = () => {
                 </div>
                 <div className='header-group'>
                     <div className="header-create-dropdown" onClick={() => handleCreateModal()}>
-                        <img src={"../src/assets/header/create.svg"} />
+                        <img src={"../src/assets/header/create.svg"} className={'pointer'} />
                         {
                             createModal ?
-                                <>
+                                <OutsideAlerter callback={() => handleDisplay('modal')}>
                                     <div className="header-create-dropdown-content">
                                         <div className="header-create-dropdown-item">
                                             Masterclass
-                                            <img src={"../src/assets/header/circle-plus.svg"}  onClick={() => handleCreateMasterClass()}/>
+                                            <img className={'pointer'} src={"../src/assets/header/circle-plus.svg"}  onClick={() => handleCreateMasterClass()}/>
                                         </div>
                                         <Divider />
                                         <div className="header-create-dropdown-item">
                                             Biography
-                                            <img src={"../src/assets/header/circle-plus.svg"} onClick={() => handleCreateBiography()}/>
+                                            <img className={'pointer'} src={"../src/assets/header/circle-plus.svg"} onClick={() => handleCreateBiography()}/>
                                         </div>
                                         <Divider />
                                         <div className="header-create-dropdown-item">
                                             Work Analysis
-                                            <img src={"../src/assets/header/circle-plus.svg"} style={{marginLeft: "5px"}} onClick={() => handleCreateWorkAnalysis()}/>
+                                            <img className={'pointer'} src={"../src/assets/header/circle-plus.svg"} style={{marginLeft: "5px"}} onClick={() => handleCreateWorkAnalysis()}/>
                                         </div>
                                     </div>
-                                </>
+                                </OutsideAlerter>
                             : 
                                 null                         
                         }
@@ -134,20 +158,23 @@ export const Header = () => {
                     </div>
 
                     <div className="header-user no-select" onClick={() => setUserModal(!userModal)}>
-                        <Avatar/>
+                        <Avatar path={avatar?.url}/>
                         {
                             userModal ?
-                                <>
+                                <OutsideAlerter callback={() => handleDisplay('user')}>
                                     <div className="header-create-dropdown-content">
                                         <div className="header-create-dropdown-item" onClick={() => navigate("/profile")}>
-                                            Profile
+                                            Signed in as {profile?.first_name} {profile?.last_name}
                                         </div>
                                         <Divider />
-                                        <div className="header-create-dropdown-item" onClick={() => handleDisconnect()}>
+                                        <div className="header-create-dropdown-item pointer hover" onClick={() => navigate("/profile")}>
+                                            Profile
+                                        </div>
+                                        <div className="header-create-dropdown-item pointer hover" onClick={() => handleDisconnect()}>
                                             Disconnect
                                         </div>
                                     </div>
-                                </>
+                                </OutsideAlerter>
                             :
                                 null
                         }

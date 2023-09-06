@@ -69,7 +69,7 @@ export const Field = ({ type, placeholder, onChange, id, value }) => {
                     className={['field-input', `field-input-${type}`].join(' ')}
                     type={type}
                     placeholder={placeholder}
-                    onChange={type === 'search' ? onSearchChange : onChange}
+                    onChange={type === 'search' ? onSearchChange : (e) => onChange(e)}
                     id={id}
                     defaultChecked={false}
                     value={value}

@@ -59,7 +59,7 @@ export const ModalMasterClass = ({ handleClose, store }) => {
                     </div>
                     <div className="modal-masterclass-infos-field">
                         Partition
-                        <Field placeholder="Piece"/>
+                        <Field placeholder="Partition"/>
                     </div>
                     <div className="modal-masterclass-infos-field">
                         Professor
@@ -67,7 +67,7 @@ export const ModalMasterClass = ({ handleClose, store }) => {
                     </div>
                     <div className="modal-masterclass-infos-field">
                         Composer
-                        <Field placeholder="Student"/>
+                        <Field placeholder="Composer"/>
                     </div>
                 </div>
             </div>
