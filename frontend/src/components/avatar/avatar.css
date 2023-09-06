@@ -1,4 +1,6 @@
 .image-style {
  border-radius: 50%;
  cursor: pointer;
+ max-height: 80px;
+ aspect-ratio: 1/1;
 }

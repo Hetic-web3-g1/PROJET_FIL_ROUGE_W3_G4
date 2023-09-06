@@ -16,15 +16,18 @@ import { Link } from "react-router-dom";
 import './Header.css';
 
 export const Header = () => {
+
+    const { store } = useContext(ReactReduxContext)
+    const profile = store.getState().user.profile
+
     const [createModal, setCreateModal] = useState(false);
     const [createMasterClassModal, setCreateMasterClassModal] = useState(false);
     const [createBiographyModal, setCreateBiographyModal] = useState(false);
     const [createWorkAnalysisModal, setCreateWorkAnalysisModal] = useState(false);
     const [userModal, setUserModal] = useState(false);
+    const [avatar, setAvatar] = useState(null);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
-    const { store } = useContext(ReactReduxContext)
 
     useEffect(() => {
         if(!store.getState().user.user_token) {
@@ -57,6 +60,24 @@ export const Header = () => {
             });
         }
     },)
+
+    useEffect(() => {        
+        if(store.getState().user.user_token) {
+            if(!avatar) {
+                const userOptions = {
+                    method: 'GET',
+                    headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}` },
+                };
+                fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/images/image/${profile?.image_id}`, userOptions).then((response) => response.json()).then(data => {
+                    fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/s3_objects/url_and_object_info/${data?.s3_object_id}`, userOptions).then((response) => response.json()).then(data2 => {
+                        setAvatar(data2);
+                    });
+                });
+            }
+        }
+    },)
+
+    console.log(avatar)
 
     const handleCreateModal = () => {
         setCreateModal(!createModal);
@@ -94,7 +115,7 @@ export const Header = () => {
                 <div className='header-group'>
                     <div className="header-logo">
                         <Link to="/home">
-                            <Avatar />
+                            <Avatar path={avatar?.url}/>
                         </Link>
                     </div>
                     <div className="header-title">
