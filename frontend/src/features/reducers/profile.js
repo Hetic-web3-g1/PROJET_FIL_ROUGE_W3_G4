@@ -10,6 +10,7 @@ const initialState = {
     interests: [],
     profileImage: '',
     id: '',
+    image_id: '',
   },
   user_token: '',
 }

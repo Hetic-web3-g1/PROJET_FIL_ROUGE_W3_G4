@@ -13,6 +13,7 @@ class MasterclassCreate(BaseModel):
     composer_bio_id: UUID | None
     work_analysis_id: UUID | None
     partition_id: UUID | None
+    image_id: UUID | None
     instrument: List[str] | None
     status: str = "created"
 
