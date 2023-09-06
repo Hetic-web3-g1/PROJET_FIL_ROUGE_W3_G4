@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react'
 import propTypes from 'prop-types'
 import { ReactReduxContext } from 'react-redux'
+import { useToast } from '../../../utils/toast'
 
 import './dashboardvideo.css'
 import './../../textstyle/textstyles.css'
@@ -15,6 +16,8 @@ import Logs from '../../../mocks/logMocks.js'
 export const DashboardVideo = ({masterclassData}) => {
 
     const { store } = useContext(ReactReduxContext)
+    const toast = useToast();
+
     const [uploadVideo, setUploadVideo] = useState(null);
     const [masterclassVideo, setMasterclassVideo] = useState([]);
     const [video, setVideo] = useState(null);
@@ -56,11 +59,9 @@ export const DashboardVideo = ({masterclassData}) => {
             body: formData,
         };
         fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/videos/video`, uploadOptions).then((response) => response.json()).then(data => {
-            console.log(data);
+            toast.open({message: "Video uploaded successfully", type: "success"})
         })
     }
-
-    console.log(masterclassVideo)
 
     return ( 
         <div>

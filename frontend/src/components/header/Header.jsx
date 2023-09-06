@@ -12,6 +12,7 @@ import { AcademyActions } from '../../features/actions/academy';
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import OutsideAlerter from '../../utils/clickOutside';
 
 import './Header.css';
 
@@ -77,8 +78,6 @@ export const Header = () => {
         }
     },)
 
-    console.log(avatar)
-
     const handleCreateModal = () => {
         setCreateModal(!createModal);
     }
@@ -98,6 +97,10 @@ export const Header = () => {
     const handleDisconnect = () => {
         dispatch(ProfileActions.disconnect());
         navigate("/");
+    }
+
+    function handleDisplay() {
+        setCreateModal(false);
     }
 
     return (
@@ -130,7 +133,7 @@ export const Header = () => {
                         <img src={"../src/assets/header/create.svg"} />
                         {
                             createModal ?
-                                <>
+                                <OutsideAlerter callback={handleDisplay}>
                                     <div className="header-create-dropdown-content">
                                         <div className="header-create-dropdown-item">
                                             Masterclass
@@ -147,7 +150,7 @@ export const Header = () => {
                                             <img src={"../src/assets/header/circle-plus.svg"} style={{marginLeft: "5px"}} onClick={() => handleCreateWorkAnalysis()}/>
                                         </div>
                                     </div>
-                                </>
+                                </OutsideAlerter>
                             : 
                                 null                         
                         }
