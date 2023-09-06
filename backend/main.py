@@ -2,13 +2,16 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from config import settings
-from src.middleware.log_error import LogErrorMiddleware
-from src.utils.fake_data import generate_data
+from src.middlewares.log_error import LogErrorMiddleware
+from src.utils.fake_data import generate_data  # noqa: F401
+from src.utils.log.log_handler import setup_logger
 
 if settings.environment in {"development"}:
     origins = ["*"]
 else:
     origins = ["groupe4.hetic-projects.arcplex.tech:80"]
+
+setup_logger()
 
 app = FastAPI()
 api = FastAPI(root_path="/api")
