@@ -28,11 +28,13 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
+
 # # ------------------------------------------------------------------------
 
 FROM test AS development
 # Start the FastAPI app with auto-reload
-CMD poetry run alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 4000 --reload
+CMD poetry run alembic upgrade head
+CMD poetry run uvicorn main:app --host 0.0.0.0 --port 4000 --reload
 
 # # ------------------------------------------------------------------------
 

@@ -2,10 +2,9 @@ import logging
 import traceback
 
 from src.database import service as db_service
-
-from ...database.db_engine import engine
-from ...utils.log.log_schema import LogCreate
-from ...utils.log.log_table import log_table
+from src.database.db_engine import engine
+from src.utils.log.models import log_table
+from src.utils.log.schemas import LogCreate
 
 
 class LogHandler(logging.Handler):
@@ -28,7 +27,7 @@ def setup_logger():
     console_log.setFormatter(console_format)
 
     logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)
+    logger.setLevel(logging.INFO)
 
     logger.addHandler(LogHandler())
     logger.addHandler(console_log)

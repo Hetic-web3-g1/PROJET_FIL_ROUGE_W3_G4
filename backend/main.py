@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from config import settings
 from src.middlewares.log_error import LogErrorMiddleware
 from src.utils.fake_data import generate_data  # noqa: F401
-from src.utils.log.log_handler import setup_logger
+from src.utils.log.handlers import setup_logger
 
 if settings.environment in {"development"}:
     origins = ["*"]
