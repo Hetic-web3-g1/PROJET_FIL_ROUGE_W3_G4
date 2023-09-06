@@ -1,4 +1,9 @@
-from src.utils.log.log_manager import logger
+import logging
+import traceback
+
+from fastapi.responses import JSONResponse
+
+from config import settings
 
 
 class LogErrorMiddleware:
@@ -9,4 +14,13 @@ class LogErrorMiddleware:
         try:
             await self.app(scope, receive, send)
         except Exception as e:
-            logger.error(f"Error occurred: {e}")
+            logging.error(e, exc_info=True, stack_info=True)
+            if settings.environment == "production":
+                response_content = {"detail": "Unexpected error"}
+            else:
+                response_content = {"detail": traceback.format_exc()}
+
+            return JSONResponse(
+                status_code=500,
+                content=response_content,
+            )
