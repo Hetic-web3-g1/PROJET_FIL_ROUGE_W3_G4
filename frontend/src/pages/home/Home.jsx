@@ -20,29 +20,50 @@ export const Home = () => {
     const navigate = useNavigate();
     const { t, i18n } = useTranslation();
 
+    const sortByState = useSelector((state) => state.filters.filters.sort_by);
+    const sortByStatusState = useSelector((state) => state.filters.filters.sort_by_status);
     const [mastercardComponent, setMastercardComponent] = useState([]);
-    const [mastercardData, setMastercardData] = useState();
+    const [mastercardData, setMastercardData] = useState([]);
     const [biographyData, setBiographyData] = useState();
+
+
+    const [sortedTest, setSortedTest] = useState([]);
 
     const { store } = useContext(ReactReduxContext)
 
-    const sortData = () => {
-        setMastercardComponent([]);
-        switch (userStateRedux) {
-            case 'Created at':
-                const sortedDataByCreation = mastercardData?.sort((a, b) => {
-                    return new Date(b.created_at) - new Date(a.created_at);
-                });
-                sortedDataByCreation?.map(e => setMastercardComponent(component => [...component, <MasterCard content={e} key={e.id} token={store.getState().user.user_token} onClick={() => (navigate(`/Masterclass/${e.id}`))}/>]));
-                break;
+    const sortDataByLabel = () => {
+        var activeFilters = [];
+        sortByStatusState.map(e => {
+            e[1] === true ? activeFilters.push(e[0]) : undefined;
+        })
 
-            case 'Last update':
-                const sortedDataByUpdate = mastercardData?.sort((a, b) => {
-                    return new Date(b.updated_at) - new Date(a.updated_at);
-                });
-                sortedDataByUpdate?.map(e => setMastercardComponent(component => [...component, <MasterCard content={e} key={e.id} token={store.getState().user.user_token} onClick={() => (navigate(`/Masterclass/${e.id}`))}/>]));
-                break;
-        }
+        var sortedArray = [];
+        activeFilters.map(filter => {
+            var mscCopy = mastercardData;
+            sortedArray.push(mscCopy.filter(e => e.status === filter.toLowerCase()));
+        })
+        return sortedArray.flat();
+    }
+
+    const sortData = () => {
+        const machin = sortDataByLabel();
+        setMastercardComponent([]);
+        switch (sortByState) 
+            {
+                case 'Created at':
+                    const sortedDataByCreation = machin?.sort((a, b) => {
+                        return new Date(b.created_at) - new Date(a.created_at);
+                    });
+                    sortedDataByCreation?.map(e => setMastercardComponent(component => [...component, <MasterCard content={e} key={e.id} token={store.getState().user.user_token} onClick={() => (navigate(`/Masterclass/${e.id}`))}/>]));
+                    break;
+
+                case 'Last update':
+                    const sortedDataByUpdate = machin?.sort((a, b) => {
+                        return new Date(b.updated_at) - new Date(a.updated_at);
+                    });
+                    sortedDataByUpdate?.map(e => setMastercardComponent(component => [...component, <MasterCard content={e} key={e.id} token={store.getState().user.user_token} onClick={() => (navigate(`/Masterclass/${e.id}`))}/>]));
+                    break;
+            }
     }
 
     useEffect(() => {
@@ -71,7 +92,7 @@ export const Home = () => {
 
     useEffect(() => {
         sortData();
-    }, [userStateRedux ,mastercardData]);
+    }, [sortByState, sortByStatusState]);
   
     return (
         <div className="home">
@@ -80,7 +101,7 @@ export const Home = () => {
             </div>
             <div className="home-body">
                 <div className="home-sidebar">
-                    <Sidebar/>
+                    <Sidebar categories={{Status: ['Completed', 'Created', 'In-review', 'In-progress', 'Archived']}}/>
                 </div>
                 {
                 mastercardData ? 

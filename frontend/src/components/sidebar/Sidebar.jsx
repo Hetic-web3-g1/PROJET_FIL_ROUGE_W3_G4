@@ -1,19 +1,42 @@
 import Checkbox from '../checkbox/Checkbox'
 import Dropdown from '../dropdown/Dropdown'
-import { useDispatch, ReactReduxContext } from 'react-redux';
+import { useDispatch, ReactReduxContext, useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState } from 'react';
 import './Sidebar.css';
 import { FiltersActions } from '../../features/actions/filters';
 
-export const Sidebar = () => {
+export const Sidebar = ({categories}) => {
   const [open, setOpen] = useState(false);
+  const sortByStatusState = useSelector((state) => state.filters.filters.sort_by_status);
+  const [checkboxList, setCheckboxList] = useState(sortByStatusState || []);
+  const [observable, setObservable] = useState(1);
   const customFilters = ['Created at', 'Last update'];
   const dispatch = useDispatch();
   const {store} = useContext(ReactReduxContext);
 
-  function handleCallback(childData) {
+  function handleValueDropdown(childData) {
     dispatch(FiltersActions.sortBy(childData));
   }
+
+  function handleCheckboxTrue(event) {
+    const tmp = checkboxList;
+    tmp.push(event);
+    setCheckboxList(tmp);
+    setObservable(observable + 1);
+  }
+
+  function handleCheckboxFalse(event) {
+    const index = checkboxList.findIndex(e => e[0] === event[0]);
+    var tmp = checkboxList;
+    tmp.splice(index, 1);
+    setCheckboxList(tmp);
+    setObservable(observable - 1);
+  }
+
+  useEffect(() => {
+    dispatch(FiltersActions.sortByStatus([...checkboxList]));
+  }, [observable])
 
   return (
     <div>
@@ -21,29 +44,22 @@ export const Sidebar = () => {
 
         <div className="sidebar-filters-container">
           <label className='sidebar-font'>Sort by:</label>
-          <Dropdown callback={handleCallback} options={customFilters} defaultValue={store.getState().filters.filters.sort_by}/>
+          <Dropdown returnValues={handleValueDropdown} options={customFilters} defaultValue={store.getState().filters.filters.sort_by}/>
 
-          <div className="sidebar-filter">
-            <h1 className='sidebar-font'>Filters subtitle</h1>
-            <Checkbox label='Filter' primary={false}/>
-            <Checkbox label='Filter' primary={false}/>
-            <Checkbox label='Filter' primary={false}/>
-          </div>
-
-          <div className="sidebar-filter">
-            <h1 className='sidebar-font'>Filters subtitle</h1>
-            <Checkbox label='Filter' primary={false}/>
-            <Checkbox label='Filter' primary={false}/>
-            <Checkbox label='Filter' primary={false}/>
-            <Checkbox label='Filter' primary={false}/>
-          </div>
-
-          <div className="sidebar-filter">
-            <h1 className='sidebar-font'>Filters subtitle</h1>
-            <Checkbox label='Filter' primary={false}/>
-            <Checkbox label='Filter' primary={false}/>
-            <Checkbox label='Filter' primary={false}/>
-          </div>
+          {
+            Object.keys(categories)?.map((categoryTitle) => {
+              { 
+                return(
+                  <div className="sidebar-filter">
+                    <h1 className='sidebar-font'>{categoryTitle}</h1>
+                    {
+                      categories[categoryTitle]?.map(filterTitle => { return(<Checkbox returnValues={(e) => e[1] === true ? handleCheckboxTrue(e) : handleCheckboxFalse(e)} value={filterTitle} label={filterTitle} primary={false}/>) })
+                    }
+                  </div>
+                )
+              }
+            })
+          }
 
         </div>
 
@@ -59,6 +75,14 @@ export const Sidebar = () => {
       </div>
     </div>
   );
+};
+
+Sidebar.propTypes = {
+  options: PropTypes.objectOf(PropTypes.array).isRequired,
+};
+
+Sidebar.defaultProps = {
+  options: {Title1: ['Cat1Filter1', 'Cat1Filter2', 'Cat1Filter3'], Title2: ['Cat2Filter1', 'Cat2Filter2', 'Cat2Filter3'], Title3: ['Cat3Filter1', 'Cat3Filter2', 'Cat3Filter3']},
 };
 
 export default Sidebar;

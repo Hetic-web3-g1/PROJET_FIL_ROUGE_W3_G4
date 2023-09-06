@@ -78,7 +78,7 @@ export const Field = ({ type, placeholder, onChange, id, value }) => {
                     className={['field-icon', `field-icon-${type}`].join(' ')}
                     onClick={HideAndShowPassword}/>
             </div>
-            <OutsideAlerter callback={handleDisplay}>
+            <OutsideAlerter returnValues={handleDisplay}>
                 <div style={{display: 'flex', justifyContent: 'center'}}>
                     
                     {!noResult &&                

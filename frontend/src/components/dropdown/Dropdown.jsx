@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import './Dropdown.css';
 
-export const Dropdown = ({ options, callback, disabled, defaultValue }) => {
+export const Dropdown = ({ options, returnValues, disabled, defaultValue }) => {
   const [open, setOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(defaultValue);
   const mode = disabled ? 'dropdown-disabled' : '';
@@ -15,7 +15,7 @@ export const Dropdown = ({ options, callback, disabled, defaultValue }) => {
   function selectItem(item) {
     setOpen(!open);
     setSelectedItem(item);
-    callback(item);
+    returnValues(item);
   }
 
   return (
@@ -34,7 +34,7 @@ export const Dropdown = ({ options, callback, disabled, defaultValue }) => {
 
 Dropdown.propTypes = {
   options: PropTypes.arrayOf(PropTypes.string),
-  callback: PropTypes.func.isRequired, // Callback function needed in parent component to get the value of the dropdown
+  returnValues: PropTypes.func.isRequired, // function needed in parent component to get the value of the dropdown
   disabled: PropTypes.bool,
   defaultValue: PropTypes.string
 };
