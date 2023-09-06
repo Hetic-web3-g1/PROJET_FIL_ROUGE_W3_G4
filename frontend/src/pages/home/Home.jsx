@@ -23,34 +23,47 @@ export const Home = () => {
     const sortByState = useSelector((state) => state.filters.filters.sort_by);
     const sortByStatusState = useSelector((state) => state.filters.filters.sort_by_status);
     const [mastercardComponent, setMastercardComponent] = useState([]);
-    const [mastercardData, setMastercardData] = useState();
+    const [mastercardData, setMastercardData] = useState([]);
     const [biographyData, setBiographyData] = useState();
+
+
+    const [sortedTest, setSortedTest] = useState([]);
 
     const { store } = useContext(ReactReduxContext)
 
+    const sortDataByLabel = () => {
+        var activeFilters = [];
+        sortByStatusState.map(e => {
+            e[1] === true ? activeFilters.push(e[0]) : undefined;
+        })
+
+        var nikzebi = [];
+        activeFilters.map(filter => {
+            var mscCopy = mastercardData;
+            nikzebi.push(mscCopy.filter(e => e.status === filter.toLowerCase()));
+        })
+        return nikzebi.flat();
+    }
+
     const sortData = () => {
+        const machin = sortDataByLabel();
         setMastercardComponent([]);
         switch (sortByState) 
             {
                 case 'Created at':
-                    const sortedDataByCreation = mastercardData?.sort((a, b) => {
+                    const sortedDataByCreation = machin?.sort((a, b) => {
                         return new Date(b.created_at) - new Date(a.created_at);
                     });
                     sortedDataByCreation?.map(e => setMastercardComponent(component => [...component, <MasterCard content={e} key={e.id} token={store.getState().user.user_token} onClick={() => (navigate(`/Masterclass/${e.id}`))}/>]));
                     break;
 
                 case 'Last update':
-                    const sortedDataByUpdate = mastercardData?.sort((a, b) => {
+                    const sortedDataByUpdate = machin?.sort((a, b) => {
                         return new Date(b.updated_at) - new Date(a.updated_at);
                     });
                     sortedDataByUpdate?.map(e => setMastercardComponent(component => [...component, <MasterCard content={e} key={e.id} token={store.getState().user.user_token} onClick={() => (navigate(`/Masterclass/${e.id}`))}/>]));
                     break;
             }
-
-        // console.log('coucou', mastercardData);
-        // const sortedDataByStatus = mastercardData?.filter(e => e.status === sortByStatusState[0].toLowerCase() && sortByStatusState[1] === true);
-        // console.log(mastercardData);
-        // console.log('STORAGE', sortByStatusState)
     }
 
     useEffect(() => {
@@ -79,7 +92,7 @@ export const Home = () => {
 
     useEffect(() => {
         sortData();
-    }, [sortByState, sortByStatusState, mastercardData]);
+    }, [sortByState, sortByStatusState]);
   
     return (
         <div className="home">
@@ -88,7 +101,7 @@ export const Home = () => {
             </div>
             <div className="home-body">
                 <div className="home-sidebar">
-                    <Sidebar categories={{Status: ['Completed', 'Created', 'In-review', 'Archived'], Title2: ['Cat2Filter1', 'Cat2Filter2', 'Cat2Filter3'], Title3: ['Cat3Filter1', 'Cat3Filter2', 'Cat3Filter3']}}/>
+                    <Sidebar categories={{Status: ['Completed', 'Created', 'In-review', 'In-progress', 'Archived']}}/>
                 </div>
                 {
                 mastercardData ? 

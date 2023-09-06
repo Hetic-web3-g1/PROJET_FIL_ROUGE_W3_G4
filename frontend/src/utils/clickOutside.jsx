@@ -5,7 +5,6 @@ import PropTypes from "prop-types";
 export const OutsideAlerter = ({ returnValues, ...props }) => {
   const wrapperRef = useRef(null);
   useOutsideAlerter(wrapperRef);
-
   return <div ref={wrapperRef}>{props.children}</div>;
 
   /**
