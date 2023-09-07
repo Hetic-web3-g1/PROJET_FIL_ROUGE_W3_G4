@@ -232,12 +232,11 @@ export const Masterclass = () => {
           </section>
         </div>
       </div>  
-      <Tabs callback={handleCallback}/>
+      <Tabs returnValues={handleCallback}/>
       <div className="masterclass-component-render">
         {component}
       </div>
-    </div>
-  </div>);
+    </div>);
 }
 
 export default Masterclass;
