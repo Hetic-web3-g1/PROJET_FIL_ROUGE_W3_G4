@@ -32,11 +32,11 @@ services:
     restart: unless-stopped
     ports:
       - '80:80'
-      - '443:443'
+      # - '443:443'
     volumes:
-      - ./nginx/conf/:/etc/nginx/conf.d/:ro
-      # - ./certbot/conf:/etc/letsencrypt
-      # - ./certbot/www:/var/www/certbot
+      - ./data/nginx/conf/:/etc/nginx/conf.d/:ro
+      # - ./data/certbot/conf:/etc/letsencrypt
+      # - ./data/certbot/www:/var/www/certbot
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
     networks: 
       - app-network
@@ -47,8 +47,8 @@ services:
   #   container_name: certbot
   #   image: certbot/certbot:latest
   #   volumes:
-  #     - ./certbot/conf:/etc/letsencrypt
-  #     - ./certbot/www:/var/www/certbot
+  #     - ./data/certbot/conf:/etc/letsencrypt
+  #     - ./data/certbot/www:/var/www/certbot
   #   # command: certonly --webroot -w /var/www/certbot --force-renewal --email martin@sionfamily.com -d groupe4.hetic-projects.arcplex.tech --agree-tos
   #   entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
@@ -69,8 +69,8 @@ services:
     ports:
       - "1235:8000"
     volumes:
-      - ./s3-config/config.json:/usr/src/app/config.docker
-      - ./s3-config/credentials:/root/.aws/credentials
+      - ./data/s3-config/config.json:/usr/src/app/config.docker
+      - ./data/s3-config/credentials:/root/.aws/credentials
       - s3-data:/usr/src/app/localData
       - s3-metadata:/usr/src/app/localMetadata
     environment:

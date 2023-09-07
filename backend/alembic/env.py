@@ -1,8 +1,9 @@
 from logging.config import fileConfig
 
+from sqlalchemy import engine_from_config, pool
+
 from alembic import context
 from config import settings
-from sqlalchemy import engine_from_config, pool
 from src.database.db_engine import metadata
 from src.entities.academies.models import *
 from src.entities.annotations.models import *
@@ -19,7 +20,7 @@ from src.entities.timecodes.models import *
 from src.entities.users.models import *
 from src.entities.videos.models import *
 from src.entities.work_analyses.models import *
-from src.utils.log.log_table import *
+from src.utils.log.models import *
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
