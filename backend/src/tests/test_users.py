@@ -1,18 +1,23 @@
 from unittest.mock import patch
 
 from src.database.db_engine import engine
+from src.entities.authentification import service as auth_service
 from src.entities.users import service as user_service
-from src.tests.fixtures import create_academy_fixture, create_admin_user_fixture
+from src.tests.fixtures import create_academy_with_admin_user_fixture
 from src.tests.helpers import client
 
-BASE_URI = "/users"
+BASE_URI = "/api/users"
 
 
 class TestUser:
     @classmethod
     def setup_class(cls):
-        cls.academy = create_academy_fixture("Test Academy")
-        cls.admin_user, cls.token = create_admin_user_fixture(cls.academy.id)
+        (
+            cls.academy,
+            cls.user,
+            cls.academy_roles,
+        ) = create_academy_with_admin_user_fixture("Test Academy")
+        cls.token = auth_service.generate_jwt_token(cls.user)
 
     def test_create_user(self):
         with patch(
@@ -25,11 +30,13 @@ class TestUser:
                     "first_name": "blabla",
                     "last_name": "blabla",
                     "email": "balbla@gmail.com",
+                    "role_id": 1,
                 },
                 headers={
                     "Authorization": f"Bearer {self.token}",
                 },
             )
+
             assert resp.status_code == 200
 
             with engine.begin() as conn:

@@ -2,6 +2,7 @@ from uuid import UUID
 
 import sqlalchemy as sa
 from sqlalchemy.engine import Connection
+
 from src.database import service as db_service
 
 from ..authentification import service as auth_service

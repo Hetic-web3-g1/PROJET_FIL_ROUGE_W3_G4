@@ -1,15 +1,16 @@
 from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import APIKeyHeader
 
-from ..users.schemas import User
+from src.database.db_engine import engine
+
+from ..roles import service as role_service
+from ..roles.schemas import Right, ServicesRights
 from . import service as auth_service
-from .schemas import ServicesRights
 
 
 class CustomSecurity:
-    def __init__(self, service_rights: ServicesRights = {}, is_admin: bool = False):
+    def __init__(self, service_rights: ServicesRights = {}):
         self.service_rights = service_rights
-        self.user_is_admin = is_admin
 
     def __call__(
         self,
@@ -32,25 +33,27 @@ class CustomSecurity:
                 headers={"WWW-Authenticate": "Bearer"},
             )
 
-        if self.user_is_admin and not self.is_admin(user):
+        if not self._has_right(user.role_id):
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail="Insufficient privileges",
+                detail="You don't have the right to access this service",
             )
 
         return user
 
-    @staticmethod
-    def is_admin(user: User):
-        """
-        Check if the user is an admin.
+    def _has_right(self, role_id: int) -> bool:
+        if not self.service_rights:
+            return True
+        with engine.begin() as conn:
+            user_role = role_service.get_role_by_id(conn, role_id)
 
-        Args:
-            user (User, optional): The user to check.
+        for service, right in self.service_rights.items():
+            if service not in user_role.service_rights:
+                return False
+            elif (
+                user_role.service_rights[service] == Right.VIEWER
+                and right == Right.EDITOR
+            ):
+                return False
 
-        Returns:
-            bool: True if the user is an admin, False otherwise.
-        """
-        if user.primary_role != "admin":
-            return False
         return True

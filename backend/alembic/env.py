@@ -13,6 +13,7 @@ from src.entities.comments.models import *
 from src.entities.images.models import *
 from src.entities.masterclasses.models import *
 from src.entities.partitions.models import *
+from src.entities.roles.models import *
 from src.entities.s3_objects.models import *
 from src.entities.subtitles.models import *
 from src.entities.tags.models import *
