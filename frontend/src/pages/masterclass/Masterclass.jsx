@@ -30,6 +30,7 @@ export const Masterclass = () => {
   const [workAnalysisData, setWorkAnalysisData] = useState();
   const [userList, setUserList] = useState();
   const [academy, setAcademy] = useState();
+  const [activeTab, setActiveTab] = useState();
   const masterclassId = window.location.href.split('/')[4];
   
   useEffect(() => {
@@ -146,7 +147,7 @@ export const Masterclass = () => {
   }
 
   useEffect(() => {
-    handleCallback('Masterclass');
+    handleCallback(activeTab || 'Masterclass');
   }, []);
 
   return (

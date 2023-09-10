@@ -106,7 +106,7 @@ export const DashboardPartition = ({partitionData, masterclassData, handleSave})
                         <UploadCard setUploadFile={setUploadPartition}/>
                     </div>
                     <div>
-                        <Button label={"Upload"} onClick={(e) => handlePartitionUpload(e)}/>
+                        <Button label={"Save"} onClick={(e) => handlePartitionUpload(e)}/>
                     </div>
                 </div>
                 )

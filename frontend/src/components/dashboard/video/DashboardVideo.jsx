@@ -21,6 +21,7 @@ export const DashboardVideo = ({masterclassData}) => {
     const [uploadVideo, setUploadVideo] = useState(null);
     const [masterclassVideo, setMasterclassVideo] = useState([]);
     const [video, setVideo] = useState(null);
+    const [videoId, setVideoId] = useState(null);
 
     useEffect(() => {
         const Options = {
@@ -30,7 +31,7 @@ export const DashboardVideo = ({masterclassData}) => {
         fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/videos/video/masterclass/${masterclassData.id}`, Options).then((response) => response.json()).then(data => {
             setMasterclassVideo(data)
         });
-    },[]);
+    },[videoId]);
 
     useEffect(() => {
         if(masterclassVideo.length > 0) {
@@ -43,6 +44,18 @@ export const DashboardVideo = ({masterclassData}) => {
             });
         }
     },[masterclassVideo]);
+
+    const handleDeleteVideo = (e) => {
+        e.preventDefault();
+        const Options = {
+            method: 'DELETE',
+            headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}`},
+        };
+        fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/videos/video/${masterclassVideo[0]?.id}`, Options).then((response) => response.json()).then(data => {
+            toast.open({message: "Video deleted successfully", type: "success"})
+            setMasterclassVideo([])
+        });
+    }
 
     const handleVideoUpload = (e) => {
         e.preventDefault();
@@ -60,16 +73,31 @@ export const DashboardVideo = ({masterclassData}) => {
         };
         fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/videos/video`, uploadOptions).then((response) => response.json()).then(data => {
             toast.open({message: "Video uploaded successfully", type: "success"})
+            console.log(data)
+            setVideoId(data)
         })
     }
 
-    return ( 
-        <div>
+    return (
+        <>
             {masterclassVideo?.length > 0 ? (
             <div className='dashboard-video'>
                 <div className='display-main'>
-                    <div className='main-video'>
-                        <VideoPlayer video={video?.url}/>
+                    <div className='dashboard-video-wrap'>
+                        <div className='main-video'>
+                            <VideoPlayer video={video?.url}/>
+                        </div>
+                        <div className="dashboard-video-list">
+                            <div className='dashboard-video-list-item'>
+                                Missing Video
+                            </div>
+                            <div className='dashboard-video-list-item'>
+                                Missing Video
+                            </div>
+                            <div className='dashboard-video-list-item'>
+                                Missing Video
+                            </div>
+                        </div>
                     </div>
                     <div className='right-side-wrapper'>
                         <div className='country-wrapper'>
@@ -85,12 +113,13 @@ export const DashboardVideo = ({masterclassData}) => {
                                         </div>
                                 )})}
                             </div>
-                        <div>
-                        <Button label='Upload Subtitle'/>
+                            <div>
+                                <Button label='Upload Subtitle'/>
+                            </div>
+                        </div>      
+                        <Button label="Remove video" onClick={(e) => handleDeleteVideo(e)}/>            
                     </div>
                 </div>
-            </div>
-            </div>
             <div className='versionning'>
                 <div className='versionning-header'>
                     <span className='subtitle2'>Current Version:</span>
@@ -129,7 +158,7 @@ export const DashboardVideo = ({masterclassData}) => {
                     </div>
                 </div>
             )}
-        </div>
+        </>
     )
 }
 
