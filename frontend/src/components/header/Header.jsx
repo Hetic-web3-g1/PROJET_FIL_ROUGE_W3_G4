@@ -133,7 +133,7 @@ export const Header = () => {
                         <img src={"../src/assets/header/create.svg"} className={'pointer'} />
                         {
                             createModal ?
-                                <OutsideAlerter callback={() => handleDisplay('modal')}>
+                                <OutsideAlerter returnValues={() => handleDisplay('modal')}>
                                     <div className="header-create-dropdown-content">
                                         <div className="header-create-dropdown-item">
                                             Masterclass
@@ -161,7 +161,7 @@ export const Header = () => {
                         <Avatar path={avatar?.url}/>
                         {
                             userModal ?
-                                <OutsideAlerter callback={() => handleDisplay('user')}>
+                                <OutsideAlerter returnValues={() => handleDisplay('user')}>
                                     <div className="header-create-dropdown-content">
                                         <div className="header-create-dropdown-item" onClick={() => navigate("/profile")}>
                                             Signed in as {profile?.first_name} {profile?.last_name}

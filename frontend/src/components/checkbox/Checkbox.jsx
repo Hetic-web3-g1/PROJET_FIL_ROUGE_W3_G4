@@ -17,7 +17,6 @@ export const Checkbox = ({ checkedByDefault, label, disabled, primary, value, re
   useEffect(() => {
     sortByStatusState?.map(e => {
       if (e[0] === value && e[1] !== false) {
-        console.log('test', sortByStatusState);
         setChecked(true);
       }
     });
