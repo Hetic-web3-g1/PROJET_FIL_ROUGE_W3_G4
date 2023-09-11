@@ -22,6 +22,8 @@ from ..entities.masterclasses.service import (
     assign_user_to_masterclass,
     create_masterclass,
 )
+from ..entities.roles.models import role_table
+from ..entities.roles.schemas import RoleCreate
 from ..entities.users.models import user_table
 from ..entities.users.schemas import User, UserCreate
 from ..entities.users.service import create_user
@@ -51,8 +53,7 @@ user = User(
     first_name="admin",
     last_name="admin",
     email="admin@gmail.com",
-    primary_role="admin",
-    secondary_role=["manager", "video_editor", "traductor", "writer"],
+    role_id=1,
     academy_id=UUID("12345648-1234-1234-1234-123456789123"),
     image_id=None,
     created_by=None,
@@ -73,6 +74,28 @@ def create_fixed_academy_fake():
         )
 
 
+def create_fixed_role_fake():
+    with engine.begin() as conn:
+        role = RoleCreate(
+            **{
+                "name": "Admin",
+                "description": "Admin role",
+                "service_rights": {
+                    "user_management": "EDITOR",
+                    "masterclass": "EDITOR",
+                    "biography": "EDITOR",
+                },
+                "academy_id": UUID("12345648-1234-1234-1234-123456789123"),
+            }
+        )
+        return db_service.create_object(
+            conn,
+            role_table,
+            role.dict(),
+            object_id=1,
+        )
+
+
 def create_fixed_user_fake():
     with engine.begin() as conn:
         fixed_user = UserCreate(
@@ -80,8 +103,7 @@ def create_fixed_user_fake():
                 "first_name": "admin",
                 "last_name": "admin",
                 "email": "admin@admin.com",
-                "primary_role": "admin",
-                "secondary_role": ["manager", "video_editor", "traductor", "writer"],
+                "role_id": 1,
                 "academy_id": UUID("12345648-1234-1234-1234-123456789123"),
             }
         )
@@ -144,10 +166,7 @@ def create_user_fake():
                 "first_name": first_name,
                 "last_name": last_name,
                 "email": first_name + "." + last_name + "@gmail.com",
-                "primary_role": random.choice(primary_role),
-                "secondary_role": [
-                    random.choice(secondary_role) for _ in range(random.randint(1, 2))
-                ],
+                "role_id": 1,
                 "academy_id": UUID("12345648-1234-1234-1234-123456789123"),
             }
         )
@@ -241,6 +260,7 @@ def generate_data():
             if not has_data(conn, table):  # Check if table is empty
                 if table == academy_table:
                     create_fixed_academy_fake()
+                    create_fixed_role_fake()
                 if table == user_table:
                     create_fixed_user_fake()
                 if table == masterclass_table:
