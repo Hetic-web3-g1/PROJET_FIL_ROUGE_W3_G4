@@ -104,7 +104,7 @@ export const Header = () => {
     }
 
     return (
-        <>
+        <div id={"header"}>
             {
                 createMasterClassModal ? <ModalMasterClass handleClose={handleCreateMasterClass} store={store}/> : null
             }
@@ -181,6 +181,6 @@ export const Header = () => {
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 }

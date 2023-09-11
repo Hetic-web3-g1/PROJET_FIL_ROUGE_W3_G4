@@ -26,7 +26,7 @@ export const ResetPassword = ({ }) => {
         body: JSON.stringify({password, token }),
       };
       fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/auth/reset-password`, resetOptions).then((response) => response.json()).then(data => {
-        if (data.detail != "Invalid Credentials" || data.detail != "Expired Token") {
+        if (data?.detail != "Invalid Credentials" || data?.detail != "Expired Token") {
           navigate("/login");
         } else {
           toast.open({message: 'Invalid Credentials', type: 'failure'});

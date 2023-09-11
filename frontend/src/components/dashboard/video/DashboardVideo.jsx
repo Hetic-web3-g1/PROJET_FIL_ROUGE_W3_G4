@@ -59,6 +59,10 @@ export const DashboardVideo = ({masterclassData}) => {
 
     const handleVideoUpload = (e) => {
         e.preventDefault();
+        if(masterclassVideo?.length > 4) {
+            toast.open({message: "You can only upload 5 videos per masterclass", type: "failure"})
+            return
+        }
         const fileBlob = new Blob([uploadVideo], {type: 'video/mp4'});
         var formData = new FormData();
         formData.append('masterclass_id', masterclassData.id);
@@ -117,7 +121,8 @@ export const DashboardVideo = ({masterclassData}) => {
                                 <Button label='Upload Subtitle'/>
                             </div>
                         </div>      
-                        <Button label="Remove video" onClick={(e) => handleDeleteVideo(e)}/>            
+                        <Button label="Remove video" onClick={(e) => handleDeleteVideo(e)}/> 
+                        <Button label="Add new video" onClick={(e) => handleVideoUpload(e)}/>            
                     </div>
                 </div>
             <div className='versionning'>
