@@ -15,6 +15,7 @@ import DashboardTeam from "../../components/dashboard/team/DashboardTeam";
 
 import MasterClassData from '../../mocks/masterClassMocks'
 import { useToast } from "../../utils/toast";
+import { getMasterclassTabData } from "../../services/masterclass/masterclass";
 
 export const Masterclass = () => {
 
@@ -46,40 +47,7 @@ export const Masterclass = () => {
   },[]);
 
   useEffect(() => {
-    const Options = {
-      method: 'GET',
-      headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}`},
-    };
-    if (masterclassData && masterclassData?.teacher_bio_id !== null) {
-      fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/biographies/biography/${masterclassData.teacher_bio_id}`, Options).then((response) => response.json()).then(data => {
-        setProfessorData(data)
-      });
-    }
-    if (masterclassData && masterclassData?.composer_bio_id !== null) {
-      fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/biographies/biography/${masterclassData.composer_bio_id}`, Options).then((response) => response.json()).then(data => {
-        setComposerData(data)
-      });
-    }
-    if (masterclassData) {
-      fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/users/academy/${masterclassData?.academy_id}`, Options).then((response) => response.json()).then(data => {
-        setUserList(data)
-      });
-    }
-    if (masterclassData) {
-      fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/academies/${masterclassData?.academy_id}`, Options).then((response) => response.json()).then(data => {
-        setAcademy(data)
-      });
-    }
-    if (masterclassData && masterclassData?.partition_id !== null) {
-      fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/partitions/partition/${masterclassData?.partition_id}`, Options).then((response) => response.json()).then(data => {
-        setPartitionData(data)
-      });
-    }
-    if (masterclassData && masterclassData?.work_analysis_id !== null) {
-      fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/work_analyzes/work_analysis/${masterclassData?.work_analysis_id}`, Options).then((response) => response.json()).then(data => {
-        setWorkAnalysisData(data)
-      });
-    }
+    getMasterclassTabData(store.getState().user.user_token ,masterclassData, setProfessorData, setComposerData, setUserList, setAcademy, setPartitionData, setWorkAnalysisData)
   },[masterclassData]); 
 
   const handleSave = (newMasterclassData) => {
