@@ -49,7 +49,7 @@ export const Header = () => {
 
     useEffect(() => {
         if(!store.getState().academy.academy?.id) {
-            setLocaleAcademyData(store.getState().user.user_token, dispatch, AcademyActions)
+            setLocaleAcademyData(store.getState().user.user_token, dispatch, store.getState().user.profile.academy_id, AcademyActions)
         }
     },)
 
