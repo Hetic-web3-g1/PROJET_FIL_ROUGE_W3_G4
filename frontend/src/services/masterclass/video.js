@@ -8,7 +8,7 @@ export function getVideoInfo(token, masterclassId, setMasterclassVideo) {
     });
 }
 
-export function getVideo(token, videoId, setVideo) {
+export function getVideo(token, video, videoId, setVideo) {
     const Options = {
         method: 'GET',
         headers:  { 'Content-Type': 'video/mp4', 'accept': 'video/mp4', 'authorization': `${token}`},
@@ -20,7 +20,7 @@ export function getVideo(token, videoId, setVideo) {
     });
 }
 
-export function deleteVideo(token, videoId, setMasterclassVideo) {
+export function deleteVideo(token, videoId, setMasterclassVideo, toast) {
     const Options = {
         method: 'DELETE',
         headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${token}`},
@@ -31,7 +31,7 @@ export function deleteVideo(token, videoId, setMasterclassVideo) {
     });
 }
 
-export function uploadNewVideo(token, uploadVideo, masterclassData, setNewVideoUploadPopup, setVideoId) {
+export function uploadNewVideo(token, uploadVideo, masterclassData, setNewVideoUploadPopup, setVideoId, toast) {
     const fileBlob = new Blob([uploadVideo], {type: 'video/mp4'});
     var formData = new FormData();
     formData.append('masterclass_id', masterclassData.id);
@@ -45,8 +45,8 @@ export function uploadNewVideo(token, uploadVideo, masterclassData, setNewVideoU
         body: formData,
     };
     fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/videos/video`, uploadOptions).then((response) => response.json()).then(data => {
-        toast.open({message: "Video uploaded successfully", type: "success"})
         setNewVideoUploadPopup(false)
         setVideoId(data)
+        toast.open({message: "Video uploaded successfully", type: "success"})
     })
 }

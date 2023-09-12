@@ -34,14 +34,14 @@ export const DashboardVideo = ({masterclassData}) => {
     useEffect(() => {
         if(masterclassVideo.length > 0) {
             for(var i = 0; i < masterclassVideo.length; i++) {
-                getVideo(store.getState().user.user_token, masterclassVideo[i]?.s3_object_id, setVideo)
+                getVideo(store.getState().user.user_token, video, masterclassVideo[i]?.s3_object_id, setVideo)
             }
         }
     },[masterclassVideo]);
 
     const handleDeleteVideo = (e) => {
         e.preventDefault();
-        deleteVideo(store.getState().user.user_token, masterclassVideo[displayedVideo]?.id)
+        deleteVideo(store.getState().user.user_token, masterclassVideo[displayedVideo]?.id, toast)
     }
 
     const handleVideoUpload = (e) => {
@@ -50,7 +50,7 @@ export const DashboardVideo = ({masterclassData}) => {
             toast.open({message: "You can only upload 5 videos per masterclass", type: "failure"})
             return
         }
-        uploadNewVideo(store.getState().user.user_token, uploadVideo, masterclassData, setNewVideoUploadPopup, setVideoId)
+        uploadNewVideo(store.getState().user.user_token, uploadVideo, masterclassData, setNewVideoUploadPopup, setVideoId, toast)
     }
 
     const choseVideoCallback = (e, chosedVideo) => {
