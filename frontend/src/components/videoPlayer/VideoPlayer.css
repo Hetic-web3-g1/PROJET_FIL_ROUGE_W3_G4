@@ -1,16 +1,11 @@
 video {
-    width: 80%;
+    width: 100%;
     top: 0;
     left: 0;
 }
 
 video::-webkit-media-controls {
     display: none;
-}
-
-.main-video{
-    width: 55%;
-    height: fit-content;
 }
 
 .video-wrapper {
@@ -52,7 +47,6 @@ video::-webkit-media-controls {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    width: 97%;
     bottom: 0;
     padding: 2px;
     flex-wrap: wrap;

@@ -98,15 +98,15 @@ export const DashboardPartition = ({partitionData, masterclassData, handleSave})
                     </Document>
                 </div>    
                 ) : (
-                <div className="dashboard-Partition-missing">
+                <div className="dashboard-partition-missing">
                     <div className='dashboard-Partition-missing-title'>
                         No Partition Uploaded yet ...
                     </div>
-                    <div className='dashboard-Partition-missing-upload-card'>
+                    <div className='dashboard-partition-missing-upload-card'>
                         <UploadCard setUploadFile={setUploadPartition}/>
                     </div>
                     <div>
-                        <Button label={"Upload"} onClick={(e) => handlePartitionUpload(e)}/>
+                        <Button label={"Save"} onClick={(e) => handlePartitionUpload(e)}/>
                     </div>
                 </div>
                 )

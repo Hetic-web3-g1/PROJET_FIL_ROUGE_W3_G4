@@ -20,7 +20,10 @@ export const DashboardVideo = ({masterclassData}) => {
 
     const [uploadVideo, setUploadVideo] = useState(null);
     const [masterclassVideo, setMasterclassVideo] = useState([]);
-    const [video, setVideo] = useState(null);
+    const [video, setVideo] = useState([]);
+    const [videoId, setVideoId] = useState(null);
+    const [displayedVideo, setDisplayedVideo] = useState(0);
+    const [newVideoUploadPopup, setNewVideoUploadPopup] = useState(false); 
 
     useEffect(() => {
         const Options = {
@@ -30,22 +33,42 @@ export const DashboardVideo = ({masterclassData}) => {
         fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/videos/video/masterclass/${masterclassData.id}`, Options).then((response) => response.json()).then(data => {
             setMasterclassVideo(data)
         });
-    },[]);
+    },[videoId]);
 
     useEffect(() => {
         if(masterclassVideo.length > 0) {
-            const Options = {
-            method: 'GET',
-            headers:  { 'Content-Type': 'video/mp4', 'accept': 'video/mp4', 'authorization': `${store.getState().user.user_token}`},
-            };
-            fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/s3_objects/url_and_object_info/${masterclassVideo[0]?.s3_object_id}`, Options).then((response) => response.json()).then(data => {
-                setVideo(data)
-            });
+            for(var i = 0; i < masterclassVideo.length; i++) {
+                const Options = {
+                method: 'GET',
+                headers:  { 'Content-Type': 'video/mp4', 'accept': 'video/mp4', 'authorization': `${store.getState().user.user_token}`},
+                };
+                fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/s3_objects/url_and_object_info/${masterclassVideo[i]?.s3_object_id}`, Options).then((response) => response.json()).then(data => {
+                    var tmp = video;
+                    tmp = [...tmp, data]
+                    setVideo([...video, data])
+                });
+            }
         }
     },[masterclassVideo]);
 
+    const handleDeleteVideo = (e) => {
+        e.preventDefault();
+        const Options = {
+            method: 'DELETE',
+            headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}`},
+        };
+        fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/videos/video/${masterclassVideo[0]?.id}`, Options).then((response) => response.json()).then(data => {
+            toast.open({message: "Video deleted successfully", type: "success"})
+            setMasterclassVideo([])
+        });
+    }
+
     const handleVideoUpload = (e) => {
         e.preventDefault();
+        if(masterclassVideo?.length > 3) {
+            toast.open({message: "You can only upload 5 videos per masterclass", type: "failure"})
+            return
+        }
         const fileBlob = new Blob([uploadVideo], {type: 'video/mp4'});
         var formData = new FormData();
         formData.append('masterclass_id', masterclassData.id);
@@ -60,16 +83,71 @@ export const DashboardVideo = ({masterclassData}) => {
         };
         fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/videos/video`, uploadOptions).then((response) => response.json()).then(data => {
             toast.open({message: "Video uploaded successfully", type: "success"})
+            setNewVideoUploadPopup(false)
+            setVideoId(data)
         })
     }
 
-    return ( 
-        <div>
+    const choseVideoCallback = (e, chosedVideo) => {
+        e.preventDefault();
+        setDisplayedVideo(chosedVideo)
+    }
+
+    const handleAddNewVideo = (e) => {
+        e.preventDefault();
+        setNewVideoUploadPopup(true)
+    }
+
+    const uploadPopup = () => {
+        return(
+            <div className='dashboard-video-popup'>
+                <div className='dashboard-video-popup-upload-card'>
+                    <UploadCard setUploadFile={setUploadVideo}/>
+                </div>
+                <div>
+                    <Button label={"Save"} onClick={(e) => handleVideoUpload(e)}/>
+                    <Button label={"Close"} onClick={(e) => setNewVideoUploadPopup(false)}/>
+                </div>
+            </div>
+        )
+    }
+
+    return (
+        <>
+            {newVideoUploadPopup ? uploadPopup() : null}
             {masterclassVideo?.length > 0 ? (
             <div className='dashboard-video'>
                 <div className='display-main'>
-                    <div className='main-video'>
-                        <VideoPlayer video={video?.url}/>
+                    <div className='dashboard-video-wrap'>
+                        <div className='main-video'>
+                            <VideoPlayer video={video[displayedVideo]?.url}/>
+                        </div>
+                        <div className="dashboard-video-list">
+                            <div className='dashboard-video-list-item' onClick={(e) => choseVideoCallback(e, 0)}>
+                                {video[0] ? (
+                                    <div>
+                                        <span style={{position:"absolute"}}>{masterclassVideo[0]?.filename}</span>
+                                        <video className='dashboard-video-list-item-video' src={video[0]?.url} controls={false}/>
+                                    </div>
+                                ) : 'Missing Video'}
+                            </div>
+                            <div className='dashboard-video-list-item' onClick={(e) => choseVideoCallback(e, 1)}>
+                                {video[1] ? (
+                                    <div>
+                                        <span style={{position:"absolute"}}>{masterclassVideo[0]?.filename}</span>
+                                        <video className='dashboard-video-list-item-video' src={video[1]?.url} controls={false}/>
+                                    </div>
+                                ) : 'Missing Video'}
+                            </div>
+                            <div className='dashboard-video-list-item' onClick={(e) => choseVideoCallback(e, 2)}>
+                                {video[2] ? (
+                                    <div>
+                                        <span style={{position:"absolute"}}>{masterclassVideo[0]?.filename}</span>
+                                        <video className='dashboard-video-list-item-video' src={video[2]?.url} controls={false}/>
+                                    </div>
+                                ) : 'Missing Video'}
+                            </div>
+                        </div>
                     </div>
                     <div className='right-side-wrapper'>
                         <div className='country-wrapper'>
@@ -85,12 +163,14 @@ export const DashboardVideo = ({masterclassData}) => {
                                         </div>
                                 )})}
                             </div>
-                        <div>
-                        <Button label='Upload Subtitle'/>
+                            <div>
+                                <Button label='Upload Subtitle'/>
+                            </div>
+                        </div>      
+                        <Button label="Remove video" onClick={(e) => handleDeleteVideo(e)}/> 
+                        <Button label="Add new video" onClick={(e) => handleAddNewVideo(e)}/>            
                     </div>
                 </div>
-            </div>
-            </div>
             <div className='versionning'>
                 <div className='versionning-header'>
                     <span className='subtitle2'>Current Version:</span>
@@ -129,7 +209,7 @@ export const DashboardVideo = ({masterclassData}) => {
                     </div>
                 </div>
             )}
-        </div>
+        </>
     )
 }
 
