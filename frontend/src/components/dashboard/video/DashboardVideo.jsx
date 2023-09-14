@@ -13,6 +13,8 @@ import Label from '../../label/Label'
 import UploadCard from '../../upload/UploadCard'
 import Logs from '../../../mocks/logMocks.js'
 
+import { ModalSubtitles } from '../../subtitles/ModalSubtitles'
+
 import { deleteVideo, getVideo, getVideoInfo, uploadNewVideo } from '../../../services/masterclass/video'
 
 export const DashboardVideo = ({masterclassData}) => {
@@ -26,6 +28,7 @@ export const DashboardVideo = ({masterclassData}) => {
     const [videoId, setVideoId] = useState(null);
     const [displayedVideo, setDisplayedVideo] = useState(0);
     const [newVideoUploadPopup, setNewVideoUploadPopup] = useState(false); 
+    const [subtitlePopup, setSubtitlePopup] = useState(false);
 
     useEffect(() => {
         getVideoInfo(store.getState().user.user_token, masterclassData.id, setMasterclassVideo)
@@ -63,6 +66,11 @@ export const DashboardVideo = ({masterclassData}) => {
         setNewVideoUploadPopup(true)
     }
 
+    const handleSubtitleModal = (e) => {
+        e.preventDefault();
+        setSubtitlePopup(!subtitlePopup);
+    }
+
     const uploadPopup = () => {
         return(
             <div className='dashboard-video-popup'>
@@ -79,6 +87,7 @@ export const DashboardVideo = ({masterclassData}) => {
 
     return (
         <>
+            {subtitlePopup ? <ModalSubtitles handleClose={handleSubtitleModal}/> : null}
             {newVideoUploadPopup ? uploadPopup() : null}
             {masterclassVideo?.length > 0 ? (
             <div className='dashboard-video'>
@@ -128,12 +137,15 @@ export const DashboardVideo = ({masterclassData}) => {
                                         </div>
                                 )})}
                             </div>
-                            <div>
-                                <Button label='Upload Subtitle'/>
+                            <div className='button-wrapper'>
+                                <Button label="Create Subtitles" onClick={(e) => handleSubtitleModal(e)} style={{marginBottom: "3px"}}/> 
+                                <Button label="Upload Subtitles" onClick={(e) => handleUploadSubtitles(e)}/> 
                             </div>
                         </div>      
-                        <Button label="Remove video" onClick={(e) => handleDeleteVideo(e)}/> 
-                        <Button label="Add new video" onClick={(e) => handleAddNewVideo(e)}/>            
+                        <div className='button-wrapper'>
+                            <Button label="Remove video" onClick={(e) => handleDeleteVideo(e)} style={{marginBottom: "3px"}}/> 
+                            <Button label="Add new video" onClick={(e) => handleAddNewVideo(e)} />   
+                        </div>
                     </div>
                 </div>
             <div className='versionning'>
