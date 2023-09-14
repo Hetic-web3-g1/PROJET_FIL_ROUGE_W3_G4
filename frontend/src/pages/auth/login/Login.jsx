@@ -7,13 +7,19 @@ import { useDispatch } from "react-redux";
 import { ProfileActions } from '../../../features/actions/profile';
 import { useNavigate } from "react-router-dom";
 import { ReactReduxContext } from 'react-redux'
+import { Link } from "react-router-dom";
+import { useToast } from '../../../utils/toast';
+
+import { login } from '../../../services/auth';
 
 export const Login = ({ }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loginData, setLoginData] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { store } = useContext(ReactReduxContext)
+  const toast = useToast();
       
   useEffect(() => {
     if(store.getState().user.user_token) {
@@ -21,21 +27,16 @@ export const Login = ({ }) => {
     }
   }, [store.getState().user.user_token])
 
-  const loginForm = (e) => { 
+  useEffect(() => {
+    if(loginData) {
+      dispatch(ProfileActions.login(loginData));
+      navigate("/home");
+    }
+  }, [loginData])
+
+  const handleLogin = (e) => { 
     e.preventDefault();
-    const loginOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'accept': 'application/json' },
-      body: JSON.stringify({email, password }),
-    };
-    fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/auth/login`, loginOptions).then((response) => response.json()).then(data => {
-      if (data.detail != "Invalid Credentials") {
-        dispatch(ProfileActions.login(data));
-        navigate("/home");
-      } else {
-        alert('Invalid user');
-      }
-    });
+    login(email, password, setLoginData, toast);
   };
 
   return (
@@ -49,7 +50,8 @@ export const Login = ({ }) => {
           <Field type="email" placeholder="Enter your mail" onChange={(e) => {setEmail(e.target.value)}}/>
           <label htmlFor="password" className='login-field' >Password</label>
           <Field type="password" placeholder="Enter your password" onChange={(e) => {setPassword(e.target.value)}}/>
-          <Button label="Login" className="button button-secondary padded" onClick={loginForm}/>
+          <Button label="Login" className="button button-secondary padded" onClick={handleLogin}/>
+          <div className='reset-password-link'>Forgot your password ? <Link to="/reset-password">Reset Password</Link></div>
       </form>
     </div>
   );

@@ -1,29 +1,29 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import './resetPassword.css';
 import Button from '../../../components/button/Button';
 import Field from '../../../components/field/Field';
 import { useNavigate } from "react-router-dom";
 import { useToast } from '../../../utils/toast';
 
+import { resetPasswordEmail } from '../../../services/auth';
+
 export const ResetPasswordEmail = ({ }) => {
   const [email, setEmail] = useState('');
+  const [resetData, setResetData] = useState(null);
   const navigate = useNavigate();
   const toast = useToast();
 
   const resetEmailForm = (e) => { 
-      e.preventDefault();
-      const emailOptions = {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json', 'accept': 'application/json' },
-      };
-      fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/auth/forgot-password?email=${email}`, emailOptions).then((response) => response.json()).then(data => {
-        if (data) {
-          navigate(`/reset-password/${data.token}`);
-        } else {
-          toast.open({message: 'Invalid Email', type: 'failure'});
-        }
-      });
+    e.preventDefault();
+    resetPasswordEmail(email, toast, setResetData);
   };
+
+  useEffect(() => {
+    if(resetData) {
+      navigate(`/reset-password/${resetData.token}`);
+    }
+  }, [resetData])
+
 
   return (
     <div className="reset-wrap">

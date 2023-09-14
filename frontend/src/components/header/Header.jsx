@@ -14,6 +14,9 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import OutsideAlerter from '../../utils/clickOutside';
 
+import { getUserAvatar, setLocaleUserData } from '../../services/user';
+import { setLocaleAcademyData } from '../../services/academy';
+
 import './Header.css';
 
 export const Header = () => {
@@ -34,46 +37,26 @@ export const Header = () => {
         if(!store.getState().user.user_token) {
           navigate("/");
         }
-      }, [store.getState().user.user_token])
+    }, [store.getState().user.user_token])
     
     useEffect(() => {
         if(store.getState().user.user_token) {
             if(!store.getState().user.profile?.id) {
-                const userOptions = {
-                    method: 'GET',
-                    headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}` },
-                };
-                fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/users/user/me`, userOptions).then((response) => response.json()).then(data => {
-                    dispatch(ProfileActions.updateProfile(data));
-                });
+                setLocaleUserData(store.getState().user.user_token, dispatch, ProfileActions)
             }
         }
     },)
 
     useEffect(() => {
         if(!store.getState().academy.academy?.id) {
-            const userOptions = {
-                method: 'GET',
-                headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}` },
-            };
-            fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/academies/${store.getState().user.profile.academy_id}`, userOptions).then((response) => response.json()).then(data => {
-                dispatch(AcademyActions.setAcademy(data));
-            });
+            setLocaleAcademyData(store.getState().user.user_token, dispatch, store.getState().user.profile.academy_id, AcademyActions)
         }
     },)
 
     useEffect(() => {        
-        if(store.getState().user.user_token) {
+        if(store.getState().user?.image_id) {
             if(!avatar) {
-                const userOptions = {
-                    method: 'GET',
-                    headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}` },
-                };
-                fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/images/image/${profile?.image_id}`, userOptions).then((response) => response.json()).then(data => {
-                    fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/s3_objects/url_and_object_info/${data?.s3_object_id}`, userOptions).then((response) => response.json()).then(data2 => {
-                        setAvatar(data2);
-                    });
-                });
+                getUserAvatar(store.getState().user.user_token, profile, setAvatar)
             }
         }
     },)

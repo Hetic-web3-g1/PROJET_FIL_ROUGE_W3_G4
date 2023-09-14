@@ -13,6 +13,8 @@ import Label from '../../label/Label'
 import UploadCard from '../../upload/UploadCard'
 import Logs from '../../../mocks/logMocks.js'
 
+import { deleteVideo, getVideo, getVideoInfo, uploadNewVideo } from '../../../services/masterclass/video'
+
 export const DashboardVideo = ({masterclassData}) => {
 
     const { store } = useContext(ReactReduxContext)
@@ -26,41 +28,20 @@ export const DashboardVideo = ({masterclassData}) => {
     const [newVideoUploadPopup, setNewVideoUploadPopup] = useState(false); 
 
     useEffect(() => {
-        const Options = {
-          method: 'GET',
-          headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}`},
-        };
-        fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/videos/video/masterclass/${masterclassData.id}`, Options).then((response) => response.json()).then(data => {
-            setMasterclassVideo(data)
-        });
+        getVideoInfo(store.getState().user.user_token, masterclassData.id, setMasterclassVideo)
     },[videoId]);
 
     useEffect(() => {
         if(masterclassVideo.length > 0) {
             for(var i = 0; i < masterclassVideo.length; i++) {
-                const Options = {
-                method: 'GET',
-                headers:  { 'Content-Type': 'video/mp4', 'accept': 'video/mp4', 'authorization': `${store.getState().user.user_token}`},
-                };
-                fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/s3_objects/url_and_object_info/${masterclassVideo[i]?.s3_object_id}`, Options).then((response) => response.json()).then(data => {
-                    var tmp = video;
-                    tmp = [...tmp, data]
-                    setVideo([...video, data])
-                });
+                getVideo(store.getState().user.user_token, video, masterclassVideo[i]?.s3_object_id, setVideo)
             }
         }
     },[masterclassVideo]);
 
     const handleDeleteVideo = (e) => {
         e.preventDefault();
-        const Options = {
-            method: 'DELETE',
-            headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}`},
-        };
-        fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/videos/video/${masterclassVideo[0]?.id}`, Options).then((response) => response.json()).then(data => {
-            toast.open({message: "Video deleted successfully", type: "success"})
-            setMasterclassVideo([])
-        });
+        deleteVideo(store.getState().user.user_token, masterclassVideo[displayedVideo]?.id, toast)
     }
 
     const handleVideoUpload = (e) => {
@@ -69,23 +50,7 @@ export const DashboardVideo = ({masterclassData}) => {
             toast.open({message: "You can only upload 5 videos per masterclass", type: "failure"})
             return
         }
-        const fileBlob = new Blob([uploadVideo], {type: 'video/mp4'});
-        var formData = new FormData();
-        formData.append('masterclass_id', masterclassData.id);
-        formData.append('duration', 1);
-        formData.append('version', 1);
-        formData.append('public', true);
-        formData.append('file', fileBlob, uploadVideo.name);
-        const uploadOptions = {
-            method: 'POST',
-            headers: { 'authorization': `${store.getState().user.user_token}` },
-            body: formData,
-        };
-        fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/videos/video`, uploadOptions).then((response) => response.json()).then(data => {
-            toast.open({message: "Video uploaded successfully", type: "success"})
-            setNewVideoUploadPopup(false)
-            setVideoId(data)
-        })
+        uploadNewVideo(store.getState().user.user_token, uploadVideo, masterclassData, setNewVideoUploadPopup, setVideoId, toast)
     }
 
     const choseVideoCallback = (e, chosedVideo) => {

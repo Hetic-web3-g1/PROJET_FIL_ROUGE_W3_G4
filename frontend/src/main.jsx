@@ -12,7 +12,7 @@ import {
 import App from "./App";
 import Home from "./pages/home/Home";
 import Masterclass from "./pages/masterclass/Masterclass";
-import Login from "./pages/login/Login";
+import Login from "./pages/auth/login/Login";
 import ErrorPage from "./pages/errorPage";
 import ResetPasswordEmail from "./pages/auth/reset/ResetPasswordEmail";
 import ResetPassword from "./pages/auth/reset/ResetPassword";
