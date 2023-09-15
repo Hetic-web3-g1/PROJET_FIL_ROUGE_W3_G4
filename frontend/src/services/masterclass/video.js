@@ -50,3 +50,32 @@ export function uploadNewVideo(token, uploadVideo, masterclassData, setNewVideoU
         toast.open({message: "Video uploaded successfully", type: "success"})
     })
 }
+
+export function uploadNewSubtitles(token, uploadSubtitles, subtitlesCountry, masterClassData, setUploadSubtitlesPopup, toast) {
+    const fileBlob = new Blob([uploadSubtitles], {type: 'text/vtt'});
+    var formData = new FormData();
+    formData.append('language', subtitlesCountry);
+    formData.append('masterclass_id', masterClassData.id);
+    formData.append('file', fileBlob, uploadSubtitles.name);
+    const uploadOptions = {
+        method: 'POST',
+        headers: { 'authorization': `${token}` },
+        body: formData,
+    };
+    fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/subtitles/subtitle`, uploadOptions).then((response) => response.json()).then(data => {
+        setUploadSubtitlesPopup(false)
+        toast.open({message: "Subtitles uploaded successfully", type: "success"})
+    })
+}
+
+export function getSubtitles(token, masterclassId, subtitles, setSubtitles) {
+    const Options = {
+        method: 'GET',
+        headers:  { 'Content-Type': 'video/mp4', 'accept': 'video/mp4', 'authorization': `${token}`},
+    };
+    fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/subtitles/subtitle/masterclass/${masterclassId}`, Options).then((response) => response.json()).then(data => {
+        var tmp = subtitles;
+        tmp = [...tmp, data]
+        setSubtitles([...subtitles, data])
+    });
+}

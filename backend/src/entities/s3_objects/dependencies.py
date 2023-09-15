@@ -25,13 +25,14 @@ def check_mimetype(file: UploadFile, file_type: str) -> tuple[str, str]:
         "image": "image",
         "video": "video",
         "partition": "application",
-        "subtitle": "application",
+        "subtitle": "text",
     }
 
     supported_file_types = {
         "image": ["jpg", "jpeg", "png", "svg"],
         "video": ["mp4"],
         "application": ["pdf", "x-subrip"],
+        "text": ["vtt"],
     }
 
     mime_type = file.content_type

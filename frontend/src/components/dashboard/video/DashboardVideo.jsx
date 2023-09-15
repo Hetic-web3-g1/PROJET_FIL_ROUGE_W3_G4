@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect, useMemo } from 'react'
 import propTypes from 'prop-types'
 import { ReactReduxContext } from 'react-redux'
 import { useToast } from '../../../utils/toast'
@@ -11,9 +11,12 @@ import VideoPlayer  from '../../videoPlayer/VideoPlayer.jsx'
 import Button from '../../button/Button'
 import Label from '../../label/Label'
 import UploadCard from '../../upload/UploadCard'
+import Dropdown from '../../dropdown/Dropdown'
 import Logs from '../../../mocks/logMocks.js'
 
-import { deleteVideo, getVideo, getVideoInfo, uploadNewVideo } from '../../../services/masterclass/video'
+import { ModalSubtitles } from '../../subtitles/ModalSubtitles'
+
+import { deleteVideo, getVideo, getVideoInfo, uploadNewVideo, uploadNewSubtitles, getSubtitles } from '../../../services/masterclass/video'
 
 export const DashboardVideo = ({masterclassData}) => {
 
@@ -26,18 +29,27 @@ export const DashboardVideo = ({masterclassData}) => {
     const [videoId, setVideoId] = useState(null);
     const [displayedVideo, setDisplayedVideo] = useState(0);
     const [newVideoUploadPopup, setNewVideoUploadPopup] = useState(false); 
+    const [subtitlePopup, setSubtitlePopup] = useState(false);
+    const [uploadSubtitlesPopup, setUploadSubtitlesPopup] = useState(false);
+    const [uploadSubtitles, setUploadSubtitles] = useState(null);
+    const [subtitlesCountry, setSubtitlesCountry] = useState('French');
+    const [subtitles, setSubtitles] = useState([]);
 
     useEffect(() => {
         getVideoInfo(store.getState().user.user_token, masterclassData.id, setMasterclassVideo)
     },[videoId]);
 
-    useEffect(() => {
+    useMemo(() => {
         if(masterclassVideo.length > 0) {
             for(var i = 0; i < masterclassVideo.length; i++) {
                 getVideo(store.getState().user.user_token, video, masterclassVideo[i]?.s3_object_id, setVideo)
             }
         }
     },[masterclassVideo]);
+
+    useEffect(() => {
+        getSubtitles(store.getState().user.user_token, masterclassData.id, subtitles, setSubtitles)
+    },[]); 
 
     const handleDeleteVideo = (e) => {
         e.preventDefault();
@@ -53,14 +65,19 @@ export const DashboardVideo = ({masterclassData}) => {
         uploadNewVideo(store.getState().user.user_token, uploadVideo, masterclassData, setNewVideoUploadPopup, setVideoId, toast)
     }
 
+    const handleSubtitlesUpload = (e) => {
+        e.preventDefault();
+        uploadNewSubtitles(store.getState().user.user_token, uploadSubtitles, subtitlesCountry, masterclassData, setUploadSubtitlesPopup, toast)
+    }
+
     const choseVideoCallback = (e, chosedVideo) => {
         e.preventDefault();
         setDisplayedVideo(chosedVideo)
     }
 
-    const handleAddNewVideo = (e) => {
+    const handleSubtitleModal = (e) => {
         e.preventDefault();
-        setNewVideoUploadPopup(true)
+        setSubtitlePopup(!subtitlePopup);
     }
 
     const uploadPopup = () => {
@@ -77,9 +94,28 @@ export const DashboardVideo = ({masterclassData}) => {
         )
     }
 
+    const handleUploadSubtitles = () => {
+        const dropdownValues = ['French', 'English', 'Chinese', 'Spanish']
+        return(
+            <div className='dashboard-video-popup'>
+                <span style={{marginBottom: "10px"}}>Upload new Subtitles</span>
+                <Dropdown returnValues={setSubtitlesCountry} options={dropdownValues} defaultValue={'French'}/>
+                <div style={{marginTop: "10px"}} className='dashboard-video-popup-upload-card'>
+                    <UploadCard setUploadFile={setUploadSubtitles}/>
+                </div>
+                <Button label={"Save"} onClick={(e) => handleSubtitlesUpload(e)}/>
+                <div style={{marginTop: "10px"}}>
+                    <Button label={"Close"} onClick={(e) => setUploadSubtitlesPopup(false)}/>
+                </div>
+            </div>
+        )
+    }
+
     return (
         <>
+            {subtitlePopup ? <ModalSubtitles handleClose={handleSubtitleModal}/> : null}
             {newVideoUploadPopup ? uploadPopup() : null}
+            {uploadSubtitlesPopup ? handleUploadSubtitles() : null}
             {masterclassVideo?.length > 0 ? (
             <div className='dashboard-video'>
                 <div className='display-main'>
@@ -91,7 +127,7 @@ export const DashboardVideo = ({masterclassData}) => {
                             <div className='dashboard-video-list-item' onClick={(e) => choseVideoCallback(e, 0)}>
                                 {video[0] ? (
                                     <div>
-                                        <span style={{position:"absolute"}}>{masterclassVideo[0]?.filename}</span>
+                                        <span>{masterclassVideo[0]?.filename}</span>
                                         <video className='dashboard-video-list-item-video' src={video[0]?.url} controls={false}/>
                                     </div>
                                 ) : 'Missing Video'}
@@ -99,7 +135,7 @@ export const DashboardVideo = ({masterclassData}) => {
                             <div className='dashboard-video-list-item' onClick={(e) => choseVideoCallback(e, 1)}>
                                 {video[1] ? (
                                     <div>
-                                        <span style={{position:"absolute"}}>{masterclassVideo[0]?.filename}</span>
+                                        <span>{masterclassVideo[0]?.filename}</span>
                                         <video className='dashboard-video-list-item-video' src={video[1]?.url} controls={false}/>
                                     </div>
                                 ) : 'Missing Video'}
@@ -107,7 +143,7 @@ export const DashboardVideo = ({masterclassData}) => {
                             <div className='dashboard-video-list-item' onClick={(e) => choseVideoCallback(e, 2)}>
                                 {video[2] ? (
                                     <div>
-                                        <span style={{position:"absolute"}}>{masterclassVideo[0]?.filename}</span>
+                                        <span>{masterclassVideo[0]?.filename}</span>
                                         <video className='dashboard-video-list-item-video' src={video[2]?.url} controls={false}/>
                                     </div>
                                 ) : 'Missing Video'}
@@ -128,12 +164,15 @@ export const DashboardVideo = ({masterclassData}) => {
                                         </div>
                                 )})}
                             </div>
-                            <div>
-                                <Button label='Upload Subtitle'/>
+                            <div className='button-wrapper'>
+                                <Button label="Create Subtitles" onClick={(e) => setSubtitlePopup(true)} style={{marginBottom: "3px"}}/> 
+                                <Button label="Upload Subtitles" onClick={(e) => setUploadSubtitlesPopup(true)}/> 
                             </div>
                         </div>      
-                        <Button label="Remove video" onClick={(e) => handleDeleteVideo(e)}/> 
-                        <Button label="Add new video" onClick={(e) => handleAddNewVideo(e)}/>            
+                        <div className='button-wrapper'>
+                            <Button label="Remove video" onClick={(e) => handleDeleteVideo(e)} style={{marginBottom: "3px"}}/> 
+                            <Button label="Add new video" onClick={(e) => setNewVideoUploadPopup(e)} />   
+                        </div>
                     </div>
                 </div>
             <div className='versionning'>
