@@ -96,10 +96,10 @@ export const ModalBioProf = ({ handleClose, store, DefaultValue }) => {
             <div className="modal-bio-prof-instrument-wrapper">
                 Instruments
                 <div className="modal-bio-prof-instrument">
-                    {Instruments.map((instrument, index) => {
+                    {Instruments.map((instrumen, index) => {
                         return (
                             <div className="instrument-card">
-                                <CardInstrument key={`modal-instrument-card-${index}`} name={instrument} legend={true} onClick={handleInstrument}/>
+                                <CardInstrument Defaultvalue={instrument[0]} key={`modal-instrument-card-${index}`} name={instrumen} legend={true} onClick={handleInstrument}/>
                             </div>
                         )
                     })}
@@ -111,7 +111,7 @@ export const ModalBioProf = ({ handleClose, store, DefaultValue }) => {
                     <div className='field-container'>
                         <div className='modal-bio-prof-infos-field marg-right'>
                             <span>Nationality</span>
-                            <Field placeholder="Nationality" value={nationality}onChange={(e) => setNationality(e.target.value)}/>
+                            <Field placeholder="Nationality" value={nationality} onChange={(e) => setNationality(e.target.value)}/>
                         </div>
                         <div className='modal-bio-prof-infos-field fix-width'>
                             <span>Website</span>
