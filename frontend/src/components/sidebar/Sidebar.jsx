@@ -2,7 +2,7 @@ import Checkbox from '../checkbox/Checkbox'
 import Dropdown from '../dropdown/Dropdown'
 import { useDispatch, ReactReduxContext, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import React, { useContext, useEffect, useState, useMemo } from 'react';
+import React, { useContext, useState, useMemo } from 'react';
 import './Sidebar.css';
 import { FiltersActions } from '../../features/actions/filters';
 
@@ -20,8 +20,6 @@ export const Sidebar = ({categories}) => {
   }
 
   const handleCheckboxTrue = (event) => {
-    console.log(event);
-    console.log(checkboxList);
     const tmp = checkboxList;
     if(checkboxList[0] === event[0]) return;
     tmp.push(event);
