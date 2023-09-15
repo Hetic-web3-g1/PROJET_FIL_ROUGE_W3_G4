@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect, useMemo } from 'react'
 import propTypes from 'prop-types'
 import { ReactReduxContext } from 'react-redux'
 import { useToast } from '../../../utils/toast'
@@ -39,7 +39,7 @@ export const DashboardVideo = ({masterclassData}) => {
         getVideoInfo(store.getState().user.user_token, masterclassData.id, setMasterclassVideo)
     },[videoId]);
 
-    useEffect(() => {
+    useMemo(() => {
         if(masterclassVideo.length > 0) {
             for(var i = 0; i < masterclassVideo.length; i++) {
                 getVideo(store.getState().user.user_token, video, masterclassVideo[i]?.s3_object_id, setVideo)
@@ -98,13 +98,15 @@ export const DashboardVideo = ({masterclassData}) => {
         const dropdownValues = ['French', 'English', 'Chinese', 'Spanish']
         return(
             <div className='dashboard-video-popup'>
-                Upload new Subtitles
+                <span style={{marginBottom: "10px"}}>Upload new Subtitles</span>
                 <Dropdown returnValues={setSubtitlesCountry} options={dropdownValues} defaultValue={'French'}/>
-                <div className='dashboard-video-popup-upload-card'>
+                <div style={{marginTop: "10px"}} className='dashboard-video-popup-upload-card'>
                     <UploadCard setUploadFile={setUploadSubtitles}/>
                 </div>
                 <Button label={"Save"} onClick={(e) => handleSubtitlesUpload(e)}/>
-                <Button label={"Close"} onClick={(e) => setUploadSubtitles(false)}/>
+                <div style={{marginTop: "10px"}}>
+                    <Button label={"Close"} onClick={(e) => setUploadSubtitlesPopup(false)}/>
+                </div>
             </div>
         )
     }
@@ -169,7 +171,7 @@ export const DashboardVideo = ({masterclassData}) => {
                         </div>      
                         <div className='button-wrapper'>
                             <Button label="Remove video" onClick={(e) => handleDeleteVideo(e)} style={{marginBottom: "3px"}}/> 
-                            <Button label="Add new video" onClick={(e) => handleAddNewVideo(e)} />   
+                            <Button label="Add new video" onClick={(e) => setNewVideoUploadPopup(e)} />   
                         </div>
                     </div>
                 </div>
