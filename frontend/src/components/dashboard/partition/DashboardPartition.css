@@ -12,3 +12,30 @@
     margin-bottom: 20px;
     width: 80vw;
 }
+
+.partition-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.annotations-container {
+    flex-grow: 0.6;
+}
+
+.pdf-container-partition {
+    margin: 25px;
+    max-height: 600px;
+    overflow: auto;
+}
+
+.annotation-field {
+    margin-bottom: 1vh;
+    display: flex;
+}
+
+.save-annotation-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
+}
