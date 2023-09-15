@@ -18,11 +18,11 @@ export const Field = ({ type, placeholder, onChange, id, value }) => {
     const navigate = useNavigate();
     const [isShown, setIsShown] = useState(false);
 
+    const [BioData, setBioData] = useState();
     const [showModalBioProf, setShowModalBioProf] = useState(false);
 
     const handleShowModalBioProf = () => {
         setShowModalBioProf(!showModalBioProf);
-        console.log('bite');
     }
 
     const handleClick = event => {
@@ -47,9 +47,9 @@ export const Field = ({ type, placeholder, onChange, id, value }) => {
         setNoResult(blockDisplayed);
     }
 
-    function handleClickBiography() {
+    function handleClickBiography(el) {
+        setBioData(el);
         showModalBioProf ? setShowModalBioProf(false) : setShowModalBioProf(true);
-        console.log(showModalBioProf);
     }
 
     /**
@@ -81,8 +81,6 @@ export const Field = ({ type, placeholder, onChange, id, value }) => {
         setNoResult(false);
     }, [searchData]);
 
-
-
     return (
         <>
             <div className={['input-wrap', `input-wrap-${type}`].join(' ')}>
@@ -113,7 +111,7 @@ export const Field = ({ type, placeholder, onChange, id, value }) => {
 
                             <div style={searchData[1]?.length === 0 ? {display: 'none'} : undefined}>
                                 <h2 className='title-search-category'>Biography</h2>
-                                {searchData[1]?.map((el, index) => {return (<li onClick={() => (handleClickBiography())} key={index} className='li-custom font'>{el.first_name}</li>)}) }
+                                {searchData[1]?.map((el, index) => {return (<li onClick={() => (handleClickBiography(el))} key={index} className='li-custom font'>{el.first_name}</li>)}) }
                                 <hr className='custom-search-hr' />
                             </div>
 
@@ -133,7 +131,7 @@ export const Field = ({ type, placeholder, onChange, id, value }) => {
 
                 </div>
             </OutsideAlerter>
-            {showModalBioProf ? <div className='modal-floater'> <ModalBioProf handleClose={handleClickBiography} store={store}/> </div> : null}
+            {showModalBioProf ? <div className='modal-floater'> <ModalBioProf DefaultValue={BioData} handleClose={handleClickBiography} store={store}/> </div> : null}
         </>
     );
 }
