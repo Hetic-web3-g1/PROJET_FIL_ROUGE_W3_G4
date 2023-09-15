@@ -46,14 +46,14 @@
 }
 
 .modal-footer {
-    padding-top: 1em;
+    padding-bottom: 4.5em;
 }
 
 .modal-button-container {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    padding: 2rem 2rem;
+    padding: 1rem 1rem;
 }
 
 .modal-close-button {

@@ -6,6 +6,8 @@ import { ReactReduxContext } from 'react-redux';
 
 import './field.css';
 import OutsideAlerter from '../../utils/clickOutside';
+import ModalBioProf from '../Modal/modalbioprof/ModalBioProf';
+
 
 export const Field = ({ type, placeholder, onChange, id, value }) => {
     const { store } = useContext(ReactReduxContext);
@@ -14,6 +16,18 @@ export const Field = ({ type, placeholder, onChange, id, value }) => {
     const [noText, setNoText] = useState(true);
     const [timer, setTimer] = useState(null);
     const navigate = useNavigate();
+    const [isShown, setIsShown] = useState(false);
+
+    const [showModalBioProf, setShowModalBioProf] = useState(false);
+
+    const handleShowModalBioProf = () => {
+        setShowModalBioProf(!showModalBioProf);
+        console.log('bite');
+    }
+
+    const handleClick = event => {
+      setIsShown(current => !current);
+    };
   
     function HideAndShowPassword() {
         var x = document.getElementById(id);
@@ -31,6 +45,11 @@ export const Field = ({ type, placeholder, onChange, id, value }) => {
      */
     function handleDisplay(blockDisplayed) {
         setNoResult(blockDisplayed);
+    }
+
+    function handleClickBiography() {
+        showModalBioProf ? setShowModalBioProf(false) : setShowModalBioProf(true);
+        console.log(showModalBioProf);
     }
 
     /**
@@ -62,6 +81,8 @@ export const Field = ({ type, placeholder, onChange, id, value }) => {
         setNoResult(false);
     }, [searchData]);
 
+
+
     return (
         <>
             <div className={['input-wrap', `input-wrap-${type}`].join(' ')}>
@@ -92,7 +113,7 @@ export const Field = ({ type, placeholder, onChange, id, value }) => {
 
                             <div style={searchData[1]?.length === 0 ? {display: 'none'} : undefined}>
                                 <h2 className='title-search-category'>Biography</h2>
-                                {searchData[1]?.map((el, index) => {return (<li key={index} className='li-custom font'>{el.first_name}</li>)})}
+                                {searchData[1]?.map((el, index) => {return (<li onClick={() => (handleClickBiography())} key={index} className='li-custom font'>{el.first_name}</li>)}) }
                                 <hr className='custom-search-hr' />
                             </div>
 
@@ -112,6 +133,7 @@ export const Field = ({ type, placeholder, onChange, id, value }) => {
 
                 </div>
             </OutsideAlerter>
+            {showModalBioProf ? <div className='modal-floater'> <ModalBioProf handleClose={handleClickBiography} store={store}/> </div> : null}
         </>
     );
 }
