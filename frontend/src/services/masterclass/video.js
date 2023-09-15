@@ -67,3 +67,15 @@ export function uploadNewSubtitles(token, uploadSubtitles, subtitlesCountry, mas
         toast.open({message: "Subtitles uploaded successfully", type: "success"})
     })
 }
+
+export function getSubtitles(token, masterclassId, subtitles, setSubtitles) {
+    const Options = {
+        method: 'GET',
+        headers:  { 'Content-Type': 'video/mp4', 'accept': 'video/mp4', 'authorization': `${token}`},
+    };
+    fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/subtitles/subtitle/masterclass/${masterclassId}`, Options).then((response) => response.json()).then(data => {
+        var tmp = subtitles;
+        tmp = [...tmp, data]
+        setSubtitles([...subtitles, data])
+    });
+}

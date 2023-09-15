@@ -16,7 +16,7 @@ import Logs from '../../../mocks/logMocks.js'
 
 import { ModalSubtitles } from '../../subtitles/ModalSubtitles'
 
-import { deleteVideo, getVideo, getVideoInfo, uploadNewVideo, uploadNewSubtitles } from '../../../services/masterclass/video'
+import { deleteVideo, getVideo, getVideoInfo, uploadNewVideo, uploadNewSubtitles, getSubtitles } from '../../../services/masterclass/video'
 
 export const DashboardVideo = ({masterclassData}) => {
 
@@ -33,6 +33,7 @@ export const DashboardVideo = ({masterclassData}) => {
     const [uploadSubtitlesPopup, setUploadSubtitlesPopup] = useState(false);
     const [uploadSubtitles, setUploadSubtitles] = useState(null);
     const [subtitlesCountry, setSubtitlesCountry] = useState('French');
+    const [subtitles, setSubtitles] = useState([]);
 
     useEffect(() => {
         getVideoInfo(store.getState().user.user_token, masterclassData.id, setMasterclassVideo)
@@ -45,6 +46,10 @@ export const DashboardVideo = ({masterclassData}) => {
             }
         }
     },[masterclassVideo]);
+
+    useEffect(() => {
+        getSubtitles(store.getState().user.user_token, masterclassData.id, subtitles, setSubtitles)
+    },[]); 
 
     const handleDeleteVideo = (e) => {
         e.preventDefault();
@@ -103,7 +108,6 @@ export const DashboardVideo = ({masterclassData}) => {
             </div>
         )
     }
-                    
 
     return (
         <>
@@ -121,7 +125,7 @@ export const DashboardVideo = ({masterclassData}) => {
                             <div className='dashboard-video-list-item' onClick={(e) => choseVideoCallback(e, 0)}>
                                 {video[0] ? (
                                     <div>
-                                        <span style={{position:"absolute"}}>{masterclassVideo[0]?.filename}</span>
+                                        <span>{masterclassVideo[0]?.filename}</span>
                                         <video className='dashboard-video-list-item-video' src={video[0]?.url} controls={false}/>
                                     </div>
                                 ) : 'Missing Video'}
@@ -129,7 +133,7 @@ export const DashboardVideo = ({masterclassData}) => {
                             <div className='dashboard-video-list-item' onClick={(e) => choseVideoCallback(e, 1)}>
                                 {video[1] ? (
                                     <div>
-                                        <span style={{position:"absolute"}}>{masterclassVideo[0]?.filename}</span>
+                                        <span>{masterclassVideo[0]?.filename}</span>
                                         <video className='dashboard-video-list-item-video' src={video[1]?.url} controls={false}/>
                                     </div>
                                 ) : 'Missing Video'}
@@ -137,7 +141,7 @@ export const DashboardVideo = ({masterclassData}) => {
                             <div className='dashboard-video-list-item' onClick={(e) => choseVideoCallback(e, 2)}>
                                 {video[2] ? (
                                     <div>
-                                        <span style={{position:"absolute"}}>{masterclassVideo[0]?.filename}</span>
+                                        <span>{masterclassVideo[0]?.filename}</span>
                                         <video className='dashboard-video-list-item-video' src={video[2]?.url} controls={false}/>
                                     </div>
                                 ) : 'Missing Video'}
