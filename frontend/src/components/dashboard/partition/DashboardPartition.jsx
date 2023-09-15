@@ -72,7 +72,12 @@ export const DashboardPartition = ({partitionData, masterclassData, handleSave})
      * Delete PDF file
      */
     const handleFileDelete = () => {
-        console.log('delete tmp')
+        const Options = {
+            method: 'DELETE',
+            headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}`},
+        };
+        fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/partitions/partition/${masterclassData.partition_id}`, Options).then((response) => response.json()).then(data => {
+        });
     }
 
     useMemo(() => {
