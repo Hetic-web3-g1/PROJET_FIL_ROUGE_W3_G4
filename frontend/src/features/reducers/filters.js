@@ -3,7 +3,7 @@ import { Types } from '../actions/type';
 const initialState = {
   filters: {
     sort_by: 'Created at',
-    sort_by_status: undefined,
+    sort_by_status: [['Completed', false], ['Created', false], ['InReview', false], ['InProgress', false], ['Archived', false]],
   }
 }
 

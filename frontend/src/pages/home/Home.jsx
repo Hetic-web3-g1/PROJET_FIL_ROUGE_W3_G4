@@ -16,27 +16,23 @@ import { useTranslation } from 'react-i18next';
 
 export const Home = () => {
 
+    const { store } = useContext(ReactReduxContext)
     const userStateRedux = useSelector((state) => state.filters.filters.sort_by);
     const navigate = useNavigate();
     const { t, i18n } = useTranslation();
 
-    const sortByState = useSelector((state) => state.filters.filters.sort_by);
-    const sortByStatusState = useSelector((state) => state.filters.filters.sort_by_status);
+    const sortByState = useSelector((state) => state.filters.filters.sort_by) || 'Created at';
+    const sortByStatusState = useSelector((state) => state.filters.filters.sort_by_status) || [['Completed', false], ['Created', false], ['InReview', false], ['InProgress', false], ['Archived', false]];
+    const [firstSortByStatusState, setFirstSortByStatusState] = useState(true);
     const [mastercardComponent, setMastercardComponent] = useState([]);
     const [mastercardData, setMastercardData] = useState([]);
     const [biographyData, setBiographyData] = useState();
-
-
-    const [sortedTest, setSortedTest] = useState([]);
-
-    const { store } = useContext(ReactReduxContext)
 
     const sortDataByCheckbox = () => {
         var activeFilters = [];
         sortByStatusState.map(e => {
             e[1] === true ? activeFilters.push(e[0]) : undefined;
         })
-
         var sortedArray = [];
         activeFilters.map(filter => {
             var mscCopy = mastercardData;
@@ -86,13 +82,13 @@ export const Home = () => {
             };
             fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/biographies`, userOptions).then((response) => response.json()).then(data => {
                 setBiographyData(data)
-            });
+            });      
         }
     },[])
 
     useEffect(() => {
         sortData();
-    }, [sortByState, sortByStatusState]);
+    }, [sortByState, sortByStatusState, mastercardData]);
   
     return (
         <div className="home">
