@@ -2,7 +2,7 @@ import Checkbox from '../checkbox/Checkbox'
 import Dropdown from '../dropdown/Dropdown'
 import { useDispatch, ReactReduxContext, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState, useMemo } from 'react';
 import './Sidebar.css';
 import { FiltersActions } from '../../features/actions/filters';
 
@@ -19,14 +19,15 @@ export const Sidebar = ({categories}) => {
     dispatch(FiltersActions.sortBy(childData));
   }
 
-  function handleCheckboxTrue(event) {
+  const handleCheckboxTrue = (event) => {
     const tmp = checkboxList;
+    if(checkboxList[0] === event[0]) return;
     tmp.push(event);
     setCheckboxList(tmp);
     setObservable(observable + 1);
   }
 
-  function handleCheckboxFalse(event) {
+  const handleCheckboxFalse = (event) => {
     const index = checkboxList.findIndex(e => e[0] === event[0]);
     var tmp = checkboxList;
     tmp.splice(index, 1);
@@ -34,18 +35,16 @@ export const Sidebar = ({categories}) => {
     setObservable(observable - 1);
   }
 
-  useEffect(() => {
+  useMemo(() => {
     dispatch(FiltersActions.sortByStatus([...checkboxList]));
   }, [observable])
 
   return (
     <div>
       <div style={open ? {display: 'none'} : null} className='sidebar-container'>
-
         <div className="sidebar-filters-container">
           <label className='sidebar-font'>Sort by:</label>
           <Dropdown returnValues={handleValueDropdown} options={customFilters} defaultValue={store.getState().filters.filters.sort_by}/>
-
           {
             Object.keys(categories)?.map((categoryTitle) => {
               { 
@@ -60,14 +59,11 @@ export const Sidebar = ({categories}) => {
               }
             })
           }
-
         </div>
-
         <div>
           <img onClick={() => setOpen(!open)} className='exit-sidebar-float' src="src\assets\sidebar\hide-sidebar.svg" alt="exit" />
         </div>
       </div>
-
       <div style={!open ? {display: 'none'} : null} className='small-sidebar'>
         <div>
           <img onClick={() => setOpen(!open)} className='exit-sidebar-float' src="src\assets\sidebar\show-sidebar.svg" alt="exit" />
