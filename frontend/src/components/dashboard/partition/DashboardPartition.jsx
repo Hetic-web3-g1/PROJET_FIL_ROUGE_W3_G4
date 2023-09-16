@@ -15,10 +15,11 @@ export const DashboardPartition = ({partitionData, masterclassData, handleSave})
     const { store } = useContext(ReactReduxContext)
     const [uploadPartition, setUploadPartition] = useState();
     const [partition, setPartition] = useState();   
+    const [partitionObservable, setPartitionObservable] = useState(0);
     const [numPages, setNumPages] = useState(null);
     const [annotations, setAnnotations] = React.useState([]);
     const [tmpAnnotation, setTmpAnnotation] = React.useState({'text': '', 'line': ''});
-    const [observable, setObservable] = React.useState(0);
+    const [uploadAnnotations, setUploadAnnotations] = useState([]);
     const toast = useToast();
 
     /**
@@ -67,6 +68,7 @@ export const DashboardPartition = ({partitionData, masterclassData, handleSave})
         };
         fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/partitions/partition`, uploadOptions).then((response) => response.json()).then(data => {
             handleSaveId(data);
+            setPartitionObservable(1);
         })
     }
 
@@ -82,7 +84,7 @@ export const DashboardPartition = ({partitionData, masterclassData, handleSave})
      */
     function handleAddLine() {
         if (tmpAnnotation.text !== '' && tmpAnnotation.line !== '') {
-            setAnnotations([...annotations, tmpAnnotation]);    
+            setUploadAnnotations([...uploadAnnotations, tmpAnnotation]);    
             setTmpAnnotation({'text': '', 'line': ''});
         }
     }
@@ -96,10 +98,12 @@ export const DashboardPartition = ({partitionData, masterclassData, handleSave})
             headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}`},
         };
         fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/partitions/partition/${masterclassData.partition_id}`, Options).then((response) => response.json()).then(data => {
+            data == null ? toast.open({message: 'Partition deleted !', type: 'success'}) : toast.open({message: 'An error occurred', type: 'failure'});
         });
+        handleSaveId(undefined);
     }
 
-    useMemo(() => {
+    useEffect(() => {
         if(partitionData?.s3_object_id !== undefined) {
             const Options = {
             method: 'GET',
@@ -119,9 +123,7 @@ export const DashboardPartition = ({partitionData, masterclassData, handleSave})
      */
     const handleSaveAnnotations = (event) => {
         event.preventDefault();
-        
-        annotations.map((annotation) => {
-
+        uploadAnnotations.map((annotation) => {
             var formattedBody = {
                 partition_id: masterclassData.partition_id,
                 measure: Number(annotation.line),
@@ -137,7 +139,29 @@ export const DashboardPartition = ({partitionData, masterclassData, handleSave})
                 data == null ? toast.open({message: 'Annotation(s) saved !', type: 'success'}) : toast.open({message: 'An error occurred', type: 'failure'});
             });
         })
-        setObservable(observable + 1);
+    }
+
+    const annotationRender = (annotation, index) => {
+        return(
+            <div key={index} className='annotation-field'>
+                <img src={'../../src/assets/partitions/music-note.svg'} alt="plus" style={{marginRight: '1vw'}}/>
+                <div key={index} style={{marginRight: '10px'}}><Field value={annotation.line} type={'number'} placeholder="Line" onChange={e => 
+                    {
+                        let Array = [...annotations];
+                        Array[index].line = e.target.value;
+                        setAnnotations(Array);
+                    }
+                }/>
+                </div>
+                <Field placeholder="Annotation" value={annotation.text} onChange={e =>
+                    {
+                        let Array = [...annotations];
+                        Array[index].text = e.target.value;
+                        setAnnotations(Array);
+                    }
+                }/>
+            </div>
+        )
     }
 
     return(
@@ -147,40 +171,28 @@ export const DashboardPartition = ({partitionData, masterclassData, handleSave})
                 {
                     annotations.map((annotation, index) => {
                         return(
-                            <div key={index} className='annotation-field'>
-                                <img src={'../../src/assets/partitions/music-note.svg'} alt="plus" style={{marginRight: '1vw'}}/>
-                                <div key={index} style={{marginRight: '10px'}}><Field value={annotation.line} type={'number'} placeholder="Line" onChange={e => 
-                                    {
-                                        let Array = [...annotations];
-                                        Array[index].line = e.target.value;
-                                        setAnnotations(Array);
-                                    }
-                                }/>
-                                </div>
-                                <Field placeholder="Annotation" value={annotation.text} onChange={e =>
-                                    {
-                                        let Array = [...annotations];
-                                        Array[index].text = e.target.value;
-                                        setAnnotations(Array);
-                                    }
-                                }/>
-                            </div>
+                            annotationRender(annotation, index)
                         )
                     })
                 }
-                    <div className='modal-bio-prof-infos-field-add'>
-                        <img src={'../../src/assets/partitions/music-note.svg'} alt="plus" style={{marginRight: '1vw', cursor: 'pointer'}}/>
-                        <img src={'../../src/assets/plus.svg'} alt="plus" style={{marginRight: '1vw', cursor: 'pointer'}} onClick={handleAddLine}/>
-                        <div style={{marginRight: '10px'}}><Field value={tmpAnnotation.line} onChange={(e) => setTmpAnnotation({...tmpAnnotation, 'line': e.target.value})} type={'number'} placeholder="Line"/></div>
-                        <Field value={tmpAnnotation.text} placeholder="Annotation" onChange={(e) => setTmpAnnotation({...tmpAnnotation, 'text': e.target.value})}/>
-                    </div>
+                {
+                    uploadAnnotations.map((annotation, index) => {
+                        return(
+                            annotationRender(annotation, index)
+                        )
+                    })
+                }
+                <div className='modal-bio-prof-infos-field-add'>
+                    <img src={'../../src/assets/partitions/music-note.svg'} alt="plus" style={{marginRight: '1vw', cursor: 'pointer'}}/>
+                    <img src={'../../src/assets/plus.svg'} alt="plus" style={{marginRight: '1vw', cursor: 'pointer'}} onClick={handleAddLine}/>
+                    <div style={{marginRight: '10px'}}><Field value={tmpAnnotation.line} onChange={(e) => setTmpAnnotation({...tmpAnnotation, 'line': e.target.value})} type={'number'} placeholder="Line"/></div>
+                    <Field value={tmpAnnotation.text} placeholder="Annotation" onChange={(e) => setTmpAnnotation({...tmpAnnotation, 'text': e.target.value})}/>
+                </div>
 
-                    <div className='save-annotation-container'>
-                        <Button label={"Save"} onClick={(e) => handleSaveAnnotations(e)}/>
-                    </div>
-
+                <div className='save-annotation-container'>
+                    <Button label={"Save"} onClick={(e) => handleSaveAnnotations(e)}/>
+                </div>
             </div>
-            
             <div>
                 {partitionData?.status ? (
                     <div className='dashboard-partition'>

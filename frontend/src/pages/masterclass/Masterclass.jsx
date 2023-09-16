@@ -34,6 +34,7 @@ export const Masterclass = () => {
   const [userList, setUserList] = useState();
   const [academy, setAcademy] = useState();
   const [activeTab, setActiveTab] = useState();
+  const [updated, setUpdated] = useState(false);
   const masterclassId = window.location.href.split('/')[4];
   
   useEffect(() => {
@@ -43,8 +44,9 @@ export const Masterclass = () => {
     };
     fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/masterclasses/masterclass/${masterclassId}`, Options).then((response) => response.json()).then(data => {
       setMasterclassData(data)
+      setUpdated(!updated)
     });
-  },[]);
+  },[updated]);
 
   useEffect(() => {
     getMasterclassTabData(store.getState().user.user_token ,masterclassData, setProfessorData, setComposerData, setUserList, setAcademy, setPartitionData, setWorkAnalysisData)
@@ -72,6 +74,7 @@ export const Masterclass = () => {
     }
     fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/masterclasses/masterclass/${masterclassData.id}`, userOptions).then((response) => response.json()).then(data => {
         toast.open({ message: 'Masterclass updated successfully', type: 'success'})
+        setUpdated(!updated)
     });
   }
 
