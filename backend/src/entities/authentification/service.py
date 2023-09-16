@@ -99,7 +99,9 @@ def reset_password(conn: Connection, user_id: UUID, password: str) -> None:
         user_id (UUID): The id of the user to reset the password.
         password (str): The new password.
     """
+    print(user_id, password)
     hash, salt = create_password_hash(password)
+    print(hash, salt)
     stmt = (
         sa.update(user_table)
         .where(user_table.c.id == user_id)

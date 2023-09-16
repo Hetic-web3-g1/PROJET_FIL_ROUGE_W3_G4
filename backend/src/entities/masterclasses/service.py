@@ -1,4 +1,5 @@
 from uuid import UUID
+from typing import List
 
 import sqlalchemy as sa
 from sqlalchemy.engine import Connection
@@ -204,6 +205,36 @@ def delete_masterclass(conn: Connection, masterclass_id: UUID) -> None:
         conn, masterclass_id, masterclass_table, masterclass_comment_table
     )
     db_service.delete_object(conn, masterclass_table, masterclass_id)
+
+
+def remove_masterclass_foreign_key(
+    conn: Connection,
+    masterclass_ids: List[UUID],
+    foreign_key: str,
+) -> None:
+    """
+    Remove a foreign key from multiple masterclasses.
+
+    Args:
+        masterclass_ids (List[UUID]): A list of UUIDs for the masterclasses.
+        foreign_id (UUID): The foreign id to remove.
+        foreign_key (str): The foreign key to remove.
+
+    Raises:
+        MasterclassNotFound: If the masterclass does not exist.
+    """
+    for masterclass_id in masterclass_ids:
+        check = conn.execute(
+            sa.select(masterclass_table).where(masterclass_table.c.id == masterclass_id)
+        ).first()
+        if check is None:
+            raise MasterclassNotFound
+
+        conn.execute(
+            sa.update(masterclass_table)
+            .where(masterclass_table.c.id == masterclass_id)
+            .values({foreign_key: None})
+        )
 
 
 # ---------------------------------------------------------------------------------------------------- #
