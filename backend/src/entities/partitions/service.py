@@ -7,6 +7,8 @@ from src.database import service as db_service
 
 from ..comments import service as comment_service
 from ..comments.schemas import CommentCreate, PartitionComment
+from ..masterclasses import service as masterclass_service
+from ..masterclasses.models import masterclass_table
 from ..s3_objects import service as s3_service
 from ..tags import service as tag_service
 from ..tags.schemas import PartitionTag
@@ -148,6 +150,18 @@ def delete_partition(conn: Connection, partition_id: UUID) -> None:
     comment_service.delete_comments_by_object_id(
         conn, partition_id, partition_table, partition_comment_table
     )
+
+    masterclass_ids = conn.execute(
+        sa.select(masterclass_table.c.id).where(
+            masterclass_table.c.partition_id == partition_id
+        )
+    ).fetchall()
+    masterclass_ids = [masterclass_id[0] for masterclass_id in masterclass_ids]
+
+    masterclass_service.remove_masterclass_foreign_key(
+        conn, masterclass_ids, "partition_id"
+    )
+
     db_service.delete_object(conn, partition_table, partition_id)
 
 

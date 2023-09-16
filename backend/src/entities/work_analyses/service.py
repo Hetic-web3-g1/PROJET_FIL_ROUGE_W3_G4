@@ -6,6 +6,8 @@ from src.database import service as db_service
 
 from ..comments import service as comment_service
 from ..comments.schemas import CommentCreate, WorkAnalysisComment
+from ..masterclasses import service as masterclass_service
+from ..masterclasses.models import masterclass_table
 from ..tags import service as tag_service
 from ..tags.schemas import WorkAnalysisTag
 from ..users.schemas import User
@@ -32,6 +34,7 @@ from .schemas import (
     WorkAnalysisMetaCreate,
 )
 
+
 def _parse_row(row: sa.Row):
     return WorkAnalysis(**row._asdict())
 
@@ -39,7 +42,7 @@ def _parse_row(row: sa.Row):
 def _parse_row_translation(row: sa.Row):
     return WorkAnalysisTranslation(**row._asdict())
 
-  
+
 def _parse_meta_row(row: sa.Row):
     return WorkAnalysisMeta(**row._asdict())
 
@@ -194,6 +197,18 @@ def delete_work_analysis(conn: Connection, work_analysis_id: UUID) -> None:
     comment_service.delete_comments_by_object_id(
         conn, work_analysis_id, work_analysis_table, work_analysis_comment_table
     )
+
+    masterclass_ids = conn.execute(
+        sa.select(masterclass_table.c.id).where(
+            masterclass_table.c.work_analysis_id == work_analysis_id
+        )
+    ).fetchall()
+    masterclass_ids = [masterclass_id[0] for masterclass_id in masterclass_ids]
+
+    masterclass_service.remove_masterclass_foreign_key(
+        conn, masterclass_ids, "work_analysis_id"
+    )
+
     db_service.delete_object(conn, work_analysis_table, work_analysis_id)
 
 

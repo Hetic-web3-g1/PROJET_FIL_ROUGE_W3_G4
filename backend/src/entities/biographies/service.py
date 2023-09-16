@@ -7,6 +7,8 @@ from src.database import service as db_service
 
 from ..comments import service as comment_service
 from ..comments.schemas import CommentCreate, BiographyComment
+from ..masterclasses import service as masterclass_service
+from ..masterclasses.models import masterclass_table
 from ..tags import service as tag_service
 from ..tags.schemas import BiographyTag
 from ..users.schemas import User
@@ -33,17 +35,18 @@ from .schemas import (
     BiographyMetaCreate,
 )
 
+
 def _parse_row(row: sa.Row):
     return Biography(**row._asdict())
 
 
 def _parse_translation_row(row: sa.Row):
     return BiographyTranslation(**row._asdict())
-  
-  
+
+
 def _parse_meta_row(row: sa.Row):
     return BiographyMeta(**row._asdict())
-  
+
 
 def get_all_biographies(conn: Connection):
     """
@@ -187,6 +190,31 @@ def delete_biography(conn: Connection, biography_id: UUID) -> None:
     comment_service.delete_comments_by_object_id(
         conn, biography_id, biography_table, biography_comment_table
     )
+
+    if check.type == "teacher":
+        masterclass_ids = conn.execute(
+            sa.select(masterclass_table.c.id).where(
+                masterclass_table.c.teacher_bio_id == biography_id
+            )
+        ).fetchall()
+        masterclass_ids = [masterclass_id[0] for masterclass_id in masterclass_ids]
+
+        masterclass_service.remove_masterclass_foreign_key(
+            conn, masterclass_ids, "teacher_bio_id"
+        )
+
+    elif check.type == "composer":
+        masterclass_ids = conn.execute(
+            sa.select(masterclass_table.c.id).where(
+                masterclass_table.c.composer_bio_id == biography_id
+            )
+        ).fetchall()
+        masterclass_ids = [masterclass_id[0] for masterclass_id in masterclass_ids]
+
+        masterclass_service.remove_masterclass_foreign_key(
+            conn, masterclass_ids, "composer_bio_id"
+        )
+
     db_service.delete_object(conn, biography_table, biography_id)
 
 
