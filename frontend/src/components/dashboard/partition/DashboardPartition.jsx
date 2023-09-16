@@ -1,14 +1,14 @@
-import React, {useState, useContext, useMemo } from 'react'
+import React, {useState, useContext, useMemo, useEffect } from 'react'
 
 import { Document, Page } from 'react-pdf';
 import { ReactReduxContext } from 'react-redux'
 
 import { Button } from '../../button/Button'
 import { UploadCard } from '../../upload/UploadCard'
+import { useToast } from '../../../utils/toast';
 import Field from '../../field/Field'
 
 import './DashboardPartition.css'
-
 
 export const DashboardPartition = ({partitionData, masterclassData, handleSave}) => {
 
@@ -18,6 +18,25 @@ export const DashboardPartition = ({partitionData, masterclassData, handleSave})
     const [numPages, setNumPages] = useState(null);
     const [annotations, setAnnotations] = React.useState([]);
     const [tmpAnnotation, setTmpAnnotation] = React.useState({'text': '', 'line': ''});
+    const [observable, setObservable] = React.useState(0);
+    const toast = useToast();
+
+    /**
+     * GET the different annotations of the partition
+     */
+    useEffect(() => {
+        setAnnotations([]);
+        const Options = {
+          method: 'GET',
+          headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}`},
+        };
+        fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/annotations/annotation/partition/${masterclassData.partition_id}`, Options).then((response) => response.json()).then(data => {
+          setAnnotations(data.map(e => ({
+            text: e.content,
+            line: e.measure
+          })));
+        });
+      }, []);
 
     /**
      * Set the partition id to the masterclass
@@ -100,9 +119,6 @@ export const DashboardPartition = ({partitionData, masterclassData, handleSave})
      */
     const handleSaveAnnotations = (event) => {
         event.preventDefault();
-        console.log('save', annotations);
-        console.log('save', masterclassData.partition_id);
-
         
         annotations.map((annotation) => {
 
@@ -114,13 +130,14 @@ export const DashboardPartition = ({partitionData, masterclassData, handleSave})
 
             const addAnnotation = {
                 method: 'POST',
-                headers: { 'authorization': `${store.getState().user.user_token}` },
+                headers: { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}` },
                 body: JSON.stringify(formattedBody),
             };
             fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/annotations/annotation`, addAnnotation).then((response) => response.json()).then(data => {
-                console.log(data); // to finish errors with the backend
+                data == null ? toast.open({message: 'Annotation(s) saved !', type: 'success'}) : toast.open({message: 'An error occurred', type: 'failure'});
             });
         })
+        setObservable(observable + 1);
     }
 
     return(
@@ -175,7 +192,7 @@ export const DashboardPartition = ({partitionData, masterclassData, handleSave})
                         <Document className="pdf-container-partition" file={file} onLoadError={console.error} onLoadSuccess={onDocumentLoadSuccess}>
                             {Array.apply(null, Array(numPages))
                             .map((x, i)=>i+1)
-                            .map(page => <Page pageNumber={page} size={[612.0, 936.0]} renderTextLayer={false} renderAnnotationLayer={false}/>)}
+                            .map(page => <Page pageNumber={page} renderTextLayer={false} renderAnnotationLayer={false}/>)}
                         </Document>
                     </div>    
                     ) : (
