@@ -122,7 +122,7 @@ export const ModalBioProf = ({ handleClose, store }) => {
                             awards.map((award, index) => {
                                 return(
                                     <div className='modal-bio-prof-award-field'>
-                                        <Field placeholder="Award" value={award} onChange={function()
+                                        <Field placeholder="Award" value={award} onChange={e =>
                                             {
                                             let Array = [...awards];
                                             Array[index] = e.target.value;
