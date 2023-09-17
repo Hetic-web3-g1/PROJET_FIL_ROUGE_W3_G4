@@ -1,10 +1,13 @@
-import React, {useState, useContext, useEffect } from 'react'
-import { ReactReduxContext } from 'react-redux'
+import React, {useState, useContext, useMemo, useEffect } from 'react'
 
 import { Document, Page } from 'react-pdf';
+import { ReactReduxContext } from 'react-redux'
 
-import { UploadCard } from '../../upload/UploadCard'
 import { Button } from '../../button/Button'
+import { UploadCard } from '../../upload/UploadCard'
+import { useToast } from '../../../utils/toast';
+import Field from '../../field/Field'
+
 import './DashboardPartition.css'
 
 export const DashboardPartition = ({partitionData, masterclassData, handleSave}) => {
@@ -12,9 +15,34 @@ export const DashboardPartition = ({partitionData, masterclassData, handleSave})
     const { store } = useContext(ReactReduxContext)
     const [uploadPartition, setUploadPartition] = useState();
     const [partition, setPartition] = useState();   
+    const [partitionObservable, setPartitionObservable] = useState(0);
     const [numPages, setNumPages] = useState(null);
-    const [pageNumber, setPageNumber] = useState(1); 
+    const [annotations, setAnnotations] = React.useState([]);
+    const [tmpAnnotation, setTmpAnnotation] = React.useState({'text': '', 'line': ''});
+    const [uploadAnnotations, setUploadAnnotations] = useState([]);
+    const toast = useToast();
 
+    /**
+     * GET the different annotations of the partition
+     */
+    useEffect(() => {
+        setAnnotations([]);
+        const Options = {
+          method: 'GET',
+          headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}`},
+        };
+        fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/annotations/annotation/partition/${masterclassData.partition_id}`, Options).then((response) => response.json()).then(data => {
+          setAnnotations(data.map(e => ({
+            text: e.content,
+            line: e.measure
+          })));
+        });
+      }, []);
+
+    /**
+     * Set the partition id to the masterclass
+     * @param {number} id Partition id
+     */
     const handleSaveId = (id) => {
         var newMasterclassData = masterclassData
         newMasterclassData.partition_id = id
@@ -23,6 +51,10 @@ export const DashboardPartition = ({partitionData, masterclassData, handleSave})
         handleSave(newMasterclassData)
     }
 
+    /**
+     * Save the partition
+     * @param {MouseEvent} e 
+     */
     const handlePartitionUpload = (e) => {
         e.preventDefault();
         const fileBlob = new Blob([uploadPartition], {type: 'application/pdf'});
@@ -36,28 +68,39 @@ export const DashboardPartition = ({partitionData, masterclassData, handleSave})
         };
         fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/partitions/partition`, uploadOptions).then((response) => response.json()).then(data => {
             handleSaveId(data);
+            setPartitionObservable(1);
         })
     }
 
+    /**
+     * On document load set the total pages of PDF file
+     */
     function onDocumentLoadSuccess({ numPages }) {
-        setPageNumber(1);
         setNumPages(numPages);
     }
 
-    function changePage(offset) {
-        setPageNumber(prevPageNumber => prevPageNumber + offset);
+    /**
+     * Add a new annotation line
+     */
+    function handleAddLine() {
+        if (tmpAnnotation.text !== '' && tmpAnnotation.line !== '') {
+            setUploadAnnotations([...uploadAnnotations, tmpAnnotation]);    
+            setTmpAnnotation({'text': '', 'line': ''});
+        }
     }
 
-    function previousPage() {
-        changePage(-1);
-    }
-    
-    function nextPage() {
-        changePage(1);
-    }
-
+    /**
+     * Delete PDF file
+     */
     const handleFileDelete = () => {
-        console.log('delete tmp')
+        const Options = {
+            method: 'DELETE',
+            headers:  { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}`},
+        };
+        fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/partitions/partition/${masterclassData.partition_id}`, Options).then((response) => response.json()).then(data => {
+            data == null ? toast.open({message: 'Partition deleted !', type: 'success'}) : toast.open({message: 'An error occurred', type: 'failure'});
+        });
+        handleSaveId(undefined);
     }
 
     useEffect(() => {
@@ -72,45 +115,113 @@ export const DashboardPartition = ({partitionData, masterclassData, handleSave})
         }
     },[]);
 
-    return(
-        <div>
-            {partitionData?.status ? (
-                <div className='dashboard-partition'>
-                    <div className='upload-file-pdf' style={{textAlign: 'center'}}>
-                        <p style={{textAlign: 'center'}}>
-                            Page {pageNumber} of {numPages}
-                        </p>
+    const file = useMemo(() => (partition?.url), [partition?.url]); // trick to avoid the PDF to reload when annotation value change
 
-                        <button style={{marginRight: '10px'}} type="button" className='btn' disabled={pageNumber <= 1} onClick={previousPage}>
-                            Previous
-                        </button>
-
-                        <button style={{marginRight: '10px'}} type="button" className='btn' disabled={pageNumber >= numPages} onClick={nextPage}>
-                            Next
-                        </button>
-
-                        <button type="button" className='btn' onClick={handleFileDelete}>
-                            Delete
-                        </button>
-                    </div>
-                    <Document className="pdf-container" file={{url:`${partition?.url}`}} onLoadError={console.error} onLoadSuccess={onDocumentLoadSuccess} >
-                        <Page pageNumber={pageNumber} renderTextLayer={false} renderAnnotationLayer={false}/>
-                    </Document>
-                </div>    
-                ) : (
-                <div className="dashboard-partition-missing">
-                    <div className='dashboard-Partition-missing-title'>
-                        No Partition Uploaded yet ...
-                    </div>
-                    <div className='dashboard-partition-missing-upload-card'>
-                        <UploadCard setUploadFile={setUploadPartition}/>
-                    </div>
-                    <div>
-                        <Button label={"Save"} onClick={(e) => handlePartitionUpload(e)}/>
-                    </div>
-                </div>
-                )
+    /**
+     * On click save all the annotations
+     * @param {MouseEvent} event 
+     */
+    const handleSaveAnnotations = (event) => {
+        event.preventDefault();
+        uploadAnnotations.map((annotation) => {
+            var formattedBody = {
+                partition_id: masterclassData.partition_id,
+                measure: Number(annotation.line),
+                content: annotation.text
             }
+
+            const addAnnotation = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}` },
+                body: JSON.stringify(formattedBody),
+            };
+            fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/annotations/annotation`, addAnnotation).then((response) => response.json()).then(data => {
+                data == null ? toast.open({message: 'Annotation(s) saved !', type: 'success'}) : toast.open({message: 'An error occurred', type: 'failure'});
+            });
+        })
+    }
+
+    const annotationRender = (annotation, index) => {
+        return(
+            <div key={index} className='annotation-field'>
+                <img src={'../../src/assets/partitions/music-note.svg'} alt="plus" style={{marginRight: '1vw'}}/>
+                <div key={index} style={{marginRight: '10px'}}><Field value={annotation.line} type={'number'} placeholder="Line" onChange={e => 
+                    {
+                        let Array = [...annotations];
+                        Array[index].line = e.target.value;
+                        setAnnotations(Array);
+                    }
+                }/>
+                </div>
+                <Field placeholder="Annotation" value={annotation.text} onChange={e =>
+                    {
+                        let Array = [...annotations];
+                        Array[index].text = e.target.value;
+                        setAnnotations(Array);
+                    }
+                }/>
+            </div>
+        )
+    }
+
+    return(
+        <div className={partition ? `partition-container` : null}>
+            <div style={!file ? {display: 'none'} : null} className='annotations-container'>
+                <h2>Annotations</h2>
+                {
+                    annotations.map((annotation, index) => {
+                        return(
+                            annotationRender(annotation, index)
+                        )
+                    })
+                }
+                {
+                    uploadAnnotations.map((annotation, index) => {
+                        return(
+                            annotationRender(annotation, index)
+                        )
+                    })
+                }
+                <div className='modal-bio-prof-infos-field-add'>
+                    <img src={'../../src/assets/partitions/music-note.svg'} alt="plus" style={{marginRight: '1vw', cursor: 'pointer'}}/>
+                    <img src={'../../src/assets/plus.svg'} alt="plus" style={{marginRight: '1vw', cursor: 'pointer'}} onClick={handleAddLine}/>
+                    <div style={{marginRight: '10px'}}><Field value={tmpAnnotation.line} onChange={(e) => setTmpAnnotation({...tmpAnnotation, 'line': e.target.value})} type={'number'} placeholder="Line"/></div>
+                    <Field value={tmpAnnotation.text} placeholder="Annotation" onChange={(e) => setTmpAnnotation({...tmpAnnotation, 'text': e.target.value})}/>
+                </div>
+
+                <div className='save-annotation-container'>
+                    <Button label={"Save"} onClick={(e) => handleSaveAnnotations(e)}/>
+                </div>
+            </div>
+            <div>
+                {partitionData?.status ? (
+                    <div className='dashboard-partition'>
+                        <div className='upload-file-pdf' style={{textAlign: 'center'}}>
+                            <button type="button" className='btn' onClick={handleFileDelete}>
+                                Delete
+                            </button>
+                        </div>
+                        <Document className="pdf-container-partition" file={file} onLoadError={console.error} onLoadSuccess={onDocumentLoadSuccess}>
+                            {Array.apply(null, Array(numPages))
+                            .map((x, i)=>i+1)
+                            .map(page => <Page pageNumber={page} renderTextLayer={false} renderAnnotationLayer={false}/>)}
+                        </Document>
+                    </div>    
+                    ) : (
+                    <div className="dashboard-partition-missing">
+                        <div className='dashboard-Partition-missing-title'>
+                            No Partition Uploaded yet ...
+                        </div>
+                        <div className='dashboard-partition-missing-upload-card'>
+                            <UploadCard setUploadFile={setUploadPartition}/>
+                        </div>
+                        <div>
+                            <Button label={"Save"} onClick={(e) => handlePartitionUpload(e)}/>
+                        </div>
+                    </div>
+                    )
+                }
+            </div>
         </div>
     );
 }
