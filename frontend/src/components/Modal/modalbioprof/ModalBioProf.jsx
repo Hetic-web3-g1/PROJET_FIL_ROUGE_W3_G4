@@ -10,21 +10,21 @@ import Field from '../../field/Field'
 import Uploadcard from '../../upload/UploadCard'
 
 
-export const ModalBioProf = ({ handleClose, store }) => {
+export const ModalBioProf = ({ handleClose, store, DefaultValue }) => {
 
     const [status, setStatus] = React.useState(1);
-    const [instrument, setInstrument] = React.useState([]);
-    const [firstName, setFirstName] = React.useState('');
-    const [lastName, setLastName] = React.useState('');
-    const [bio, setBio] = React.useState('');
-    const [nationality, setNationality] = React.useState('');
-    const [website, setWebsite] = React.useState('');
-    const [awards, setAwards] = React.useState([]);
+    const [instrument, setInstrument] = React.useState(DefaultValue.instrument || []);
+    const [firstName, setFirstName] = React.useState(DefaultValue.first_name || '');
+    const [lastName, setLastName] = React.useState(DefaultValue.last_name  || '');
+    const [bio, setBio] = React.useState(DefaultValue.content  || '');
+    const [nationality, setNationality] = React.useState(DefaultValue.nationality  || '');
+    const [website, setWebsite] = React.useState(DefaultValue.website  || '');
+    const [awards, setAwards] = React.useState(DefaultValue.award || []);
     const [tmpAward, setTmpAward] = React.useState('');
     const [type, setType] = React.useState('Professor');
 
     const createdBy = store.getState().user.profile.id;
-
+    
     const radioHandler = (status) => {
         setStatus(status);
     };
@@ -64,11 +64,11 @@ export const ModalBioProf = ({ handleClose, store }) => {
                 <div className="modal-bio-prof-infos-1">
                     <div className="modal-bio-prof-infos-field marg-right">
                         First Name
-                        <Field placeholder="First Name" onChange={(e) => setFirstName(e.target.value)}/>
+                        <Field placeholder="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)}/>
                     </div>
                     <div className="modal-bio-prof-infos-field marg-right">
                         Last Name
-                        <Field placeholder="Last Name" onChange={(e) => setLastName(e.target.value)}/>
+                        <Field placeholder="Last Name" value={lastName} onChange={(e) => setLastName(e.target.value)}/>
                     </div>
                     <div className="modal-bio-prof-infos-checkbox">
                         <div className="modal-bio-prof-infos-element">
@@ -89,15 +89,17 @@ export const ModalBioProf = ({ handleClose, store }) => {
                             </div>
                         </div>
                 </div>
-
+            <div>
+                <img></img>
+            </div>
             </div>
             <div className="modal-bio-prof-instrument-wrapper">
                 Instruments
                 <div className="modal-bio-prof-instrument">
-                    {Instruments.map((instrument, index) => {
+                    {Instruments.map((instrumen, index) => {
                         return (
                             <div className="instrument-card">
-                                <CardInstrument key={`modal-instrument-card-${index}`} name={instrument} legend={true} onClick={handleInstrument}/>
+                                <CardInstrument Defaultvalue={instrument[0]} key={`modal-instrument-card-${index}`} name={instrumen} legend={true} onClick={handleInstrument}/>
                             </div>
                         )
                     })}
@@ -109,11 +111,11 @@ export const ModalBioProf = ({ handleClose, store }) => {
                     <div className='field-container'>
                         <div className='modal-bio-prof-infos-field marg-right'>
                             <span>Nationality</span>
-                            <Field placeholder="Nationality" onChange={(e) => setNationality(e.target.value)}/>
+                            <Field placeholder="Nationality" value={nationality} onChange={(e) => setNationality(e.target.value)}/>
                         </div>
                         <div className='modal-bio-prof-infos-field fix-width'>
                             <span>Website</span>
-                            <Field placeholder="Website" onChange={(e) => setWebsite(e.target.value)}/>
+                            <Field placeholder="Website" value={website} onChange={(e) => setWebsite(e.target.value)}/>
                         </div>
                     </div>
                     <div className='modal-bio-prof-infos-field full-width'>
@@ -143,7 +145,7 @@ export const ModalBioProf = ({ handleClose, store }) => {
    
             <div style={{ display: 'flex','flex-direction': 'column'}}>
                 <span>Biography</span>
-                <textarea className="modal-bio-prof-textarea" placeholder="..." row='20' onChange={(e) => setBio(e.target.value)}/>
+                <textarea value={bio} className="modal-bio-prof-textarea" placeholder="..." row='20' onChange={(e) => setBio(e.target.value)}/>
             </div>
         </div>
     );

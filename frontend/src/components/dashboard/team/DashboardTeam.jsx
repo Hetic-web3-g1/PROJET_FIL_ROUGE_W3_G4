@@ -89,7 +89,7 @@ const DashboardTeam = ({ users, masterclassData }) => {
                     </div>
                 ))}
             </div>
-            <button className="dashboard-team-save" onClick={(e) => handleSave(e)}>Save</button>
+            <button className="dashboard-team-save button button-medium button-primary" onClick={(e) => handleSave(e)}>Save</button>
         </div>
     );
 }

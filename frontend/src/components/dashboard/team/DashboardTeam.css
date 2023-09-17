@@ -42,3 +42,15 @@
 .dashboard-team-role-user {
     max-width: 20vw;
 }
+
+.dashboard-team-role-name {
+    width: 20%;
+}
+
+.dashboard-team-role-description {
+    width: 40%;
+}
+
+.dashboard-team-save {
+    margin-top: 2%;
+}
