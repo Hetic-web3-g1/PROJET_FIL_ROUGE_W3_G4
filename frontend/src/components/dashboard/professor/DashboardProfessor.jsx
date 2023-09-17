@@ -72,7 +72,7 @@ export const DashboardProfessor = ({masterclassData, handleSave, professorData, 
                             )
                         })}
                     </ul>
-                    <button onClick={e => {e.preventDefault; handleSave(masterclass)}}>Save</button>
+                    <button className='button button-medium button-primary' onClick={e => {e.preventDefault; handleSave(masterclass)}}>Save</button>
                 </div>
                 <hr/>
             </>

@@ -10,16 +10,44 @@ import Field from '../../field/Field'
 import Button from '../../button/Button'
  
 
-export const ModalWorkAnalysis = ({ handleClose, handleSave }) => {
+export const ModalWorkAnalysis = ({ handleClose, store, DefaultValue }) => {
 
-    const [Learnings, setLearnings] = React.useState([]);
     const [tmpLearnings, setTmpLearnings] = React.useState('');
-    const [about, setAbout] = React.useState('');
-    const [content, setContent] = React.useState('');
+    const [learnings, setLearnings] = React.useState(DefaultValue.learning || []);
+    const [about, setAbout] = React.useState(DefaultValue.about || '');
+    const [content, setContent] = React.useState(DefaultValue.content || '');
+    const [awards, setAwards] = React.useState([]);
+    const [title, setTitle] = React.useState(DefaultValue.title || '');
+    // const [learning, setLearning] = React.useState(DefaultValue.learning || []);
+
+
+    const handleSave = () => {
+        const workAnalysisOptions = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'accept': 'application/json', 'authorization': `${store.getState().user.user_token}` },
+          body : JSON.stringify({
+                title: title,
+                about: about,
+                learning: learnings,
+                content: content,
+                award: awards,
+            }),
+        };
+        fetch(`http://${import.meta.env.VITE_API_ENDPOINT}/work_analyzes/work_analysis`, workAnalysisOptions).then((response) => response.json()).then(data => {
+          if (data?.detail[0].msg != "field required") {
+            handleClose();
+          } else {
+            alert('Invalid data');
+          }
+        });
+
+
+    };
 
     const AssociateMasterclass = (e) => {
         e.preventDefault();
     }   
+    
 
     const masterclassContent = (
         <div className='modal-bio-prof-background-wrapper'>
@@ -31,18 +59,18 @@ export const ModalWorkAnalysis = ({ handleClose, handleSave }) => {
             </div>
             <div className='field-container2 marg-bottom'>
                 <span className='marg-bottom'>About this masterclass</span>
-                <textarea className="modal-work-analysis-textarea" placeholder="..." row='10' onChange={(e) => setAbout(e.target.value)}/>
+                <textarea value={about} className="modal-work-analysis-textarea" placeholder='...' row='10' onChange={(e) => setAbout(e.target.value)}/>
             </div>
    
             <div className='modal-bio-prof-infos-field full-width'>
             <span className='marg-bottom'>Learnings</span>
             {
-                Learnings.map((learning, index) => {
+                learnings.map((learning, index) => {
                     return(
                         <div className='modal-bio-prof-award-field'>
                             <Field placeholder="Learning" value={learning} onChange={(e) => 
                                 {
-                                    let Array = [...Learnings];
+                                    let Array = [...learnings];
                                     Array[index] = e.target.value;
                                     setLearnings(Array);
                                 }
@@ -53,12 +81,12 @@ export const ModalWorkAnalysis = ({ handleClose, handleSave }) => {
             }
             </div>
             <div className='modal-bio-prof-infos-field full-width-flex'>
-                <img src={'../../src/assets/plus.svg'} alt="plus" style={{marginRight: '1vw', cursor: 'pointer'}} onClick={() => setLearnings([...Learnings, tmpLearnings])}/>
+                <img src={'../../src/assets/plus.svg'} alt="plus" style={{marginRight: '1vw', cursor: 'pointer'}} onClick={() => setLearnings([...learnings, tmpLearnings])}/>
                 <Field placeholder="Learnings" onChange={(e) => setTmpLearnings([e.target.value])}/>
             </div>
             <div className='field-container2 marg-bottom'>
-                <span className='marg-bottom'>Description</span>
-                <textarea className="modal-work-analysis-textarea" placeholder="..." row='10' onChange={(e) => setContent(e.target.value)}/>
+                <span className='marg-bottom'>Piece by composer</span>
+                <textarea value={content} className="modal-work-analysis-textarea" placeholder="..." row='10' onChange={(e) => setContent(e.target.value)}/>
             </div>
         </div>
         
@@ -70,6 +98,8 @@ export const ModalWorkAnalysis = ({ handleClose, handleSave }) => {
 };
 
 ModalWorkAnalysis.propTypes = {
+    
+    content: propTypes.string,
     handleClose: propTypes.func,
 };
 

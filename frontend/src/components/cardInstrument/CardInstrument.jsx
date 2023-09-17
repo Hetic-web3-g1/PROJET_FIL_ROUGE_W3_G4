@@ -6,10 +6,6 @@ export const CardInstrument = ({ name, size, legend, onClick, Defaultvalue }) =>
   const mode = legend ? 'L-' : '';
   const [style, setStyle] = useState(false);
 
-  /**
-   * Select all img element, replace the highlight by highlight-close class on all element to put the highlight class to the selected element.
-   */
-
   function defaultCheck (highlight) {
       if (Defaultvalue == name.toLowerCase()) {
         return highlight = 'highlight';
